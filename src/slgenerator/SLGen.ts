@@ -1,4 +1,4 @@
-import Environment from "../Environment";
+import { Environment } from "../Environment";
 import { VariableSystem } from "../variablesystem/VariableSystem";
 
 // Constants that expose the types of the generators.
@@ -17,7 +17,7 @@ export class SLGen{
      * Returns when this code can run. If normale is used, the code can use the setup-function but will use the loop function to run continuesly.
      * But selecting a start_only generator to run after a start_normal generator, will result in an error. 
      */
-    getType() : Number{
+    public getType() : Number{
         return GENERATOR_NORMAL;
     }
 
@@ -29,7 +29,7 @@ export class SLGen{
      *  (Optional) validator: (function) that takes in a value as the parameter and returns if the given value is valid (true/false).
      * }
      */
-    getConfigSkeleton() : Object{
+    public getConfigSkeleton() : Object{
         return {}
     }
 
@@ -44,7 +44,7 @@ export class SLGen{
      * }
      * 
      */
-    generateCode(env : Environment, varSys : VariableSystem) : Object{
+    public generateCode(env : Environment, varSys : VariableSystem) : Object{
         return {}
     }
 }
