@@ -7,6 +7,6 @@ import { Environment } from "../Environment";
  * @param env that determins if and how the comment will be printed.
  * @returns a string for string-interpolation.
  */
-export function CMT(comment: string, env: Environment) : string{
+export function C(comment: string, env: Environment) : string{
     return env.withComments ? ("// "+comment) : "";
 }

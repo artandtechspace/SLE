@@ -1,5 +1,5 @@
 import { Environment } from "../Environment";
-import { CMT } from "../utils/WorkUtils";
+import { C } from "../utils/WorkUtils";
 
 /**
  * When calling the toString method (eg. when using string-interpolation) this will just return the plain old variable-name.
@@ -62,7 +62,7 @@ export class VariableSystem {
      * Generates the global variable code and returns that as a single string which must be printed at the top of the document.
      */
     public generateGlobalCode() : string{
-        return `${CMT("Global variable-declarations",this.env)}\n${this.globalVars.map(va=>va.declair()).join("\n")}`;
+        return `${C("Global variable-declarations",this.env)}\n${this.globalVars.map(va=>va.declair()).join("\n")}`;
     }
 
 

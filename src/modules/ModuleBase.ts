@@ -8,10 +8,10 @@ export const GENERATOR_START_ONLY : Number = 1;
 export const GENERATOR_NORMAL : Number = 0;
 
 /**
- * SL-Gen is the element that takes in a configuration file and generate the code based on that.
+ * The module-base is the element that takes in a configuration file and generate the code based on the provided information and environment.
  */
 
-export class SLGen{
+export class ModuleBase{
 
     /**
      * Returns when this code can run. If normale is used, the code can use the setup-function but will use the loop function to run continuesly.
