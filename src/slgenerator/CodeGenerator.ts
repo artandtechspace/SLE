@@ -26,7 +26,11 @@ export function generateCode(env: Environment, elements: [ModuleBase, Config][])
     // Generates the code for the modules and appends it to the setup and loop strings
     function onGenCode(element: [ModuleBase,Config]){
         // Generates the code
-        var code: ModuleReturn = element[0].generateCode(env,varSys,element[1]);
+        var code: string|ModuleReturn = element[0].generateCode(env,varSys,element[1]);
+
+        // Checks if an error occurred
+        if(typeof code === "string")
+            throw code;
 
         // Checks if loop-code got added
         if(code.loop !== undefined)

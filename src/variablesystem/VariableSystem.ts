@@ -28,14 +28,14 @@ class Variable {
      * @returns statement to declair the variable.
      */
     declair(){
-        return this.type+" "+this.assign;
+        return this.type+" "+this.assign();
     }
 
     /**
      * @returns statement to (re)assignes the variable.
      */
     assign(){
-        return `${this.name} = ${this.initValue};`;
+        return this.name+(this.initValue !== undefined ? ` = ${this.initValue};` : ";" ) 
     }
 
     toString(){
@@ -108,11 +108,7 @@ export class VariableSystem {
      * @param type the raw string variable type. Important: This is case-sensitiv. This will be used to determin based on the userers choosen configuration how the code will be generated or potional free variables reused.
      * @param name this is how the variable shall later be called in code. If the name is no longer available or the user has choosen a specific configuration that works against this principal, the name may result in a slightly or largely different style. For example name could result in name1 or name2 if already choosen or result in a completely different name if the user has choosen to reused free variables.
      * @param initValue the raw string that will be printed into the code after the equals sign. Could be new something, a string or just a single number.
-     * @returns an object with two entrys:
-     * {
-     *  name: the real variable name that can now directly be referenced inside the code.
-     *  init: a string that must be print at the top of your local code to init the variable.
-     * }
+     * @returns the variable
      */
     public requestLocalVariable(type: string, name: string, initValue: string = "null"): Variable {
         // Makes the name unique

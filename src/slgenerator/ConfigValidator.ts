@@ -51,13 +51,12 @@ function tryParseModules(json: any) : [ModuleBase, Config][]|string{
     // Checks the format of the config
     if(typeof json !== "object" || json.constructor.name !== "Array")
         return "The module-element's must be wrapped as objects inside of an array.";
-
     
     // List with all modules and their configs.
     var list: [ModuleBase, Config][] = [];
 
     // Iterates over all objects
-    for(var modObj in json){
+    for(var modObj of json){       
 
         // Checks if the element is an object
         if(typeof modObj !== "object")
@@ -71,7 +70,7 @@ function tryParseModules(json: any) : [ModuleBase, Config][]|string{
         var modName:string = modObj["name"];
 
         // Checks if a valid config object is given (This is optional)
-        if("config" in modObj && typeof modObj["config"] === "object")
+        if("config" in modObj && typeof modObj["config"] !== "object")
             return "Config's must be objects. Error in module '"+modName+"'";
 
         // Gets the raw config
@@ -85,11 +84,13 @@ function tryParseModules(json: any) : [ModuleBase, Config][]|string{
             return `Module '${modName}' couldn't be found.`;
 
         // Generates the config-object
-        var config:Config = new Config(rawCfgObj);
+        var config:Config = new Config(rawCfgObj);        
 
         // Appends
         list.push([mod,config]);
     }
+
+    
 
     return list;
 }

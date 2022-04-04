@@ -19,7 +19,7 @@ export class ModuleBase{
      * }
      * 
      */
-    public generateCode(env : Environment, varSys : VariableSystem, config: Config) : ModuleReturn{
+    public generateCode(env : Environment, varSys : VariableSystem, config: Config) : string|ModuleReturn{
         return {}
     }
 }

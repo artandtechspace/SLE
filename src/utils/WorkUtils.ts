@@ -8,5 +8,5 @@ import { Environment } from "../Environment";
  * @returns a string for string-interpolation.
  */
 export function C(comment: string, env: Environment) : string{
-    return env.withComments ? ("// "+comment) : "";
+    return env.withComments ? ("// "+comment+"\n") : "";
 }

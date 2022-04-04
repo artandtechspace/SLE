@@ -15,7 +15,7 @@ class ModuleManager{
      */
     getModuleByName(key: string) : ModuleBase|undefined{
         // Gets the value
-        var value : any = key as keyof typeof MODULES;
+        var value : any = MODULES[key as keyof typeof MODULES];
         
         // Checks if the module couldn't be found
         if(value === undefined)
