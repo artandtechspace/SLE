@@ -1,10 +1,10 @@
 import { Config } from "../Config";
-import ModuleComment from "../modules/ModuleComment";
 import { Environment } from "../Environment";
 import { ModuleBase } from "../modules/ModuleBase";
 import ModuleManager from "../modules/ModuleManager";
 import { isInteger } from "../utils/WorkUtils";
-import ModuleDelay from "../modules/ModuleDelay";
+import SpecialCommentModule from "../modules/special/SpecialCommentModule";
+import SpecialDelayModule from "../modules/special/SpecialDelayModule";
 
 
 /**
@@ -71,7 +71,7 @@ export function tryParseModules(json: any) : [ModuleBase, Config][]|string{
             switch(type){
                 case "string":
                     // Registers a new comment module
-                    list.push([ModuleComment,new Config({
+                    list.push([SpecialCommentModule,new Config({
                         comment: modObj
                     })]);
                     continue;
@@ -81,7 +81,7 @@ export function tryParseModules(json: any) : [ModuleBase, Config][]|string{
                         return "Delay-function '"+modObj+"' must be an integer >= 1";
                     
                     // Registers a new delay module
-                    list.push([ModuleDelay,new Config({
+                    list.push([SpecialDelayModule,new Config({
                         delay: modObj
                     })]);
                     continue;
