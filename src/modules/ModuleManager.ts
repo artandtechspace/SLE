@@ -1,9 +1,13 @@
 import { ModuleBase } from "./ModuleBase";
 import TestModule from "../defaultModules/TestModule";
+import ColorModule from "../defaultModules/ColorModule";
+import LoopModule from "../defaultModules/LoopModule";
 
 // List with all registered modules
 const MODULES = {
-    "test": TestModule
+    "test": TestModule,
+    "color": ColorModule,
+    "loop": LoopModule
 }
 
 class ModuleManager{

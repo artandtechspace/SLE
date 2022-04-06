@@ -1,4 +1,5 @@
 import { Config } from "../Config";
+import ModuleComment from "../defaultModules/ModuleComment";
 import { Environment } from "../Environment";
 import { ModuleBase } from "../modules/ModuleBase";
 import ModuleManager from "../modules/ModuleManager";
@@ -9,7 +10,7 @@ import ModuleManager from "../modules/ModuleManager";
  * @param json json-element with the presumed env-config
  * @returns if everything parses correctly the environment, otherwise a string with the error
  */
- function tryParseEnvironment(json: any) : Environment|string{
+export function tryParseEnvironment(json: any) : Environment|string{
 
     // Checks the format of the config
     if(typeof json !== "object" || json.constructor.name !== "Object")
@@ -46,10 +47,10 @@ import ModuleManager from "../modules/ModuleManager";
  * @param json the json-element with the presumed config.
  * @returns if the parsing failes, the error message, otherwise all fully passed config's
  */
-function tryParseModules(json: any) : [ModuleBase, Config][]|string{
+export function tryParseModules(json: any) : [ModuleBase, Config][]|string{
 
     // Checks the format of the config
-    if(typeof json !== "object" || json.constructor.name !== "Array")
+    if(json === undefined || typeof json !== "object" || json.constructor.name !== "Array")
         return "The module-element's must be wrapped as objects inside of an array.";
     
     // List with all modules and their configs.
@@ -59,8 +60,19 @@ function tryParseModules(json: any) : [ModuleBase, Config][]|string{
     for(var modObj of json){       
 
         // Checks if the element is an object
-        if(typeof modObj !== "object")
-            return "Please write only modules inside the array";
+        if(typeof modObj !== "object"){
+
+            // Checks if the element is a comment
+            if(typeof modObj === "string"){
+                // Registers a new comment module
+                list.push([ModuleComment,new Config({
+                    comment: modObj
+                })]);
+                continue;
+            }
+
+            return "Please write only modules and comments inside the array";
+        }
 
         // Checks if the object has a name
         if(!("name" in modObj) || typeof modObj["name"] !== "string")

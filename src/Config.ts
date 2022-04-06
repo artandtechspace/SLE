@@ -1,50 +1,51 @@
-export class Config{
+export class Config {
 
     // The raw config-object
     private readonly rawObject: object;
 
-    constructor(object: object){
+    constructor(object: object) {
         this.rawObject = object;
     }
 
     /**
-     * Tries to get a value from the config. If it failes to get one it will fall back to the default value or null if not given.
-     * 
-     * @param key key for the config.
-     * @param defaultValue the default value for when no value is provided. At default is not required to be set.
-     * @param typeName optionally can specify a string for a type which will be checked with typeof.
-     * @returns the value or the default if failed to be correct.
+     * Gets the raw element from the config-object
      */
-    get(key: string, defaultValue: any = null, typeName: string|undefined = undefined) : any{
+    getRaw(key: string){
+        return this.rawObject[key as keyof typeof this.rawObject];
+    }
+
+    /**
+     * Tries to get the requested value from the user config.
+     * Using the validator that value will be checked and if it's invalid the error will be thrown.
+     * @returns the validated value
+     */
+    getRequired(key: string, validator: (val: any) => boolean, error: string) {
         // Gets the value
-        var value : any = this.rawObject[key as keyof typeof this.rawObject];
+        var value: any = this.rawObject[key as keyof typeof this.rawObject];
 
         // Checks if the value is not given
-        if(value === undefined || value === null)
-            return defaultValue;
+        if(value === undefined)
+            throw "Attribute '"+key+"' is required but not given.";
 
-        // Checks if either the type is not required or the type matches
-        if(typeName !== undefined && typeof value !== typeName)
-            return null;
-        
+        // Checks if the validator is okay with the value
+        if (!validator(value))
+            throw "Error validating '" + key + "': " + error;
+
         return value;
     }
 
     /**
-     * Same as get(...) but throws an error if the value is invalid.
-     * @param key the key to get
-     * @param error error to be thrown in case of an invalid value.
-     * @param typeName (Optional) type-Requirement that gets checked using typeof
+     * Like the normal get but this must not be given and there can be a default-value for non-specified config values.
      */
-    getThrowError(key: string, error: string, typeName : string|undefined = undefined) : any{
+    getOptional(key: string, validator: (val: any) => boolean, error: string, defaultVal: any = undefined){
         // Gets the value
-        var value = this.get(key,undefined,typeName);
+        var value: any = this.rawObject[key as keyof typeof this.rawObject];
 
-        // Checks if the value has an error
-        if(value === null)
-            throw error;
+        // Checks if the validator is okay with the value or if the value is just not given
+        if (value !== undefined && !validator(value))
+            throw "Error validating '" + key + "': " + error;
 
-        return value;
+        // Returns the value or the default value
+        return value || defaultVal;
     }
-
 }
