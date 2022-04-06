@@ -43,8 +43,8 @@ class ColorModule extends ModuleBase {
         var opStart = start > 0 ? (start + "+") : "";
 
         // Delay operations
-        var opDelayLed = pif("\ndelay("+delayPerLed+");",delayPerLed > 0);
-        var opDelayStep = pif("\ndelay("+delayAfterStep+");",delayAfterStep > 0);
+        var opDelayLed = pif("\nFastLED.show();\ndelay("+delayPerLed+");",delayPerLed > 0);
+        var opDelayStep = pif("\nFastLED.show();\ndelay("+delayAfterStep+");",delayAfterStep > 0);
 
         // Delay-bracket operations
         var opDelayLedBOpen = pif(" {",delayPerLed > 0);
@@ -58,7 +58,7 @@ class ColorModule extends ModuleBase {
             // Checks if only a single led is required
             if (ledsPerStep === 1)
                 return {
-                    loop: `leds[${start}] = ${colorString};`
+                    loop: `leds[${start}] = ${colorString};\nFastLED.show();`
                 }
             else {
                 // Requests the led variable
@@ -68,6 +68,7 @@ class ColorModule extends ModuleBase {
                     loop: `
                         for(${vLed.declair()} ${vLed} < ${ledsPerStep}; ${vLed}++)${opDelayLedBOpen}
                             leds[${opStart}${vLed}] = ${colorString};${opDelayLed}${opDelayLedBClose}
+                        FastLED.show();
                     `
                 }
             }
@@ -81,6 +82,7 @@ class ColorModule extends ModuleBase {
                 for(${vStep.declair()} ${vStep} < ${steps}; ${vStep}++)${opDelayStepBOpen}
                     for(${vLed.declair()} ${vLed} < ${ledsPerStep}; ${vLed}++)${opDelayLedBOpen}
                         leds[${opStart}${vStep} * ${(space+ledsPerStep)} + ${vLed}] = ${colorString};${opDelayLed}${opDelayLedBClose}${opDelayStep}${opDelayStepBClose}
+                FastLED.show();    
                 `
             }
         }
