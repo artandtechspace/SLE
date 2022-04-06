@@ -14,7 +14,7 @@ class SpecialCommentModule extends ModuleBase {
 
     public generateCode(env: Environment, _: VariableSystem, config: Config): string | ModuleReturn {
         return {
-            loop: C(config.getRaw("comment"),env)
+            loop: "// "+config.getRaw("comment")
         };
     }
 }
