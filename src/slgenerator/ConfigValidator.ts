@@ -1,5 +1,5 @@
 import { Config } from "../Config";
-import ModuleComment from "../defaultModules/ModuleComment";
+import ModuleComment from "../modules/ModuleComment";
 import { Environment } from "../Environment";
 import { ModuleBase } from "../modules/ModuleBase";
 import ModuleManager from "../modules/ModuleManager";
