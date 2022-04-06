@@ -3,6 +3,8 @@ import ModuleComment from "../modules/ModuleComment";
 import { Environment } from "../Environment";
 import { ModuleBase } from "../modules/ModuleBase";
 import ModuleManager from "../modules/ModuleManager";
+import { isInteger } from "../utils/WorkUtils";
+import ModuleDelay from "../modules/ModuleDelay";
 
 
 /**
@@ -59,16 +61,30 @@ export function tryParseModules(json: any) : [ModuleBase, Config][]|string{
     // Iterates over all objects
     for(var modObj of json){       
 
-        // Checks if the element is an object
-        if(typeof modObj !== "object"){
+        // Gets the type
+        var type = typeof modObj;
 
-            // Checks if the element is a comment
-            if(typeof modObj === "string"){
-                // Registers a new comment module
-                list.push([ModuleComment,new Config({
-                    comment: modObj
-                })]);
-                continue;
+        // Checks if the element is an object
+        if(type !== "object"){
+
+            // Checks the type
+            switch(type){
+                case "string":
+                    // Registers a new comment module
+                    list.push([ModuleComment,new Config({
+                        comment: modObj
+                    })]);
+                    continue;
+                case "number":
+                    // Checks if the number is valid
+                    if(!isInteger(modObj,1))
+                        return "Delay-function '"+modObj+"' must be an integer >= 1";
+                    
+                    // Registers a new delay module
+                    list.push([ModuleDelay,new Config({
+                        delay: modObj
+                    })]);
+                    continue;
             }
 
             return "Please write only modules and comments inside the array";
