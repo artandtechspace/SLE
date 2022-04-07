@@ -1,6 +1,5 @@
 import { Config } from "../../Config";
 import { Environment } from "../../Environment";
-import { C } from "../../utils/WorkUtils";
 import { VariableSystem } from "../../variablesystem/VariableSystem";
 import { ModuleBase } from "../ModuleBase";
 import { ModuleReturn } from "../ModuleReturn";
