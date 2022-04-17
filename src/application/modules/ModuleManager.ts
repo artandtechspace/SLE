@@ -1,11 +1,9 @@
-import { ModuleBase } from "./ModuleBase";
-import TestModule from "../defaultModules/TestModule";
-import ColorModule from "../defaultModules/ColorModule";
-import LoopModule from "../defaultModules/LoopModule";
+import { ModuleBase } from "./ModuleBase.js";
+import ColorModule from "../defaultModules/ColorModule.js";
+import LoopModule from "../defaultModules/LoopModule.js";
 
 // List with all registered modules
 const MODULES = {
-    "test": TestModule,
     "color": ColorModule,
     "loop": LoopModule
 }

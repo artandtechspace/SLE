@@ -1,10 +1,10 @@
-import { Config } from "../Config";
-import { Environment } from "../Environment";
-import { ModuleBase } from "../modules/ModuleBase";
-import ModuleManager from "../modules/ModuleManager";
-import { isInteger } from "../utils/WorkUtils";
-import SpecialCommentModule from "../modules/special/SpecialCommentModule";
-import SpecialDelayModule from "../modules/special/SpecialDelayModule";
+import { Config } from "../Config.js";
+import { Environment } from "../Environment.js";
+import { ModuleBase } from "../modules/ModuleBase.js";
+import ModuleManager from "../modules/ModuleManager.js";
+import { isInteger } from "../utils/WorkUtils.js";
+import SpecialCommentModule from "../modules/special/SpecialCommentModule.js";
+import SpecialDelayModule from "../modules/special/SpecialDelayModule.js";
 
 
 /**

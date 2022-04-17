@@ -1,4 +1,4 @@
-import { Environment } from "../Environment";
+import { Environment } from "../Environment.js";
 
 // Hex-color regex
 const HEX_COLOR_REG = /^[\da-fA-F]{1,6}$/gi;

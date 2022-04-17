@@ -1,10 +1,10 @@
-import { Config } from "../Config";
-import { Environment } from "../Environment";
-import { VariableSystem } from "../variablesystem/VariableSystem";
-import { ModuleBase } from "../modules/ModuleBase";
-import { ModuleReturn } from "../modules/ModuleReturn";
-import { isHexRGB, isInteger, printIf as pif } from "../utils/WorkUtils";
-import { getFLEDColorDefinition } from "../utils/ColorUtils";
+import { Config } from "../Config.js";
+import { Environment } from "../Environment.js";
+import { VariableSystem } from "../variablesystem/VariableSystem.js";
+import { ModuleBase } from "../modules/ModuleBase.js";
+import { ModuleReturn } from "../modules/ModuleReturn.js";
+import { isHexRGB, isInteger, printIf as pif } from "../utils/WorkUtils.js";
+import { getFLEDColorDefinition } from "../utils/ColorUtils.js";
 
 class ColorModule extends ModuleBase {
 

@@ -1,14 +1,14 @@
-import { Config } from "../Config";
-import { Environment } from "../Environment";
-import { VariableSystem } from "../variablesystem/VariableSystem";
-import { ModuleBase } from "../modules/ModuleBase";
-import { ModuleReturn } from "../modules/ModuleReturn";
-import { tryParseModules } from "../slgenerator/ConfigValidator";
-import { generateModuleCode } from "../slgenerator/CodeGenerator";
-import { isInteger, printIf as pif } from "../utils/WorkUtils";
+import { Config } from "../Config.js";
+import { Environment } from "../Environment.js";
+import { VariableSystem } from "../variablesystem/VariableSystem.js";
+import { ModuleBase } from "../modules/ModuleBase.js";
+import { ModuleReturn } from "../modules/ModuleReturn.js";
+import { isInteger, printIf as pif } from "../utils/WorkUtils.js";
+import { tryParseModules } from "../codegenerator/ConfigValidator.js";
+import { generateModuleCode } from "../codegenerator/CodeGenerator.js";
 
 class LoopModule extends ModuleBase {
-
+    
     public generateCode(env: Environment, varSys: VariableSystem, config: Config): string | ModuleReturn {
 
         // Gets the submodules

@@ -1,5 +1,5 @@
-import { Environment } from "../Environment";
-import { C } from "../utils/WorkUtils";
+import { Environment } from "../Environment.js";
+import { C } from "../utils/WorkUtils.js";
 
 /**
  * When calling the toString method (eg. when using string-interpolation) this will just return the plain old variable-name.

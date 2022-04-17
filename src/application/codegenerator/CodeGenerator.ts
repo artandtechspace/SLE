@@ -1,9 +1,9 @@
-import { Config } from "../Config";
-import { Environment } from "../Environment";
-import { ModuleBase } from "../modules/ModuleBase";
-import { ModuleReturn } from "../modules/ModuleReturn";
-import { C } from "../utils/WorkUtils";
-import { VariableSystem } from "../variablesystem/VariableSystem";
+import { Config } from "../Config.js";
+import { Environment } from "../Environment.js";
+import { ModuleBase } from "../modules/ModuleBase.js";
+import { ModuleReturn } from "../modules/ModuleReturn.js";
+import { C } from "../utils/WorkUtils.js";
+import { VariableSystem } from "../variablesystem/VariableSystem.js";
 
 // Regexes to match env-variables and code-insert-points
 const CODE_REGEX = /\$\w+\$/gi;

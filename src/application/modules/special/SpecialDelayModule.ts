@@ -1,8 +1,8 @@
-import { Config } from "../../Config";
-import { Environment } from "../../Environment";
-import { VariableSystem } from "../../variablesystem/VariableSystem";
-import { ModuleBase } from "../ModuleBase";
-import { ModuleReturn } from "../ModuleReturn";
+import { Config } from "../../Config.js";
+import { Environment } from "../../Environment.js";
+import { VariableSystem } from "../../variablesystem/VariableSystem.js";
+import { ModuleBase } from "../ModuleBase.js";
+import { ModuleReturn } from "../ModuleReturn.js";
 
 /**
  * This is a special module which can't be directly instanciated by a json-config.

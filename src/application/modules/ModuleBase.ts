@@ -1,7 +1,7 @@
-import { Config } from "../Config";
-import { Environment } from "../Environment";
-import { VariableSystem } from "../variablesystem/VariableSystem";
-import { ModuleReturn } from "./ModuleReturn";
+import { Config } from "../Config.js";
+import { Environment } from "../Environment.js";
+import { VariableSystem } from "../variablesystem/VariableSystem.js";
+import { ModuleReturn } from "./ModuleReturn.js";
 
 /**
  * The module-base is the element that takes in a configuration file and generate the code based on the provided information and environment.

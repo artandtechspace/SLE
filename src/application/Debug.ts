@@ -1,8 +1,7 @@
 
-import { generateCode } from "./slgenerator/CodeGenerator";
-import { validateObject } from "./slgenerator/ConfigValidator";
-
 import { readFile } from "fs";
+import { generateCode } from "./codegenerator/CodeGenerator";
+import { validateObject } from "./codegenerator/ConfigValidator";
 
 // Default preprocessing code
 const ppCode = `
