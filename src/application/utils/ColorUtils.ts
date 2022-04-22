@@ -1,3 +1,10 @@
+// RGB-object
+interface RGB{
+    r: number,
+    g: number,
+    b: number
+}
+
 // Contains all predefined colors of the fastled library.
 const PREDEFINED_COLORS = {
     // Hex  : Constant-name
@@ -169,4 +176,64 @@ export function getFLEDColorDefinition(hex: string): [string,boolean]{
          potName === undefined ? `0x${hex}` : ("CRGB::"+name),
          potName !== undefined
      ];
+}
+
+/**
+ * Converts a HSV-Color into a RGB-Color
+ * 
+ * Modified version of: https://stackoverflow.com/a/17243070
+ * @param {number} h Hue-Part (From 0.00 to 1.00)
+ * @param {number} s Saturation-Part (From 0.00 to 1.00)
+ * @param {number} v Value-Part (From 0.00 to 1.00)
+ * @returns an object with keys of r, g and b and their respective values from 0 to 255
+ */
+ export function HSVtoRGB(h: number, s: number, v: number) : RGB {
+    // Variable declaration
+    var r, g, b, i, f, p, q, t;
+
+    // Variable assignment
+    i = Math.floor(h * 6);
+    f = h * 6 - i;
+    p = v * (1 - s);
+    q = v * (1 - f * s);
+    t = v * (1 - (1 - f) * s);
+
+    // Calculation
+    switch (i % 6) {
+        case 0: r = v, g = t, b = p; break;
+        case 1: r = q, g = v, b = p; break;
+        case 2: r = p, g = v, b = t; break;
+        case 3: r = p, g = q, b = v; break;
+        case 4: r = t, g = p, b = v; break;
+        case 5: r = v, g = p, b = q; break;
+        default: r = g = b = 0;
+    }
+
+    // Return as RGB-Colors
+    return {
+        r: Math.round(r * 255),
+        g: Math.round(g * 255),
+        b: Math.round(b * 255)
+    };
+}
+
+/**
+ * Takes in a decimal value, converts it to hex and pads the string with a zero if it has only a length of 1
+ */
+function decToHexTwoDigits(dec: number){
+    var val = dec.toString(16);
+    
+    return (val.length <= 1 ? "0" : "") + val
+}
+
+/**
+ * Converts a HSV-Color into a RGB-Color in the hex format: #RRGGBB.
+ * @param {number} h Hue-Part (From 0.00 to 1.00)
+ * @param {number} s Saturation-Part (From 0.00 to 1.00)
+ * @param {number} v Value-Part (From 0.00 to 1.00)
+ * @returns the hex-color in the following format: #RRGGBB
+ */
+export function HSV2HEX(h: number,s: number,v: number, withoutSharp=false){
+    var {r,g,b} = HSVtoRGB(h,s,v);  
+    return `${withoutSharp ? "" : "#"}${decToHexTwoDigits(r)}${decToHexTwoDigits(g)}${decToHexTwoDigits(b)}`;
 }

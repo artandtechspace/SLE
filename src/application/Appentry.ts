@@ -1,51 +1,71 @@
-import { generateCode } from "./codegenerator/CodeGenerator.js";
-import { validateObject } from "./codegenerator/ConfigValidator.js";
+// Import
+import registerBlockyBlocks from "./blockly/BlockRegister.js";
+import { Toolbox } from "./blockly/Toolbox.js";
+const Blockly = require("blockly");
 
-const toParse = `
-{
-    "modules": [
-      {
-        "name":"loop",
-        "config": {
-          "repeats": 5,
-          "modules": [
-            {
-              "name": "color",
-              "config": {
-                  "ledsPerStep": 10,      
-                  "rgb": "FF00aa"
-              }
-            },
-            200
-          ]
-        }
-      },
 
-      "yoooo"
-      
-    ],
-    "env": {
-      "ledAmount": 50,
-      "withComments": true,
-      "pin": 6,
-      "preprocessingCode": "#include <FastLED.h>\\n\\n#define LED_PIN $LED_PIN$\\n#define LED_AMT $LED_AMOUNT$\\n\\n// Fast-led api\\nCRGB leds[NUM_LEDS];\\n\\n$VARIABLES$\\n\\nvoid setup(){\\n    // Setups fastled-library\\n    FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, LED_AMT);\\n    \\n    $SETUP_CODE$\\n}\\n\\nvoid loop(){\\n    // Loop-code\\n$RUN_CODE$\\n}"
-    }
-  }
-  
-  
-`;
 
+
+
+// Generates the options for blockly
+var blocklyOptions = { 
+	toolbox : Toolbox, 
+	collapse : false, 
+	comments : false, 
+	disable : true, 
+	maxBlocks : Infinity, 
+	trashcan : true, 
+	horizontalLayout : false, 
+	toolboxPosition : 'start', 
+	css : true,
+	rtl : false, 
+	scrollbars : true, 
+	sounds : true, 
+	oneBasedIndex : true, 
+	grid : {
+		spacing : 20, 
+		length : 1, 
+		colour : '#888', 
+		snap : false
+	}, 
+	zoom : {
+		controls : true, 
+		wheel : true, 
+		startScale : 1, 
+		maxScale : 3, 
+		minScale : 0.3, 
+		scaleSpeed : 1.2
+	}
+};
+
+
+// Workspace for blockly
+var workspace: object;
+
+
+/**
+ * Event: When the generate-code button get's clicked
+ */
+function onGenCodeClicked(){
+
+}
 
 /**
  * Gets called once the general environment for the app got setup. Eg. the electron browser-window or the inbrowser setup got done.
  */
 export default function onAppInitalize(){
-    // Parses the config
-    var [env, modsNConfigs] = validateObject(toParse);
-            
-    // Tries to generate the code
-    var code = generateCode(env,modsNConfigs);
+	// Initalizes all blockly-blocks
+	registerBlockyBlocks();
 
-    // TODO: Export to file
-    console.log("Generated code: \n\n"+code);
+  // Creates the workspace with blockly
+  workspace = Blockly.inject('blocklyDiv', blocklyOptions);
+
+  // Shorts a function-name
+  const S: (name:string) => any = document.querySelector;
+
+  // Adds all event's
+  S("#genCode").onclick = onGenCodeClicked;
+
+  
+
 }
