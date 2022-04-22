@@ -1,4 +1,4 @@
-import { HSV2HEX, HSVtoRGB } from "../../utils/ColorUtils.js";
+import { HSV2HEX } from "../../utils/ColorUtils.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
 
 const Blockly = require("blockly");
@@ -7,16 +7,116 @@ const Blockly = require("blockly");
  * This file registers all blocks that are using the color-module. Eg. generate configs for it
  */
 
+function registerGeneralColor(){
+    Blockly.Blocks['simple_color'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField("Color leds")
+                .appendField(new Blockly.FieldNumber(0, 0), "start")
+                .appendField("to")
+                .appendField(new Blockly.FieldNumber(0), "end")
+                .appendField("in")
+                .appendField(new Blockly.FieldColour("#ff0000"), "color")
+                .appendField(", but skip")
+                .appendField(new Blockly.FieldNumber(1, 1), "skipLen")
+                .appendField("leds every")
+                .appendField(new Blockly.FieldNumber(1, 1), "skipStart")
+                .appendField("leds.");
+            this.setColour(230);
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+        }
+    };
+
+    Blockly.JavaScript['simple_color'] = function(block:any) {
+        // Starts/End of the animation
+        var start:number = block.getFieldValue('start');
+        var end:number = block.getFieldValue('end');
+
+        // RGB-Color
+        var hsv = block.getFieldValue('color');
+
+        // How long skips should be
+        var skipLen:number = block.getFieldValue('skipLen');
+
+        // After how many leds a skip should occurre
+        var skipStart:number = block.getFieldValue('skipStart');
+
+        // How many leds are used
+        var amt = end-start;
+
+        // Checks if an invalid length got specified
+        if(amt <= 0)
+            return "error.The specified 'end'-value is eiter the 'start'-value or below the 'start'-value.";
+
+        // Assembles the config
+        return JSON.stringify({
+            "name": "color",
+            "config": {
+                "start": start,
+                "ledsPerStep": skipStart,      
+                "rgb": HSV2HEX(hsv.h,hsv.s,hsv.v,true),
+                "spaceBetweenSteps": skipLen,
+                "steps": Math.ceil(amt/skipStart)
+            }
+        });
+      };
+}
+
+function registerStripe(){
+    Blockly.Blocks['simple_stripe_color'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField("Color leds")
+                .appendField(new Blockly.FieldNumber(0, 0), "start")
+                .appendField("to")
+                .appendField(new Blockly.FieldNumber(0), "end")
+                .appendField("in")
+                .appendField(new FieldCustomColor(), "color")
+                .appendField(".");
+            this.setColour(230);
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+        }
+    };
+
+    Blockly.JavaScript['simple_stripe_color'] = function(block:any) {
+        var start: number = block.getFieldValue('start');
+        var end: number = block.getFieldValue('end');
+        var hsv = block.getFieldValue('color');
+
+        // How many leds are used
+        var amt = end-start;
+
+        // Checks if an invalid length got specified
+        if(amt <= 0)
+            return "error.The specified 'end'-value is eiter the 'start'-value or below the 'start'-value.";
+
+        // Assembles the config
+        return JSON.stringify({
+            "name": "color",
+            "config": {
+                "start": start,
+                "ledsPerStep": amt,      
+                "rgb": HSV2HEX(hsv.h,hsv.s,hsv.v,true)
+            }
+        });
+    };
+}
+
 // Single-led
 function registerSingleLed(){
     Blockly.Blocks['simple_single_color'] = {
         init: function() {
             this.appendDummyInput()
-                .appendField("Set led")
-                .appendField(new Blockly.FieldNumber(0), "led")
-                .appendField("to")
-                .appendField(new FieldCustomColor(), "color");
+                .appendField("Color led")
+                .appendField(new Blockly.FieldNumber(0, 0), "led")
+                .appendField("in")
+                .appendField(new FieldCustomColor(), "color")
+                .appendField(".");
             this.setColour(230);
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
         }
     };
 
@@ -38,5 +138,7 @@ function registerSingleLed(){
 
 export default function registerColorBlocks(){
     registerSingleLed();
+    registerGeneralColor();
+    registerStripe();
 
 }

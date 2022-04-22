@@ -12,3 +12,4 @@ tsc --outDir build/electron/application
 
 # Copies the electron integration code
 cp -r src/electron/ build/
+cp -r src/webfiles/ build/electron/

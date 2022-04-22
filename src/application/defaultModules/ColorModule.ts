@@ -24,16 +24,8 @@ class ColorModule extends ModuleBase {
         var rgbHex = config.getRequired("rgb", isHexRGB, "must be an hex-color value in the format 'RRGGBB'");
 
 
-
-
-        // How many leds of the stripe would be covered by the animation
-        var anmCover = start+steps*(space+ledsPerStep);
-
-        // Checks if the overall led-amount excedes the stripe length
-        if(anmCover > env.ledAmount)
-            throw "the animation covers the stripe up to pixel '"+anmCover+"' which is behind the last pixel '"+env.ledAmount+"'.";
-
-
+        // Note: there is no check to alert the user if the animation is operation outside the bounds of the stripe-size.
+        // This usually can just be ignored
 
             
         // Gets the color-string

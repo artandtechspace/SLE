@@ -13,7 +13,7 @@ app.on('ready', () => {
     }
   });
 
-  const indexHTML = path.join(__dirname + '/index.html');
+  const indexHTML = path.join(__dirname + '/webfiles/index.html');
     win.loadFile(indexHTML).then(() => {
         // IMPLEMENT FANCY STUFF HERE
   });
