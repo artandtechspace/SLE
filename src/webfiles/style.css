@@ -21,8 +21,7 @@ body{
 }
 
 #blocklyDiv{
-    width: 80%;
     min-width: 400px;
-    background: rgb(54, 87, 122);
+    flex-grow: 1;
     height:100%;
 }
