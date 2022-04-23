@@ -1,4 +1,5 @@
 import { HSV2HEX } from "../../utils/ColorUtils.js";
+import { packageBlockConfig } from "../BlockRegister.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
 
 const Blockly = require("blockly");
@@ -7,8 +8,9 @@ const Blockly = require("blockly");
  * This file registers all blocks that are using the color-module. Eg. generate configs for it
  */
 
+// General color module with spaces between leds
 function registerGeneralColor(){
-    Blockly.Blocks['simple_color'] = {
+    Blockly.Blocks['sle_simple_color'] = {
         init: function() {
             this.appendDummyInput()
                 .appendField("Color leds")
@@ -28,7 +30,7 @@ function registerGeneralColor(){
         }
     };
 
-    Blockly.JavaScript['simple_color'] = function(block:any) {
+    Blockly.JavaScript['sle_simple_color'] = function(block:any) {
         // Starts/End of the animation
         var start:number = block.getFieldValue('start');
         var end:number = block.getFieldValue('end');
@@ -50,7 +52,7 @@ function registerGeneralColor(){
             return "error.The specified 'end'-value is eiter the 'start'-value or below the 'start'-value.";
 
         // Assembles the config
-        return JSON.stringify({
+        return packageBlockConfig({
             "name": "color",
             "config": {
                 "start": start,
@@ -60,11 +62,12 @@ function registerGeneralColor(){
                 "steps": Math.ceil(amt/skipStart)
             }
         });
-      };
+    };
 }
 
+// Colors multiple leds in a row
 function registerStripe(){
-    Blockly.Blocks['simple_stripe_color'] = {
+    Blockly.Blocks['sle_simple_stripe_color'] = {
         init: function() {
             this.appendDummyInput()
                 .appendField("Color leds")
@@ -80,7 +83,7 @@ function registerStripe(){
         }
     };
 
-    Blockly.JavaScript['simple_stripe_color'] = function(block:any) {
+    Blockly.JavaScript['sle_simple_stripe_color'] = function(block:any) {
         var start: number = block.getFieldValue('start');
         var end: number = block.getFieldValue('end');
         var hsv = block.getFieldValue('color');
@@ -93,7 +96,7 @@ function registerStripe(){
             return "error.The specified 'end'-value is eiter the 'start'-value or below the 'start'-value.";
 
         // Assembles the config
-        return JSON.stringify({
+        return packageBlockConfig({
             "name": "color",
             "config": {
                 "start": start,
@@ -106,7 +109,7 @@ function registerStripe(){
 
 // Single-led
 function registerSingleLed(){
-    Blockly.Blocks['simple_single_color'] = {
+    Blockly.Blocks['sle_simple_single_color'] = {
         init: function() {
             this.appendDummyInput()
                 .appendField("Color led")
@@ -120,12 +123,12 @@ function registerSingleLed(){
         }
     };
 
-    Blockly.JavaScript['simple_single_color'] = function(block:any) {
+    Blockly.JavaScript['sle_simple_single_color'] = function(block:any) {
         // Gets the color as an rgb-value
         var hsv = block.getFieldValue('color');
 
         // Assembles the config
-        return JSON.stringify({
+        return packageBlockConfig({
             "name": "color",
             "config": {
                 "ledsPerStep": block.getFieldValue('led'),      

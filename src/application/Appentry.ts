@@ -1,5 +1,5 @@
 // Import
-import registerBlockyBlocks from "./blockly/BlockRegister.js";
+import { parseConfigsFromBlocks, registerBlockyBlocks } from "./blockly/BlockRegister.js";
 import { Toolbox } from "./blockly/Toolbox.js";
 const Blockly = require("blockly");
 
@@ -47,7 +47,12 @@ var workspace: object;
  * Event: When the generate-code button get's clicked
  */
 function onGenCodeClicked(){
+	var code = Blockly.JavaScript.workspaceToCode(workspace);
 
+	console.log("Code: ");
+	console.log(parseConfigsFromBlocks(code));
+	
+	
 }
 
 /**
@@ -65,7 +70,5 @@ export default function onAppInitalize(){
 
   	// Adds all event's
   	S("#genCode").onclick = onGenCodeClicked;
-
-  
 
 }

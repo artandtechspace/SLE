@@ -5,15 +5,14 @@ export const Toolbox = {
     "kind": "flyoutToolbox",
     "contents": [
       {
-        "kind": "block",
-        "type": "controls_if"
-      },
-      {
-        "kind": "block",
-        "type": "controls_whileUntil"
-      },{
           "kind": "block",
-          "type": "simple_single_color"
+          "type": "sle_simple_single_color"
+      },{
+        "kind": "block",
+        "type": "sle_control_loop"
+      },{
+        "kind": "block",
+        "type": "sle_control_delay"
       }
     ]
 
