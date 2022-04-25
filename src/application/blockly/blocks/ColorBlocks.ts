@@ -131,8 +131,9 @@ function registerSingleLed(){
         return packageBlockConfig({
             "name": "color",
             "config": {
-                "ledsPerStep": block.getFieldValue('led'),      
-                "rgb": HSV2HEX(hsv.h,hsv.s,hsv.v,true)
+                "start": block.getFieldValue('led'),      
+                "rgb": HSV2HEX(hsv.h,hsv.s,hsv.v,true),
+                "ledsPerStep": 1
             }
         });
     };

@@ -1,5 +1,6 @@
 import { Config } from "../Config.js";
 import { Environment } from "../Environment.js";
+import { Arduino } from "../simulation/Arduino.js";
 import { VariableSystem } from "../variablesystem/VariableSystem.js";
 import { ModuleReturn } from "./ModuleReturn.js";
 
@@ -22,4 +23,9 @@ export class ModuleBase{
     public generateCode(env : Environment, varSys : VariableSystem, config: Config) : string|ModuleReturn{
         return {}
     }
+
+
+    // TODO
+    public simulateSetup(env : Environment, config: Config, singleSourceOfTruth: {[k: string]: any}, arduino: Arduino){}
+    public async simulateLoop(env : Environment, singleSourceOfTruth: {[k: string]: any}, arduino: Arduino){}
 }

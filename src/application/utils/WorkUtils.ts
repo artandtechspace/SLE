@@ -1,7 +1,7 @@
 import { Environment } from "../Environment.js";
 
 // Hex-color regex
-const HEX_COLOR_REG = /^[\da-fA-F]{1,6}$/gi;
+const HEX_COLOR_REG = /^[\da-fA-F]{1,6}$/i;
 
 /**
  * Takes in a comment and the current environment. Based on these settings the command will be printed or not.

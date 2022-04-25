@@ -1,5 +1,6 @@
 import { Config } from "../../Config.js";
 import { Environment } from "../../Environment.js";
+import { Arduino } from "../../simulation/Arduino.js";
 import { VariableSystem } from "../../variablesystem/VariableSystem.js";
 import { ModuleBase } from "../ModuleBase.js";
 import { ModuleReturn } from "../ModuleReturn.js";
@@ -15,6 +16,14 @@ class SpecialCommentModule extends ModuleBase {
         return {
             loop: `delay(${config.getRaw("delay")});\n`
         };
+    }
+
+    public simulateSetup(env : Environment, config: Config, singleSourceOfTruth: {[k: string]: any}, arduino: Arduino){
+        singleSourceOfTruth.delay = config.getRaw("delay");   
+    }
+
+    public async simulateLoop(env : Environment, singleSourceOfTruth: {[k: string]: any}, arduino: Arduino){
+        await arduino.delay(singleSourceOfTruth.delay);
     }
 }
 

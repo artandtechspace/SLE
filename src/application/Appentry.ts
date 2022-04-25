@@ -1,6 +1,9 @@
 // Import
 import { parseConfigsFromBlocks, registerBlockyBlocks } from "./blockly/BlockRegister.js";
 import { Toolbox } from "./blockly/Toolbox.js";
+import { tryParseModules } from "./codegenerator/ConfigValidator.js";
+import { Environment } from "./Environment.js";
+import { ArduinoSimulation } from "./simulation/ArduinoSimulation.js";
 const Blockly = require("blockly");
 
 
@@ -42,17 +45,28 @@ var blocklyOptions = {
 // Workspace for blockly
 var workspace: object;
 
+// Arduino-simulation
+var simulation: ArduinoSimulation = new ArduinoSimulation();
 
 /**
  * Event: When the generate-code button get's clicked
  */
 function onGenCodeClicked(){
-	var code = Blockly.JavaScript.workspaceToCode(workspace);
+	var config = parseConfigsFromBlocks(Blockly.JavaScript.workspaceToCode(workspace));
 
-	console.log("Code: ");
-	console.log(parseConfigsFromBlocks(code));
+	console.log("Config: ");
+	console.log(config);
 	
 	
+
+	var mods = tryParseModules(config);
+
+	if(typeof mods === "string"){
+		console.log("Error: "+mods);
+		return;
+	}
+
+	simulation.startSimulation(new Environment(20,false,"",2),mods);
 }
 
 /**
@@ -70,5 +84,8 @@ export default function onAppInitalize(){
 
   	// Adds all event's
   	S("#genCode").onclick = onGenCodeClicked;
+
+	// Attaches the simulation
+	simulation.attachToPreview(S("#simulationPreview"));
 
 }
