@@ -1,8 +1,15 @@
 // RGB-object
-interface RGB{
-    r: number,
-    g: number,
-    b: number
+export interface RGB{
+    r: number, // 0 - 255
+    g: number, // 0 - 255
+    b: number  // 0 - 255
+}
+
+// HSV-object
+export interface HSV{
+    h: number, // 0.00 - 1.00
+    s: number, // 0.00 - 1.00
+    v: number  // 0.00 - 1.00
 }
 
 // Contains all predefined colors of the fastled library.

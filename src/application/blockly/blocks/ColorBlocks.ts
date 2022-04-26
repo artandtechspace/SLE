@@ -18,7 +18,7 @@ function registerGeneralColor(){
                 .appendField("to")
                 .appendField(new Blockly.FieldNumber(0), "end")
                 .appendField("in")
-                .appendField(new Blockly.FieldColour("#ff0000"), "color")
+                .appendField(new FieldCustomColor(), "color")
                 .appendField(", but skip")
                 .appendField(new Blockly.FieldNumber(1, 1), "skipLen")
                 .appendField("leds every")

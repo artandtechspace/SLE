@@ -1,5 +1,6 @@
 // Import
 import { parseConfigsFromBlocks, registerBlockyBlocks } from "./blockly/BlockRegister.js";
+import registerCustomFields from "./blockly/fields/FieldRegistry.js";
 import { Toolbox } from "./blockly/Toolbox.js";
 import { tryParseModules } from "./codegenerator/ConfigValidator.js";
 import { Environment } from "./Environment.js";
@@ -76,6 +77,9 @@ export default function onAppInitalize(){
 	// Shorts a function-name
 	const S: (name:string) => HTMLElement = document.querySelector.bind(document);
 	
+	// Inits all custom blockly-fields
+	registerCustomFields();
+
 	// Initalizes all blockly-blocks
 	registerBlockyBlocks();
 

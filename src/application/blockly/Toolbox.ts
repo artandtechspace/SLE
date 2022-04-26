@@ -13,6 +13,12 @@ export const Toolbox = {
       },{
         "kind": "block",
         "type": "sle_control_delay"
+      },{
+        "kind": "block",
+        "type": "sle_simple_stripe_color"
+      },{
+        "kind": "block",
+        "type": "sle_simple_color"
       }
     ]
 
