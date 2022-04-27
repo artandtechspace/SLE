@@ -1,46 +1,16 @@
 // Import
-import { parseConfigsFromBlocks, registerBlockyBlocks } from "./blockly/BlockRegister.js";
+import { parseConfigsFromBlocks, registerBlockly } from "./blockly/BlockRegister.js";
 import registerCustomFields from "./blockly/fields/FieldRegistry.js";
-import { Toolbox } from "./blockly/Toolbox.js";
 import { tryParseModules } from "./codegenerator/ConfigValidator.js";
 import { Environment } from "./Environment.js";
 import { ArduinoSimulation } from "./simulation/ArduinoSimulation.js";
+import { setupUi } from "./ui/UiSetup.js";
+import { TabHandler } from "./ui/utils/TabHandler.js";
 const Blockly = require("blockly");
 
 
 
 
-
-// Generates the options for blockly
-var blocklyOptions = { 
-	toolbox : Toolbox, 
-	collapse : false, 
-	comments : false, 
-	disable : true, 
-	maxBlocks : Infinity, 
-	trashcan : true, 
-	horizontalLayout : false, 
-	toolboxPosition : 'start', 
-	css : true,
-	rtl : false, 
-	scrollbars : true, 
-	sounds : true, 
-	oneBasedIndex : true, 
-	grid : {
-		spacing : 20, 
-		length : 1, 
-		colour : '#888', 
-		snap : false
-	}, 
-	zoom : {
-		controls : true, 
-		wheel : true, 
-		startScale : 1, 
-		maxScale : 3, 
-		minScale : 0.3, 
-		scaleSpeed : 1.2
-	}
-};
 
 
 // Workspace for blockly
@@ -48,6 +18,9 @@ var workspace: object;
 
 // Arduino-simulation
 var simulation: ArduinoSimulation = new ArduinoSimulation();
+
+// Tab-handler for the sidebar
+var tabhandler: TabHandler;
 
 /**
  * Event: When the generate-code button get's clicked
@@ -77,19 +50,23 @@ export default function onAppInitalize(){
 	// Shorts a function-name
 	const S: (name:string) => HTMLElement = document.querySelector.bind(document);
 	
+	// Gets the simulation-preview element
+	const simPrevElm = S("#simulationPreview");
+
+
+	// Performs the ui-setup
+	tabhandler = setupUi().tabhandler;
+	
 	// Inits all custom blockly-fields
 	registerCustomFields();
 
-	// Initalizes all blockly-blocks
-	registerBlockyBlocks();
-
-  	// Creates the workspace with blockly
-  	workspace = Blockly.inject('blocklyDiv', blocklyOptions);
+	// Initalizes all blockly-stuff
+	workspace = registerBlockly();
 
   	// Adds all event's
-  	S("#genCode").onclick = onGenCodeClicked;
+	S("#genCode").onclick = onGenCodeClicked;
 
 	// Attaches the simulation
-	simulation.attachToPreview(S("#simulationPreview"));
+	simulation.attachToPreview(simPrevElm);
 
 }

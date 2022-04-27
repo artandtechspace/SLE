@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script type="module" defer src="script.js"></script>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="forkawesome/fork-awesome.min.css">
+</head>
+<body>
+
+    <!--Splits main work area and sidebar-->
+    <div id="content">
+        <div id="mainArea">
+                <div id="blocklyDiv">
+    
+                </div>
+            
+            <!--Bottom-info text for errors, warning or infosmations-->
+            <div id="infobar">
+                <div class="wrapper">
+                    <span>
+                    </span>
+                    <i class="fa fa-info" aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
+        <div class="sliderbar x" id="sidebarBar"></div>
+        <div id="sidebar">
+            <div id="preview">
+                <div id="wrapper">
+                    <div id="previewPicker">
+                        <div id="texts">
+                            <input type="button" tab="0" value="Code">
+                            <input type="button" tab="1" value="Animation">
+                            <input type="button" tab="2" value="Raw-JSON">
+                        </div>
+
+                        <div id="icons">
+                            <i class="fa fa-code" tab="0" aria-hidden="true"></i>
+                            <i class="fa fa-film" tab="1" aria-hidden="true"></i>
+                            <i class="fa fa-cog" tab="2" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    <div class="tab" tab="0"></div>
+                    <div class="tab" id="simulationPreview" tab="1">Tab dos</div>
+                    <div class="tab" tab="2">Tab tres</div>
+                </div>
+            </div>
+            <div class="sliderbar y" id="controlsBar"></div>
+            <div id="controls">
+                <input type="button" value="Genderate Code" id="genCode">
+            </div>
+        </div>
+
+    </div>
+
+
+</body>
+</html>
