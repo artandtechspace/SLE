@@ -64,6 +64,7 @@ export default function onAppInitalize(){
 	workspace = registerBlockly();
 
   	// Adds all event's
+	// TODO
 	S("#genCode").onclick = onGenCodeClicked;
 
 	// Attaches the simulation

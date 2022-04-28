@@ -17,6 +17,7 @@ const Blockly = require("blockly");
       'insertionMarkerOpacity': 0.3,
       'scrollbarOpacity': 0.4,
       'cursorColour': '#d0d0d0',
-      'blackBackground': '#333',
+      'blackBackground': '#333'
     },
+    'startHats': true  
   });

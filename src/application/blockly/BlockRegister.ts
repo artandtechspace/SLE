@@ -13,7 +13,7 @@ const BLOCKLY_OPTIONS = {
 	toolbox : Toolbox, 
 	collapse : false, 
 	comments : false, 
-	disable : true, 
+	disable : false,
 	maxBlocks : Infinity, 
 	trashcan : true, 
 	horizontalLayout : false, 
@@ -22,7 +22,7 @@ const BLOCKLY_OPTIONS = {
 	rtl : false, 
 	scrollbars : true, 
 	sounds : true, 
-	oneBasedIndex : true, 
+	oneBasedIndex : true,
 	grid : {
 		spacing : 20, 
 		length : 1, 
@@ -39,14 +39,25 @@ const BLOCKLY_OPTIONS = {
 	}
 };
 
-
-
 // Function that registers all blockly-blocks
 // Returns the blockly-workspace
 export function registerBlockly(){
 	registerBlocks();
 
-	return injectBlocklyIntoPage();
+	// Injects blockly to the page and creates the workspace
+	var ws = injectBlocklyIntoPage();
+
+	// Disables any element that are not the root generator element or it's children
+	ws.addChangeListener(Blockly.Events.disableOrphans);
+
+	// Creates the root element
+	Blockly.serialization.blocks.append({
+		'type': 'sle_root',
+		"x": 40,
+		"y": 40,
+	}, ws);
+
+	return ws;
 }
 
 // Registers all blockly-blocks

@@ -1,7 +1,4 @@
-import { HSV2HEX } from "../../utils/ColorUtils.js";
 import { packageBlockConfig, parseConfigsFromBlocks } from "../BlockRegister.js";
-import FieldCustomColor from "../fields/FieldCustomColor.js";
-
 const Blockly = require("blockly");
 
 /**
@@ -69,8 +66,24 @@ function registerDelay(){
     };
 }
 
+// Root-block (All others shall be disabled)
+function registerRoot(){
+    Blockly.Blocks['sle_root'] = {
+        init: function() {
+          this.appendDummyInput()
+              .appendField("Program-Plan");
+          this.setNextStatement(true, null);
+          this.setDeletable(false);
+          this.setEditable(false);
+          this.setMovable(false);
+        }
+    };
+}
+
 
 export default function registerControlBlocks(){
+    registerRoot();
+    
     registerLoop();
     registerDelay();
 }
