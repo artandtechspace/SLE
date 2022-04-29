@@ -3,7 +3,9 @@ import { parseConfigsFromBlocks } from "./blockly/BlocklyUtils.js";
 import { registerBlockly } from "./blockly/BlockRegister.js";
 import registerCustomFields from "./blockly/fields/FieldRegistry.js";
 import { tryParseModules } from "./codegenerator/ConfigValidator.js";
+import { Config } from "./Config.js";
 import { Environment } from "./Environment.js";
+import { ModuleBase } from "./modules/ModuleBase.js";
 import { ArduinoSimulation } from "./simulation/ArduinoSimulation.js";
 import { setupUi } from "./ui/UiSetup.js";
 import { TabHandler } from "./ui/utils/TabHandler.js";
@@ -35,10 +37,29 @@ function onBlocklyChange(evt: any){
 	if(evt !== undefined &&(evt.type !== "drag" || evt.isStart) && evt.type !== "change")
 		return;
 	
-	var cfg;
 	try{
+		// Gets the raw string config
+		var rawCfg = Blockly.JavaScript.workspaceToCode(workspace);
+
+		// Generates the checksum
+		var csum: number = hash53b(rawCfg);
+		
+		// Checks if the checksum has changed
+		if(csum === blocklyChecksum)
+			return;
+
+
 		// Parses the config from the workspace
-		cfg = parseConfigsFromBlocks(Blockly.JavaScript.workspaceToCode(workspace));
+		var cfg: [] = parseConfigsFromBlocks(rawCfg);	
+	
+		// Updates the checksum
+		blocklyChecksum = csum;
+	
+		// Tries to parse all modules
+		var mods: [ModuleBase, Config][] = tryParseModules(cfg);
+	
+		// Restarts the simulation
+		simulation.startSimulation(new Environment(20,false,"",2),mods);
 	}catch(e){
 
 		// TODO
@@ -48,26 +69,6 @@ function onBlocklyChange(evt: any){
 		return;
 	}
 
-	// Generates the checksum
-	var csum = hash53b(JSON.stringify(cfg));	
-
-	// Checks if the checksum has changed
-	if(csum === blocklyChecksum)
-		return;
-
-	// Updates the checksum
-	blocklyChecksum = csum;
-
-	var mods = tryParseModules(cfg);
-
-	// Checks if an error got found
-	if(typeof mods === "string"){
-		// TODO
-		console.log("Error: "+mods);
-		return;
-	}
-
-	simulation.startSimulation(new Environment(20,false,"",2),mods);
 	
 }
 

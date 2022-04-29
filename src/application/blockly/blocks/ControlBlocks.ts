@@ -1,3 +1,4 @@
+import { BlockError } from "../../errorSystem/Error.js";
 import { getNumberFromCode, packageBlockConfig, parseConfigsFromBlocks } from "../BlocklyUtils.js";
 const Blockly = require("blockly");
 
@@ -78,7 +79,7 @@ function registerDelay(){
 
         // Ensures that the delay is given
         if(isNaN(waitTime))
-            throw "Delay is not set.";
+            throw new BlockError("Delay is not set.",block);
 
         // Assembles the config
         return `${waitTime*multiplicator},`;

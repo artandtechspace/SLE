@@ -1,3 +1,5 @@
+import { Error, SystemError } from "../errorSystem/Error.js";
+
 /**
  * Element that takes in a function that shall appear to run sync but internally runs async and can be intercepted.
  */
@@ -47,7 +49,7 @@ export class StopableCallchain{
         // Starts the new chain
         asyncChain(this._delay.bind(this)).catch(e=>{
             if(e !== "callchain.stop")
-                throw e;
+                throw e instanceof Error ? e : new SystemError(e);
         });
 
     }

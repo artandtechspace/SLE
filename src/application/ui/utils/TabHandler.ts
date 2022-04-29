@@ -1,3 +1,4 @@
+import { SystemError } from "../../errorSystem/Error.js";
 
 /**
  * The TabHandler removes/adds element to the page depending on the current tab.
@@ -116,9 +117,15 @@ export class TabHandler{
             btn.addEventListener("click",this.onTabButtonClicked);
     }
 
-    // Takes in an array of tabs and maps it into a loopup-table to save globally.
-    // Unmounts the tabs from the document and returns the parent element that the tabs are mounted at. This is their entry point.
-    // If not all tabs share the same parent, an exception will be thrown
+    
+    /**
+     * 
+     * Takes in an array of @param rawTabs and maps it into a loopup-table to save globally.
+     * Unmounts the tabs from the document and returns the parent element that the tabs are mounted at. This is their entry point.
+     * 
+     * @throws {SystemError} if there is a critical error
+     * @returns {HTMLElement} the parent element of all tabs
+     */
     private registerTabs(rawTabs: HTMLElement[]): HTMLElement{
         // Saves the tabs
         this.tabs = rawTabs;
@@ -130,13 +137,13 @@ export class TabHandler{
         for(let tab of rawTabs){
             // Ensures that they are mounted
             if(tab.parentElement === undefined)
-                throw "Tab is not mounted on the document.";
+                throw new SystemError("Tab is not mounted on the document.");
             
             // Checks if the parent is currently unset
             if(parent !== undefined){
                 // Checks if the parent match up
                 if(parent !== tab.parentElement)
-                    throw "Two tabs don't share the same parents.";
+                    throw new SystemError("Two tabs don't share the same parents.");
             }else
                 // Sets the mount point
                 parent = tab.parentElement as HTMLElement;
@@ -147,7 +154,7 @@ export class TabHandler{
 
         // Ensures that at least one tab got registered
         if(parent === undefined)
-            throw "No tabs were registered";
+            throw new SystemError("No tabs were registered");
 
         return parent;
     }

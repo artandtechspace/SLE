@@ -1,3 +1,4 @@
+import { BlockError } from "../../errorSystem/Error.js";
 import { HSV2HEX } from "../../utils/ColorUtils.js";
 import { getNumberFromCode, packageBlockConfig } from "../BlocklyUtils.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
@@ -103,7 +104,7 @@ function registerStripe(){
 
         // Checks if an invalid length got specified
         if(amt <= 0)
-            throw "The specified 'end'-value is eiter the 'start'-value or below the 'start'-value.";
+            throw new BlockError("The specified 'end'-value is eiter the 'start'-value or below the 'start'-value.", block);
 
         // Assembles the config
         return packageBlockConfig({

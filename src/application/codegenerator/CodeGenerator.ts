@@ -1,5 +1,6 @@
 import { Config } from "../Config.js";
 import { Environment } from "../Environment.js";
+import { ModuleError } from "../errorSystem/Error.js";
 import { ModuleBase } from "../modules/ModuleBase.js";
 import { ModuleReturn } from "../modules/ModuleReturn.js";
 import { C } from "../utils/WorkUtils.js";
@@ -27,11 +28,7 @@ export function generateModuleCode(env: Environment, variablesystem: VariableSys
     // Generates the code for the modules and appends it to the setup and loop strings
     function onGenCode(element: [ModuleBase,Config]){
         // Generates the code
-        var code: string|ModuleReturn = element[0].generateCode(env,variablesystem,element[1]);
-
-        // Checks if an error occurred
-        if(typeof code === "string")
-            throw code;
+        var code: ModuleReturn = element[0].generateCode(env,variablesystem,element[1]);
 
         // Checks if loop-code got added
         if(code.loop !== undefined)
@@ -49,7 +46,7 @@ export function generateModuleCode(env: Environment, variablesystem: VariableSys
             onGenCode(mods[i]);
     }catch(e){
         // Some element had an error
-        throw "Error while processing Module: "+mods[i][0].constructor.name+":\n"+e;
+        throw new ModuleError("Error while processing Module: "+mods[i][0].constructor.name+": "+e);
     }
 
     return {

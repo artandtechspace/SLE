@@ -12,7 +12,7 @@ import { ModuleReturn } from "../ModuleReturn.js";
 
 class SpecialCommentModule extends ModuleBase {
 
-    public generateCode(env: Environment, _: VariableSystem, config: Config): string | ModuleReturn {
+    public generateCode(env: Environment, _: VariableSystem, config: Config): ModuleReturn {
         return {
             loop: `delay(${config.getRaw("delay")});\n`
         };

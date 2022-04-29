@@ -4,6 +4,7 @@ import { StopableCallchain } from "../utils/StopableCallchain.js";
 import { Arduino } from "./Arduino.js";
 import { Environment } from "../Environment.js";
 import { attachInfileSVG } from "../utils/SVGUtil.js";
+import { SystemError } from "../errorSystem/Error.js";
 
 export class ArduinoSimulation{
 
@@ -51,7 +52,7 @@ export class ArduinoSimulation{
     /**
      * Attaches the preview to an element.
      * @param {HTMLElement} preview the element where the preview shall be shown. Inside this element and svg will be inserted with the review for the led's
-     * @throws an error if no leds would be found
+     * @throws {SystemError} if there is a critical error
      */
     public async attachToPreview(preview: HTMLElement){
         // Retrieves the svg-image for the led's and appends it
@@ -62,7 +63,7 @@ export class ArduinoSimulation{
 
         // Ensures that the leds could be loaded
         if(this.leds.length <= 0)
-            throw "No leds could be found.";
+            throw new SystemError("No leds could be found.")
     }
 
     /**

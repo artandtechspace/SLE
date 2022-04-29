@@ -37,7 +37,7 @@ class ColorModule extends ModuleBase {
         }
     }
 
-    public generateCode(env: Environment, varSys: VariableSystem, config: Config): string | ModuleReturn {
+    public generateCode(env: Environment, varSys: VariableSystem, config: Config): ModuleReturn {
 
         // Validates the config
         var cfg = this.validateConfig(config);

@@ -7,6 +7,7 @@ import { isInteger, printIf as pif } from "../utils/WorkUtils.js";
 import { tryParseModules } from "../codegenerator/ConfigValidator.js";
 import { generateModuleCode } from "../codegenerator/CodeGenerator.js";
 import { Arduino } from "../simulation/Arduino.js";
+import { ModuleError } from "../errorSystem/Error.js";
 
 class LoopModule extends ModuleBase {
     
@@ -25,7 +26,7 @@ class LoopModule extends ModuleBase {
 
         // Checks if the submodules failed to parse
         if(typeof submodules === "string")
-            throw "Failed to pass submodules: "+submodules;
+            throw new ModuleError("Failed to pass submodules: "+submodules);
 
         return {
             submodules: (submodules as [ModuleBase, Config][]),
@@ -34,7 +35,7 @@ class LoopModule extends ModuleBase {
         }
     }
 
-    public generateCode(env: Environment, varSys: VariableSystem, config: Config): string | ModuleReturn {
+    public generateCode(env: Environment, varSys: VariableSystem, config: Config): ModuleReturn {
 
         // Validates the config
         var cfg = this.validateConfig(config);

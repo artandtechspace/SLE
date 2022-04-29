@@ -19,8 +19,10 @@ export class ModuleBase{
      * 
      * }
      * 
+     * @throws {ModuleError} if there is an error
+     * 
      */
-    public generateCode(env : Environment, varSys : VariableSystem, config: Config) : string|ModuleReturn{
+    public generateCode(env : Environment, varSys : VariableSystem, config: Config) : ModuleReturn{
         return {}
     }
 
