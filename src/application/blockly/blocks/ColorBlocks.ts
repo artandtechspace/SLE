@@ -1,6 +1,5 @@
 import { HSV2HEX } from "../../utils/ColorUtils.js";
-import { getNumberFromCode } from "../BlocklyUtils.js";
-import { packageBlockConfig } from "../BlockRegister.js";
+import { getNumberFromCode, packageBlockConfig } from "../BlocklyUtils.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
 
 const Blockly = require("blockly");
@@ -23,22 +22,21 @@ export default function registerColorBlocks(){
 function registerStepsColor(){
     Blockly.Blocks['sle_steps_color'] = {
         init: function() {
-            this.appendDummyInput()
-                .appendField("Color");
             this.appendValueInput("steps")
                 .setCheck("Number")
-                .appendField("step(s) from");
+                .appendField("Color");
             this.appendValueInput("start")
-                .setCheck("Number")
+                .appendField("step(s) from")
+                .setCheck("Number");
+            this.appendValueInput("skipLen")
                 .appendField("in")
                 .appendField(new FieldCustomColor(), "color")
-                .appendField("with");
-
-            this.appendValueInput("skipLen")
+                .appendField("with")
                 .setCheck("Number")
-                .appendField("leds space every")
             this.appendValueInput("skipStart")
-                .setCheck("Number")
+                .appendField("leds space every")
+                .setCheck("Number");
+            this.appendDummyInput()
                 .appendField("leds.");
             this.setColour(230);
             this.setPreviousStatement(true, null);
@@ -79,16 +77,15 @@ function registerStepsColor(){
 function registerStripe(){
     Blockly.Blocks['sle_simple_stripe_color'] = {
         init: function() {
-            this.appendDummyInput()
-                .appendField("Color leds");
             this.appendValueInput("start")
                 .setCheck("Number")
-                .appendField("to")
+                .appendField("Color leds");
             this.appendValueInput("end")
                 .setCheck("Number")
+                .appendField("to");
+            this.appendDummyInput()
                 .appendField("in")
-                .appendField(new FieldCustomColor(), "color")
-                .appendField(".");
+                .appendField(new FieldCustomColor(), "color");
             this.setColour(230);
             this.setPreviousStatement(true, null);
             this.setNextStatement(true, null);
@@ -124,13 +121,12 @@ function registerStripe(){
 function registerSingleLed(){
     Blockly.Blocks['sle_simple_single_color'] = {
         init: function() {
-            this.appendDummyInput()
-                .appendField("Color led")
             this.appendValueInput("led")
                 .setCheck("Number")
+                .appendField("Color led");
+            this.appendDummyInput()
                 .appendField("in")
-                .appendField(new FieldCustomColor(), "color")
-                .appendField(".");
+                .appendField(new FieldCustomColor(), "color");
             this.setColour(230);
             this.setPreviousStatement(true, null);
             this.setNextStatement(true, null);

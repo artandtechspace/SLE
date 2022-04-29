@@ -5,8 +5,8 @@ app.on('ready', () => {
   console.log('App is ready');
 
   const win = new BrowserWindow({
-    width: 600,
-    height: 400,
+    width: 600*2,
+    height: 400*2,
     webPreferences:{
       nodeIntegration: true,
       contextIsolation: false

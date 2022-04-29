@@ -47,15 +47,8 @@ export function registerBlockly(){
 	// Injects blockly to the page and creates the workspace
 	var ws = injectBlocklyIntoPage();
 
-	// Disables any element that are not the root generator element or it's children
-	ws.addChangeListener(Blockly.Events.disableOrphans);
-
-	// Creates the root element
-	Blockly.serialization.blocks.append({
-		'type': 'sle_root',
-		"x": 40,
-		"y": 40,
-	}, ws);
+	// Appends the root element and disables any non-root elements
+	addRootToPage(ws);
 
 	return ws;
 }
@@ -64,6 +57,19 @@ export function registerBlockly(){
 function registerBlocks(){
 	registerColorBlocks();
 	registerControlBlocks();
+}
+
+// Adds the root element to the page and disables any non-root elements
+function addRootToPage(workspace: any){
+	// Disables any element that are not the root generator element or it's children
+	workspace.addChangeListener(Blockly.Events.disableOrphans);
+
+	// Creates the root element
+	Blockly.serialization.blocks.append({
+		'type': 'sle_root',
+		"x": 100,
+		"y": 100,
+	}, workspace);
 }
 
 // Injects blockly and return the workspace-handle
@@ -79,29 +85,4 @@ function injectBlocklyIntoPage(){
   	new ResizeObserver(_=>Blockly.svgResize(workspace)).observe(blocklyDiv);
 
     return workspace;
-}
-
-
-
-
-
-
-// Takes in a given string that got provided by any blocky-code generator and which contains the module-configs.
-export function parseConfigsFromBlocks(cfg: string): []{
-    cfg = cfg.trim();
-
-    // Checks if the element already is an array
-    if(cfg.startsWith("[") && cfg.endsWith("]"))
-        return JSON.parse(cfg) as [];
-
-    // Checks if they do end with a comma
-    if(!cfg.endsWith(","))
-        return [];
-
-    return JSON.parse("["+cfg.substring(0,cfg.length-1)+"]") as [];
-}
-
-// Function use by the blocks to package their config-object into a state that can be passed up the block-chain as a json-object
-export function packageBlockConfig(config: Object){
-    return JSON.stringify(config)+",";
 }

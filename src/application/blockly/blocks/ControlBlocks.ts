@@ -1,5 +1,4 @@
-import { getNumberFromCode } from "../BlocklyUtils.js";
-import { packageBlockConfig, parseConfigsFromBlocks } from "../BlockRegister.js";
+import { getNumberFromCode, packageBlockConfig, parseConfigsFromBlocks } from "../BlocklyUtils.js";
 const Blockly = require("blockly");
 
 /**
@@ -24,6 +23,7 @@ function registerLoop(){
                 .appendField("Repeat")
             this.appendValueInput("loopAmount")
                 .setCheck("Number")
+            this.appendDummyInput()
                 .appendField("times");
             this.appendStatementInput("loops")
                 .setCheck(null);

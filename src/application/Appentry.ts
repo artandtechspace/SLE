@@ -1,5 +1,6 @@
 // Import
-import { parseConfigsFromBlocks, registerBlockly } from "./blockly/BlockRegister.js";
+import { parseConfigsFromBlocks } from "./blockly/BlocklyUtils.js";
+import { registerBlockly } from "./blockly/BlockRegister.js";
 import registerCustomFields from "./blockly/fields/FieldRegistry.js";
 import { tryParseModules } from "./codegenerator/ConfigValidator.js";
 import { Environment } from "./Environment.js";
@@ -22,27 +23,6 @@ var simulation: ArduinoSimulation = new ArduinoSimulation();
 
 // Tab-handler for the sidebar
 var tabhandler: TabHandler;
-
-/**
- * Event: When the generate-code button get's clicked
- */
-function onGenCodeClicked(){
-	var config = parseConfigsFromBlocks(Blockly.JavaScript.workspaceToCode(workspace));
-
-	console.log("Config: ");
-	console.log(config);
-	
-	
-
-	var mods = tryParseModules(config);
-
-	if(typeof mods === "string"){
-		console.log("Error: "+mods);
-		return;
-	}
-
-	simulation.startSimulation(new Environment(20,false,"",2),mods);
-}
 
 // Checksum of the previous blockly-configuration
 var blocklyChecksum: number = 0;
