@@ -51,13 +51,18 @@ export class ArduinoSimulation{
     /**
      * Attaches the preview to an element.
      * @param {HTMLElement} preview the element where the preview shall be shown. Inside this element and svg will be inserted with the review for the led's
+     * @throws an error if no leds would be found
      */
     public async attachToPreview(preview: HTMLElement){
         // Retrieves the svg-image for the led's and appends it
         this.preview = await attachInfileSVG(preview,"../resources/LedCanvas.svg");
 
         // Gets all leds
-        this.leds = Array.from(this.preview.getElementsByClassName("led")) as HTMLElement[];
+        this.leds = Array.from(this.preview.querySelectorAll("[led]")) as HTMLElement[];
+
+        // Ensures that the leds could be loaded
+        if(this.leds.length <= 0)
+            throw "No leds could be found.";
     }
 
     /**
@@ -98,7 +103,7 @@ export class ArduinoSimulation{
                     await obj.mod.simulateLoop(env,obj.ssot,arduino);
                 
                 // Default delay to prevent infinitely fast loops
-                await delay(100);
+                await delay(1000);
             }
         });
 

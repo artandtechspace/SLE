@@ -1,3 +1,4 @@
+import { getNumberFromCode } from "../BlocklyUtils.js";
 import { packageBlockConfig, parseConfigsFromBlocks } from "../BlockRegister.js";
 const Blockly = require("blockly");
 
@@ -5,13 +6,24 @@ const Blockly = require("blockly");
  * This file registers all blocks that are used for the general logic of the sle
  */
 
+
+export default function registerControlBlocks(){
+    registerRoot();
+    
+    registerLoop();
+    registerDelay();
+}
+
+
+
 // Loop-block
 function registerLoop(){
     Blockly.Blocks['sle_control_loop'] = {
         init: function() {
             this.appendDummyInput()
                 .appendField("Repeat")
-                .appendField(new Blockly.FieldNumber(0, 2), "loopAmount")
+            this.appendValueInput("loopAmount")
+                .setCheck("Number")
                 .appendField("times");
             this.appendStatementInput("loops")
                 .setCheck(null);
@@ -19,6 +31,7 @@ function registerLoop(){
             this.setPreviousStatement(true, null);
             this.setNextStatement(true, null);
             this.setColour(230);
+            this.setInputsInline(true);
         }
     };
 
@@ -31,7 +44,7 @@ function registerLoop(){
             name: "loop",
             config: {
                 // How often the code shall be looped
-                repeats: block.getFieldValue('loopAmount'),
+                repeats: getNumberFromCode(block,"loopAmount"),
                 // Parsed subblocks that shall be looped
                 modules: parseConfigsFromBlocks(subConfig)
             }
@@ -45,21 +58,27 @@ function registerDelay(){
         init: function() {
             this.appendDummyInput()
                 .appendField("wait")
-                .appendField(new Blockly.FieldNumber(1, 1), "time")
-                .appendField(new Blockly.FieldDropdown([["ms","millis"],["seconds","seconds"]]), "timeUnit");
+            this.appendValueInput("time")
+                .setCheck("Number")
+                .appendField(new Blockly.FieldDropdown([["ms","millis"],["millis","seconds"]]), "timeUnit");
             this.setInputsInline(false);
             this.setPreviousStatement(true, null);
             this.setNextStatement(true, null);
             this.setColour(230);
+            this.setInputsInline(true);
         }
     };
 
     Blockly.JavaScript['sle_control_delay'] = function(block:any) {
-        var waitTime = block.getFieldValue('time');
+        var waitTime = getNumberFromCode(block,"time");
         var timeUnit = block.getFieldValue('timeUnit');
 
         // Gets the multiplicator based on the time-unit
         var multiplicator = timeUnit === "seconds" ? 1000 : 1; 
+
+        // Ensures that the delay is given
+        if(isNaN(waitTime))
+            throw "Delay is not set.";
 
         // Assembles the config
         return `${waitTime*multiplicator},`;
@@ -78,12 +97,6 @@ function registerRoot(){
           this.setMovable(false);
         }
     };
-}
 
-
-export default function registerControlBlocks(){
-    registerRoot();
-    
-    registerLoop();
-    registerDelay();
+    Blockly.JavaScript["sle_root"] = ()=>"";
 }
