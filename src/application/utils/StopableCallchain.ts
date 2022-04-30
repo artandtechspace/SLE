@@ -18,7 +18,7 @@ export class StopableCallchain{
      * 
      * @param {number} amt how long to wait
      */
-    private async _delay(amt: number){
+    private async delay(amt: number){
         // Starts the timeout
         this.timeoutId = setTimeout(() => {
             this.timeoutId = null;
@@ -42,12 +42,12 @@ export class StopableCallchain{
      * This takes in a function @param asnyChain which itself takes a function as a parameter.
      * This function is the async-delay method that must be awaited to stop the execution.
      */
-    startChain(asyncChain: (delayFunc: (amount: number)=>Promise<unknown>)=>Promise<void>){
+    public startChain(asyncChain: (delayFunc: (amount: number)=>Promise<unknown>)=>Promise<void>){
         // Stops any previously started chain
         this.stop();
 
         // Starts the new chain
-        asyncChain(this._delay.bind(this)).catch(e=>{
+        asyncChain(this.delay.bind(this)).catch(e=>{
             if(e !== "callchain.stop")
                 throw e instanceof Error ? e : new SystemError(e);
         });
@@ -57,7 +57,7 @@ export class StopableCallchain{
     /**
      * Stops the current call if there is one executing
      */
-    stop(){
+    public stop(){
         // Checks if there is currently a delay going on
         if(this.timeoutId === undefined)
             return;

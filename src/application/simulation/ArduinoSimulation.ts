@@ -98,7 +98,7 @@ export class ArduinoSimulation{
         // Starts the arduin-simulation-loop
         this.callchain.startChain(async(delay)=>{
             // Inits the arduino
-            arduino.__init(delay);
+            arduino.init(delay);
 
             while(true){
                 for(var obj of modObjects)
