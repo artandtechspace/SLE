@@ -52,6 +52,7 @@ export class ArduinoSimulation{
     /**
      * Attaches the preview to an element.
      * @param {HTMLElement} preview the element where the preview shall be shown. Inside this element and svg will be inserted with the review for the led's
+     * 
      * @throws {SystemError} if there is a critical error
      */
     public async attachToPreview(preview: HTMLElement){
@@ -63,7 +64,7 @@ export class ArduinoSimulation{
 
         // Ensures that the leds could be loaded
         if(this.leds.length <= 0)
-            throw new SystemError("No leds could be found.")
+            throw new SystemError("No leds could be found.");
     }
 
     /**
@@ -116,6 +117,11 @@ export class ArduinoSimulation{
     public stopSimulation(){
         this.callchain.stop();
         this.clearLeds();
+    }
+
+    // Returns how many leds got found
+    public getLedAmount(){
+        return this.leds.length;
     }
 
 }

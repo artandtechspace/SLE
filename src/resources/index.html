@@ -11,6 +11,28 @@
 </head>
 <body>
 
+    <!--Overlay elements-->
+    <div id="popup-overlay" class="shown">
+        <div id="popup">
+            <input type="button" value="X" id="popup-close">
+
+            <div id="popup-content">
+
+                <!--Precompile editor-->
+                <div id="precompEditor">
+                    <p>Editing the Precompile-Code</p>
+                    <textarea></textarea>
+                    <div>
+                        <input type="button" value="Save" id="pce-save">
+                        <input type="button" value="Cancle" id="pce-cancle">
+                    </div>
+                </div>
+                
+            </div>
+
+        </div>
+    </div>
+
     <!--Splits main work area and sidebar-->
     <div id="content">
         <div id="mainArea">
@@ -23,6 +45,7 @@
                 <div class="wrapper">
                     <span>
                     </span>
+                    <!--Error-info icon-->
                     <i class="fa fa-info" aria-hidden="true"></i>
                 </div>
             </div>
@@ -58,11 +81,59 @@
             </div>
             <div class="sliderbar y" id="controlsBar"></div>
             <div id="controls">
+
+                <!--All configuration fields-->
+                <div>
+
+                    <!--Led-pin field-->
+                    <div class="infoInput">
+                        <div class="wrapper">
+                            <p>Led-Pin</p>
+                            <i class="fa fa-info" aria-hidden="true"></i>
+                            <div class="wrapper">
+                                <div class="popup">
+                                    <p>Pin that the WS2812b-Stripe is connected to</p>
+                                </div>
+                            </div>
+                        </div>
+                        <input id="inpPin" style="width:200px" min="0" type="number" placeholder="Led-Pin"/>
+                    </div>
+
+                    <!--Led-amount field-->
+                    <div class="infoInput">
+                        <div class="wrapper">
+                            <p>Led-amount</p>
+                            <i class="fa fa-info" aria-hidden="true"></i>
+                            <div class="wrapper">
+                                <div class="popup">
+                                    <p>How many leds are on the led-stripe</p>
+                                </div>
+                            </div>
+                        </div>
+                        <input id="inpAmt" style="width:200px" min="1" type="number" placeholder="Led-Amount"/>
+                    </div>
+
+                    <!--With comments field-->
+                    <div class="infoInput">
+                        <input id="inpComments" type="checkbox"/>
+                        <div class="wrapper">
+                            <p>Integrate comments?</p>
+                            <i class="fa fa-info" aria-hidden="true"></i>
+                            <div class="wrapper">
+                                <div class="popup">
+                                    <p>If comments should be added to the final source-code</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Precompile-Code field-->
+                    <div class="infoInput">
+                        <input id="inpPreCode" type="button" value="View/Edit Precompile-Code"/>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
-
-
 </body>
 </html>

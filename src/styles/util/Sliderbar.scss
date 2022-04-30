@@ -1,0 +1,31 @@
+/*
+ * Styles for the dragable sliders
+ */
+
+.sliderbar{
+
+    user-select: none;
+    display: inline-block;
+    position: relative;
+    background: $defaultBorderColor;
+
+    transition: .2s;
+    transition-property: background;
+    
+    &.x{
+        width: $defaultBorderSize;
+        height: 100%;
+        cursor: ew-resize;
+    }
+
+    &:active{
+        background-color: #007fd4;
+        transition: .2s;
+    }
+
+    &.y{
+        height: $defaultBorderSize;
+        width: 100%;
+        cursor: ns-resize;
+    }
+}

@@ -1,0 +1,19 @@
+/*
+ * Sidebar style 
+ */
+
+@import 'Controls.scss';
+@import 'Preview.scss';
+
+
+ #sidebar{
+    display: flex;
+    background: #1E1E1E;
+    height:100%;
+    flex-direction: column;
+    width: 0;
+
+    // Default width, can be changed by js later
+    min-width: 250px;
+
+}

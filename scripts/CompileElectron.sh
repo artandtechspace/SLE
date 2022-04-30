@@ -11,7 +11,7 @@ rm -rf build/electron/ &&
 tsc --outDir build/electron/application &&
 
 # Compiles the scss of the project
-node-sass --include-path scss src/styles/main.scss build/electron/resources/main.css &&
+node-sass --include-path scss src/styles/Main.scss build/electron/resources/main.css &&
 
 # Copies the electron integration code
 cp -r src/electron/ build/ &&

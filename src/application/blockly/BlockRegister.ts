@@ -1,11 +1,9 @@
+import { S } from "../ui/utils/UiUtils.js";
 import registerColorBlocks from "./blocks/ColorBlocks.js";
 import registerControlBlocks from "./blocks/ControlBlocks.js";
 import Theme from "./Theme.js";
 import { Toolbox } from "./Toolbox.js";
 const Blockly = require("blockly");
-
-// Shorts a function-name
-const S: (name:string) => HTMLElement = document.querySelector.bind(document);
 
 // Generates the options for blockly
 const BLOCKLY_OPTIONS = {

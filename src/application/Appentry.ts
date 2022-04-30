@@ -6,25 +6,30 @@ import { tryParseModules } from "./codegenerator/ConfigValidator.js";
 import { Config } from "./Config.js";
 import { Environment } from "./Environment.js";
 import { ModuleBase } from "./modules/ModuleBase.js";
+import { PopupSystem } from "./popupSystem/PopupSystem.js";
+import { PRESET_SOURCECODE } from "./Preset.js";
 import { ArduinoSimulation } from "./simulation/ArduinoSimulation.js";
 import { setupUi } from "./ui/UiSetup.js";
 import { TabHandler } from "./ui/utils/TabHandler.js";
 import { hash53b } from "./utils/CryptoUtil.js";
 const Blockly = require("blockly");
 
-
-
-
-
+// Global environment
+var env: Environment;
 
 // Workspace for blockly
 var workspace: object;
 
 // Arduino-simulation
-var simulation: ArduinoSimulation = new ArduinoSimulation();
+var simulation: ArduinoSimulation;
 
 // Tab-handler for the sidebar
 var tabhandler: TabHandler;
+
+// Popupsystem
+var popsys: PopupSystem;
+
+
 
 // Checksum of the previous blockly-configuration
 var blocklyChecksum: number = 0;
@@ -48,7 +53,6 @@ function onBlocklyChange(evt: any){
 		if(csum === blocklyChecksum)
 			return;
 
-
 		// Parses the config from the workspace
 		var cfg: [] = parseConfigsFromBlocks(rawCfg);	
 	
@@ -60,6 +64,9 @@ function onBlocklyChange(evt: any){
 	
 		// Restarts the simulation
 		simulation.startSimulation(new Environment(20,false,"",2),mods);
+
+		// Removes and previous error-messages
+
 	}catch(e){
 
 		// TODO
@@ -72,20 +79,20 @@ function onBlocklyChange(evt: any){
 	
 }
 
+
 /**
  * Gets called once the general environment for the app got setup. Eg. the electron browser-window or the inbrowser setup got done.
  */
-export default function onAppInitalize(){
-	// Shorts a function-name
-	const S: (name:string) => HTMLElement = document.querySelector.bind(document);
-	
-	// Gets the simulation-preview element
-	const simPrevElm = S("#simulationPreview");
-
-
+export default async function onAppInitalize(){
 	// Performs the ui-setup
-	tabhandler = setupUi().tabhandler;
-	
+	var cfg = await setupUi();
+	tabhandler = cfg.tabhandler;
+	popsys = cfg.popupsystem;
+	simulation = cfg.simulation;
+	env = cfg.environment;
+
+
+
 	// Inits all custom blockly-fields
 	registerCustomFields();
 
@@ -94,9 +101,4 @@ export default function onAppInitalize(){
 	
 	// Registers the change-handler for blockly
 	(workspace as any).addChangeListener(onBlocklyChange);
-
-
-	// Attaches the simulation
-	simulation.attachToPreview(simPrevElm);
-
 }

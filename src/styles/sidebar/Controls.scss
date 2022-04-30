@@ -1,0 +1,116 @@
+/*
+ * Sidebar controls style
+ */
+#sidebar>#controls{
+    position: relative;
+    width: 100%;
+    height: 250px;
+    padding: .8rem;
+    
+    // Default element with an info-icon
+    div.infoInput{
+        color: $textColor;
+        padding: .25rem;
+            
+        &>.wrapper{
+            display: inline-flex;
+            margin-bottom: .25rem;
+            padding-left: .6rem;
+            white-space: nowrap;
+            
+            // Title-text
+            p{
+                font-size: 1.2rem;
+                white-space: nowrap;
+            }
+        
+            // Help-Icon (Clickable)
+            i{
+                font-size: 15px;
+                border: 2px solid $textColor;
+                border-radius: 50%;
+                padding: 2px 6px;
+                margin-left: 0;
+                cursor: pointer;
+                margin-left: .5rem;
+            }
+    
+            i:hover + .wrapper{
+                visibility: visible;
+                opacity: 1;
+                transition: .2s;
+            }
+    
+            &>.wrapper{
+                visibility: hidden;
+                opacity: 0;
+                transition: .2s;
+                position: relative;
+    
+                // Element that will popup
+                &>.popup{
+                    position: absolute;
+                    transform: translateX(-100%) translateY(-100%);
+                    border: 2px solid #c3c3c3;
+                    bottom: 0;
+                    left: 3px;
+                    border-radius: 5px;
+
+                    p{
+                        border-radius: 5px;
+                        background: #252526;
+                        padding: 5px 10px;
+                    }
+
+                    &::after{
+                        content: '';
+                        position: absolute;
+                        background: #252526;
+                        width: 10px;
+                        height: 10px;
+                        right: 5px;
+                        bottom: -5px;
+                        transform: rotateZ(45deg);
+                        z-index: -1;
+                        border: 2px solid #c3c3c3;
+                    }
+                }
+            }
+    
+        }
+    
+        // Input element
+        input{
+            border: 2px solid #4F4F4F;
+            border-radius: 5px;
+            background: linear-gradient(180deg, #303030 0%, #242424 100%);
+            padding: .2rem .5rem;
+            outline: none;
+            color: $textColor;
+            font-size: 1rem;
+            display: block;
+
+            &::placeholder{
+                color: $placeHolderColor;
+                font-style: italic;
+            }
+
+            &[type="button"]{
+                cursor: pointer;
+
+                &:active{
+                    background: #1e1e1e !important;
+                }
+            }
+
+            &[type="checkbox"]{
+                display: inline;
+                margin-left: .2rem;
+            }
+
+        }
+
+    }
+}
+
+
