@@ -1,3 +1,16 @@
 
 // Short name for the queryselector-function
-export const S: (name: string, base?: HTMLElement) => HTMLElement = (name: string, base: HTMLElement = document.body) => base.querySelector(name) as HTMLElement;
+
+import { SystemError } from "../../errorSystem/Error.js";
+
+// Also throws a SystemError if the element couldn't be found
+export function S(name: string, base: HTMLElement = document.body): HTMLElement{
+    // Querys the element
+    var x = base.querySelector(name);
+
+    // Ensures that the element got found
+    if(x === null)
+        throw new SystemError("Object: "+name+" couldn't be found!");
+
+    return x as HTMLElement;
+}

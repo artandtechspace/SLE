@@ -24,6 +24,9 @@ export async function setupUi(){
     try{
         registerSliderBars();
         registerSidebarIconChanger();
+
+        // Gets the code-area
+        var codeArea = S("#codeArea") as HTMLTextAreaElement;
     
         var popupsystem = setupPopupsystem();
         var tabhandler = registerSidebarTabs();
@@ -47,7 +50,8 @@ export async function setupUi(){
             popupsystem,
             simulation,
             environment: env,
-            errorsystem
+            errorsystem,
+            codeArea
         };
     }catch(error){
         displayLoadingError(error as Error);
@@ -79,8 +83,7 @@ function displayLoadingError(error: any){
         console.error("App crashed while handling critical error: ", e, "Inital error: ",error);
 
         // Uses the last tool known to men that now can notify the user.
-        while(true)
-            alert("Oh no. It seams the app has crashed while handling an initalization error. please restart it.");
+        alert("Oh no. It seams the app has crashed while handling an initalization error. please restart it.");
     }
 
 }

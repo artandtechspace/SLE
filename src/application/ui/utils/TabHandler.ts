@@ -29,7 +29,7 @@ export class TabHandler{
     private tabWrapper: HTMLElement;
 
     // (Optional) Event handler for the tab-change event
-    private onTabSelect?: (tabId: number)=>boolean|number|undefined;
+    private onTabSelect?: (tabId: number)=>boolean|number|void;
 
     constructor(tabButtons: [HTMLElement, number][], tabs: [HTMLElement, number][], selectedTab: number){
         this.selectedTab = selectedTab;
@@ -45,7 +45,7 @@ export class TabHandler{
     }
 
     // Sets the tab-change event handler
-    public setTabChangeHandler(onTabSelect?: (tabId: number)=>boolean|number|undefined){
+    public setTabChangeHandler(onTabSelect?: (tabId: number)=>boolean|number|void){
         this.onTabSelect = onTabSelect;
     }
 
@@ -72,6 +72,10 @@ export class TabHandler{
         // Updates the tab and the ui
         this.selectedTab = id;
         this.update();
+    }
+
+    public getSelectedTab(){
+        return this.selectedTab;
     }
 
     // Updates the ui. Call this when a change occurres with the tab-selection

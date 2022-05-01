@@ -2,6 +2,7 @@
 import { parseConfigsFromBlocks } from "./blockly/BlocklyUtils.js";
 import { registerBlockly } from "./blockly/BlockRegister.js";
 import registerCustomFields from "./blockly/fields/FieldRegistry.js";
+import { generateCode } from "./codegenerator/CodeGenerator.js";
 import { tryParseModules } from "./codegenerator/ConfigValidator.js";
 import { Config } from "./Config.js";
 import { Environment } from "./Environment.js";
@@ -10,8 +11,10 @@ import { InAppErrorSystem } from "./errorSystem/InAppErrorSystem.js";
 import { ModuleBase } from "./modules/ModuleBase.js";
 import { PopupSystem } from "./popupSystem/PopupSystem.js";
 import { ArduinoSimulation } from "./simulation/ArduinoSimulation.js";
+import { TAB_ANIMATION, TAB_CODE } from "./ui/Tabs.js";
 import { setupUi } from "./ui/UiSetup.js";
 import { TabHandler } from "./ui/utils/TabHandler.js";
+import { S } from "./ui/utils/UiUtils.js";
 import { hash53b } from "./utils/CryptoUtil.js";
 const Blockly = require("blockly");
 
@@ -36,6 +39,9 @@ var errsys: InAppErrorSystem;
 // Timeout-handler for blockly-compilations
 var compileTimeout: NodeJS.Timeout | undefined;
 
+
+// Holds the generated source-code
+var codeArea: HTMLTextAreaElement;
 
 /**
  * Requests a compilation of the blockly-workspace and to restart the animation.
@@ -81,21 +87,35 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 			// Tries to parse all modules
 			var mods: [ModuleBase, Config][] = tryParseModules(cfg);
 		
-			// Restarts the simulation
-			simulation.startSimulation(new Environment(20,false,"",2),mods);
+			// Checks what to do
+			switch(tabhandler.getSelectedTab()){
+				case TAB_ANIMATION:
+					// Starts the simulation
+					simulation.startSimulation(env,mods);
+					break;
+				case TAB_CODE:
+					// Generates the code and appends it to the code-area
+					codeArea.value = generateCode(env,mods);
+					break;
+			}
 	
 			// Removes and previous error-messages
 			errsys.removeError();
 			
-	
 		}catch(e){
+			// Stops the simulation and removes the code
+			simulation.stopSimulation();
+			codeArea.value="";
+
 			// Sets the block-checksum to invalid
 			blocklyChecksum = 0;
 	
 			// Ensures that the error is from the error-system
-			if(!(e instanceof Error))
-				while(true)
-					alert("We have detected a critical error, please restart the application.");
+			if(!(e instanceof Error)){
+				alert("We have detected a critical error, please restart the application.");
+				return;
+			}
+					
 
 			// Shows the error
 			errsys.writeError(e);
@@ -118,6 +138,18 @@ function onBlocklyChange(evt: any){
 	requestBlocklyWsCompilation();
 }
 
+// Event: When the tab-view changes
+function onTabChange(tabId: number){
+	// Stops the animation
+	simulation.stopSimulation();
+	// Resets the code-area
+	codeArea.value="";
+
+	// Checks if the code should be regenerated
+	if(tabId === TAB_CODE || tabId === TAB_ANIMATION)
+		requestBlocklyWsCompilation(true);
+}
+
 
 /**
  * Gets called once the general environment for the app got setup. Eg. the electron browser-window or the inbrowser setup got done.
@@ -136,7 +168,10 @@ export default async function onAppInitalize(){
 	simulation = cfg.simulation;
 	env = cfg.environment;
 	errsys = cfg.errorsystem;
+	codeArea = cfg.codeArea;
 
+	// Appends the tab-change event
+	tabhandler.setTabChangeHandler(onTabChange);
 
 
 	// Inits all custom blockly-fields

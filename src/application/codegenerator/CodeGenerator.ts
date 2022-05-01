@@ -1,6 +1,6 @@
 import { Config } from "../Config.js";
 import { Environment } from "../Environment.js";
-import { ModuleError } from "../errorSystem/Error.js";
+import { ModuleError, Error } from "../errorSystem/Error.js";
 import { ModuleBase } from "../modules/ModuleBase.js";
 import { ModuleReturn } from "../modules/ModuleReturn.js";
 import { C } from "../utils/WorkUtils.js";
@@ -60,7 +60,9 @@ export function generateModuleCode(env: Environment, variablesystem: VariableSys
  * 
  * @param env environment passed by the user to the config.
  * @param mods all modules specified with their settings.
- * @returns a single string (or throws an error) that contains the finalized code.
+ * @throws {Error} if an error occurred
+ * 
+ * @returns a single string that contains the finalized code.
  */
 export function generateCode(env: Environment, mods: [ModuleBase, Config][]) : string{
 
