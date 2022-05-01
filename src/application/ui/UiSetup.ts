@@ -1,4 +1,5 @@
 import { Environment } from "../Environment.js";
+import { Error } from "../errorSystem/Error.js";
 import { PopupSystem } from "../popupSystem/PopupSystem.js";
 import { PRESET_SOURCECODE } from "../Preset.js";
 import { ArduinoSimulation } from "../simulation/ArduinoSimulation.js";
@@ -8,33 +9,77 @@ import { S } from "./utils/UiUtils.js";
 
 // Executes to setup the ui
 // Returns an object with all important elements
+
+/**
+ * Setups the ui-environment
+ * 
+ * @returns an object with all generated element for the ui or false if an error occurred
+ * setting up the ui. If an error occurres it's only required to stop further init-code as
+ * the error will already be displayed inside the ui.
+ */
 export async function setupUi(){
-    registerSliderBars();
-    registerSidebarIconChanger();
 
-    var popupsystem = setupPopupsystem();
-    var tabhandler = registerSidebarTabs();
-    var simulation = await setupArduinoSimulation();
+    try{
+        registerSliderBars();
+        registerSidebarIconChanger();
+    
+        var popupsystem = setupPopupsystem();
+        var tabhandler = registerSidebarTabs();
+        var simulation = await setupArduinoSimulation();
+    
+        // Builds the environment
+        var env = new Environment(simulation.getLedAmount(),true,PRESET_SOURCECODE,1);
+    
+        // Binds the environment-settings to the ui
+        bindEnvironment(env,popupsystem);
+    
+        // Cleans all hidden popup-content
+        popupsystem.closePopup();
 
-    // Builds the environment
-    var env = new Environment(simulation.getLedAmount(),true,PRESET_SOURCECODE,1);
+        // Closes the loading-screen
+        removeLoadingScreen();
+    
+        return {
+            tabhandler,
+            popupsystem,
+            simulation,
+            environment: env
+        };
+    }catch(error){
+        displayLoadingError(error as Error);
+        return false;
+    }
 
-    // Binds the environment-settings to the ui
-    bindEnvironment(env,popupsystem);
-
-    // Cleans all hidden popup-content
-    popupsystem.closePopup();
-
-    return {
-        tabhandler,
-        popupsystem,
-        simulation,
-        environment: env
-    };
 }
 
 
+// Displays the given error inside the ui
+function displayLoadingError(error: any){
+    try{
+        // Gets the components
+        var ls = S("#loadingScreen");
+        var status = S("#status",ls);
+        var display = S("#infoDisplay",ls);
 
+        // Adds the styles
+        ls.classList.add("error");
+
+        // Updates the messages
+        status.textContent = "Error loading application.";
+        display.textContent = "We failed to initalize the application. Please try to restart it. Below is the error message that we retreived:\n\n"+(error as Error).message;
+
+    }catch(_){
+        // Uses the last tool known to men that now can notify the user.
+        alert("We detected a cricital error while initalizing the app, please restart it.");
+    }
+
+}
+
+// Removes the ui-loading screen
+function removeLoadingScreen(){
+    // Removes the loading-screen
+    S("#loadingScreen").classList.add("hide");
+}
 
 // The environment-binder takes in the reference to an environment and binds to the ui
 function bindEnvironment(env: Environment, popsys: PopupSystem){

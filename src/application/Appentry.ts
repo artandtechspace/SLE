@@ -86,6 +86,12 @@ function onBlocklyChange(evt: any){
 export default async function onAppInitalize(){
 	// Performs the ui-setup
 	var cfg = await setupUi();
+
+	// Checks if there was an error while initalizing the app
+	if(cfg === false)
+		return;
+
+	// Stores all variables
 	tabhandler = cfg.tabhandler;
 	popsys = cfg.popupsystem;
 	simulation = cfg.simulation;

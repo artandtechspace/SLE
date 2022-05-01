@@ -1,0 +1,77 @@
+#loadingScreen{
+    position: absolute;
+    z-index: 99999;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    flex-direction: column;
+    right: 0;
+    background-color: #3a3a3a;
+    transition: 2s;
+    opacity: 1;
+    visibility: visible;
+
+    i{
+        font-size: 10rem;
+        animation: Jump 2s ease 0s infinite normal ;
+    }
+
+    #status{
+        font-size: 1.8rem;
+        font-family: serif;
+    }
+
+    #infoDisplay{
+        font-size: 1.3rem;
+        overflow: auto;
+        margin:2rem;
+        white-space: pre;
+        text-align: center;
+    }
+
+    // Will be added if an error occurres
+    &.error{
+        
+        #infoDisplay{
+            color: #ff5b5b;
+        }
+
+        i{
+            animation: none;
+        }
+    }
+
+    // Will be added once the inital loading is done
+    &.hide{
+        transition: 1s;
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+/*
+ * Modified version of https://stackoverflow.com/a/37087846
+ */
+@keyframes Jump {
+    from, 20%, 53%, 80%, to {
+      animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+      transform: translate3d(0,0,0);
+    }
+  
+    40%, 43% {
+      animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+      transform: translate3d(0, -30px, 0);
+    }
+  
+    70% {
+      animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+      transform: translate3d(0, -15px, 0);
+    }
+  
+    90% {
+      transform: translate3d(0,-4px,0);
+    }
+}
