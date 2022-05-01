@@ -93,6 +93,10 @@ body{
                 height: 17px;
                 text-align: center;
                 border-radius: 50%;
+
+                &.hidden{
+                    display: none;
+                }
             }
         }
 

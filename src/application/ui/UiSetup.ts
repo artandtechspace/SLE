@@ -1,8 +1,10 @@
 import { Environment } from "../Environment.js";
 import { Error } from "../errorSystem/Error.js";
+import { InAppErrorSystem } from "../errorSystem/InAppErrorSystem.js";
 import { PopupSystem } from "../popupSystem/PopupSystem.js";
 import { PRESET_SOURCECODE } from "../Preset.js";
 import { ArduinoSimulation } from "../simulation/ArduinoSimulation.js";
+import { TAB_ANIMATION, TAB_CODE, TAB_JSON } from "./Tabs.js";
 import { SliderBar, SliderBarDirection } from "./utils/SliderBar.js";
 import { TabHandler } from "./utils/TabHandler.js";
 import { S } from "./utils/UiUtils.js";
@@ -26,6 +28,7 @@ export async function setupUi(){
         var popupsystem = setupPopupsystem();
         var tabhandler = registerSidebarTabs();
         var simulation = await setupArduinoSimulation();
+        var errorsystem = new InAppErrorSystem();
     
         // Builds the environment
         var env = new Environment(simulation.getLedAmount(),true,PRESET_SOURCECODE,1);
@@ -43,7 +46,8 @@ export async function setupUi(){
             tabhandler,
             popupsystem,
             simulation,
-            environment: env
+            environment: env,
+            errorsystem
         };
     }catch(error){
         displayLoadingError(error as Error);
@@ -68,9 +72,15 @@ function displayLoadingError(error: any){
         status.textContent = "Error loading application.";
         display.textContent = "We failed to initalize the application. Please try to restart it. Below is the error message that we retreived:\n\n"+(error as Error).message;
 
-    }catch(_){
+        // Logs the error
+        console.error(error);        
+
+    }catch(e){
+        console.error("App crashed while handling critical error: ", e, "Inital error: ",error);
+
         // Uses the last tool known to men that now can notify the user.
-        alert("We detected a cricital error while initalizing the app, please restart it.");
+        while(true)
+            alert("Oh no. It seams the app has crashed while handling an initalization error. please restart it.");
     }
 
 }
@@ -125,7 +135,7 @@ async function setupArduinoSimulation(){
     var simulation = new ArduinoSimulation();
 
 	// Gets the simulation-preview element
-	const simPrevElm = S("#simulationPreview");
+	const simPrevElm = S("#animationTab");
 
     // Attaches to the simulation
     await simulation.attachToPreview(simPrevElm);
@@ -144,6 +154,7 @@ function setupPopupsystem(){
 
     // Appends the event handler to the control-button
 	S("#inpPreCode").addEventListener("click",()=>popsys.showPopup(codeEditElm));
+    
 
 	return popsys;
 }
@@ -152,13 +163,29 @@ function setupPopupsystem(){
 // Registers the sidebar-tabs and logic
 function registerSidebarTabs(){
 
-    // Gets the general tab-buttons
-    const TAB_BUTTONS: HTMLElement[] = [
-        ...S("#texts").children as unknown as HTMLElement[],
-        ...S("#icons").children as unknown as HTMLElement[]
+    // Gets the parents
+    var btns = S("#texts");
+    var icons = S("#icons");
+    var tabs = S("#tabs");
+
+    // Creates the tab-buttons
+    const BUTTONS: [HTMLElement,number][] = [
+        [S("#btnTabCode",btns),TAB_CODE],
+        [S("#tabCode",icons),TAB_CODE],
+        [S("#btnTabAnimation",btns),TAB_ANIMATION],
+        [S("#tabAnimation",icons),TAB_ANIMATION],
+        [S("#btnTabJson",btns),TAB_JSON],
+        [S("#tabJson",icons),TAB_JSON]
     ];
 
-    return new TabHandler(TAB_BUTTONS,document.querySelectorAll(".tab") as unknown as HTMLElement[],1);
+    // Gets the tabs
+    const TABS: [HTMLElement,number][] = [
+        [S("#codeTab",tabs),TAB_CODE],
+        [S("#animationTab",tabs),TAB_ANIMATION],
+        [S("#jsonTab",tabs),TAB_JSON]
+    ]
+
+    return new TabHandler(BUTTONS,TABS,1);
 }
 
 

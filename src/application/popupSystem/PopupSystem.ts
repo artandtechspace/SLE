@@ -12,7 +12,7 @@ export class PopupSystem{
         this.closeBtn = this.overlay.querySelector("#popup-close") as HTMLInputElement;
 
         // Appends the close event to the button
-        this.closeBtn.addEventListener("click",this.closePopup);
+        this.closeBtn.addEventListener("click",this.closePopup);        
     }
 
     /**

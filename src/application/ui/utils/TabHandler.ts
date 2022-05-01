@@ -20,10 +20,10 @@ export class TabHandler{
     private selectedTab: number;
 
     // Object with all tabs
-    private tabs: HTMLElement[] = [];
+    private tabs: [HTMLElement, number][] = [];
 
     // Tab-button elements
-    private buttons: HTMLElement[] = [];
+    private buttons: [HTMLElement, number][] = [];
 
     // Wrapper where the tabs will be added to
     private tabWrapper: HTMLElement;
@@ -31,7 +31,7 @@ export class TabHandler{
     // (Optional) Event handler for the tab-change event
     private onTabSelect?: (tabId: number)=>boolean|number|undefined;
 
-    constructor(tabButtons: HTMLElement[], tabs: HTMLElement[], selectedTab: number, onTabSelect?: (tabId: number)=>boolean|number|undefined){
+    constructor(tabButtons: [HTMLElement, number][], tabs: [HTMLElement, number][], selectedTab: number){
         this.selectedTab = selectedTab;
 
         // Registers the tabs
@@ -44,9 +44,18 @@ export class TabHandler{
         this.update();
     }
 
+    // Sets the tab-change event handler
+    public setTabChangeHandler(onTabSelect?: (tabId: number)=>boolean|number|undefined){
+        this.onTabSelect = onTabSelect;
+    }
+
     // Selects a different tab. Ensure that the tab exists, if no tab is selected, the field for the
     // tab will be empty and no button will be highlighted
     public selectTab(id: number){
+        // Ensures that that id isn't already selected
+        if(id === this.selectedTab)
+            return;
+
         // Executes the event-handler if given
         if(this.onTabSelect !== undefined){
             let res = this.onTabSelect(id);
@@ -65,26 +74,10 @@ export class TabHandler{
         this.update();
     }
 
-    // Event: When a tab-button get's clicked
-    private onTabButtonClicked=(evt: MouseEvent)=>{
-        // Tab-id
-        let tabId = parseInt((evt.target as HTMLElement).getAttribute("tab") as string);
-        
-        // Ensures that there is a change
-        if(tabId === this.selectedTab)
-            return;
-        
-        // Selects the correct tab
-        this.selectTab(tabId);
-    }
-
     // Updates the ui. Call this when a change occurres with the tab-selection
     private update(){
         // Updates the tabs
-        for(let tab of this.tabs){
-            // Tab-id
-            let tabId = parseInt(tab.getAttribute("tab") as string);
-            
+        for(let [tab, tabId] of this.tabs){            
             // Removes/Adds depending on the current selection
             tab.parentElement?.removeChild(tab);
 
@@ -94,10 +87,7 @@ export class TabHandler{
         }
 
         // Updates the buttons
-        for(let btn of this.buttons){
-            // Tab-id
-            let tabId = parseInt(btn.getAttribute("tab") as string);
-            
+        for(let [btn, tabId] of this.buttons){            
             // Adds/Removes the selected class depending on if the button's tab is selected
             if(tabId === this.selectedTab)
                 btn.classList.add("select");
@@ -107,14 +97,14 @@ export class TabHandler{
     }
 
     // Appends the event-handler to the tab-buttons and saves the button globally
-    private registerButtons(rawButtons: HTMLElement[]){
+    private registerButtons(rawButtons: [HTMLElement, number][]){
         // Saves the buttons globally
         this.buttons = rawButtons;
 
         // Iterates over every button
-        for(let btn of rawButtons)
+        for(let [btn,tabId] of rawButtons)
             // Appends the event-handler
-            btn.addEventListener("click",this.onTabButtonClicked);
+            btn.addEventListener("click",()=>this.selectTab(tabId));
     }
 
     
@@ -126,7 +116,7 @@ export class TabHandler{
      * @throws {SystemError} if there is a critical error
      * @returns {HTMLElement} the parent element of all tabs
      */
-    private registerTabs(rawTabs: HTMLElement[]): HTMLElement{
+    private registerTabs(rawTabs: [HTMLElement, number][]): HTMLElement{
         // Saves the tabs
         this.tabs = rawTabs;
         
@@ -134,7 +124,7 @@ export class TabHandler{
         var parent: HTMLElement|undefined;
 
         // Inits the tabs
-        for(let tab of rawTabs){
+        for(let [tab, _] of rawTabs){
             // Ensures that they are mounted
             if(tab.parentElement === undefined)
                 throw new SystemError("Tab is not mounted on the document.");

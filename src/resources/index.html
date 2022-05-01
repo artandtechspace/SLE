@@ -63,27 +63,29 @@
                 <div id="wrapper">
                     <div id="previewPicker">
                         <div id="texts">
-                            <input type="button" tab="0" value="Code">
-                            <input type="button" tab="1" value="Animation">
-                            <input type="button" tab="2" value="Raw-JSON">
+                            <input type="button" id="btnTabCode" value="Code">
+                            <input type="button" id="btnTabAnimation" value="Animation">
+                            <input type="button" id="btnTabJson" value="Raw-JSON">
                         </div>
 
                         <div id="icons">
-                            <i class="fa fa-code" tab="0" aria-hidden="true"></i>
-                            <i class="fa fa-film" tab="1" aria-hidden="true"></i>
-                            <i class="fa fa-cog" tab="2" aria-hidden="true"></i>
+                            <i class="fa fa-code" id="tabCode" aria-hidden="true"></i>
+                            <i class="fa fa-film" id="tabAnimation" aria-hidden="true"></i>
+                            <i class="fa fa-cog" id="tabJson" aria-hidden="true"></i>
                         </div>
                     </div>
-                    <!--Code-tab-->
-                    <div id="codeTab" class="tab" tab="0">
-                        <textarea id="codeArea" placeholder="[Output Source-code]" disabled></textarea>
+                    <div id="tabs">
+                        <!--Code-tab-->
+                        <div id="codeTab" class="tab">
+                            <textarea id="codeArea" placeholder="[Output Source-code]" disabled></textarea>
+                        </div>
+    
+                        <!--Animation-tab-->
+                        <div id="animationTab" class="tab"></div>
+    
+                        <!--Raw-json tab-->
+                        <div id="jsonTab" class="tab">Tab tres</div>
                     </div>
-
-                    <!--Animation-tab-->
-                    <div class="tab" id="simulationPreview" tab="1"></div>
-
-                    <!--Raw-json tab-->
-                    <div class="tab" tab="2">Tab tres</div>
                 </div>
             </div>
             <div class="sliderbar y" id="controlsBar"></div>

@@ -110,18 +110,26 @@
         }
     }
 
-    #codeTab{
-        textarea{
-            background-color: transparent;
-        }        
-    }
-    
-    #simulationPreview{
+    // Container for all tabs
+    #tabs{
         flex-grow: 1;
 
-        svg{
-            width:100%;
-            height:100%;
+        &>*{
+            height: 100%;
+        }
+        
+        #codeTab{
+            textarea{
+                background-color: transparent;
+            }        
+        }
+        
+        #animationTab{
+            svg{
+                width:100%;
+                height:100%;
+            }
         }
     }
+    
 }

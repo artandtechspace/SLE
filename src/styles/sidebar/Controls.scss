@@ -11,6 +11,7 @@
     div.infoInput{
         color: $textColor;
         padding: .25rem;
+        white-space: nowrap;
             
         &>.wrapper{
             display: inline-flex;
