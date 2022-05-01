@@ -18,6 +18,5 @@ void setup(){
 }
 
 void loop(){
-    // Loop-code
 $RUN_CODE$
 }`;

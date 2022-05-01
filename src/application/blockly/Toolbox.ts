@@ -4,7 +4,7 @@
 export const Toolbox = {
     "kind": "categoryToolbox",
     "contents": [
-      category("Colors", 210,[
+      category("Colors", 130,[
         block("sle_simple_single_color",{
           "led": inputNumber(0)
         }),
@@ -16,8 +16,8 @@ export const Toolbox = {
         block("sle_steps_color",{
           "start": inputNumber(0),
           "steps": inputNumber(1),
-          "skipLen": inputNumber(1),
-          "skipStart": inputNumber(1),
+          "space-between-steps": inputNumber(1),
+          "step-length": inputNumber(1),
         })
       ]),
       
@@ -27,11 +27,8 @@ export const Toolbox = {
         }),
 
         block("sle_control_loop",{
-          "loopAmount": inputNumber(2)
-        })
-      ]),
-
-      category("Numbers", 210,[
+          "repeat-amount": inputNumber(2)
+        }),
         block("math_number")
       ])
     ]

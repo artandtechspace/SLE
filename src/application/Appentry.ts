@@ -156,7 +156,7 @@ function onTabChange(tabId: number){
  */
 export default async function onAppInitalize(){
 	// Performs the ui-setup
-	var cfg = await setupUi();
+	var cfg = await setupUi(()=>requestBlocklyWsCompilation(true));
 
 	// Checks if there was an error while initalizing the app
 	if(cfg === false)

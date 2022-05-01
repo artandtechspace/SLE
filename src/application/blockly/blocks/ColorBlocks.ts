@@ -29,17 +29,17 @@ function registerStepsColor(){
             this.appendValueInput("start")
                 .appendField("step(s) from")
                 .setCheck("Number");
-            this.appendValueInput("skipLen")
+            this.appendValueInput("space-between-steps")
                 .appendField("in")
                 .appendField(new FieldCustomColor(), "color")
                 .appendField("with")
                 .setCheck("Number")
-            this.appendValueInput("skipStart")
+            this.appendValueInput("step-length")
                 .appendField("leds space every")
                 .setCheck("Number");
             this.appendDummyInput()
                 .appendField("leds.");
-            this.setColour(230);
+            this.setColour(130);
             this.setPreviousStatement(true, null);
             this.setNextStatement(true, null);
             this.setInputsInline(true);
@@ -48,14 +48,14 @@ function registerStepsColor(){
 
     Blockly.JavaScript['sle_steps_color'] = function(block:any) {
         // Variables
-        var start = getNumberFromCode(block,"start");
-        var steps = getNumberFromCode(block,"steps");
+        var start = getNumberFromCode(block,"start", 0);
+        var steps = getNumberFromCode(block,"steps", 1);
 
         // How many leds to skip between steps
-        var skipLen = getNumberFromCode(block,"skipLen");
+        var skipLen = getNumberFromCode(block,"space-between-steps", 1);
 
         // How long each step is
-        var skipStart = getNumberFromCode(block,"skipStart");
+        var skipStart = getNumberFromCode(block,"step-length", 1);
 
         // RGB-Color
         var hsv = block.getFieldValue('color');
@@ -87,7 +87,7 @@ function registerStripe(){
             this.appendDummyInput()
                 .appendField("in")
                 .appendField(new FieldCustomColor(), "color");
-            this.setColour(230);
+            this.setColour(130);
             this.setPreviousStatement(true, null);
             this.setNextStatement(true, null);
             this.setInputsInline(true);
@@ -95,7 +95,7 @@ function registerStripe(){
     };
 
     Blockly.JavaScript['sle_simple_stripe_color'] = function(block:any) {
-        var start: number = getNumberFromCode(block,"start");
+        var start: number = getNumberFromCode(block,"start", 0);
         var end: number = getNumberFromCode(block,"end");
         var hsv = block.getFieldValue('color');
 
@@ -128,7 +128,7 @@ function registerSingleLed(){
             this.appendDummyInput()
                 .appendField("in")
                 .appendField(new FieldCustomColor(), "color");
-            this.setColour(230);
+            this.setColour(130);
             this.setPreviousStatement(true, null);
             this.setNextStatement(true, null);
             this.setInputsInline(true);

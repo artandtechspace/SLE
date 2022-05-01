@@ -22,7 +22,7 @@ function registerLoop(){
         init: function() {
             this.appendDummyInput()
                 .appendField("Repeat")
-            this.appendValueInput("loopAmount")
+            this.appendValueInput("repeat-amount")
                 .setCheck("Number")
             this.appendDummyInput()
                 .appendField("times");
@@ -40,12 +40,15 @@ function registerLoop(){
         // Gets the subconfig code
         var subConfig = Blockly.JavaScript.statementToCode(block, 'loops');
         
+        // Gets the amount of loops
+        var loopAmt = getNumberFromCode(block,"repeat-amount");
+
         // Assembles the config
         return packageBlockConfig({
             name: "loop",
             config: {
                 // How often the code shall be looped
-                repeats: getNumberFromCode(block,"loopAmount"),
+                repeats: loopAmt,
                 // Parsed subblocks that shall be looped
                 modules: parseConfigsFromBlocks(subConfig)
             }
@@ -61,7 +64,7 @@ function registerDelay(){
                 .appendField("wait")
             this.appendValueInput("time")
                 .setCheck("Number")
-                .appendField(new Blockly.FieldDropdown([["ms","millis"],["millis","seconds"]]), "timeUnit");
+                .appendField(new Blockly.FieldDropdown([["ms","millis"],["seconds","seconds"]]), "timeUnit");
             this.setInputsInline(false);
             this.setPreviousStatement(true, null);
             this.setNextStatement(true, null);
@@ -71,15 +74,11 @@ function registerDelay(){
     };
 
     Blockly.JavaScript['sle_control_delay'] = function(block:any) {
-        var waitTime = getNumberFromCode(block,"time");
+        var waitTime = getNumberFromCode(block,"time", 0);
         var timeUnit = block.getFieldValue('timeUnit');
 
         // Gets the multiplicator based on the time-unit
         var multiplicator = timeUnit === "seconds" ? 1000 : 1; 
-
-        // Ensures that the delay is given
-        if(isNaN(waitTime))
-            throw new BlockError("Delay is not set.",block);
 
         // Assembles the config
         return `${waitTime*multiplicator},`;

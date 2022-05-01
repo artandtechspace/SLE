@@ -15,11 +15,13 @@ import { S } from "./utils/UiUtils.js";
 /**
  * Setups the ui-environment
  * 
+ * @param onEnvChange callback that executes every time a environment-variable changes
+ * 
  * @returns an object with all generated element for the ui or false if an error occurred
  * setting up the ui. If an error occurres it's only required to stop further init-code as
  * the error will already be displayed inside the ui.
  */
-export async function setupUi(){
+export async function setupUi(onEnvChange: ()=>void){
 
     try{
         registerSliderBars();
@@ -37,7 +39,7 @@ export async function setupUi(){
         var env = new Environment(simulation.getLedAmount(),true,PRESET_SOURCECODE,1);
     
         // Binds the environment-settings to the ui
-        bindEnvironment(env,popupsystem);
+        bindEnvironment(env,popupsystem, onEnvChange);
     
         // Cleans all hidden popup-content
         popupsystem.closePopup();
@@ -95,7 +97,7 @@ function removeLoadingScreen(){
 }
 
 // The environment-binder takes in the reference to an environment and binds to the ui
-function bindEnvironment(env: Environment, popsys: PopupSystem){
+function bindEnvironment(env: Environment, popsys: PopupSystem, onEnvChange: ()=>void){
     // Gets all elements to bind to
     var ctrl = S("#controls") as any;;
     var inpPin = S("#inpPin",ctrl) as any;
@@ -114,19 +116,28 @@ function bindEnvironment(env: Environment, popsys: PopupSystem){
     inpAmt.value = env.ledAmount;
     inpComments.checked = env.withComments;
 
-
     // Adds the event-handlers
-    inpPin.addEventListener("change",(_: any)=>env.ledPin=inpPin.value);
-    inpAmt.addEventListener("change",(_: any)=>env.ledAmount=inpAmt.value);
-    inpComments.addEventListener("change",(_: any)=>env.withComments=inpComments.checked);
+    inpPin.addEventListener("change",(_: any)=>{
+        env.ledPin=inpPin.value;
+        onEnvChange();
+    });
+    inpAmt.addEventListener("change",(_: any)=>{
+        env.ledAmount=inpAmt.value
+        onEnvChange();
+    });
+    inpComments.addEventListener("change",(_: any)=>{
+        env.withComments=inpComments.checked
+        onEnvChange();
+    });
     inpPreCode.addEventListener("click",(_: any)=>{
         popsys.showPopup(codeEditorPopup);
         codeEditor.value = env.preprocessingCode;
     });
     btnCancle.addEventListener("click",popsys.closePopup);
     btnSave.addEventListener("click",(_: any)=>{
-        env.preprocessingCode = codeEditor.value;
+        env.preprocessingCode = codeEditor.value
         popsys.closePopup();
+        onEnvChange();
     });
 
 }
