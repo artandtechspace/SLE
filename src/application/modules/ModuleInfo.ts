@@ -10,11 +10,11 @@ export interface ModuleInfo{
  * Returns the combined infos of all given modules
  * @param env the environment
  * @param mods the modules
- * @returns 
+ * @returns some informations like the estimated runtime in millis
  */
 export function getModuleInfos(env: Environment, mods: [ModuleBase, Config][]) : ModuleInfo{
     // Calculates the runtime of all modules
-    var runtime = mods.map(([mod, cfg])=> mod.calculateCodeInfos(env, cfg).runtime).reduce((a,b)=>a+b);
+    var runtime = mods.map(([mod, cfg])=> mod.calculateCodeInfos(env, cfg).runtime).reduce((a,b)=>a+b,0);
 
     return {
         runtime

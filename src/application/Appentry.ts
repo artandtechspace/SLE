@@ -9,9 +9,10 @@ import { Environment } from "./Environment.js";
 import { Error } from "./errorSystem/Error.js";
 import { InAppErrorSystem } from "./errorSystem/InAppErrorSystem.js";
 import { ModuleBase } from "./modules/ModuleBase.js";
+import { getModuleInfos } from "./modules/ModuleInfo.js";
 import { PopupSystem } from "./popupSystem/PopupSystem.js";
 import { ArduinoSimulation } from "./simulation/ArduinoSimulation.js";
-import { TAB_ANIMATION, TAB_CODE } from "./ui/Tabs.js";
+import { TAB_ANALYTICS, TAB_ANIMATION, TAB_CODE } from "./ui/Tabs.js";
 import { setupUi } from "./ui/UiSetup.js";
 import { TabHandler } from "./ui/utils/TabHandler.js";
 import { S } from "./ui/utils/UiUtils.js";
@@ -40,9 +41,9 @@ var errsys: InAppErrorSystem;
 var compileTimeout: NodeJS.Timeout | undefined;
 
 
-// Holds the generated source-code
-var codeArea: HTMLTextAreaElement;
-
+// Some specific html-references
+var codeArea: HTMLTextAreaElement; // Holds the generated source-code
+var runtimeDisplay: HTMLSpanElement; // Holds how long the given configuration will run
 /**
  * Requests a compilation of the blockly-workspace and to restart the animation.
  * If this function is called multiple times in a very short time, only one function will execute.
@@ -97,21 +98,27 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 					// Generates the code and appends it to the code-area
 					codeArea.value = generateCode(env,mods);
 					break;
+				case TAB_ANALYTICS:
+					// Generates the runtime-analytics
+					runtimeDisplay.textContent = (getModuleInfos(env,mods).runtime/1000).toString();
+					break;
 			}
 	
 			// Removes and previous error-messages
 			errsys.removeError();
 			
 		}catch(e){
-			// Stops the simulation and removes the code
+			// Stops the simulation and removes and elements
 			simulation.stopSimulation();
 			codeArea.value="";
+			runtimeDisplay.textContent = "[x]";
 
 			// Sets the block-checksum to invalid
 			blocklyChecksum = 0;
 	
 			// Ensures that the error is from the error-system
 			if(!(e instanceof Error)){
+				console.error(e);
 				alert("We have detected a critical error, please restart the application.");
 				return;
 			}
@@ -142,12 +149,12 @@ function onBlocklyChange(evt: any){
 function onTabChange(tabId: number){
 	// Stops the animation
 	simulation.stopSimulation();
-	// Resets the code-area
+	// Resets some elements
 	codeArea.value="";
+	runtimeDisplay.textContent="[x]";
 
-	// Checks if the code should be regenerated
-	if(tabId === TAB_CODE || tabId === TAB_ANIMATION)
-		requestBlocklyWsCompilation(true);
+	// Requests a recompilation to update the tab
+	requestBlocklyWsCompilation(true);
 }
 
 
@@ -169,6 +176,7 @@ export default async function onAppInitalize(){
 	env = cfg.environment;
 	errsys = cfg.errorsystem;
 	codeArea = cfg.codeArea;
+	runtimeDisplay = cfg.runtimeDisplay;
 
 	// Appends the tab-change event
 	tabhandler.setTabChangeHandler(onTabChange);

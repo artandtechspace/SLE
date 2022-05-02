@@ -4,7 +4,7 @@ import { InAppErrorSystem } from "../errorSystem/InAppErrorSystem.js";
 import { PopupSystem } from "../popupSystem/PopupSystem.js";
 import { PRESET_SOURCECODE } from "../Preset.js";
 import { ArduinoSimulation } from "../simulation/ArduinoSimulation.js";
-import { TAB_ANIMATION, TAB_CODE, TAB_JSON } from "./Tabs.js";
+import { TAB_ANIMATION, TAB_CODE, TAB_ANALYTICS } from "./Tabs.js";
 import { SliderBar, SliderBarDirection } from "./utils/SliderBar.js";
 import { TabHandler } from "./utils/TabHandler.js";
 import { S } from "./utils/UiUtils.js";
@@ -27,9 +27,10 @@ export async function setupUi(onEnvChange: ()=>void){
         registerSliderBars();
         registerSidebarIconChanger();
 
-        // Gets the code-area
+        // Gets specific elements
         var codeArea = S("#codeArea") as HTMLTextAreaElement;
-    
+        var runtimeDisplay = S("#runtime",S("#analyticsTab")) as HTMLSpanElement;
+
         var popupsystem = setupPopupsystem();
         var tabhandler = registerSidebarTabs();
         var simulation = await setupArduinoSimulation();
@@ -53,7 +54,8 @@ export async function setupUi(onEnvChange: ()=>void){
             simulation,
             environment: env,
             errorsystem,
-            codeArea
+            codeArea,
+            runtimeDisplay
         };
     }catch(error){
         displayLoadingError(error as Error);
@@ -188,15 +190,15 @@ function registerSidebarTabs(){
         [S("#tabCode",icons),TAB_CODE],
         [S("#btnTabAnimation",btns),TAB_ANIMATION],
         [S("#tabAnimation",icons),TAB_ANIMATION],
-        [S("#btnTabJson",btns),TAB_JSON],
-        [S("#tabJson",icons),TAB_JSON]
+        [S("#btnTabAnalytics",btns),TAB_ANALYTICS],
+        [S("#tabAnalytics",icons),TAB_ANALYTICS]
     ];
 
     // Gets the tabs
     const TABS: [HTMLElement,number][] = [
         [S("#codeTab",tabs),TAB_CODE],
         [S("#animationTab",tabs),TAB_ANIMATION],
-        [S("#jsonTab",tabs),TAB_JSON]
+        [S("#analyticsTab",tabs),TAB_ANALYTICS]
     ]
 
     return new TabHandler(BUTTONS,TABS,1);
