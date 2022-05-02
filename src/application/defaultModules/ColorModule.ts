@@ -6,6 +6,7 @@ import { ModuleReturn } from "../modules/ModuleReturn.js";
 import { isHexRGB, isInteger, printIf as pif } from "../utils/WorkUtils.js";
 import { getFLEDColorDefinition } from "../utils/ColorUtils.js";
 import { Arduino } from "../simulation/Arduino.js";
+import { ModuleInfo } from "../modules/ModuleInfo.js";
 
 class ColorModule extends ModuleBase {
 
@@ -59,6 +60,10 @@ class ColorModule extends ModuleBase {
         var opDelayStepBOpen = pif(" {",cfg.delayAfterStep > 0);
         var opDelayStepBClose = pif("\n}",cfg.delayAfterStep > 0);
 
+        // Calculates the dirty-variable
+        // Marks as dirty if no delay is given
+        var isDirty = cfg.delayPerLed <= 0 && cfg.delayAfterStep <= 0;
+
         // Checks if there is only a singles step
         if (cfg.steps === 1) {
 
@@ -77,9 +82,7 @@ class ColorModule extends ModuleBase {
                         for(${vLed.declair()} ${vLed} < ${cfg.ledsPerStep}; ${vLed}++)${opDelayLedBOpen}
                             leds[${opStart}${vLed}] = ${colorString};${opDelayLed}${opDelayLedBClose}
                     `,
-
-                    // Marks as dirty if no delay is given
-                    isDirty: cfg.delayPerLed <= 0 && cfg.delayAfterStep <= 0
+                    isDirty
                 }
             }
         } else {
@@ -93,10 +96,25 @@ class ColorModule extends ModuleBase {
                     for(${vLed.declair()} ${vLed} < ${cfg.ledsPerStep}; ${vLed}++)${opDelayLedBOpen}
                         leds[${opStart}${vStep} * ${(cfg.space+cfg.ledsPerStep)} + ${vLed}] = ${colorString};${opDelayLed}${opDelayLedBClose}${opDelayStep}${opDelayStepBClose}
                 `,
-
-                // Marks as dirty if no delay is given
-                isDirty: cfg.delayPerLed <= 0 && cfg.delayAfterStep <= 0
+                isDirty
             }
+        }
+    }
+
+    
+    public calculateCodeInfos(env: Environment, config: Config) : ModuleInfo {
+
+        // Validates the config
+        var cfg = this.validateConfig(config);
+
+        // Checks if only a single led is given
+        if(cfg.ledsPerStep === 1 && cfg.steps === 1)
+            return {
+                runtime: 0
+            }
+
+        return {
+            runtime: (cfg.delayPerLed * cfg.ledsPerStep + cfg.delayAfterStep) * cfg.steps
         }
     }
 

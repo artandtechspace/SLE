@@ -1,6 +1,8 @@
 import { ModuleBase } from "./ModuleBase.js";
 import ColorModule from "../defaultModules/ColorModule.js";
 import LoopModule from "../defaultModules/LoopModule.js";
+import { Environment } from "../Environment.js";
+import { Config } from "../Config.js";
 
 // List with all registered modules
 const MODULES = {

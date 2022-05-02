@@ -60,7 +60,7 @@ export function generateModuleCode(env: Environment, variablesystem: VariableSys
     return {
         setup: setupCode.trim().length > 0 ? setupCode : undefined,
         loop: loopCode.trim().length > 0 ? loopCode : undefined,
-        isDirty: isDirty
+        isDirty
     }
 }
 
@@ -71,9 +71,9 @@ export function generateModuleCode(env: Environment, variablesystem: VariableSys
  * @param mods all modules specified with their settings.
  * @throws {Error} if an error occurred
  * 
- * @returns a single string that contains the finalized code.
+ * @returns an object that contains the generated code and estimated runtime
  */
-export function generateCode(env: Environment, mods: [ModuleBase, Config][]) : string{
+export function generateCode(env: Environment, mods: [ModuleBase, Config][]) : string {
 
     // Creates the var-system
     var varSys = new VariableSystem(env);

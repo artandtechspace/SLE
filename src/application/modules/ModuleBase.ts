@@ -2,6 +2,7 @@ import { Config } from "../Config.js";
 import { Environment } from "../Environment.js";
 import { Arduino } from "../simulation/Arduino.js";
 import { VariableSystem } from "../variablesystem/VariableSystem.js";
+import { ModuleInfo } from "./ModuleInfo.js";
 import { ModuleReturn } from "./ModuleReturn.js";
 
 /**
@@ -26,6 +27,14 @@ export class ModuleBase{
         return {}
     }
 
+    /**
+     * Takes in some settings and returns informations about the given config
+     */
+    public calculateCodeInfos(env: Environment, config: Config) : ModuleInfo {
+        return {
+            runtime: 0
+        }
+    }
 
     // TODO
     public simulateSetup(env : Environment, config: Config, singleSourceOfTruth: {[k: string]: any}, arduino: Arduino){}
