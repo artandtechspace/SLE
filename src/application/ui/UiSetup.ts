@@ -37,7 +37,7 @@ export async function setupUi(onEnvChange: ()=>void){
         var errorsystem = new InAppErrorSystem();
     
         // Builds the environment
-        var env = new Environment(simulation.getLedAmount(),true,PRESET_SOURCECODE,1);
+        var env = new Environment(simulation.getLedAmount(),true,PRESET_SOURCECODE,0);
     
         // Binds the environment-settings to the ui
         bindEnvironment(env,popupsystem, onEnvChange);

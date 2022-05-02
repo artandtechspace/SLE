@@ -2,7 +2,6 @@ import { Config } from "../Config.js";
 import { Environment } from "../Environment.js";
 import { Arduino } from "../simulation/Arduino.js";
 import { VariableSystem } from "../variablesystem/VariableSystem.js";
-import { ModuleInfo } from "./ModuleInfo.js";
 import { ModuleReturn } from "./ModuleReturn.js";
 
 /**
@@ -11,7 +10,7 @@ import { ModuleReturn } from "./ModuleReturn.js";
 
 export class ModuleBase{
     /**
-     * This function is here to generate the code for the Arduino/Mc.
+     * This function is here to generate the code for the Arduino/MC.
      * 
      * It returns an object with the following properties:
      * {
@@ -27,14 +26,7 @@ export class ModuleBase{
         return {}
     }
 
-    /**
-     * Takes in some settings and returns informations about the given config
-     */
-    public calculateCodeInfos(env: Environment, config: Config) : ModuleInfo {
-        return {
-            runtime: 0
-        }
-    }
+    //#region Simulation
 
     /**
      * Runs once at the begining to simulate the setup of for the module als time intensiv calculations should be done here.
@@ -54,4 +46,18 @@ export class ModuleBase{
      * @param arduino the arduino-simulatio object. Can be used to await a delay or push stuff
      */
     public async simulateLoop(env : Environment, singleSourceOfTruth: {[k: string]: any}, arduino: Arduino){}
+
+    //#endregion
+
+    //#region Module-infos
+
+    /**
+     * Takes in some settings and returns informations about the given config
+     */
+    public calculateRuntime(env: Environment, config: Config) : number{
+        return 0;
+    }
+
+    //#endregion 
+
 }

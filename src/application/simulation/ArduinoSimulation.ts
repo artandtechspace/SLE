@@ -5,7 +5,7 @@ import { Arduino } from "./Arduino.js";
 import { Environment } from "../Environment.js";
 import { attachInfileSVG } from "../utils/SVGUtil.js";
 import { SystemError } from "../errorSystem/Error.js";
-import { getModuleInfos } from "../modules/ModuleInfo.js";
+import { getFullRuntime } from "../modules/ModuleInfo.js";
 
 export class ArduinoSimulation{
 
@@ -74,7 +74,7 @@ export class ArduinoSimulation{
      */
     public startSimulation(env: Environment, config: [ModuleBase, Config][]){
         // Cauclates the estimated runtime
-        var estimatedRuntime = getModuleInfos(env,config).runtime;
+        var estimatedRuntime = getFullRuntime(env,config);
 
         // Stops the current simulation 
         this.stopSimulation();

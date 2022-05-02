@@ -6,7 +6,7 @@ export const PRESET_SOURCECODE = `
 #define LED_AMT $LED_AMOUNT$
 
 // Fast-led api
-CRGB leds[NUM_LEDS];
+CRGB leds[LED_AMT];
 
 $VARIABLES$
 

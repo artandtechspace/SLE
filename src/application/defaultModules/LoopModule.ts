@@ -8,7 +8,7 @@ import { tryParseModules } from "../codegenerator/ConfigValidator.js";
 import { generateModuleCode } from "../codegenerator/CodeGenerator.js";
 import { Arduino } from "../simulation/Arduino.js";
 import { ModuleError } from "../errorSystem/Error.js";
-import { getModuleInfos, ModuleInfo } from "../modules/ModuleInfo.js";
+import { getFullRuntime } from "../modules/ModuleInfo.js";
 
 class LoopModule extends ModuleBase {
     
@@ -61,14 +61,12 @@ class LoopModule extends ModuleBase {
         };
     }
 
-    public calculateCodeInfos(env: Environment, config: Config) : ModuleInfo {
+    public calculateRuntime(env: Environment, config: Config) : number {
 
         // Validates the config
         var cfg = this.validateConfig(config);
 
-        return {
-            runtime: getModuleInfos(env, cfg.submodules).runtime * cfg.repeats
-        }
+        return getFullRuntime(env, cfg.submodules) * cfg.repeats;
     }
 
 

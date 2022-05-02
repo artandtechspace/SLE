@@ -4,7 +4,7 @@
 export const Toolbox = {
     "kind": "categoryToolbox",
     "contents": [
-      category("Colors", 130,[
+      category("Color", 130,[
         block("sle_simple_single_color",{
           "led": inputNumber(0)
         }),

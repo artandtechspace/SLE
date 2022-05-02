@@ -6,7 +6,6 @@ import { ModuleReturn } from "../modules/ModuleReturn.js";
 import { isHexRGB, isInteger, printIf as pif } from "../utils/WorkUtils.js";
 import { getFLEDColorDefinition } from "../utils/ColorUtils.js";
 import { Arduino } from "../simulation/Arduino.js";
-import { ModuleInfo } from "../modules/ModuleInfo.js";
 
 class ColorModule extends ModuleBase {
 
@@ -102,20 +101,15 @@ class ColorModule extends ModuleBase {
     }
 
     
-    public calculateCodeInfos(env: Environment, config: Config) : ModuleInfo {
-
+    public calculateRuntime(env: Environment, config: Config) : number {
         // Validates the config
         var cfg = this.validateConfig(config);
 
         // Checks if only a single led is given
         if(cfg.ledsPerStep === 1 && cfg.steps === 1)
-            return {
-                runtime: 0
-            }
+            return 0;
 
-        return {
-            runtime: (cfg.delayPerLed * cfg.ledsPerStep + cfg.delayAfterStep) * cfg.steps
-        }
+        return (cfg.delayPerLed * cfg.ledsPerStep + cfg.delayAfterStep) * cfg.steps
     }
 
 

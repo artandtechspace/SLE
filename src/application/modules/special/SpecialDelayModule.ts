@@ -4,7 +4,6 @@ import { Arduino } from "../../simulation/Arduino.js";
 import { printIf as pIf } from "../../utils/WorkUtils.js";
 import { VariableSystem } from "../../variablesystem/VariableSystem.js";
 import { ModuleBase } from "../ModuleBase.js";
-import { ModuleInfo } from "../ModuleInfo.js";
 import { ModuleReturn } from "../ModuleReturn.js";
 
 /**
@@ -14,10 +13,8 @@ import { ModuleReturn } from "../ModuleReturn.js";
 
 class SpecialCommentModule extends ModuleBase {
 
-    public calculateCodeInfos(env: Environment, config: Config) : ModuleInfo {
-        return {
-            runtime: config.getRaw("delay")
-        }
+    public calculateRuntime(env: Environment, config: Config) : number {
+        return config.getRaw("delay");
     }
 
     public generateCode(env: Environment, _: VariableSystem, config: Config, isDirty: boolean): ModuleReturn {

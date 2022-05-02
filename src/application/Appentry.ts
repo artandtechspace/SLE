@@ -9,7 +9,7 @@ import { Environment } from "./Environment.js";
 import { Error } from "./errorSystem/Error.js";
 import { InAppErrorSystem } from "./errorSystem/InAppErrorSystem.js";
 import { ModuleBase } from "./modules/ModuleBase.js";
-import { getModuleInfos } from "./modules/ModuleInfo.js";
+import { getFullRuntime } from "./modules/ModuleInfo.js";
 import { PopupSystem } from "./popupSystem/PopupSystem.js";
 import { ArduinoSimulation } from "./simulation/ArduinoSimulation.js";
 import { TAB_ANALYTICS, TAB_ANIMATION, TAB_CODE } from "./ui/Tabs.js";
@@ -100,7 +100,7 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 					break;
 				case TAB_ANALYTICS:
 					// Generates the runtime-analytics
-					runtimeDisplay.textContent = (getModuleInfos(env,mods).runtime/1000).toString();
+					runtimeDisplay.textContent = (getFullRuntime(env,mods)/1000).toString();
 					break;
 			}
 	
