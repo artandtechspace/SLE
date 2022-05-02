@@ -36,7 +36,22 @@ export class ModuleBase{
         }
     }
 
-    // TODO
+    /**
+     * Runs once at the begining to simulate the setup of for the module als time intensiv calculations should be done here.
+     * 
+     * @param env the environment 
+     * @param config the configuration for the module
+     * @param singleSourceOfTruth an object that is also passed to the loop function. Use this to store internal variables and append validated configurations that are required inside the loop method.
+     * @param arduino the arduino-simulatio object. Can be used to await a delay or push stuff
+     */
     public simulateSetup(env : Environment, config: Config, singleSourceOfTruth: {[k: string]: any}, arduino: Arduino){}
+    
+    /**
+     * Runs once at the begining to simulate the setup of for the module als time intensiv calculations should be done here.
+     * 
+     * @param env the environment 
+     * @param singleSourceOfTruth an object that is also passed to the loop function. Use this to store internal variables or already calculated configurations and so on.
+     * @param arduino the arduino-simulatio object. Can be used to await a delay or push stuff
+     */
     public async simulateLoop(env : Environment, singleSourceOfTruth: {[k: string]: any}, arduino: Arduino){}
 }
