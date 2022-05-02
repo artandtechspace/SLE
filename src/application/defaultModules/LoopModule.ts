@@ -18,7 +18,6 @@ class LoopModule extends ModuleBase {
 
         // Gets further settings
         var repeats = cfg.getRequired("repeats",v=>isInteger(v,2),"must be an integer >= 2");
-        var delayBetween = cfg.getOptional("delay",v=>isInteger(v,1),"must be an integer >= 1",undefined);
 
 
         // Validates the submodules
@@ -30,34 +29,34 @@ class LoopModule extends ModuleBase {
 
         return {
             submodules: (submodules as [ModuleBase, Config][]),
-            delayBetween,
             repeats
         }
     }
 
-    public generateCode(env: Environment, varSys: VariableSystem, config: Config): ModuleReturn {
+    public generateCode(env: Environment, varSys: VariableSystem, config: Config, isDirty: boolean): ModuleReturn {
 
         // Validates the config
         var cfg = this.validateConfig(config);
-        
 
         // Gets the generated codes (The execution may end here do to an error beeing thrown)
-        var generatedCode:ModuleReturn = generateModuleCode(env,varSys,cfg.submodules);
+        var generatedCode:ModuleReturn = generateModuleCode(env,varSys,cfg.submodules, isDirty);
 
         // Requests the local variable
         var vItr = varSys.requestLocalVariable("int","i","0");
 
-
         // Generates the new loop code
         var loopCode = `
             for(${vItr.declair()} ${vItr} < ${cfg.repeats}; ${vItr}++){
-                ${generatedCode.loop ?? ""} ${pif(`\ndelay(${cfg.delayBetween});`, cfg.delayBetween !== undefined)}
+                ${generatedCode.loop ?? ""}${pif(
+                    "FastLED.show();", generatedCode.isDirty as boolean
+                )}
             }
         `;
 
         return {
             setup: generatedCode.setup,
-            loop: loopCode
+            loop: loopCode,
+            isDirty: false
         };
     }
 
@@ -87,13 +86,9 @@ class LoopModule extends ModuleBase {
 
         // Stores the require settings too
         singleSourceOfTruth.repeats = cfg.repeats;
-        singleSourceOfTruth.delayBetween = cfg.delayBetween;
     }
 
     public async simulateLoop(env : Environment, singleSourceOfTruth: {[k: string]: any}, arduino: Arduino){
-        // Gets the delay
-        var del = singleSourceOfTruth.delayBetween;
-        
         // Gets the mods
         var mods = singleSourceOfTruth.mods as {mod:ModuleBase,cfg: Config, ssot: {}}[];
 
@@ -103,10 +98,6 @@ class LoopModule extends ModuleBase {
             // Executes the loop for the modules
             for(var modObj of mods)
                 await modObj.mod.simulateLoop(env,modObj.ssot,arduino);
-
-            // Awaits the delay if it is given
-            if(del > 0)
-                await arduino.delay(del);
         }
     }
 }

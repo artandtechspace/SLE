@@ -22,7 +22,7 @@ export class ModuleBase{
      * @throws {ModuleError} if there is an error
      * 
      */
-    public generateCode(env : Environment, varSys : VariableSystem, config: Config) : ModuleReturn{
+    public generateCode(env : Environment, varSys : VariableSystem, config: Config, isDirty: boolean) : ModuleReturn{
         return {}
     }
 

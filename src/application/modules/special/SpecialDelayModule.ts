@@ -1,6 +1,7 @@
 import { Config } from "../../Config.js";
 import { Environment } from "../../Environment.js";
 import { Arduino } from "../../simulation/Arduino.js";
+import { printIf as pIf } from "../../utils/WorkUtils.js";
 import { VariableSystem } from "../../variablesystem/VariableSystem.js";
 import { ModuleBase } from "../ModuleBase.js";
 import { ModuleReturn } from "../ModuleReturn.js";
@@ -12,9 +13,14 @@ import { ModuleReturn } from "../ModuleReturn.js";
 
 class SpecialCommentModule extends ModuleBase {
 
-    public generateCode(env: Environment, _: VariableSystem, config: Config): ModuleReturn {
+    public generateCode(env: Environment, _: VariableSystem, config: Config, isDirty: boolean): ModuleReturn {
+        
+        // Generates a push-operation for any idle leds of there are some
+        var opPush = pIf("FastLED.show();\n", isDirty);
+
         return {
-            loop: `delay(${config.getRaw("delay")});\n`
+            loop: `${opPush}delay(${config.getRaw("delay")});\n`,
+            isDirty: false
         };
     }
 

@@ -11,7 +11,7 @@ import { ModuleReturn } from "../ModuleReturn.js";
 
 class SpecialCommentModule extends ModuleBase {
 
-    public generateCode(env: Environment, _: VariableSystem, config: Config): ModuleReturn {
+    public generateCode(env: Environment, _: VariableSystem, config: Config, isDirty: boolean): ModuleReturn {
         return {
             loop: "// "+config.getRaw("comment")
         };

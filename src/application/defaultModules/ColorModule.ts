@@ -37,7 +37,7 @@ class ColorModule extends ModuleBase {
         }
     }
 
-    public generateCode(env: Environment, varSys: VariableSystem, config: Config): ModuleReturn {
+    public generateCode(env: Environment, varSys: VariableSystem, config: Config, isDirty: boolean): ModuleReturn {
 
         // Validates the config
         var cfg = this.validateConfig(config);
@@ -65,7 +65,8 @@ class ColorModule extends ModuleBase {
             // Checks if only a single led is required
             if (cfg.ledsPerStep === 1)
                 return {
-                    loop: `leds[${cfg.start}] = ${colorString};\nFastLED.show();`
+                    loop: `leds[${cfg.start}] = ${colorString};`,
+                    isDirty: true
                 }
             else {
                 // Requests the led variable
@@ -75,8 +76,10 @@ class ColorModule extends ModuleBase {
                     loop: `
                         for(${vLed.declair()} ${vLed} < ${cfg.ledsPerStep}; ${vLed}++)${opDelayLedBOpen}
                             leds[${opStart}${vLed}] = ${colorString};${opDelayLed}${opDelayLedBClose}
-                        FastLED.show();
-                    `
+                    `,
+
+                    // Marks as dirty if no delay is given
+                    isDirty: cfg.delayPerLed <= 0 && cfg.delayAfterStep <= 0
                 }
             }
         } else {
@@ -89,8 +92,10 @@ class ColorModule extends ModuleBase {
                 for(${vStep.declair()} ${vStep} < ${cfg.steps}; ${vStep}++)${opDelayStepBOpen}
                     for(${vLed.declair()} ${vLed} < ${cfg.ledsPerStep}; ${vLed}++)${opDelayLedBOpen}
                         leds[${opStart}${vStep} * ${(cfg.space+cfg.ledsPerStep)} + ${vLed}] = ${colorString};${opDelayLed}${opDelayLedBClose}${opDelayStep}${opDelayStepBClose}
-                FastLED.show();    
-                `
+                `,
+
+                // Marks as dirty if no delay is given
+                isDirty: cfg.delayPerLed <= 0 && cfg.delayAfterStep <= 0
             }
         }
     }

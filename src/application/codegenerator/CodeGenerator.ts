@@ -3,7 +3,7 @@ import { Environment } from "../Environment.js";
 import { ModuleError, Error } from "../errorSystem/Error.js";
 import { ModuleBase } from "../modules/ModuleBase.js";
 import { ModuleReturn } from "../modules/ModuleReturn.js";
-import { C } from "../utils/WorkUtils.js";
+import { C, printIf } from "../utils/WorkUtils.js";
 import { VariableSystem } from "../variablesystem/VariableSystem.js";
 
 // Regexes to match env-variables and code-insert-points
@@ -14,21 +14,25 @@ const CODE_REGEX = /\$\w+\$/gi;
  * @param env the environment
  * @param variablesystem the used variable-system
  * @param mods all mods to generate the config for
+ * @param beginDirtyState if the isDirty-state is dirty from the beginning
  * 
  * @throws exception of a module failed to generate code.
  * 
  * @returns the module-return for all modules. Meaning all setups and loop codes combined.
  */
-export function generateModuleCode(env: Environment, variablesystem: VariableSystem, mods: [ModuleBase, Config][]) : ModuleReturn{
+export function generateModuleCode(env: Environment, variablesystem: VariableSystem, mods: [ModuleBase, Config][], beginDirtyState: boolean = false) : ModuleReturn{
     
     // Final code storage
     var setupCode = "";
     var loopCode = "";
 
+    // If the last module returned a dirty-state
+    var isDirty: boolean = beginDirtyState;
+
     // Generates the code for the modules and appends it to the setup and loop strings
     function onGenCode(element: [ModuleBase,Config]){
         // Generates the code
-        var code: ModuleReturn = element[0].generateCode(env,variablesystem,element[1]);
+        var code: ModuleReturn = element[0].generateCode(env,variablesystem,element[1], isDirty);
 
         // Checks if loop-code got added
         if(code.loop !== undefined)
@@ -37,6 +41,10 @@ export function generateModuleCode(env: Environment, variablesystem: VariableSys
         // Checks if loop-code got added
         if(code.setup !== undefined)
             setupCode+=`${code.setup}\n\n`;
+
+        // Updates the dirty state
+        if(code.isDirty !== undefined)
+            isDirty = code.isDirty;
     }
 
     var i = 0;
@@ -51,7 +59,8 @@ export function generateModuleCode(env: Environment, variablesystem: VariableSys
 
     return {
         setup: setupCode.trim().length > 0 ? setupCode : undefined,
-        loop: loopCode.trim().length > 0 ? loopCode : undefined
+        loop: loopCode.trim().length > 0 ? loopCode : undefined,
+        isDirty: isDirty
     }
 }
 
@@ -102,6 +111,9 @@ export function generateCode(env: Environment, mods: [ModuleBase, Config][]) : s
         loopCode+=generatedCode.loop;
     if(generatedCode.setup)
         setupCode+=generatedCode.setup;
+    
+    // Checks if the generated code is still dirty
+    loopCode+=printIf("\nFastLED.show();",generatedCode.isDirty as boolean);
 
     // Generates the final code
     return env.preprocessingCode.replace(CODE_REGEX,replaceCodes);
