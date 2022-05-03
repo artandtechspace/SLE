@@ -1,5 +1,0 @@
-SLGen:
-- The most basic element that takes in configuration parameters, the basic environment (Led amount, etc.) and implements the code generation based on a json-file.
-
-EnvConfig:
-- The basic configuration that is not slgen-specific and get's passed to everything. This includes things like the amount of leds or later on maybe a specific code-generation guidline
