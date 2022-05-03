@@ -3,7 +3,7 @@ import { Arduino } from "./Arduino.js";
 import { Environment } from "../Environment.js";
 import { attachInfileSVG } from "../utils/SVGUtil.js";
 import { SystemError } from "../errorSystem/Error.js";
-import { getFullRuntime } from "../modules/ModuleInfo.js";
+import { getFullRuntime } from "../modules/ModuleUtils.js";
 import { ModBlockExport } from "../ConfigBuilder.js";
 
 export class ArduinoSimulation{

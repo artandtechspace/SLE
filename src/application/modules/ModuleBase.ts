@@ -1,6 +1,6 @@
 import { Environment } from "../Environment.js";
 import { Arduino } from "../simulation/Arduino.js";
-import { OpenObject } from "../types/Types.js";
+import { OpenObject, PositiveNumber } from "../types/Types.js";
 import { VariableSystem } from "../variablesystem/VariableSystem.js";
 
 // Return of the code-generator function
@@ -18,7 +18,7 @@ export interface ModuleReturn {
  * The module-base is the element that takes in a configuration file and generate the code based on the provided information and environment.
  */
 
-export class ModuleBase<Config extends OpenObject>{
+export abstract class ModuleBase<Config extends OpenObject>{
     /**
      * This function is here to generate the code for the Arduino/MC.
      * 
@@ -65,6 +65,12 @@ export class ModuleBase<Config extends OpenObject>{
     public calculateRuntime(env: Environment, config: Config) : number{
         return 0;
     }
+
+    /**
+     * Takes in some settings and return the highest index (from 0 including) of any led ever accessed by the given config.
+     * If nothing is returned, it is assumed that the module doesn't used the leds
+     */
+    public calculateMaxAccessedLed(env: Environment, config: Config): PositiveNumber | void {}
 
     //#endregion 
 

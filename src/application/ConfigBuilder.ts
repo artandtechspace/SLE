@@ -3,8 +3,12 @@ import { ModuleBase } from "./modules/ModuleBase";
 
 // Is returned by a mod-block when called from the Config-builder
 export interface ModBlockExport<T>{
+    // Module that is used
     module: ModuleBase<T>,
-    config: T
+    // Module-configuration
+    config: T,
+    // Block that the config originated from
+    block: any
 }
 
 // Function for blockly-blocks that supplie mod-block-exports

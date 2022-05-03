@@ -102,15 +102,6 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig> {
         }
     }
 
-    
-    public calculateRuntime(env: Environment, cfg: ColorModuleConfig) : number {
-        // Checks if only a single led is given
-        if(cfg.ledsPerStep === 1 && cfg.steps === 1)
-            return 0;
-
-        return (cfg.delayPerLed * cfg.ledsPerStep + cfg.delayAfterStep) * cfg.steps
-    }
-
     public async simulateLoop(env : Environment, cfg: ColorModuleConfig, singleSourceOfTruth: OpenObject, arduino: Arduino){        
         // Iterates over every step
         for(var step = 0; step < cfg.steps; step++){
@@ -136,6 +127,18 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig> {
 
         // Updates the leds
         arduino.pushLeds(); 
+    }
+
+    public calculateRuntime(env: Environment, cfg: ColorModuleConfig) : number {
+        // Checks if only a single led is given
+        if(cfg.ledsPerStep === 1 && cfg.steps === 1)
+            return 0;
+
+        return (cfg.delayPerLed * cfg.ledsPerStep + cfg.delayAfterStep) * cfg.steps
+    }
+
+    public calculateMaxAccessedLed(env: Environment, cfg: ColorModuleConfig): PositiveNumber|void {
+        return cfg.start+cfg.steps*cfg.ledsPerStep+(cfg.steps-1)*cfg.space-1 as PositiveNumber;
     }
 }
 

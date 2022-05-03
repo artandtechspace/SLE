@@ -1,11 +1,6 @@
-export class Error{
-    // Error-message
-    public readonly message: string;
+import { ExceptionBase } from "./ExceptionBase.js";
 
-    protected constructor(message: string){
-        this.message = message;
-    }
-}
+export abstract class Error extends ExceptionBase{}
 
 export class SystemError extends Error{
     public constructor(message: string){

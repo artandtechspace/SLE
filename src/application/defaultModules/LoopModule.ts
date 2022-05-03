@@ -5,7 +5,7 @@ import { ModuleReturn } from "../modules/ModuleBase.js";
 import { printIf as pif } from "../utils/WorkUtils.js";
 import { generateModuleCode } from "../codegenerator/CodeGenerator.js";
 import { Arduino } from "../simulation/Arduino.js";
-import { getFullRuntime } from "../modules/ModuleInfo.js";
+import { getFullRuntime } from "../modules/ModuleUtils.js";
 import { ModBlockExport } from "../ConfigBuilder.js";
 import { Min, OpenObject } from "../types/Types.js";
 

@@ -61,7 +61,8 @@ function registerLoop(name: string){
             config: {
                 repeats: loopAmt,
                 submodules
-            }
+            },
+            block
         }
     });
 }
@@ -95,7 +96,8 @@ function registerDelay(name: string){
             module: DelayModule,
             config: {
                 delay: (waitTime * multiplicator) as PositiveNumber
-            }
+            },
+            block
         }
     });
 }

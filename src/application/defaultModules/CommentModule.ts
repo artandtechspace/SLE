@@ -1,5 +1,6 @@
 import { Environment } from "../Environment.js";
 import { ModuleBase, ModuleReturn } from "../modules/ModuleBase.js";
+import { PositiveNumber } from "../types/Types.js";
 import { VariableSystem } from "../variablesystem/VariableSystem.js";
 
 

@@ -73,7 +73,8 @@ function registerStepsColor(name: string){
                 rgbHex: color,
                 space: skipLen as any as PositiveNumber,
                 steps
-            }
+            },
+            block
         }
     });
 }
@@ -117,7 +118,8 @@ function registerStripe(name: string){
                 start,
                 ledsPerStep: amt,
                 rgbHex: color
-            }
+            },
+            block
         }
     });
 }
@@ -152,8 +154,8 @@ function registerSingleLed(name: string){
                 ...ColorModule.DEFAULT_CONFIG,
                 start,
                 rgbHex: color
-            }
-            
+            },
+            block
         }
     });
 }
