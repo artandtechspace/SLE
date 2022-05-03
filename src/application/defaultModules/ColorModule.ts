@@ -76,7 +76,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig> {
                 }
             else {
                 // Requests the led variable
-                var vLed = varSys.requestLocalVariable("int", "l", "0");
+                var vLed = varSys.requestLocalVariable("int", "led", "0");
 
                 return {
                     loop: `
@@ -88,8 +88,8 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig> {
             }
         } else {
             // Gets the variables
-            var vStep = varSys.requestLocalVariable("int", "s", "0");
-            var vLed = varSys.requestLocalVariable("int", "l", "0");
+            var vStep = varSys.requestLocalVariable("int", "steps", "0");
+            var vLed = varSys.requestLocalVariable("int", "led", "0");
             
             return {
                 loop: `
