@@ -4,4 +4,4 @@
 cd $(dirname "${BASH_SOURCE[0]}") &&
 cd .. &&
 
-electron build/electron/
+electron build/electron/setup/

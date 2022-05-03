@@ -14,5 +14,9 @@ tsc --outDir build/electron/application &&
 node-sass --include-path scss src/styles/Main.scss build/electron/resources/main.css &&
 
 # Copies the electron integration code
-cp -r src/electron/ build/ &&
-cp -r src/resources/ build/electron/
+cp -r src/resources/* build/electron/resources/ &&
+mkdir build/electron/setup/ &&
+cp -r src/electron/* build/electron/setup/ &&
+
+# Copies the webpage
+cp src/index.html build/electron/index.html
