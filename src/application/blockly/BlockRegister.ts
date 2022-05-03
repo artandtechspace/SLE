@@ -1,6 +1,7 @@
 import { S } from "../ui/utils/UiUtils.js";
 import registerColorBlocks from "./blocks/ColorBlocks.js";
 import registerControlBlocks from "./blocks/ControlBlocks.js";
+import registerSpecialBlocks from "./blocks/SpecialBlocks.js";
 import Theme from "./Theme.js";
 import { Toolbox } from "./Toolbox.js";
 const Blockly = require("blockly");
@@ -53,6 +54,8 @@ export function registerBlockly(){
 
 // Registers all blockly-blocks
 function registerBlocks(){
+	registerSpecialBlocks();
+	
 	registerColorBlocks();
 	registerControlBlocks();
 }

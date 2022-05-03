@@ -1,8 +1,7 @@
-import { Config } from "../Config.js";
 import { Environment } from "../Environment.js";
-import { ModuleError, Error } from "../errorSystem/Error.js";
-import { ModuleBase } from "../modules/ModuleBase.js";
-import { ModuleReturn } from "../modules/ModuleReturn.js";
+import { ModuleError } from "../errorSystem/Error.js";
+import { ModuleReturn } from "../modules/ModuleBase.js";
+import { ModBlockExport } from "../ConfigBuilder.js";
 import { C, printIf } from "../utils/WorkUtils.js";
 import { VariableSystem } from "../variablesystem/VariableSystem.js";
 
@@ -20,7 +19,7 @@ const CODE_REGEX = /\$\w+\$/gi;
  * 
  * @returns the module-return for all modules. Meaning all setups and loop codes combined.
  */
-export function generateModuleCode(env: Environment, variablesystem: VariableSystem, mods: [ModuleBase, Config][], beginDirtyState: boolean = false) : ModuleReturn{
+export function generateModuleCode(env: Environment, variablesystem: VariableSystem, mods: ModBlockExport<any>[], beginDirtyState: boolean = false) : ModuleReturn{
     
     // Final code storage
     var setupCode = "";
@@ -30,9 +29,9 @@ export function generateModuleCode(env: Environment, variablesystem: VariableSys
     var isDirty: boolean = beginDirtyState;
 
     // Generates the code for the modules and appends it to the setup and loop strings
-    function onGenCode(element: [ModuleBase,Config]){
+    function onGenCode(element: ModBlockExport<any>){
         // Generates the code
-        var code: ModuleReturn = element[0].generateCode(env,variablesystem,element[1], isDirty);
+        var code: ModuleReturn = element.module.generateCode(env,variablesystem,element.config, isDirty);
 
         // Checks if loop-code got added
         if(code.loop !== undefined)
@@ -54,7 +53,7 @@ export function generateModuleCode(env: Environment, variablesystem: VariableSys
             onGenCode(mods[i]);
     }catch(e){
         // Some element had an error
-        throw new ModuleError("Error while processing Module: "+mods[i][0].constructor.name+": "+e);
+        throw new ModuleError("Error while processing Module: "+mods[i].module.constructor.name+": "+e);
     }
 
     return {
@@ -73,7 +72,7 @@ export function generateModuleCode(env: Environment, variablesystem: VariableSys
  * 
  * @returns an object that contains the generated code and estimated runtime
  */
-export function generateCode(env: Environment, mods: [ModuleBase, Config][]) : string {
+export function generateCode(env: Environment, mods: ModBlockExport<any>[]) : string {
 
     // Creates the var-system
     var varSys = new VariableSystem(env);
@@ -104,7 +103,7 @@ export function generateCode(env: Environment, mods: [ModuleBase, Config][]) : s
     }
 
     // Gets the generated codes (The execution may end here do to an error beeing thrown)
-    var generatedCode:ModuleReturn = generateModuleCode(env,varSys,mods);
+    var generatedCode: ModuleReturn = generateModuleCode(env,varSys,mods);
 
     // Appends the codes
     if(generatedCode.loop)

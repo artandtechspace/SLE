@@ -1,5 +1,9 @@
-import { BlockError } from "../../errorSystem/Error.js";
-import { getNumberFromCode, packageBlockConfig, parseConfigsFromBlocks } from "../BlocklyUtils.js";
+import { DelayModule, DelayModuleConfig } from "../../defaultModules/DelayModule.js";
+import { LoopModule, LoopModuleConfig } from "../../defaultModules/LoopModule.js";
+import { Environment } from "../../Environment.js";
+import { ModBlockExport, ConfigBuilder } from "../../ConfigBuilder.js";
+import { Min, PositiveNumber } from "../../types/Types.js";
+import { getNumberFromCodeAsMin } from "../BlocklyUtils.js";
 const Blockly = require("blockly");
 
 /**
@@ -8,17 +12,26 @@ const Blockly = require("blockly");
 
 
 export default function registerControlBlocks(){
-    registerRoot();
     
-    registerLoop();
-    registerDelay();
+    registerNumberBlock();
+
+    registerLoop("sle_control_loop");
+    registerDelay("sle_control_delay");
 }
 
 
+function registerNumberBlock(){
+    // Name of the block
+    const name = "math_number";
+
+    ConfigBuilder.registerValueSupplier(name,(block: any)=>{
+        return block.getFieldValue("NUM");
+    });
+}
 
 // Loop-block
-function registerLoop(){
-    Blockly.Blocks['sle_control_loop'] = {
+function registerLoop(name: string){
+    Blockly.Blocks[name] = {
         init: function() {
             this.appendDummyInput()
                 .appendField("Repeat")
@@ -36,29 +49,26 @@ function registerLoop(){
         }
     };
 
-    Blockly.JavaScript['sle_control_loop'] = function(block:any) {
-        // Gets the subconfig code
-        var subConfig = Blockly.JavaScript.statementToCode(block, 'loops');
-        
-        // Gets the amount of loops
-        var loopAmt = getNumberFromCode(block,"repeat-amount");
+    ConfigBuilder.registerModuleBlock<LoopModuleConfig>(name, function(block:any, env: Environment) {
+        // Gets the submodules
+        var submodules: ModBlockExport<any>[] = ConfigBuilder.generateModuleExports(block.getInputTargetBlock("loops"), env);
 
-        // Assembles the config
-        return packageBlockConfig({
-            name: "loop",
+        // Gets the amount of loops
+        var loopAmt: Min<2> = getNumberFromCodeAsMin(block,"repeat-amount", 2);
+
+        return {
+            module: LoopModule,
             config: {
-                // How often the code shall be looped
                 repeats: loopAmt,
-                // Parsed subblocks that shall be looped
-                modules: parseConfigsFromBlocks(subConfig)
+                submodules
             }
-        });
-    };
+        }
+    });
 }
 
 // Delay-register
-function registerDelay(){
-    Blockly.Blocks['sle_control_delay'] = {
+function registerDelay(name: string){
+    Blockly.Blocks[name] = {
         init: function() {
             this.appendDummyInput()
                 .appendField("wait")
@@ -73,30 +83,20 @@ function registerDelay(){
         }
     };
 
-    Blockly.JavaScript['sle_control_delay'] = function(block:any) {
-        var waitTime = getNumberFromCode(block,"time", 0);
+    ConfigBuilder.registerModuleBlock<DelayModuleConfig>(name, function(block:any, env: Environment) {
+        var waitTime: PositiveNumber = getNumberFromCodeAsMin(block,"time", 0);
         var timeUnit = block.getFieldValue('timeUnit');
 
         // Gets the multiplicator based on the time-unit
         var multiplicator = timeUnit === "seconds" ? 1000 : 1; 
 
         // Assembles the config
-        return `${waitTime*multiplicator},`;
-    };
-}
-
-// Root-block (All others shall be disabled)
-function registerRoot(){
-    Blockly.Blocks['sle_root'] = {
-        init: function() {
-          this.appendDummyInput()
-              .appendField("Program-Plan");
-          this.setNextStatement(true, null);
-          this.setDeletable(false);
-          this.setEditable(false);
-          this.setMovable(false);
+        return {
+            module: DelayModule,
+            config: {
+                delay: (waitTime * multiplicator) as PositiveNumber
+            }
         }
-    };
-
-    Blockly.JavaScript["sle_root"] = ()=>"";
+    });
 }
+

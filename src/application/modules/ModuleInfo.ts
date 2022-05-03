@@ -1,6 +1,5 @@
-import { Config } from "../Config.js";
 import { Environment } from "../Environment.js";
-import { ModuleBase } from "./ModuleBase.js";
+import { ModBlockExport } from "../ConfigBuilder.js";
 
 /**
  * Returns the combined infos of all given modules
@@ -8,7 +7,7 @@ import { ModuleBase } from "./ModuleBase.js";
  * @param mods the modules
  * @returns some informations like the estimated runtime in millis
  */
-export function getFullRuntime(env: Environment, mods: [ModuleBase, Config][]) : number{
+export function getFullRuntime(env: Environment, mods: ModBlockExport<any>[]) : number{
     // Calculates the runtime of all modules
-    return mods.map(([mod, cfg])=> mod.calculateRuntime(env, cfg)).reduce((a,b)=>a+b,0);
+    return mods.map((exp)=> exp.module.calculateRuntime(env, exp.config)).reduce((a,b)=>a+b,0);
 }

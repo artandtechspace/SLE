@@ -1,6 +1,9 @@
+import { ColorModule, ColorModuleConfig } from "../../defaultModules/ColorModule.js";
+import { Environment } from "../../Environment.js";
 import { BlockError } from "../../errorSystem/Error.js";
-import { HSV2HEX } from "../../utils/ColorUtils.js";
-import { getNumberFromCode, packageBlockConfig } from "../BlocklyUtils.js";
+import { ConfigBuilder } from "../../ConfigBuilder.js";
+import { HexColor, isMin, Min, PositiveNumber } from "../../types/Types.js";
+import { getHexFromCode, getNumberFromCode, getNumberFromCodeAsMin } from "../BlocklyUtils.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
 
 const Blockly = require("blockly");
@@ -11,17 +14,17 @@ const Blockly = require("blockly");
 
 
 export default function registerColorBlocks(){
-    registerSingleLed();
-    registerStripe();
-    registerStepsColor();
+    registerSingleLed('sle_simple_single_color');
+    registerStripe('sle_simple_stripe_color');
+    registerStepsColor('sle_steps_color');
 
 }
 
 
 
 // General color module with spaces between leds
-function registerStepsColor(){
-    Blockly.Blocks['sle_steps_color'] = {
+function registerStepsColor(name: string){
+    Blockly.Blocks[name] = {
         init: function() {
             this.appendValueInput("steps")
                 .setCheck("Number")
@@ -46,37 +49,38 @@ function registerStepsColor(){
         }
     };
 
-    Blockly.JavaScript['sle_steps_color'] = function(block:any) {
+    ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any, env: Environment) {
         // Variables
-        var start = getNumberFromCode(block,"start", 0);
-        var steps = getNumberFromCode(block,"steps", 1);
+        var start: PositiveNumber = getNumberFromCodeAsMin(block,"start", 0);
+        var steps: Min<1> = getNumberFromCodeAsMin(block,"steps", 1);
 
         // How many leds to skip between steps
-        var skipLen = getNumberFromCode(block,"space-between-steps", 1);
+        var skipLen: Min<1> = getNumberFromCodeAsMin(block,"space-between-steps", 1);
 
         // How long each step is
-        var skipStart = getNumberFromCode(block,"step-length", 1);
+        var skipStart: Min<1> = getNumberFromCodeAsMin(block,"step-length", 1);
 
-        // RGB-Color
-        var hsv = block.getFieldValue('color');
+        // Gets the color
+        var color: HexColor = getHexFromCode(block,"color");
 
         // Assembles the config
-        return packageBlockConfig({
-            "name": "color",
-            "config": {
-                "start": start,
-                "ledsPerStep": skipStart,      
-                "rgb": HSV2HEX(hsv.h,hsv.s,hsv.v,true),
-                "spaceBetweenSteps": skipLen,
-                "steps": steps
+        return {
+            module: ColorModule,
+            config: {
+                ...ColorModule.DEFAULT_CONFIG,
+                start,
+                ledsPerStep: skipStart,
+                rgbHex: color,
+                space: skipLen as any as PositiveNumber,
+                steps
             }
-        });
-    };
+        }
+    });
 }
 
 // Colors multiple leds in a row
-function registerStripe(){
-    Blockly.Blocks['sle_simple_stripe_color'] = {
+function registerStripe(name: string){
+    Blockly.Blocks[name] = {
         init: function() {
             this.appendValueInput("start")
                 .setCheck("Number")
@@ -94,33 +98,33 @@ function registerStripe(){
         }
     };
 
-    Blockly.JavaScript['sle_simple_stripe_color'] = function(block:any) {
-        var start: number = getNumberFromCode(block,"start", 0);
+    ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any, env: Environment) {
+        var start: PositiveNumber = getNumberFromCodeAsMin(block,"start", 0);
         var end: number = getNumberFromCode(block,"end");
-        var hsv = block.getFieldValue('color');
+        var color: HexColor = getHexFromCode(block,"color");
 
         // How many leds are used
-        var amt = end-start;
+        var amt: number = end-start;
 
         // Checks if an invalid length got specified
-        if(amt <= 0)
+        if(!isMin(amt,1))
             throw new BlockError("The specified 'end'-value is eiter the 'start'-value or below the 'start'-value.", block);
 
-        // Assembles the config
-        return packageBlockConfig({
-            "name": "color",
-            "config": {
-                "start": start,
-                "ledsPerStep": amt,      
-                "rgb": HSV2HEX(hsv.h,hsv.s,hsv.v,true)
+        return {
+            module: ColorModule,
+            config: {
+                ...ColorModule.DEFAULT_CONFIG,
+                start,
+                ledsPerStep: amt,
+                rgbHex: color
             }
-        });
-    };
+        }
+    });
 }
 
 // Single-led
-function registerSingleLed(){
-    Blockly.Blocks['sle_simple_single_color'] = {
+function registerSingleLed(name: string){
+    Blockly.Blocks[name] = {
         init: function() {
             this.appendValueInput("led")
                 .setCheck("Number")
@@ -135,18 +139,21 @@ function registerSingleLed(){
         }
     };
 
-    Blockly.JavaScript['sle_simple_single_color'] = function(block:any) {
-        // Gets the color as an rgb-value
-        var hsv = block.getFieldValue('color');
+    ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any, env: Environment) {
+        // Start
+        var start: PositiveNumber = getNumberFromCodeAsMin(block,"led",0);
 
-        // Assembles the config
-        return packageBlockConfig({
-            "name": "color",
-            "config": {
-                "start": getNumberFromCode(block,"led"),      
-                "rgb": HSV2HEX(hsv.h,hsv.s,hsv.v,true),
-                "ledsPerStep": 1
+        // Color
+        var color: HexColor = getHexFromCode(block,"color");
+
+        return {
+            module: ColorModule,
+            config:{
+                ...ColorModule.DEFAULT_CONFIG,
+                start,
+                rgbHex: color
             }
-        });
-    };
+            
+        }
+    });
 }

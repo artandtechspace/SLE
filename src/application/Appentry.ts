@@ -1,23 +1,18 @@
 // Import
-import { parseConfigsFromBlocks } from "./blockly/BlocklyUtils.js";
 import { registerBlockly } from "./blockly/BlockRegister.js";
 import registerCustomFields from "./blockly/fields/FieldRegistry.js";
 import { generateCode } from "./codegenerator/CodeGenerator.js";
-import { tryParseModules } from "./codegenerator/ConfigValidator.js";
-import { Config } from "./Config.js";
 import { Environment } from "./Environment.js";
 import { Error } from "./errorSystem/Error.js";
 import { InAppErrorSystem } from "./errorSystem/InAppErrorSystem.js";
-import { ModuleBase } from "./modules/ModuleBase.js";
 import { getFullRuntime } from "./modules/ModuleInfo.js";
 import { PopupSystem } from "./popupSystem/PopupSystem.js";
 import { ArduinoSimulation } from "./simulation/ArduinoSimulation.js";
+import { ConfigBuilder } from "./ConfigBuilder.js";
 import { TAB_ANALYTICS, TAB_ANIMATION, TAB_CODE } from "./ui/Tabs.js";
 import { setupUi } from "./ui/UiSetup.js";
 import { TabHandler } from "./ui/utils/TabHandler.js";
-import { S } from "./ui/utils/UiUtils.js";
 import { hash53b } from "./utils/CryptoUtil.js";
-const Blockly = require("blockly");
 
 // Global environment
 var env: Environment;
@@ -44,6 +39,13 @@ var compileTimeout: NodeJS.Timeout | undefined;
 // Some specific html-references
 var codeArea: HTMLTextAreaElement; // Holds the generated source-code
 var runtimeDisplay: HTMLSpanElement; // Holds how long the given configuration will run
+
+
+
+// Checksum of the previous blockly-configuration
+var blocklyChecksum: number = 0;
+
+
 /**
  * Requests a compilation of the blockly-workspace and to restart the animation.
  * If this function is called multiple times in a very short time, only one function will execute.
@@ -69,38 +71,31 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 
 		try{
 			// Gets the raw string config
-			var rawCfg = Blockly.JavaScript.workspaceToCode(workspace);		
+			var modExports = ConfigBuilder.generateModuleExports((workspace as any).getTopBlocks()[0].getNextBlock(),env);	
 	
 			// Generates the checksum
-			var csum: number = hash53b(rawCfg);			
+			var csum: number = hash53b(JSON.stringify(modExports));			
 	
 			// Checks if the checksum has changed
 			if(csum === blocklyChecksum && !ignoreNoChanges)
 				return;
-	
-			// Parses the config from the workspace
-			var cfg: [] = parseConfigsFromBlocks(rawCfg);
-			
-		
+
 			// Updates the checksum
 			blocklyChecksum = csum;
-		
-			// Tries to parse all modules
-			var mods: [ModuleBase, Config][] = tryParseModules(cfg);
-		
+
 			// Checks what to do
 			switch(tabhandler.getSelectedTab()){
 				case TAB_ANIMATION:
 					// Starts the simulation
-					simulation.startSimulation(env,mods);
+					simulation.startSimulation(env,modExports);
 					break;
 				case TAB_CODE:
 					// Generates the code and appends it to the code-area
-					codeArea.value = generateCode(env,mods);
+					codeArea.value = generateCode(env,modExports);
 					break;
 				case TAB_ANALYTICS:
 					// Generates the runtime-analytics
-					runtimeDisplay.textContent = (getFullRuntime(env,mods)/1000).toString();
+					runtimeDisplay.textContent = (getFullRuntime(env,modExports)/1000).toString();
 					break;
 			}
 	
@@ -130,9 +125,6 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 	}
 }
 
-
-// Checksum of the previous blockly-configuration
-var blocklyChecksum: number = 0;
 
 // Eventhandler for blockly-events
 function onBlocklyChange(evt: any){

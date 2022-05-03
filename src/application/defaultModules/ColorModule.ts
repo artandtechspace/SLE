@@ -1,47 +1,49 @@
-import { Config } from "../Config.js";
 import { Environment } from "../Environment.js";
 import { VariableSystem } from "../variablesystem/VariableSystem.js";
 import { ModuleBase } from "../modules/ModuleBase.js";
-import { ModuleReturn } from "../modules/ModuleReturn.js";
-import { isHexRGB, isInteger, printIf as pif } from "../utils/WorkUtils.js";
+import { ModuleReturn } from "../modules/ModuleBase";
+import { printIf as pif } from "../utils/WorkUtils.js";
 import { getFLEDColorDefinition } from "../utils/ColorUtils.js";
 import { Arduino } from "../simulation/Arduino.js";
+import { HexColor, Min, OpenObject, PositiveNumber as PositiveNumber } from "../types/Types.js";
 
-class ColorModule extends ModuleBase {
+export type ColorModuleConfig = {
+    // Amount of leds per step
+    ledsPerStep: Min<1>,
 
-    private validateConfig(cfg: Config){
-        // Gets the general variables
-        var ledsPerStep:number = cfg.getRequired("ledsPerStep", val => isInteger(val, 1), "must be an integer >= 1");
-        var start:number = cfg.getOptional("start", val => isInteger(val, 0), "must be an integer >= 0", 0);
-        var space:number = cfg.getOptional("spaceBetweenSteps", val => isInteger(val, 0), "must be an integer >= 0", 0);
-        var steps:number = cfg.getOptional("steps", val => isInteger(val, 1), "must be an integer >= 1", 1);
+    // Where to start from on the step
+    start: PositiveNumber,
 
-        // Gets the optional delays
-        var delayPerLed:number = cfg.getOptional("delayLed",val=>isInteger(val,0),"must be an integer >= 0",0);
-        var delayAfterStep:number = cfg.getOptional("delayStep",val=>isInteger(val,0),"must be an integer >= 0",0);
+    // Space between steps
+    space: PositiveNumber,
 
-        // Gets the color
-        var rgbHex = cfg.getRequired("rgb", isHexRGB, "must be an hex-color value in the format 'RRGGBB'");
+    // Amount of steps
+    steps: Min<1>,
 
-        // Note: there is no check to alert the user if the animation is operation outside the bounds of the stripe-size.
-        // This usually can just be ignored
+    // Delay that will be waited per led
+    delayPerLed: PositiveNumber,
 
-        return {
-            ledsPerStep,
-            start,
-            space,
-            steps,
-            delayPerLed,
-            delayAfterStep,
-            rgbHex
-        }
-    }
+    // Delay that will be waited between steps
+    delayAfterStep: PositiveNumber,
+    
+    // Color
+    rgbHex: HexColor
+};
 
-    public generateCode(env: Environment, varSys: VariableSystem, config: Config, isDirty: boolean): ModuleReturn {
+class ColorModule_ extends ModuleBase<ColorModuleConfig> {
 
-        // Validates the config
-        var cfg = this.validateConfig(config);
+    // Default configuration
+    public readonly DEFAULT_CONFIG: ColorModuleConfig = {
+        delayAfterStep: 0 as PositiveNumber,
+        delayPerLed: 0 as PositiveNumber,
+        ledsPerStep: 1 as Min<1>,
+        rgbHex: "FF0000" as HexColor,
+        space: 0 as PositiveNumber,
+        start: 0 as PositiveNumber,
+        steps: 1 as Min<1>
+    };
 
+    public generateCode(env: Environment, varSys: VariableSystem, cfg: ColorModuleConfig, isDirty: boolean): ModuleReturn {
             
         // Gets the color-string
         var [colorString, _] = getFLEDColorDefinition(cfg.rgbHex);
@@ -101,10 +103,7 @@ class ColorModule extends ModuleBase {
     }
 
     
-    public calculateRuntime(env: Environment, config: Config) : number {
-        // Validates the config
-        var cfg = this.validateConfig(config);
-
+    public calculateRuntime(env: Environment, cfg: ColorModuleConfig) : number {
         // Checks if only a single led is given
         if(cfg.ledsPerStep === 1 && cfg.steps === 1)
             return 0;
@@ -112,17 +111,7 @@ class ColorModule extends ModuleBase {
         return (cfg.delayPerLed * cfg.ledsPerStep + cfg.delayAfterStep) * cfg.steps
     }
 
-
-    public simulateSetup(env : Environment, config: Config, singleSourceOfTruth: {[k: string]: any}, arduino: Arduino){
-        // Validates the config and stores it
-        singleSourceOfTruth.cfg = this.validateConfig(config);
-    }
-
-    public async simulateLoop(env : Environment, singleSourceOfTruth: {[k: string]: any}, arduino: Arduino){
-
-        // Gets the validated config
-        var cfg = singleSourceOfTruth.cfg;
-        
+    public async simulateLoop(env : Environment, cfg: ColorModuleConfig, singleSourceOfTruth: OpenObject, arduino: Arduino){        
         // Iterates over every step
         for(var step = 0; step < cfg.steps; step++){
             // For every led of that step
@@ -150,4 +139,4 @@ class ColorModule extends ModuleBase {
     }
 }
 
-export default new ColorModule();
+export const ColorModule = new ColorModule_();
