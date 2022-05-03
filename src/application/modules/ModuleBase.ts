@@ -29,8 +29,6 @@ export class ModuleBase<Config extends OpenObject>{
      * 
      * }
      * 
-     * @throws {ModuleError} if there is an error
-     * 
      */
     public generateCode(env : Environment, varSys : VariableSystem, config: Config, isDirty: boolean) : ModuleReturn{
         return {}

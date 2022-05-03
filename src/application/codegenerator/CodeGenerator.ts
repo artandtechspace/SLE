@@ -1,5 +1,4 @@
 import { Environment } from "../Environment.js";
-import { ModuleError } from "../errorSystem/Error.js";
 import { ModuleReturn } from "../modules/ModuleBase.js";
 import { ModBlockExport } from "../ConfigBuilder.js";
 import { C, printIf } from "../utils/WorkUtils.js";
@@ -14,8 +13,6 @@ const CODE_REGEX = /\$\w+\$/gi;
  * @param variablesystem the used variable-system
  * @param mods all mods to generate the config for
  * @param beginDirtyState if the isDirty-state is dirty from the beginning
- * 
- * @throws exception of a module failed to generate code.
  * 
  * @returns the module-return for all modules. Meaning all setups and loop codes combined.
  */
@@ -46,15 +43,9 @@ export function generateModuleCode(env: Environment, variablesystem: VariableSys
             isDirty = code.isDirty;
     }
 
-    var i = 0;
-    try{
-        // Generates the codes
-        for(;i<mods.length; i++)
-            onGenCode(mods[i]);
-    }catch(e){
-        // Some element had an error
-        throw new ModuleError("Error while processing Module: "+mods[i].module.constructor.name+": "+e);
-    }
+    // Generates the codes
+    for(let i=0;i<mods.length; i++)
+        onGenCode(mods[i]);
 
     return {
         setup: setupCode.trim().length > 0 ? setupCode : undefined,

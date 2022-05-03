@@ -22,9 +22,3 @@ export class BlockError extends Error{
         this.block = block;
     }
 }
-
-export class ModuleError extends Error{
-    public constructor(message: string){
-        super(message);
-    }
-}
