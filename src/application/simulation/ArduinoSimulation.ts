@@ -57,7 +57,7 @@ export class ArduinoSimulation{
      */
     public async attachToPreview(preview: HTMLElement){
         // Retrieves the svg-image for the led's and appends it
-        this.preview = await attachInfileSVG(preview,"resources/LedCanvas.svg");
+        this.preview = await attachInfileSVG(preview,"resources/animationWrapper/LedCanvas.svg");
 
         // Gets all leds
         this.leds = Array.from(this.preview.querySelectorAll("[led]")) as HTMLElement[];

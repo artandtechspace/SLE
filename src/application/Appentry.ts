@@ -3,7 +3,7 @@ import { registerBlockly } from "./blockly/BlockRegister.js";
 import registerCustomFields from "./blockly/fields/FieldRegistry.js";
 import { generateCode } from "./codegenerator/CodeGenerator.js";
 import { Environment } from "./Environment.js";
-import { Error } from "./errorSystem/Error.js";
+import { Error, SystemError } from "./errorSystem/Error.js";
 import { InAppErrorSystem } from "./errorSystem/InAppErrorSystem.js";
 import { getFullRuntime, getOutOfBoundsModExports } from "./modules/ModuleUtils.js";
 import { PopupSystem } from "./popupSystem/PopupSystem.js";
@@ -46,6 +46,32 @@ var runtimeDisplay: HTMLSpanElement; // Holds how long the given configuration w
 // Checksum of the previous blockly-configuration
 var blocklyChecksum: number = 0;
 
+/**
+ * Gets the root block from the workspace.
+ * 
+ * @throws {Error} If there are multiple non-disabled blocks or non-disabled and non-root blocks
+ */
+function getRootBlock(){
+	// Gets all blocks that
+	var blocks = (workspace as any).getTopBlocks().filter((block:any)=>!block.disabled);
+
+	// Checks the length
+	if(blocks.length <= 0)
+		throw new SystemError("No root-block found. Did something go wrong while loading?");
+
+	// Checks the length
+	if(blocks.length > 1)
+		throw new SystemError("Found multiple non-disabled blocks on the workspace. Did something go wrong while loading?");
+	
+	// Gets the block
+	var blg = blocks[0];
+
+	// Ensures that the block is the root
+	if(blg.type !== "sle_root")
+		throw new SystemError("Found a single non-root block on the workspace but nothing else. Did something go wrong while loading?");
+
+	return blg;
+}
 
 /**
  * Requests a compilation of the blockly-workspace and to restart the animation.
@@ -71,8 +97,10 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 		compileTimeout = undefined;
 
 		try{
+			// Ensures that only the root element exists on the workspace
+
 			// Gets the raw string config
-			var modExports: ModBlockExport<any>[] = ConfigBuilder.generateModuleExports((workspace as any).getTopBlocks()[0].getNextBlock(),env);	
+			var modExports: ModBlockExport<any>[] = ConfigBuilder.generateModuleExports(getRootBlock().getNextBlock(),env);	
 
 			// Generates the checksum only from the config-files
 			var csum: number = hash53b(JSON.stringify(modExports.map(exp=>exp.config)));			

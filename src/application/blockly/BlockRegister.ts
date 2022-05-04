@@ -41,14 +41,14 @@ const BLOCKLY_OPTIONS = {
 
 // Function that registers all blockly-blocks
 // Returns the blockly-workspace
-export function registerBlockly(){
+export function registerBlockly(){	
 	registerBlocks();
 
 	// Injects blockly to the page and creates the workspace
 	var ws = injectBlocklyIntoPage();
 
 	// Appends the root element and disables any non-root elements
-	addRootToPage(ws);
+	addRootToPage(ws);	
 
 	return ws;
 }
