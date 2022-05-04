@@ -11,7 +11,11 @@ export const Toolbox = {
 
         block("sle_simple_stripe_color",{
           "start": inputNumber(0),
-          "end": inputNumber(5)
+          "end": {
+            block: {
+              type: "sle_values_ledamount"
+            }
+          }
         }),
         block("sle_steps_color",{
           "start": inputNumber(0),
@@ -29,8 +33,11 @@ export const Toolbox = {
         block("sle_control_loop",{
           "repeat-amount": inputNumber(2)
         }),
-        block("sle_control_comment"),
-        block("math_number")
+        block("sle_control_comment")
+      ]),
+      category("Values", 20, [
+        block("math_number"),
+        block("sle_values_ledamount")
       ])
     ]
 

@@ -2,6 +2,7 @@ import { S } from "../ui/utils/UiUtils.js";
 import registerColorBlocks from "./blocks/ColorBlocks.js";
 import registerControlBlocks from "./blocks/ControlBlocks.js";
 import registerSpecialBlocks from "./blocks/SpecialBlocks.js";
+import registerValueBlocks from "./blocks/ValueBlocks.js";
 import Theme from "./Theme.js";
 import { Toolbox } from "./Toolbox.js";
 const Blockly = require("blockly");
@@ -58,6 +59,7 @@ function registerBlocks(){
 	
 	registerColorBlocks();
 	registerControlBlocks();
+	registerValueBlocks();
 }
 
 // Adds the root element to the page and disables any non-root elements

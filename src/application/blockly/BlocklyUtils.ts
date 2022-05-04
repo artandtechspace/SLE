@@ -2,6 +2,7 @@ import { BlockError } from "../errorSystem/Error.js";
 import { ConfigBuilder } from "../ConfigBuilder.js";
 import { HexColor, Max, Min } from "../types/Types.js";
 import { HSV2HEX } from "../utils/ColorUtils.js";
+import { Environment } from "../Environment.js";
 
 /** 
  * @returns the hex-color from a custom-color-field. This expects to get passed a custom-color-field
@@ -18,9 +19,9 @@ export function getHexFromCode(block: any, field: string) : HexColor{
  * @throws {BlockError} if anything is not perfectly expected with the number.
  * @returns the searched number as a min
  */
- export function getNumberFromCodeAsMin<minimum extends number>(block: any, field: string, min: minimum) : Min<minimum>{
+ export function getNumberFromCodeAsMin<minimum extends number>(block: any, field: string, min: minimum, env: Environment) : Min<minimum>{
     // Gets the number
-    var val = getNumberFromCode(block,field);
+    var val = getNumberFromCode(block,field,env);
 
     // Ensures that the number is within the required range.
     if(val < min)
@@ -33,9 +34,9 @@ export function getHexFromCode(block: any, field: string) : HexColor{
  * @throws {BlockError} if anything is not perfectly expected with the number.
  * @returns the searched number as a min
  */
- export function getNumberFromCodeAsMax<maximum extends number>(block: any, field: string, max: maximum) : Max<maximum>{
+ export function getNumberFromCodeAsMax<maximum extends number>(block: any, field: string, max: maximum, env: Environment) : Max<maximum>{
     // Gets the number
-    var val = getNumberFromCode(block,field);
+    var val = getNumberFromCode(block,field,env);
 
     // Ensures that the number is within the required range.
     if(val > max)
@@ -48,9 +49,9 @@ export function getHexFromCode(block: any, field: string) : HexColor{
  * @throws {BlockError} if anything is not perfectly expected with the number.
  * @returns the searched number as a min
  */
-export function getNumberFromCode(block: any,field: string) {
+export function getNumberFromCode(block: any,field: string, env:Environment) {
     // Reads the value and passes it
-    var val = parseInt(ConfigBuilder.getValueFromSupplier(block.getInputTargetBlock(field)));
+    var val = parseInt(ConfigBuilder.getValueFromSupplier(block.getInputTargetBlock(field), env));
 
     // Ensures that the number is valid
     if(isNaN(val))

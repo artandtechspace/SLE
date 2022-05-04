@@ -14,7 +14,7 @@ export interface ModBlockExport<T>{
 // Function for blockly-blocks that supplie mod-block-exports
 export type ModBlockFunc<T> = (block: any, env: Environment)=>ModBlockExport<T>;
 // Function for blockly-blocks that supplie values
-export type SupplierFunc = (block: any)=>any;
+export type SupplierFunc = (block: any, env: Environment)=>any;
 
 class ConfigBuilder_{
 
@@ -46,8 +46,8 @@ class ConfigBuilder_{
      * Returns the value of a given supplier-block (Inline-blockly-block)
      * @param block the blockly-block
      */
-    getValueFromSupplier(block: any): any{
-        return this.blockSuppliers[block.type](block);
+    getValueFromSupplier(block: any, env: Environment): any{
+        return this.blockSuppliers[block.type](block, env);
     }
 
     /**

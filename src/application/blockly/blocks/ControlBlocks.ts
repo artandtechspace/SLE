@@ -13,8 +13,6 @@ const Blockly = require("blockly");
 
 
 export default function registerControlBlocks(){
-    
-    registerNumberBlock();
 
     registerLoop("sle_control_loop");
     registerDelay("sle_control_delay");
@@ -46,16 +44,6 @@ function registerComment(name: string){
     });
 }
 
-// Math's num block
-function registerNumberBlock(){
-    // Name of the block
-    const name = "math_number";
-
-    ConfigBuilder.registerValueSupplier(name,(block: any)=>{
-        return block.getFieldValue("NUM");
-    });
-}
-
 // Loop-block
 function registerLoop(name: string){
     Blockly.Blocks[name] = {
@@ -81,7 +69,7 @@ function registerLoop(name: string){
         var submodules: ModBlockExport<any>[] = ConfigBuilder.generateModuleExports(block.getInputTargetBlock("loops"), env);
 
         // Gets the amount of loops
-        var loopAmt: Min<2> = getNumberFromCodeAsMin(block,"repeat-amount", 2);
+        var loopAmt: Min<2> = getNumberFromCodeAsMin(block,"repeat-amount", 2,env);
 
         return {
             module: LoopModule,
@@ -112,7 +100,7 @@ function registerDelay(name: string){
     };
 
     ConfigBuilder.registerModuleBlock<DelayModuleConfig>(name, function(block:any, env: Environment) {
-        var waitTime: PositiveNumber = getNumberFromCodeAsMin(block,"time", 0);
+        var waitTime: PositiveNumber = getNumberFromCodeAsMin(block,"time", 0,env);
         var timeUnit = block.getFieldValue('timeUnit');
 
         // Gets the multiplicator based on the time-unit

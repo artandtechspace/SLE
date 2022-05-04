@@ -51,14 +51,14 @@ function registerStepsColor(name: string){
 
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any, env: Environment) {
         // Variables
-        var start: PositiveNumber = getNumberFromCodeAsMin(block,"start", 0);
-        var steps: Min<1> = getNumberFromCodeAsMin(block,"steps", 1);
+        var start: PositiveNumber = getNumberFromCodeAsMin(block,"start", 0, env);
+        var steps: Min<1> = getNumberFromCodeAsMin(block,"steps", 1, env);
 
         // How many leds to skip between steps
-        var skipLen: Min<1> = getNumberFromCodeAsMin(block,"space-between-steps", 1);
+        var skipLen: Min<1> = getNumberFromCodeAsMin(block,"space-between-steps", 1, env);
 
         // How long each step is
-        var skipStart: Min<1> = getNumberFromCodeAsMin(block,"step-length", 1);
+        var skipStart: Min<1> = getNumberFromCodeAsMin(block,"step-length", 1, env);
 
         // Gets the color
         var color: HexColor = getHexFromCode(block,"color");
@@ -100,8 +100,8 @@ function registerStripe(name: string){
     };
 
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any, env: Environment) {
-        var start: PositiveNumber = getNumberFromCodeAsMin(block,"start", 0);
-        var end: number = getNumberFromCode(block,"end");
+        var start: PositiveNumber = getNumberFromCodeAsMin(block,"start", 0, env);
+        var end: number = getNumberFromCode(block,"end", env);
         var color: HexColor = getHexFromCode(block,"color");
 
         // How many leds are used
@@ -143,7 +143,7 @@ function registerSingleLed(name: string){
 
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any, env: Environment) {
         // Start
-        var start: PositiveNumber = getNumberFromCodeAsMin(block,"led",0);
+        var start: PositiveNumber = getNumberFromCodeAsMin(block,"led",0, env);
 
         // Color
         var color: HexColor = getHexFromCode(block,"color");
