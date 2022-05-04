@@ -4,6 +4,7 @@ import { Environment } from "../../Environment.js";
 import { ModBlockExport, ConfigBuilder } from "../../ConfigBuilder.js";
 import { Min, PositiveNumber } from "../../types/Types.js";
 import { getNumberFromCodeAsMin } from "../BlocklyUtils.js";
+import { CommentMod, CommentModuleConfig } from "../../defaultModules/CommentModule.js";
 const Blockly = require("blockly");
 
 /**
@@ -17,9 +18,35 @@ export default function registerControlBlocks(){
 
     registerLoop("sle_control_loop");
     registerDelay("sle_control_delay");
+    registerComment("sle_control_comment");
 }
 
+function registerComment(name: string){
+    Blockly.Blocks[name] = {
+        init: function() {
+          this.appendDummyInput()
+              .appendField("//")
+              .appendField(new Blockly.FieldTextInput("Im a comment in the code."), "text");
+            this.setInputsInline(false);
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(90);
+            this.setInputsInline(true);
+        }
+    };
 
+    ConfigBuilder.registerModuleBlock<CommentModuleConfig>(name, function(block:any, env: Environment) {
+        return {
+            module: CommentMod,
+            config: {
+                text: block.getFieldValue("text")
+            },
+            block
+        }
+    });
+}
+
+// Math's num block
 function registerNumberBlock(){
     // Name of the block
     const name = "math_number";

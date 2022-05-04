@@ -15,15 +15,6 @@ import { TabHandler } from "./ui/utils/TabHandler.js";
 import { hash53b } from "./utils/CryptoUtil.js";
 import { BlockWarning } from "./errorSystem/Warning.js";
 
-
-
-
-// TODO:
-// Take a look at the code-generation for the color-module. Seams to overflow the stripe-length
-
-
-
-
 // Global environment
 var env: Environment;
 

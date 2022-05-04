@@ -29,6 +29,7 @@ export const Toolbox = {
         block("sle_control_loop",{
           "repeat-amount": inputNumber(2)
         }),
+        block("sle_control_comment"),
         block("math_number")
       ])
     ]

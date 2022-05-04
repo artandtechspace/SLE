@@ -17,9 +17,13 @@ export type CommentModuleConfig = {
 class CommentModule_ extends ModuleBase<CommentModuleConfig> {
 
     public generateCode(env: Environment, _: VariableSystem, config: CommentModuleConfig, isDirty: boolean): ModuleReturn {
-        return {
-            loop: "// "+config.text
-        };
+        // Ensures that comments are active
+        if(env.withComments)
+            return {
+                loop: "// "+config.text
+            };
+        
+        return {};
     }
 }
 
