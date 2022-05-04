@@ -4,7 +4,7 @@ import { Environment } from "../../Environment.js";
 import { ModBlockExport, ConfigBuilder } from "../../ConfigBuilder.js";
 import { Min, PositiveNumber } from "../../types/Types.js";
 import { getNumberFromCodeAsMin } from "../BlocklyUtils.js";
-import { CommentMod, CommentModuleConfig } from "../../defaultModules/CommentModule.js";
+import { CommentModule, CommentModuleConfig } from "../../defaultModules/CommentModule.js";
 const Blockly = require("blockly");
 
 /**
@@ -37,7 +37,7 @@ function registerComment(name: string){
 
     ConfigBuilder.registerModuleBlock<CommentModuleConfig>(name, function(block:any, env: Environment) {
         return {
-            module: CommentMod,
+            module: CommentModule,
             config: {
                 text: block.getFieldValue("text")
             },

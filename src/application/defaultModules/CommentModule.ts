@@ -27,4 +27,4 @@ class CommentModule_ extends ModuleBase<CommentModuleConfig> {
     }
 }
 
-export const CommentMod = new CommentModule_();
+export const CommentModule = new CommentModule_();
