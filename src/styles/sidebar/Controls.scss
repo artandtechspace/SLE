@@ -4,7 +4,7 @@
 #sidebar>#controls{
     position: relative;
     width: 100%;
-    height: 250px;
+    height: 300px;
     padding: .8rem;
     
     // Default element with an info-icon
@@ -81,7 +81,7 @@
         }
     
         // Input element
-        input{
+        input, select{
             border: 2px solid #4F4F4F;
             border-radius: 5px;
             background: linear-gradient(180deg, #303030 0%, #242424 100%);
@@ -109,6 +109,11 @@
                 margin-left: .2rem;
             }
 
+        }
+
+        // Options elements for select-inputs
+        select option{
+            background-color: #303030;
         }
 
     }

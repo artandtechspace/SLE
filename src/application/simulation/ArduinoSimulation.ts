@@ -1,21 +1,26 @@
 import { StopableCallchain } from "../utils/StopableCallchain.js";
 import { Arduino } from "./Arduino.js";
 import { Environment } from "../Environment.js";
-import { attachInfileSVG } from "../utils/SVGUtil.js";
 import { SystemError } from "../errorSystem/Error.js";
 import { getFullRuntime } from "../modules/ModuleUtils.js";
 import { ModBlockExport } from "../ConfigBuilder.js";
+import { Min, PositiveNumber } from "../types/Types.js";
 
 export class ArduinoSimulation{
 
-    // Element that holds the preview-svg-html-object
-    private preview?: SVGElement;
-
     // Contains a list with all led-items from the preview (This exists for performance reasons)
+    // It is also always ensures that if loaded this element has at least one led
     private leds: HTMLElement[] = [];
 
     // Callchain
     private callchain = new StopableCallchain();
+
+    // Container of the preview-svg
+    private previewContainer: HTMLElement;
+
+    constructor(preview: HTMLElement){
+        this.previewContainer = preview;
+    }
 
     /**
      * Event: When an light-update get's pushed from the modules
@@ -48,23 +53,28 @@ export class ArduinoSimulation{
         this.leds.forEach(led=>led.style.fill="black");
     }
 
-
     /**
-     * Attaches the preview to an element.
-     * @param {HTMLElement} preview the element where the preview shall be shown. Inside this element and svg will be inserted with the review for the led's
+     * Loads the given svg as the preview.
+     * This must be called at least once before any other functions of this class can be used.
+     * If the preview is overwritten and there is an error
      * 
-     * @throws {SystemError} if there is a critical error
+     * @param svg the preview-element
+     * 
+     * @throws {SystemError} if there is an error with loading the preview-element
      */
-    public async attachToPreview(preview: HTMLElement){
-        // Retrieves the svg-image for the led's and appends it
-        this.preview = await attachInfileSVG(preview,"resources/animationWrapper/LedCanvas.svg");
-
+    public loadPreview(svg: SVGElement){
         // Gets all leds
-        this.leds = Array.from(this.preview.querySelectorAll("[led]")) as HTMLElement[];
+        var leds = Array.from(svg.querySelectorAll("[led]")) as HTMLElement[];
 
         // Ensures that the leds could be loaded
-        if(this.leds.length <= 0)
+        if(leds.length <= 0)
             throw new SystemError("No leds could be found.");
+
+        this.leds = leds;
+
+        // Attaches the preview
+        this.previewContainer.innerHTML="";
+        this.previewContainer.appendChild(svg);
     }
 
     /**
@@ -123,8 +133,8 @@ export class ArduinoSimulation{
     }
 
     // Returns how many leds got found
-    public getLedAmount(){
-        return this.leds.length;
+    public getLedAmount(): Min<1>{
+        return this.leds.length as Min<1>;
     }
 
 }

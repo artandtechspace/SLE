@@ -4,9 +4,12 @@ import { InAppErrorSystem } from "../errorSystem/InAppErrorSystem.js";
 import { PopupSystem } from "../popupSystem/PopupSystem.js";
 import { PRESET_SOURCECODE } from "../Preset.js";
 import { ArduinoSimulation } from "../simulation/ArduinoSimulation.js";
+import { Min, PositiveNumber } from "../types/Types.js";
+import { loadSVG } from "../utils/SVGUtil.js";
 import { TAB_ANIMATION, TAB_CODE, TAB_ANALYTICS } from "./Tabs.js";
 import { SliderBar, SliderBarDirection } from "./utils/SliderBar.js";
 import { TabHandler } from "./utils/TabHandler.js";
+import { PREVIEWS_FILE_PATH, PREVIEWS, DEFAULT_PREVIEW_NAME, setupEnvironment } from "./utils/UiEnvironmentIntegration.js";
 import { S } from "./utils/UiUtils.js";
 
 // Executes to setup the ui
@@ -26,7 +29,7 @@ export async function setupUi(onEnvChange: ()=>void){
     try{
         registerSliderBars();
         registerSidebarIconChanger();
-
+        
         // Gets specific elements
         var codeArea = S("#codeArea") as HTMLTextAreaElement;
         var runtimeDisplay = S("#runtime",S("#analyticsTab")) as HTMLSpanElement;
@@ -37,10 +40,10 @@ export async function setupUi(onEnvChange: ()=>void){
         var errorsystem = new InAppErrorSystem();
     
         // Builds the environment
-        var env = new Environment(simulation.getLedAmount(),true,PRESET_SOURCECODE,0);
+        var env = new Environment(simulation.getLedAmount() as any as Min<1>,true,PRESET_SOURCECODE,0 as PositiveNumber, DEFAULT_PREVIEW_NAME);
     
         // Binds the environment-settings to the ui
-        bindEnvironment(env,popupsystem, onEnvChange);
+        setupEnvironment(env,popupsystem,simulation,onEnvChange);
     
         // Cleans all hidden popup-content
         popupsystem.closePopup();
@@ -98,63 +101,14 @@ function removeLoadingScreen(){
     S("#loadingScreen").classList.add("hide");
 }
 
-// The environment-binder takes in the reference to an environment and binds to the ui
-function bindEnvironment(env: Environment, popsys: PopupSystem, onEnvChange: ()=>void){
-    // Gets all elements to bind to
-    var ctrl = S("#controls") as any;;
-    var inpPin = S("#inpPin",ctrl) as any;
-    var inpAmt = S("#inpAmt",ctrl) as any;
-    var inpComments = S("#inpComments",ctrl) as any;
-    var inpPreCode = S("#inpPreCode",ctrl) as any;
-
-	// Gets the code-editor element's
-	var codeEditorPopup = S("#precompEditor") as any;
-    var codeEditor = S("textarea",codeEditorPopup) as any;
-    var btnSave = S("#pce-save",codeEditorPopup) as any;
-    var btnCancle = S("#pce-cancle",codeEditorPopup) as any;
-
-    // Sets the default values
-    inpPin.value = env.ledPin;
-    inpAmt.value = env.ledAmount;
-    inpComments.checked = env.withComments;
-
-    // Adds the event-handlers
-    inpPin.addEventListener("change",(_: any)=>{
-        env.ledPin=inpPin.value;
-        onEnvChange();
-    });
-    inpAmt.addEventListener("change",(_: any)=>{
-        env.ledAmount=inpAmt.value
-        onEnvChange();
-    });
-    inpComments.addEventListener("change",(_: any)=>{
-        env.withComments=inpComments.checked
-        onEnvChange();
-    });
-    inpPreCode.addEventListener("click",(_: any)=>{
-        popsys.showPopup(codeEditorPopup);
-        codeEditor.value = env.preprocessingCode;
-    });
-    btnCancle.addEventListener("click",popsys.closePopup);
-    btnSave.addEventListener("click",(_: any)=>{
-        env.preprocessingCode = codeEditor.value
-        popsys.closePopup();
-        onEnvChange();
-    });
-
-}
-
 // Setups the arduino-simulation and inserts it into the environment
 async function setupArduinoSimulation(){
 
-    // Creates the simulation
-    var simulation = new ArduinoSimulation();
+    // Creates the simulation with the preview-element
+    var simulation = new ArduinoSimulation(S("#animationTab"));
 
-	// Gets the simulation-preview element
-	const simPrevElm = S("#animationTab");
-
-    // Attaches to the simulation
-    await simulation.attachToPreview(simPrevElm);
+    // Loads the first preview
+    simulation.loadPreview(await loadSVG(PREVIEWS_FILE_PATH+DEFAULT_PREVIEW_NAME));
 
     return simulation;
 }
@@ -207,7 +161,7 @@ function registerSidebarTabs(){
 
 // Registers the sliders
 function registerSliderBars(){
-    SliderBar.register(S("#controls"), S(".sliderbar.y"), 250, 500, SliderBarDirection.DIRECTION_Y_BACKWARD);
+    SliderBar.register(S("#controls"), S(".sliderbar.y"), 280, 500, SliderBarDirection.DIRECTION_Y_BACKWARD);
     SliderBar.register(S("#sidebar"),S(".sliderbar.x"), 50, 500, SliderBarDirection.DIRECTION_X_BACKWARD);
 }
 

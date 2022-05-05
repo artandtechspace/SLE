@@ -1,16 +1,15 @@
 import { SystemError } from "../errorSystem/Error.js";
 
 /**
- * Loads an svg from the given path and attaches it as a children to the given parent.
+ * Loads an svg from the given path.
  * This is used to make svgs accessible and editable by css
  * 
- * @param {HTMLElement} parent the future parent of the svg
  * @param {string} path the path to the svg-image
  * 
  * @throws {SystemError} if there is a critical error. Like if it failed to load or the loaded file didn't contain an svg
  * @returns {SVGElement} the handle to the svg-image
  */
- export async function attachInfileSVG(parent: HTMLElement,path: string): Promise<SVGElement>{
+ export async function loadSVG(path: string): Promise<SVGElement>{
     // Gets the svg-image
     var res = await fetch(path);
     
@@ -37,9 +36,6 @@ import { SystemError } from "../errorSystem/Error.js";
 
     // Removes the dummy object
     dummy.removeChild(handle);
-
-    // Appends the object to the parent
-    parent.appendChild(handle);
 
     // Returns the svg-handle
     return handle;

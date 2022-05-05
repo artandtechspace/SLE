@@ -13,8 +13,7 @@
         height:100%;
         display: flex;
         flex-direction: column;
-        // TODO: Resize svg to not have overflow at all
-        overflow: hidden;
+        align-items: center;
 
         &>.tab{
             width: 100%;
@@ -126,11 +125,12 @@
         }
         
         #animationTab{
-            margin: 0 5px;
+            padding: 5px;
             
             svg{
                 width:100%;
                 height:100%;
+                user-select: none;
             }
         }
     }
