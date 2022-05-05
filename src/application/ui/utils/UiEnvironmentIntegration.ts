@@ -7,7 +7,7 @@ import { loadSVG } from "../../utils/SVGUtil.js";
 import { S } from "./UiUtils.js";
 
 // Path to the preview-files
-export const PREVIEWS_FILE_PATH = "resources/animationWrapper/";
+export const PREVIEWS_FILE_PATH = "resources/arduinoPreviews/";
 
 // Holds the name and file-name for a preset preview
 export const PREVIEWS: {[key: string]: string} = {
