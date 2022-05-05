@@ -47,7 +47,7 @@ class ConfigBuilder_{
      * @param block the blockly-block
      */
     getValueFromSupplier(block: any, env: Environment): any{
-        return this.blockSuppliers[block.type](block, env);
+        return block === null ? null : this.blockSuppliers[block.type](block, env);
     }
 
     /**
