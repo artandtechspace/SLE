@@ -2,10 +2,11 @@ import { ColorModule, ColorModuleConfig } from "../../defaultModules/ColorModule
 import { Environment } from "../../Environment.js";
 import { BlockError } from "../../errorSystem/Error.js";
 import { ConfigBuilder } from "../../ConfigBuilder.js";
-import { HexColor, isMin, Min, PositiveNumber } from "../../types/Types.js";
-import { getHexFromCode, getNumberFromCode, getNumberFromCodeAsMin } from "../BlocklyUtils.js";
+import { HexColor, Min, PositiveNumber } from "../../types/Types.js";
+import { getHexFromCode, getNumberFromCodeAsMin } from "../BlocklyUtils.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
-import { TB_COLOR_ANIMATIONS, TB_COLOR_COLOR } from "../Toolbox.js";
+import { TB_COLOR_COLOR } from "../Toolbox.js";
+import FieldBrightness from "../fields/FieldBrightness.js";
 
 const Blockly = require("blockly");
 
@@ -18,7 +19,6 @@ export default function registerColorBlocks(){
     registerSingleLed('sle_simple_single_color');
     registerStripe('sle_simple_stripe_color');
     registerStepsColor('sle_steps_color');
-
 }
 
 
