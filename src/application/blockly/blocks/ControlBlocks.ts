@@ -5,6 +5,7 @@ import { ModBlockExport, ConfigBuilder } from "../../ConfigBuilder.js";
 import { Min, PositiveNumber } from "../../types/Types.js";
 import { getNumberFromCodeAsMin } from "../BlocklyUtils.js";
 import { CommentModule, CommentModuleConfig } from "../../defaultModules/CommentModule.js";
+import { TB_COLOR_CONTROL } from "../Toolbox.js";
 const Blockly = require("blockly");
 
 /**
@@ -59,7 +60,7 @@ function registerLoop(name: string){
             this.setInputsInline(false);
             this.setPreviousStatement(true, null);
             this.setNextStatement(true, null);
-            this.setColour(230);
+            this.setColour(TB_COLOR_CONTROL);
             this.setInputsInline(true);
         }
     };
@@ -94,7 +95,7 @@ function registerDelay(name: string){
             this.setInputsInline(false);
             this.setPreviousStatement(true, null);
             this.setNextStatement(true, null);
-            this.setColour(230);
+            this.setColour(TB_COLOR_CONTROL);
             this.setInputsInline(true);
         }
     };

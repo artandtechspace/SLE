@@ -13,7 +13,7 @@ import { C } from "../utils/WorkUtils.js";
  * 
  * would work perfectly fine.
  */
-class Variable {
+export class Variable {
     public name: string;
     public type: string;
     public initValue: string;

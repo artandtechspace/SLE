@@ -14,6 +14,8 @@ import { setupUi } from "./ui/UiSetup.js";
 import { TabHandler } from "./ui/utils/TabHandler.js";
 import { hash53b } from "./utils/CryptoUtil.js";
 import { BlockWarning } from "./errorSystem/Warning.js";
+import { LoopModule, LoopModuleConfig } from "./defaultModules/LoopModule.js";
+import { didWorkspaceChange, setWorkspaceInvalid } from "./blockly/WorkspaceChangeDetector.js";
 
 // Global environment
 var env: Environment;
@@ -42,9 +44,6 @@ var codeArea: HTMLTextAreaElement; // Holds the generated source-code
 var runtimeDisplay: HTMLSpanElement; // Holds how long the given configuration will run
 
 
-
-// Checksum of the previous blockly-configuration
-var blocklyChecksum: number = 0;
 
 /**
  * Gets the root block from the workspace.
@@ -101,16 +100,10 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 
 			// Gets the raw string config
 			var modExports: ModBlockExport<any>[] = ConfigBuilder.generateModuleExports(getRootBlock().getNextBlock(),env);	
-
-			// Generates the checksum only from the config-files
-			var csum: number = hash53b(JSON.stringify(modExports.map(exp=>exp.config)));			
-	
+			
 			// Checks if the checksum has changed
-			if(csum === blocklyChecksum && !ignoreNoChanges)
+			if(!didWorkspaceChange(modExports) && !ignoreNoChanges)
 				return;
-
-			// Updates the checksum
-			blocklyChecksum = csum;
 
 			// Checks what to do
 			switch(tabhandler.getSelectedTab()){
@@ -148,7 +141,7 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 			runtimeDisplay.textContent = "[x]";
 
 			// Sets the block-checksum to invalid
-			blocklyChecksum = 0;
+			setWorkspaceInvalid();
 	
 			// Ensures that the error is from the error-system
 			if(!(e instanceof Error)){

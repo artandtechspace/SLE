@@ -1,4 +1,5 @@
 import { S } from "../ui/utils/UiUtils.js";
+import registerAnimationBlocks from "./blocks/AnimationBlocks.js";
 import registerColorBlocks from "./blocks/ColorBlocks.js";
 import registerControlBlocks from "./blocks/ControlBlocks.js";
 import registerSpecialBlocks from "./blocks/SpecialBlocks.js";
@@ -60,6 +61,7 @@ function registerBlocks(){
 	registerColorBlocks();
 	registerControlBlocks();
 	registerValueBlocks();
+	registerAnimationBlocks();
 }
 
 // Adds the root element to the page and disables any non-root elements

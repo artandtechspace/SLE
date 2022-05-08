@@ -50,3 +50,7 @@ export function isHexRGB(value: any){
 export function printIf(element: string, condition: boolean) : string{
     return condition ? element : "";
 }
+
+export function printIfElse(element: string, elseElement: string, condition: boolean): string{
+    return condition ? element : elseElement;
+}

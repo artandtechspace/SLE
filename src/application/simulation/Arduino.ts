@@ -81,7 +81,9 @@ export class Arduino{
      * @param v value as a percentage (0.00-1.00)
      */
      public setLedHSV(id: number,h: number,s: number,v: number){
-        this.leds[id] = `hsl(${h/255*360},${s/255*100}%,${v/255*100}%)`
+        let hsv2hsl = (h:number,s:number,v:number,l=v-v*s/2, m=Math.min(l,1-l)) => [h,m?(v-l)/m:0,l];
+        var nums = hsv2hsl(h*360,s,v);
+        this.leds[id] = `hsl(${nums[0]},${nums[1]*100}%,${nums[2]*100}%)`
     }
 
 }

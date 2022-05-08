@@ -1,10 +1,15 @@
 /**
  * Toolbox for the blockly workspace
  */
+export const TB_COLOR_COLOR = 45;
+export const TB_COLOR_CONTROL = 210;
+export const TB_COLOR_VALUES = 20;
+export const TB_COLOR_ANIMATIONS = 120;
+
 export const Toolbox = {
     "kind": "categoryToolbox",
     "contents": [
-      category("Color", 130,[
+      category("Color", TB_COLOR_COLOR,[
         block("sle_simple_single_color",{
           "led": inputNumber(0)
         }),
@@ -25,7 +30,7 @@ export const Toolbox = {
         })
       ]),
       
-      category("Control", 210,[
+      category("Control", TB_COLOR_CONTROL,[
         block("sle_control_delay",{
           "time": inputNumber(50)
         }),
@@ -35,9 +40,16 @@ export const Toolbox = {
         }),
         block("sle_control_comment")
       ]),
-      category("Values", 20, [
+      category("Values", TB_COLOR_VALUES, [
         block("math_number"),
         block("sle_values_ledamount")
+      ]),
+      category("Animations", TB_COLOR_ANIMATIONS, [
+        block("sle_animation_gradient",{
+          "start": inputNumber(0),
+          "length": inputNumber(5),
+          "delay": inputNumber(100)
+        }),
       ])
     ]
 

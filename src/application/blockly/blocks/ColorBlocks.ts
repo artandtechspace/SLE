@@ -5,6 +5,7 @@ import { ConfigBuilder } from "../../ConfigBuilder.js";
 import { HexColor, isMin, Min, PositiveNumber } from "../../types/Types.js";
 import { getHexFromCode, getNumberFromCode, getNumberFromCodeAsMin } from "../BlocklyUtils.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
+import { TB_COLOR_ANIMATIONS, TB_COLOR_COLOR } from "../Toolbox.js";
 
 const Blockly = require("blockly");
 
@@ -42,7 +43,7 @@ function registerStepsColor(name: string){
                 .setCheck("Number");
             this.appendDummyInput()
                 .appendField("leds.");
-            this.setColour(130);
+            this.setColour(TB_COLOR_COLOR);
             this.setPreviousStatement(true, null);
             this.setNextStatement(true, null);
             this.setInputsInline(true);
@@ -92,7 +93,7 @@ function registerStripe(name: string){
             this.appendDummyInput()
                 .appendField("in")
                 .appendField(new FieldCustomColor(), "color");
-            this.setColour(130);
+            this.setColour(TB_COLOR_COLOR);
             this.setPreviousStatement(true, null);
             this.setNextStatement(true, null);
             this.setInputsInline(true);
@@ -100,17 +101,20 @@ function registerStripe(name: string){
     };
 
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any, env: Environment) {
-        var start: PositiveNumber = getNumberFromCodeAsMin(block,"start", 0, env);
-        var end: number = getNumberFromCode(block,"end", env);
+        var pos1: PositiveNumber = getNumberFromCodeAsMin(block,"start", 0, env);
+        var pos2: PositiveNumber = getNumberFromCodeAsMin(block,"end", 0, env);
         var color: HexColor = getHexFromCode(block,"color");
-
-        // How many leds are used
-        var amt: number = end-start;
-
+        
         // Checks if an invalid length got specified
-        if(!isMin(amt,1))
-            throw new BlockError("The specified 'end'-value is eiter the 'start'-value or below the 'start'-value.", block);
-
+        if(pos1 === pos2)
+            throw new BlockError("The start- and end-values are equal.", block);
+        
+        // Gets the start
+        var start = Math.min(pos1,pos2) as PositiveNumber;
+        
+        // How many leds are used
+        var amt: Min<1> = Math.max(pos1,pos2)-start as Min<1>;
+        
         return {
             module: ColorModule,
             config: {
@@ -134,7 +138,7 @@ function registerSingleLed(name: string){
             this.appendDummyInput()
                 .appendField("in")
                 .appendField(new FieldCustomColor(), "color");
-            this.setColour(130);
+            this.setColour(TB_COLOR_COLOR);
             this.setPreviousStatement(true, null);
             this.setNextStatement(true, null);
             this.setInputsInline(true);
