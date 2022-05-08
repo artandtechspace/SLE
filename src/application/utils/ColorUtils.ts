@@ -1,3 +1,5 @@
+import { OpenObject } from "../types/Types";
+
 // RGB-object
 export interface RGB{
     r: number, // 0 - 255
@@ -194,7 +196,7 @@ export function getFLEDColorDefinition(hex: string): [string,boolean]{
  * @param {number} v Value-Part (From 0.00 to 1.00)
  * @returns an object with keys of r, g and b and their respective values from 0 to 255
  */
- export function HSVtoRGB(h: number, s: number, v: number) : RGB {
+export function HSVtoRGB(h: number, s: number, v: number) : RGB {
     // Variable declaration
     var r, g, b, i, f, p, q, t;
 
@@ -243,4 +245,18 @@ function decToHexTwoDigits(dec: number){
 export function HSV2HEX(h: number,s: number,v: number, withoutSharp=false){
     var {r,g,b} = HSVtoRGB(h,s,v);  
     return `${withoutSharp ? "" : "#"}${decToHexTwoDigits(r)}${decToHexTwoDigits(g)}${decToHexTwoDigits(b)}`;
+}
+
+// Takes in an object and returns if that object is a valid HSV-object
+export function isValidHUE(obj: OpenObject) : obj is HSV{
+    
+    // Checks for the keys
+    if(Object.keys(obj).length !== 3 )
+        return false;
+
+    // Ensures that the names match
+    if(obj["h"] === undefined || obj["s"] === undefined || obj["v"] === undefined)
+        return false;
+
+    return Object.values(obj).every(val=>typeof val === "number" && val >= 0 && val <= 1);
 }

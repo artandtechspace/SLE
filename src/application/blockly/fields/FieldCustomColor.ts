@@ -1,4 +1,4 @@
-import { HSV, HSV2HEX } from "../../utils/ColorUtils.js";
+import { HSV, HSV2HEX, isValidHUE } from "../../utils/ColorUtils.js";
 import { create as C } from "../../utils/HTMLBuilder.js";
 const Blockly = require("blockly");
 
@@ -14,6 +14,10 @@ export default class FieldCustomColor extends Blockly.Field{
   };
 
   SERIALIZABLE = true;
+
+  isColorDisabled = false;
+  isValueDisabled = false;
+  isSaturationDisabled = false;
   
   constructor(opt_value: HSV|null = null, opt_validator?: (value:HSV)=>boolean){
     opt_value = FieldCustomColor.validateInputColor(opt_value);
@@ -22,33 +26,32 @@ export default class FieldCustomColor extends Blockly.Field{
     
     super(opt_value,opt_validator);
   }
+
+  // Removes the saturation slider
+  disableSaturation(){
+    this.isSaturationDisabled = true;
+    return this;
+  }
+
+  // Removes the value slider
+  disableValue(){
+    this.isValueDisabled = true;
+    return this;
+  }
+
+  // Removes the color slider
+  disableColor(){
+    this.isColorDisabled = true;
+    return this;
+  }
   
     // Validates the input-color as an hsv-object. Return null if invalid and the object if valid.
     private static validateInputColor(value: any): HSV|null{
         // Ensures the value is an object
         if(typeof value !== "object" || value === null)
           return null;
-        
-        // Checks for the keys
-        if(Object.keys(value).length !== 3 )
-          return null;
-      
-        // Gets the keys
-        var keys = Object.keys(FieldCustomColor.DEFAULT_VALUE);
-      
-        // Checks if the given value is okay
-        const isValid=(x: (any))=>{
-          // Gets the value
-          var val = value[x as keyof typeof value];
-      
-          return typeof val === "number" && val >= 0 && val <= 1;
-        }
-      
-        // Checks if the keys are given and valid
-        if(keys.filter(isValid).length != keys.length)
-          return null;
-      
-        return value;
+
+        return isValidHUE(value) ? value : null;
     }
 
     // Create an field from a given json object
@@ -127,20 +130,25 @@ export default class FieldCustomColor extends Blockly.Field{
       const evtMapper = (event: Event,name: string)=>this.onValueChange((event.target as EventTarget)["value" as keyof typeof event.target], name);
 
       // Generates the sliders
-      var sliderColor = createSlider("colorH",h,evt=>evtMapper(evt,"h"));
-      var sliderLight = createSlider("colorV",v,evt=>evtMapper(evt,"v"));
-      var sliderSaturation = createSlider("colorS",s,evt=>evtMapper(evt,"s"));
+      var sliderColor = this.isColorDisabled ? undefined : createSlider("colorH",h,evt=>evtMapper(evt,"h"));
+      var sliderValue = this.isValueDisabled ? undefined : createSlider("colorV",v,evt=>evtMapper(evt,"v"));
+      var sliderSaturation = this.isSaturationDisabled ? undefined : createSlider("colorS",s,evt=>evtMapper(evt,"s"));
   
       // Creates the html-part
-      
       Blockly.DropDownDiv.getContentDiv().appendChild(C("div",{
         chld: [
-          C("p",{ text: "Color" }),
-          sliderColor.html,
-          C("p",{ text: "Brightness" }),
-          sliderLight.html,
-          C("p",{ text: "Saturation" }),
-          sliderSaturation.html
+          ...( this.isColorDisabled ? [] : [
+            C("p",{ text: "Color" }),
+            sliderColor?.html,
+          ]),
+          ...( this.isValueDisabled ? [] : [
+            C("p",{ text: "Brightness" }),
+            sliderValue?.html,
+          ]),
+          ...( this.isSaturationDisabled ? [] : [
+            C("p",{ text: "Saturation" }),
+            sliderSaturation?.html
+          ]),
         ],
         cls:"blockly-custfield-colorslider-popup"
       }));
@@ -150,9 +158,9 @@ export default class FieldCustomColor extends Blockly.Field{
   
       // Attaches the sliders
       this.openEditorField_ = {
-        h: sliderColor.canvas,
-        s: sliderSaturation.canvas,
-        v: sliderLight.canvas
+        h: sliderColor?.canvas,
+        s: sliderSaturation?.canvas,
+        v: sliderValue?.canvas
       }
   
       // Opens the dropdown and registers the close-handler
@@ -170,6 +178,10 @@ export default class FieldCustomColor extends Blockly.Field{
     private renderSlider(field: string){
       // Gets the canvas
       var canvas = this.openEditorField_[field];
+
+      // Ensures the slider is enabled
+      if(!canvas)
+        return;
   
       // Opens the context
       const ctx = canvas.getContext("2d");
