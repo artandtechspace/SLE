@@ -52,7 +52,7 @@
             justify-content: space-evenly;
             
             input{
-                background-color: transparent;
+                background: transparent;
                 border: none;
                 outline: none;
                 color: $textColor;
@@ -120,9 +120,19 @@
         }
         
         #codeTab{
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+
+            #copy{
+                margin: 10px auto
+            }
+
             textarea{
                 background-color: transparent;
                 font-size: .6rem;
+                height: unset;
+                flex-grow: 1;
             }        
         }
         

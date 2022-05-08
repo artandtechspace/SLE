@@ -137,7 +137,7 @@ function registerSidebarTabs(){
     var btns = S("#texts");
     var icons = S("#icons");
     var tabs = S("#tabs");
-
+    
     // Creates the tab-buttons
     const BUTTONS: [HTMLElement,number][] = [
         [S("#btnTabCode",btns),TAB_CODE],
@@ -148,9 +148,13 @@ function registerSidebarTabs(){
         [S("#tabAnalytics",icons),TAB_ANALYTICS]
     ];
 
+    // Handle the code-tab
+    var codeTab = S("#codeTab",tabs);
+    handleTabCode(codeTab as HTMLDivElement);
+    
     // Gets the tabs
     const TABS: [HTMLElement,number][] = [
-        [S("#codeTab",tabs),TAB_CODE],
+        [codeTab,TAB_CODE],
         [S("#animationTab",tabs),TAB_ANIMATION],
         [S("#analyticsTab",tabs),TAB_ANALYTICS]
     ]
@@ -158,11 +162,20 @@ function registerSidebarTabs(){
     return new TabHandler(BUTTONS,TABS,1);
 }
 
+// Inits the tab-code
+function handleTabCode(tabCode: HTMLDivElement){
+    // Gets the text-area
+    var textArea = S("textarea",tabCode) as HTMLTextAreaElement;
+
+    // Gets the copy-button and registers the event-handler
+    S("#copy",tabCode).addEventListener("click",()=>navigator.clipboard.writeText(textArea.value));
+}
+
 
 // Registers the sliders
 function registerSliderBars(){
-    SliderBar.register(S("#controls"), S(".sliderbar.y"), 280, 500, SliderBarDirection.DIRECTION_Y_BACKWARD);
-    SliderBar.register(S("#sidebar"),S(".sliderbar.x"), 50, 500, SliderBarDirection.DIRECTION_X_BACKWARD);
+    SliderBar.register(S("#controls"), S(".sliderbar.y"), 50, 500, SliderBarDirection.DIRECTION_Y_BACKWARD);
+    SliderBar.register(S("#sidebar"),S(".sliderbar.x"), 50, 800, SliderBarDirection.DIRECTION_X_BACKWARD);
 }
 
 

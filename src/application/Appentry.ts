@@ -12,9 +12,7 @@ import { ConfigBuilder, ModBlockExport } from "./ConfigBuilder.js";
 import { TAB_ANALYTICS, TAB_ANIMATION, TAB_CODE } from "./ui/Tabs.js";
 import { setupUi } from "./ui/UiSetup.js";
 import { TabHandler } from "./ui/utils/TabHandler.js";
-import { hash53b } from "./utils/CryptoUtil.js";
 import { BlockWarning } from "./errorSystem/Warning.js";
-import { LoopModule, LoopModuleConfig } from "./defaultModules/LoopModule.js";
 import { didWorkspaceChange, setWorkspaceInvalid } from "./blockly/WorkspaceChangeDetector.js";
 
 // Global environment
