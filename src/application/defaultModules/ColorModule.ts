@@ -1,11 +1,12 @@
 import { Environment } from "../Environment.js";
-import { VariableSystem } from "../variablesystem/VariableSystem.js";
+import { Variable, VariableSystem } from "../variablesystem/VariableSystem.js";
 import { ModuleBase } from "../modules/ModuleBase.js";
 import { ModuleReturn } from "../modules/ModuleBase";
 import { printIf as pif } from "../utils/WorkUtils.js";
 import { getFLEDColorDefinition } from "../utils/ColorUtils.js";
 import { Arduino } from "../simulation/Arduino.js";
 import { HexColor, Min, OpenObject, PositiveNumber as PositiveNumber } from "../types/Types.js";
+import { EquationSimplifier } from "../utils/EquationSimplifier.js";
 
 export type ColorModuleConfig = {
     // Amount of leds per step
@@ -30,6 +31,19 @@ export type ColorModuleConfig = {
     rgbHex: HexColor
 };
 
+// Generates the eqaution that is required for the led index
+function getLedIndexEquation(cfg: ColorModuleConfig, led: Variable, step?: Variable){
+    // cfg.start+step * (cfg.space+cfg.ledsPerStep) + led
+    return EquationSimplifier.simplifyEquation({
+        num: cfg.start,
+        vars: [led],
+        equations: [{
+            vars: step !== undefined ? [step] : [],
+            num: (cfg.space+cfg.ledsPerStep)
+        }]
+    }, EquationSimplifier.ADD);
+}
+
 class ColorModule_ extends ModuleBase<ColorModuleConfig> {
 
     // Default configuration
@@ -47,9 +61,6 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig> {
             
         // Gets the color-string
         var [colorString, _] = getFLEDColorDefinition(cfg.rgbHex);
-
-        // Start-addition operation
-        var opStart = cfg.start > 0 ? (cfg.start + "+") : "";
 
         // Delay operations
         var opDelayLed = pif("\nFastLED.show();\ndelay("+cfg.delayPerLed+");",cfg.delayPerLed > 0);
@@ -81,7 +92,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig> {
                 return {
                     loop: `
                         for(${vLed.declair()} ${vLed} < ${cfg.ledsPerStep}; ${vLed}++)${opDelayLedBOpen}
-                            leds[${opStart}${vLed}] = ${colorString};${opDelayLed}${opDelayLedBClose}
+                            leds[${getLedIndexEquation(cfg,vLed)}] = ${colorString};${opDelayLed}${opDelayLedBClose}
                     `,
                     isDirty
                 }
@@ -95,7 +106,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig> {
                 loop: `
                 for(${vStep.declair()} ${vStep} < ${cfg.steps}; ${vStep}++)${opDelayStepBOpen}
                     for(${vLed.declair()} ${vLed} < ${cfg.ledsPerStep}; ${vLed}++)${opDelayLedBOpen}
-                        leds[${opStart}${vStep} * ${(cfg.space+cfg.ledsPerStep)} + ${vLed}] = ${colorString};${opDelayLed}${opDelayLedBClose}${opDelayStep}${opDelayStepBClose}
+                        leds[${getLedIndexEquation(cfg,vLed,vStep)}] = ${colorString};${opDelayLed}${opDelayLedBClose}${opDelayStep}${opDelayStepBClose}
                 `,
                 isDirty
             }
