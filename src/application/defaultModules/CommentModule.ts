@@ -1,6 +1,8 @@
+import { ModuleCode } from "../codegenerator/CodeGenerator.js";
 import { Environment } from "../Environment.js";
-import { ModuleBase, ModuleReturn } from "../modules/ModuleBase.js";
+import { ModuleBase } from "../modules/ModuleBase.js";
 import { PositiveNumber } from "../types/Types.js";
+import { FunctionSupplier } from "../variablesystem/CppFuncSupplier.js";
 import { VariableSystem } from "../variablesystem/VariableSystem.js";
 
 
@@ -16,7 +18,7 @@ export type CommentModuleConfig = {
 
 class CommentModule_ extends ModuleBase<CommentModuleConfig> {
 
-    public generateCode(env: Environment, _: VariableSystem, config: CommentModuleConfig, isDirty: boolean): ModuleReturn {
+    public generateCode(env: Environment, varSys: VariableSystem, config: CommentModuleConfig, funcSup: FunctionSupplier, isDirty: boolean): ModuleCode {
         // Ensures that comments are active
         if(env.withComments)
             return {

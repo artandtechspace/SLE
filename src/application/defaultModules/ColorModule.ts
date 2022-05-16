@@ -1,12 +1,16 @@
 import { Environment } from "../Environment.js";
-import { Variable, VariableSystem } from "../variablesystem/VariableSystem.js";
+import { VariableSystem } from "../variablesystem/VariableSystem.js";
 import { ModuleBase } from "../modules/ModuleBase.js";
-import { ModuleReturn } from "../modules/ModuleBase";
-import { printIf as pif } from "../utils/WorkUtils.js";
-import { getFLEDColorDefinition } from "../utils/ColorUtils.js";
-import { Arduino } from "../simulation/Arduino.js";
+import { printIfElse } from "../utils/WorkUtils.js";
 import { HexColor, Min, OpenObject, PositiveNumber as PositiveNumber } from "../types/Types.js";
-import { EquationSimplifier } from "../utils/EquationSimplifier.js";
+import { FunctionGenerator } from "../variablesystem/CppFuncGenerator.js";
+import { ModuleCode } from "../codegenerator/CodeGenerator.js";
+import { FunctionSupplier } from "../variablesystem/CppFuncSupplier.js";
+import { CppInt, CppVoid } from "../variablesystem/CppTypes.js";
+import { CppFuncParam, CppFuncParams, CppTypeDefintion } from "../variablesystem/CppFuncDefs.js";
+import { printEquation } from "../utils/EquationHandler.js";
+import { Variable } from "../variablesystem/Variable.js";
+import { Arduino } from "../simulation/Arduino.js";
 
 export type ColorModuleConfig = {
     // Amount of leds per step
@@ -31,20 +35,18 @@ export type ColorModuleConfig = {
     rgbHex: HexColor
 };
 
-// Generates the eqaution that is required for the led index
-function getLedIndexEquation(cfg: ColorModuleConfig, led: Variable, step?: Variable){
-    // cfg.start+step * (cfg.space+cfg.ledsPerStep) + led
-    return EquationSimplifier.simplifyEquation({
-        num: cfg.start,
-        vars: [led],
-        equations: [{
-            vars: step !== undefined ? [step] : [],
-            num: (cfg.space+cfg.ledsPerStep)
-        }]
-    }, EquationSimplifier.ADD);
+// Which depth the color-module has to use
+enum ModDepth{
+    // Only a single led has to be lit
+    SINGLE_LED,
+    // A line of led has to be lit
+    LED_LINE,
+    // Multiple lines with spaces between have to be lit
+    FULL_STEPS
 }
 
-class ColorModule_ extends ModuleBase<ColorModuleConfig> {
+class ColorModule_ extends ModuleBase<ColorModuleConfig>{
+
 
     // Default configuration
     public readonly DEFAULT_CONFIG: ColorModuleConfig = {
@@ -57,63 +59,148 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig> {
         steps: 1 as Min<1>
     };
 
-    public generateCode(env: Environment, varSys: VariableSystem, cfg: ColorModuleConfig, isDirty: boolean): ModuleReturn {
-            
-        // Gets the color-string
-        var [colorString, _] = getFLEDColorDefinition(cfg.rgbHex);
+    // Takes in a config and returns it's depth
+    private getConfigDepth(cfg: ColorModuleConfig) : ModDepth{
+        // Checks if there is only a single step
+        if (cfg.steps === 1)
+            // Return if there is only a single led or multiple leds
+            return cfg.ledsPerStep <= 1 ? ModDepth.SINGLE_LED : ModDepth.LED_LINE;
 
-        // Delay operations
-        var opDelayLed = pif("\nFastLED.show();\ndelay("+cfg.delayPerLed+");",cfg.delayPerLed > 0);
-        var opDelayStep = pif("\nFastLED.show();\ndelay("+cfg.delayAfterStep+");",cfg.delayAfterStep > 0);
+        return ModDepth.FULL_STEPS;
+    }
 
-        // Delay-bracket operations
-        var opDelayLedBOpen = pif(" {",cfg.delayPerLed > 0);
-        var opDelayLedBClose = pif("\n}",cfg.delayPerLed > 0);
-        var opDelayStepBOpen = pif(" {",cfg.delayAfterStep > 0);
-        var opDelayStepBClose = pif("\n}",cfg.delayAfterStep > 0);
+    // Returns the mapped values for equations
+    private getEquationsConfig(prms: CppFuncParams<ColorModuleConfig>, led: Variable, step?: Variable){
+        return {
+            "start": prms.start.value,
+            "space": prms.space.value,
+            "ledsPerStep": prms.ledsPerStep.value,
+            "led": led,
+            "step": step ?? 0
+        };
+    }
 
-        // Calculates the dirty-variable
-        // Marks as dirty if no delay is given
-        var isDirty = cfg.delayPerLed <= 0 && cfg.delayAfterStep <= 0;
-
-        // Checks if there is only a singles step
-        if (cfg.steps === 1) {
-
-            // Checks if only a single led is required
-            if (cfg.ledsPerStep === 1)
-                return {
-                    loop: `leds[${cfg.start}] = ${colorString};`,
-                    isDirty: true
-                }
-            else {
-                // Requests the led variable
-                var vLed = varSys.requestLocalVariable("int", "led", "0");
-
-                return {
-                    loop: `
-                        for(${vLed.declair()} ${vLed} < ${cfg.ledsPerStep}; ${vLed}++)${opDelayLedBOpen}
-                            leds[${getLedIndexEquation(cfg,vLed)}] = ${colorString};${opDelayLed}${opDelayLedBClose}
-                    `,
-                    isDirty
-                }
-            }
-        } else {
-            // Gets the variables
-            var vStep = varSys.requestLocalVariable("int", "steps", "0");
-            var vLed = varSys.requestLocalVariable("int", "led", "0");
-            
-            return {
-                loop: `
-                for(${vStep.declair()} ${vStep} < ${cfg.steps}; ${vStep}++)${opDelayStepBOpen}
-                    for(${vLed.declair()} ${vLed} < ${cfg.ledsPerStep}; ${vLed}++)${opDelayLedBOpen}
-                        leds[${getLedIndexEquation(cfg,vLed,vStep)}] = ${colorString};${opDelayLed}${opDelayLedBClose}${opDelayStep}${opDelayStepBClose}
-                `,
-                isDirty
-            }
+    // Returns the type-definitions for the module-config
+    private getCppTypeDefinition() : CppTypeDefintion<ColorModuleConfig>{
+        return {
+            delayAfterStep: CppInt,
+            delayPerLed: CppInt,
+            ledsPerStep: CppInt,
+            rgbHex: CppInt,
+            space: CppInt,
+            start: CppInt,
+            steps: CppInt
         }
     }
 
-    public async simulateLoop(env : Environment, cfg: ColorModuleConfig, singleSourceOfTruth: OpenObject, arduino: Arduino){        
+    // Takes in a delay-parameter from the cpp-parameters and returns the code depending on the value of the parameter
+    private generateDelayCode(delayParam: CppFuncParam<number>){
+        var delayCode = "\nFastLED.show();\ndelay("+delayParam.value+");";
+        return printIfElse(
+            delayParam.value > 0 ? delayCode : ``,
+            `
+                if(${delayParam.value} > 0){
+                    ${delayCode}
+                }
+            `,
+            delayParam.isStatic
+        );
+    }
+
+    // Generates the code for a single line depth
+    private generateLine(env: Environment, varSys: VariableSystem, prms: CppFuncParams<ColorModuleConfig>) : string{
+
+        // Requests the led variable
+        var vLed = varSys.requestLocalVariable("int", "led", "0");
+
+        // Gets the led-index-calculation
+        // cfg.start + led
+        var idxCalc = printEquation(
+            "$start + $led",
+            this.getEquationsConfig(prms,vLed)
+        );
+        
+        // Gets the color
+        var clr = prms.rgbHex.isStatic ? `0x${prms.rgbHex.value}` : prms.rgbHex.value;
+
+        return `
+            for(${vLed.declair()} ${vLed} < ${prms.ledsPerStep.value}; ${vLed}++){
+                leds[${idxCalc}] = ${clr};${this.generateDelayCode(prms.delayPerLed)}
+            }
+        `;
+    }
+
+    // Generates the code for multiple steps depth
+    private generateFullSteps(env: Environment, varSys: VariableSystem, prms: CppFuncParams<ColorModuleConfig>) : string{
+
+        // Gets the variables
+        var vStep = varSys.requestLocalVariable("int", "steps", "0");
+        var vLed = varSys.requestLocalVariable("int", "led", "0");
+
+        // Gets the led-index-calculation
+        // cfg.start+step * (cfg.space+cfg.ledsPerStep) + led
+        var idxCalc = printEquation(
+            "$start + $step * ($space + $ledsPerStep) + $led",
+            this.getEquationsConfig(prms,vLed,vStep)
+        );
+        
+        // Gets the color
+        var clr = prms.rgbHex.isStatic ? `0x${prms.rgbHex.value}` : prms.rgbHex.value;
+
+        return `
+            for(${vStep.declair()} ${vStep} < ${prms.steps.value}; ${vStep}++){
+                for(${vLed.declair()} ${vLed} < ${prms.ledsPerStep.value}; ${vLed}++){
+                    leds[${idxCalc}] = ${clr};${this.generateDelayCode(prms.delayPerLed)}
+                }${this.generateDelayCode(prms.delayAfterStep)}
+            }
+        
+        `;
+    }
+
+
+
+    
+
+    public registerFunction(env: Environment, config: ColorModuleConfig, funcGen: FunctionGenerator): void {
+        // Gets the depth
+        var depth = this.getConfigDepth(config);
+
+        switch(depth){
+            case ModDepth.FULL_STEPS:
+                funcGen.registerCppFunc(this,"ColorSteps",CppVoid,this.getCppTypeDefinition(),config,this.generateFullSteps.bind(this));
+                break;
+            case ModDepth.LED_LINE:
+                funcGen.registerCppFunc(this,"ColorLine",CppVoid,this.getCppTypeDefinition(),config,this.generateLine.bind(this));
+                break;
+        }
+    }
+
+    public generateCode(env: Environment, varSys: VariableSystem, cfg: ColorModuleConfig, funcSup: FunctionSupplier, isDirty: boolean): ModuleCode {
+        // Gets the depth
+        var depth = this.getConfigDepth(cfg);
+
+        switch(depth){
+            case ModDepth.SINGLE_LED:
+                return {
+                    loop: `leds[${cfg.start}] = 0x${cfg.rgbHex};`,
+                    isDirty: true
+                }
+            case ModDepth.LED_LINE:
+                return {
+                    loop: funcSup.getCppFuncCall(this,"ColorLine",cfg),
+                    isDirty: cfg.delayPerLed <= 0
+                };
+            case ModDepth.FULL_STEPS:
+                return {
+                    loop: funcSup.getCppFuncCall(this,"ColorSteps",cfg),
+                    isDirty: cfg.delayPerLed <= 0 && cfg.delayAfterStep <= 0
+                };
+        }
+    }
+
+
+    public async simulateLoop(env: Environment, cfg: ColorModuleConfig, singleSourceOfTruth: OpenObject, arduino: Arduino): Promise<void> {
+        
         // Iterates over every step
         for(var step = 0; step < cfg.steps; step++){
             // For every led of that step

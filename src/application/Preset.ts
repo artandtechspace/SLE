@@ -10,6 +10,8 @@ CRGB leds[LED_AMT];
 
 $VARIABLES$
 
+$FUNC_DEFS$
+
 void setup(){
     // Setups fastled-library
     FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, LED_AMT);

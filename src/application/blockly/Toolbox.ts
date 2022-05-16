@@ -49,7 +49,7 @@ export const Toolbox = {
           "start": inputNumber(0),
           "length": inputNumber(5),
           "delay": inputNumber(100)
-        }),
+        })
       ])
     ]
 

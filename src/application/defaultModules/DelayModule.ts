@@ -4,7 +4,8 @@ import { PositiveNumber } from "../types/Types.js";
 import { printIf as pIf } from "../utils/WorkUtils.js";
 import { VariableSystem } from "../variablesystem/VariableSystem.js";
 import { ModuleBase } from "../modules/ModuleBase.js";
-import { ModuleReturn } from "../modules/ModuleBase.js";
+import { ModuleCode } from "../codegenerator/CodeGenerator.js";
+import { FunctionSupplier } from "../variablesystem/CppFuncSupplier.js";
 
 /**
  * This is a special module which can't be directly instanciated by a json-config.
@@ -21,13 +22,12 @@ class DelayModule_ extends ModuleBase<DelayModuleConfig> {
         return config.delay;
     }
 
-    public generateCode(env: Environment, _: VariableSystem, config: DelayModuleConfig, isDirty: boolean): ModuleReturn {
-        
-        // Ensures that there is actually a delay set
+    public generateCode(env: Environment, varSys: VariableSystem, config: DelayModuleConfig, funcSup: FunctionSupplier, isDirty: boolean): ModuleCode {
+         // Ensures that there is actually a delay set
         if(config.delay === 0)
             return {};
         
-        // Generates a push-operation for any idle leds of there are some
+        // Generates a push-operation for any idle leds of there are any
         var opPush = pIf("FastLED.show();\n", isDirty);
 
         return {

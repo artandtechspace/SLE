@@ -1,17 +1,24 @@
 import { Environment } from "../Environment.js";
-import { Variable, VariableSystem } from "../variablesystem/VariableSystem.js";
-import { ModuleBase } from "../modules/ModuleBase.js";
-import { ModuleReturn } from "../modules/ModuleBase";
+import { VariableSystem } from "../variablesystem/VariableSystem.js";
 import { Arduino } from "../simulation/Arduino.js";
-import { Min, OpenObject, PositiveNumber as PositiveNumber } from "../types/Types.js";
-import { HSV } from "../utils/ColorUtils.js";
-import { printIf as pIf } from "../utils/WorkUtils.js";
-import { Equation, EquationSimplifier } from "../utils/EquationSimplifier.js";
+import { OpenObject, PositiveNumber as PositiveNumber } from "../types/Types.js";
+import { printIf, printIfElse } from "../utils/WorkUtils.js";
+import { Variable } from "../variablesystem/Variable.js";
+import { ModuleAsFuncBase } from "../modules/ModuleAsFuncBase.js";
+import { CppTypeDefintion, CppFuncParams, CppFuncParam } from "../variablesystem/CppFuncDefs.js";
+import { CppBool, CppFloat, CppInt } from "../variablesystem/CppTypes.js";
+import { tenaryBoolsEqual, tenaryLargerThan } from "../utils/CodeGenerationUtils.js";
+import { printEquation } from "../utils/EquationHandler.js";
 
-export type GradientModuleConfig = {
+export type GradientModuleConfig = {    
     // The colors to fade between
-    colorFrom: HSV,
-    colorTo: HSV,
+    color_frm_h: number,
+    color_frm_s: number,
+    color_frm_v: number,
+
+    color_to_h: number,
+    color_to_s: number,
+    color_to_v: number
 
     // Here the gradient starts
     ledFrom: PositiveNumber,
@@ -27,78 +34,18 @@ export type GradientModuleConfig = {
     delayPerLed: PositiveNumber
 };
 
-// Returns the hue-equation for the code-generator that is used if the hue-desition is before it's beginning
-function getNegativeHueEquation(cfg: GradientModuleConfig,perc: Variable){
-    // ((cfg.colorFrom.h + (cfg.colorTo.h + 1 - cfg.colorFrom.h) * perc) * 255) % 255
-    return "(int)("+EquationSimplifier.simplifyEquation({
-        num: 255,
-        equations: [{
-            num: (cfg.colorFrom.h),
-            equations: [{
-                num: (cfg.colorTo.h + 1 - cfg.colorFrom.h),
-                vars: [perc]
-            }]
-        }]
-    },EquationSimplifier.MUL)+") % 255";
-}
-
-// Returns the hue-equation for the code-generator that is used if the hue-desition is after it's beginning
-function getPositiveHueEquation(cfg: GradientModuleConfig,perc: Variable){
-    // ((cfg.colorTo.h - cfg.colorFrom.h) * perc + cfg.colorFrom.h) * 255
-    return EquationSimplifier.simplifyEquation({
-        num: 255,
-        equations: [{
-            num: cfg.colorFrom.h,
-            equations: [{
-                vars: [perc],
-                num: (cfg.colorTo.h-cfg.colorFrom.h)
-            }]
-        }]
-    }, EquationSimplifier.MUL);
-}
-
-// Returns the index-calulation code for the code-generation
-function getIndexEquation(cfg: GradientModuleConfig, led: Variable){
-    // cfg.ledFrom + (cfg.directionReversed ? (cfg.ledLength-led-1) : led)
-    var rev = cfg.directionReversed;
-    return EquationSimplifier.simplifyEquation({
-        num: cfg.ledFrom + (rev ? (cfg.ledLength - 1) : 0),
-        vars: (rev ? [] : [led]),
-        equations: (rev ? [{
-            num: -1,
-            vars: [led]
-        }] : [])
-    },EquationSimplifier.ADD);
-}
-
-// Returns the calulation to get the next value for the given (Saturation or value) element
-function getRangeCalction(get: (obj: HSV) => number, cfg: GradientModuleConfig, perc: Variable){
-    // Gets start and stop number
-    var start = get(cfg.colorFrom);
-    var stop = get(cfg.colorTo);
-
-    // (start + Math.abs(start - stop) * (start < stop ? 1 : -1) * perc) * 255;
-    return EquationSimplifier.simplifyEquation({
-        // Mul
-        num: 255,
-        equations:[{
-            // Add
-            num: start,
-            equations: [{
-                // Mul
-                num: Math.abs(start-stop) * (start < stop ? 1 : -1),
-                vars: [perc]
-            }]
-        }]
-    },EquationSimplifier.MUL);
-}
-
-class GradientModule_ extends ModuleBase<GradientModuleConfig> {
+class GradientModule_ extends ModuleAsFuncBase<GradientModuleConfig> {
 
     // Default configuration
     public readonly DEFAULT_CONFIG: GradientModuleConfig = {
-        colorFrom: { h: 0, s: 1, v: 1 },
-        colorTo: { h: 1, s: 1, v: 1 },
+        color_frm_h: 0,
+        color_frm_s: 1,
+        color_frm_v: 1,
+
+        color_to_h: 1,
+        color_to_s: 1,
+        color_to_v: 1,
+
         ledFrom: 0 as PositiveNumber,
         ledLength: 5 as PositiveNumber,
         delayPerLed: 0 as PositiveNumber,
@@ -106,62 +53,35 @@ class GradientModule_ extends ModuleBase<GradientModuleConfig> {
         colorReversed: false
     };
 
-    public generateCode(env: Environment, varSys: VariableSystem, cfg: GradientModuleConfig, isDirty: boolean): ModuleReturn {
+    constructor(){
+        super("Gradient")
+    }
 
-        // Requests the led variable
-        var vLed = varSys.requestLocalVariable("int","led","0");
-
-
-        // Requests the percentual-led state variable
-        var vPercDec = `${cfg.directionReversed === cfg.colorReversed ? vLed.toString() : `(${cfg.ledLength-1}-${vLed})`}/(float)(${cfg.ledLength-1})`;
-        var vPerc = varSys.requestLocalVariable("float", "perc", vPercDec);
-
-
-        // Gets the calculator-string for the hue-value
-        var hueCalculator = (cfg.colorFrom.h > cfg.colorTo.h ? getNegativeHueEquation : getPositiveHueEquation);
-
-
-        // If the code contains a delay
-        var hasDelay = cfg.delayPerLed > 0;
-
+    public getCppTypeDefinition(): CppTypeDefintion<GradientModuleConfig> {
         return {
-            loop: `
-
-            for(${vLed.declair()} ${vLed} < ${cfg.ledLength}; ${vLed}++){
-                ${vPerc.declair()}
-
-
-                leds[${getIndexEquation(cfg,vLed)}] = CHSV(
-                    ${hueCalculator(cfg, vPerc)},
-                    ${getRangeCalction(obj=>obj.s,cfg ,vPerc)},
-                    ${getRangeCalction(obj=>obj.v,cfg ,vPerc)}
-                );
-
-                ${pIf(`
-                    delay(${cfg.delayPerLed});
-                    FastLED.show();
-                `,hasDelay)}
-
-            }
-            `,
-
-            isDirty: (!hasDelay) || isDirty
-        };
+            colorReversed: CppBool,
+            color_frm_h: CppFloat,
+            color_frm_s: CppFloat,
+            color_frm_v: CppFloat,
+            color_to_h: CppFloat,
+            color_to_s: CppFloat,
+            color_to_v: CppFloat,
+            delayPerLed: CppInt,
+            directionReversed: CppBool,
+            ledFrom: CppInt,
+            ledLength: CppInt,
+        }
+    }
+    public isDirtyAfterExecution(env: Environment, cfg: GradientModuleConfig, isDirty: boolean): boolean {
+        return cfg.delayPerLed <= 0 || isDirty;
     }
 
     public simulateSetup(env: Environment, cfg: GradientModuleConfig, ssot: OpenObject, arduino: Arduino): void {
-        // Multiplicator and range for saturation and value
-        ssot.sMul = cfg.colorFrom.s < cfg.colorTo.s ? 1 : -1;
-        ssot.sRange = Math.abs(cfg.colorFrom.s-cfg.colorTo.s);
-        
-        ssot.vMul = cfg.colorFrom.v < cfg.colorTo.v ? 1 : -1;
-        ssot.vRange = Math.abs(cfg.colorFrom.v-cfg.colorTo.v);
-
         // Sets the hue-calculation function based on if the the color from is before or after the end-color
         ssot.hueFunc =
-            cfg.colorFrom.h > cfg.colorTo.h ?
-            (perc:number)=>((cfg.colorFrom.h+(cfg.colorTo.h+1-cfg.colorFrom.h)*perc) % 1) :
-            (perc:number)=>(cfg.colorTo.h-cfg.colorFrom.h)*perc+cfg.colorFrom.h;
+            cfg.color_frm_h > cfg.color_to_h ?
+            (perc:number)=>((cfg.color_frm_h+(cfg.color_to_h+1-cfg.color_frm_h)*perc) % 1) :
+            (perc:number)=>(cfg.color_to_h-cfg.color_frm_h)*perc+cfg.color_frm_h;
     }
 
     public async simulateLoop(env : Environment, cfg: GradientModuleConfig, ssot: OpenObject, arduino: Arduino){
@@ -174,8 +94,8 @@ class GradientModule_ extends ModuleBase<GradientModuleConfig> {
             var hue = ssot.hueFunc(perc);
             
             // Calculates saturation and value
-            var saturation = cfg.colorFrom.s + ssot.sRange * perc * ssot.sMul;
-            var value = cfg.colorFrom.v + ssot.vRange * perc * ssot.vMul;
+            var saturation = cfg.color_frm_s + perc * (cfg.color_to_s - cfg.color_frm_s);
+            var value = cfg.color_frm_v + perc * (cfg.color_to_v - cfg.color_frm_v);
 
             // Gets the index
             var index = cfg.ledFrom + (cfg.directionReversed ? (cfg.ledLength-led-1) : led);
@@ -202,6 +122,111 @@ class GradientModule_ extends ModuleBase<GradientModuleConfig> {
     public calculateRuntime(env: Environment, config: GradientModuleConfig): number {
         return config.delayPerLed*config.ledLength;
     }
+
+    private getPositiveHueCalc(perc: Variable, prms: CppFuncParams<GradientModuleConfig>){
+        // ((cfg.color_frm_h + (cfg.color_to_h + 1 - cfg.color_frm_h) * perc) * 255) % 255
+        return printEquation(
+            "(int)(255 * ( $clrFrm + ($clrTo + 1 - $clrFrm) * $perc)) % 255",
+            {
+                "clrFrm": prms.color_frm_h.value,
+                "clrTo": prms.color_to_h.value,
+                "perc": perc
+            }
+        );
+    }
+
+    private getNegativeHueCalc(perc: Variable, prms: CppFuncParams<GradientModuleConfig>){
+        // ((cfg.color_to_h - cfg.color_frm_h) * perc + cfg.color_frm_h) * 255
+        return printEquation(
+            "255 * ($clrFrm + $perc * ($clrTo - $clrFrm))",
+            {
+                "clrFrm": prms.color_frm_h.value,
+                "clrTo": prms.color_to_h.value,
+                "perc": perc
+            }
+        );
+    }
+
+    public generateFunctionCode(env: Environment, varSys: VariableSystem, prms: CppFuncParams<GradientModuleConfig>): string {
+        // Requests the led variable
+        var vLed = varSys.requestLocalVariable("int","led","0");
+
+
+        // Gets the equation for the percentage-variable
+        var vPercEquation = tenaryBoolsEqual(prms.directionReversed, prms.colorReversed,
+            ()=> "$led/(float)($length -1)",
+            ()=> "($length -1 -$led)/(float)($length -1)"
+        );
+        
+        // Requests the percentual-led state variable
+        var vPerc = varSys.requestLocalVariable("float", "perc", printEquation(vPercEquation,{
+            "led": vLed,
+            "length": prms.ledLength.value
+        }));
+
+        // Gets the calculator-string for the hue-value
+        var hueCalc: string = tenaryLargerThan(prms.color_frm_h,prms.color_to_h,
+            ()=>this.getPositiveHueCalc(vPerc,prms),
+            ()=>this.getNegativeHueCalc(vPerc,prms)
+        ) as string;
+
+
+
+        // Value and Saturation calulation
+        var valSatCalc = "255 * ($from + $perc * ($to - $from))";
+        var satCalc: string = printEquation(valSatCalc,{
+            "perc": vPerc,
+            "from": prms.color_frm_s.value,
+            "to": prms.color_to_s.value
+        });
+        var valCalc: string = printEquation(valSatCalc,{
+            "perc": vPerc,
+            "from": prms.color_frm_v.value,
+            "to": prms.color_to_v.value
+        });
+
+        // Gets the index of the next led
+        // cfg.ledFrom + (cfg.directionReversed ? (cfg.ledLength-led-1) : led)
+        var idxCalc = printEquation("$from + "+tenaryBoolsEqual(prms.directionReversed,{ isStatic: true, value: true },
+            ()=>"$length - $led -1",
+            ()=>"$led"
+        ),{
+            "from": prms.ledFrom.value,
+            "length": prms.ledLength.value,
+            "led": vLed
+        });
+        
+
+        // Generates the code
+        return `
+        for(${vLed.declair()} ${vLed} < ${prms.ledLength.value}; ${vLed}++){
+            ${vPerc.declair()}
+
+            leds[${idxCalc}] = CHSV(
+                ${hueCalc},
+                ${satCalc},
+                ${valCalc}
+            );
+
+            ${printIfElse(
+                printIf(`
+                    delay(${prms.delayPerLed.value});
+                    FastLED.show();`,
+                    prms.delayPerLed.value > 0
+                )
+                ,
+                `
+                if(${prms.delayPerLed.value} > 0){
+                    delay(${prms.delayPerLed.value});
+                    FastLED.show();
+                }
+                `,
+                prms.delayPerLed.isStatic
+            )}
+
+        }`;
+    }
+
 }
 
 export const GradientModule = new GradientModule_();

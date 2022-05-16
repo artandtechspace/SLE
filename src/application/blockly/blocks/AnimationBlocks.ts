@@ -68,8 +68,14 @@ function registerGradientBlock(name: string){
         return {
             module: GradientModule,
             config: {
-                colorFrom,
-                colorTo,
+                color_frm_h: colorFrom.h,
+                color_frm_s: colorFrom.s,
+                color_frm_v: colorFrom.v,
+
+                color_to_h: colorTo.h,
+                color_to_s: colorTo.s,
+                color_to_v: colorTo.v,
+
                 delayPerLed: delay,
                 ledFrom: start,
                 ledLength: length,

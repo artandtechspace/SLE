@@ -1,38 +1,28 @@
+import { ModuleCode } from "../codegenerator/CodeGenerator.js";
 import { Environment } from "../Environment.js";
 import { Arduino } from "../simulation/Arduino.js";
 import { OpenObject, PositiveNumber } from "../types/Types.js";
+import { FunctionGenerator } from "../variablesystem/CppFuncGenerator.js";
+import { FunctionSupplier } from "../variablesystem/CppFuncSupplier.js";
 import { VariableSystem } from "../variablesystem/VariableSystem.js";
-
-// Return of the code-generator function
-export interface ModuleReturn {
-    // If not returned, unused
-    setup?: string
-    // If not returned, unused
-    loop?: string,
-    // If not returned is false
-    isDirty?: boolean
-};
-
 
 /**
  * The module-base is the element that takes in a configuration file and generate the code based on the provided information and environment.
  */
 
 export abstract class ModuleBase<Config extends OpenObject>{
-    /**
-     * This function is here to generate the code for the Arduino/MC.
-     * 
-     * It returns an object with the following properties:
-     * {
-     * (Optional) setup: a string with the mc. setup-code that shall run once. If the function-type is start-only this is a required function.
-     * loop: a string with the mc. loop-code that can continuesly run in the loop. If the generator-type is set to start-only this will be ignored.
-     * 
-     * }
-     * 
-     */
-    public generateCode(env : Environment, varSys : VariableSystem, config: Config, isDirty: boolean) : ModuleReturn{
+    
+    //#region Code-generation
+
+    public generateCode(env: Environment, varSys: VariableSystem, config: Config, funcSup: FunctionSupplier, isDirty: boolean): ModuleCode{
         return {}
     }
+
+    public registerFunction(env: Environment, config: Config, funcGen: FunctionGenerator){}
+
+
+    //#endregion
+
 
     //#region Simulation
 

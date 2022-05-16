@@ -1,47 +1,7 @@
 import { Environment } from "../Environment.js";
 import { C } from "../utils/WorkUtils.js";
-
-/**
- * When calling the toString method (eg. when using string-interpolation) this will just return the plain old variable-name.
- * That means that the following call:
- * 
- * var va = new Variable(...);
- * var code = `
- *    ${va}++;
- *    print(${va})
- * `
- * 
- * would work perfectly fine.
- */
-export class Variable {
-    public name: string;
-    public type: string;
-    public initValue: string;
-
-    constructor(name: string, type: string, initValue: string) {
-        this.name = name;
-        this.type = type;
-        this.initValue = initValue;
-    }
-
-    /**
-     * @returns statement to declair the variable.
-     */
-    declair(){
-        return this.type+" "+this.assign();
-    }
-
-    /**
-     * @returns statement to (re)assignes the variable.
-     */
-    assign(){
-        return this.name+(this.initValue !== undefined ? ` = ${this.initValue};` : ";" ) 
-    }
-
-    toString(){
-        return this.name;
-    }
-}
+import { UniqueNameSupplier } from "./UniqueNameSupplier.js";
+import { Variable } from "./Variable.js";
 
 export class VariableSystem {
 
@@ -51,11 +11,12 @@ export class VariableSystem {
     // Global variables that the system will automatically assign.
     private globalVars: Variable[] = [];
 
-    // Already used variable-names
-    private usedNames : string[] = [];
+    // Supplier for unique names
+    private unqSup: UniqueNameSupplier;
 
-    constructor(env: Environment) {
+    constructor(env: Environment, uniqueSupplier: UniqueNameSupplier) {
         this.env = env;
+        this.unqSup = uniqueSupplier;
     }
 
     /**
@@ -69,30 +30,7 @@ export class VariableSystem {
 
 
 
-    /**
-     * Gets a unique name for the given variable-name.
-     * @param name the original variable-name that must be made unique
-     */
-    private getUniqueNameFor(name: string) {
-        // Next name to test
-        var nameIteration = name;
-
-        // Current next index for the name
-        var indexIteration = 1;
-
-        // Searches until a valid name got found.
-        while (true) {
-            // Checks if the name already exists
-            if (this.usedNames.filter(nm => nm === nameIteration).length >= 1){
-                // Advances the name
-                nameIteration = name+(indexIteration++);
-                continue;
-            }
-
-            // Returns the name
-            return nameIteration;
-        }
-    }
+   
 
 
 
@@ -112,14 +50,10 @@ export class VariableSystem {
      */
     public requestLocalVariable(type: string, name: string, initValue: string = "null"): Variable {
         // Makes the name unique
-        name = this.getUniqueNameFor(name);
+        name = this.unqSup.getUniqueNameFor(name);
 
         // Gets the actual variable-object
-        var va = new Variable(name,type,initValue);
-
-        // Registers the local variable
-        this.usedNames.push(va.name);
-        return va;
+        return new Variable(name,type,initValue);
     }
 
     /**
@@ -134,14 +68,13 @@ export class VariableSystem {
     public requestGlobalVariable(type: string, name: string, initValue: string = "null"): Variable {
         
         // Ensures that the variable name not already got used.
-        name = this.getUniqueNameFor(name);
+        name = this.unqSup.getUniqueNameFor(name);
 
         // Gets the actual variable-object
         var va = new Variable(name,type,initValue);
 
         // Registers the global variable
         this.globalVars.push(va);
-        this.usedNames.push(va.name);
 
         return va;
     }

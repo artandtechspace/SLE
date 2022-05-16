@@ -15,18 +15,6 @@ export function getFullRuntime(env: Environment, mods: ModBlockExport<any>[]) : 
 }
 
 /**
- * Acc 6
- * Len 7
- * 
- * index
- * 0 1 2 3
- * 
- * led amt
- * 1 2 3 4
- * 
- */
-
-/**
  * Return all mod-exports that are accessing an led which is out of bounds
  * @param env the environment
  * @param mods the mod-exports

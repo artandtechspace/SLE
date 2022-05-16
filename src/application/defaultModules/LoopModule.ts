@@ -1,13 +1,14 @@
 import { Environment } from "../Environment.js";
 import { VariableSystem } from "../variablesystem/VariableSystem.js";
 import { ModuleBase } from "../modules/ModuleBase.js";
-import { ModuleReturn } from "../modules/ModuleBase.js";
 import { printIf as pif } from "../utils/WorkUtils.js";
-import { generateModuleCode } from "../codegenerator/CodeGenerator.js";
+import { generateModuleCode, ModuleCode } from "../codegenerator/CodeGenerator.js";
 import { Arduino } from "../simulation/Arduino.js";
 import { getFullRuntime } from "../modules/ModuleUtils.js";
 import { ModBlockExport } from "../ConfigBuilder.js";
 import { Min, OpenObject } from "../types/Types.js";
+import { FunctionGenerator } from "../variablesystem/CppFuncGenerator.js";
+import { FunctionSupplier } from "../variablesystem/CppFuncSupplier.js";
 
 export type LoopModuleConfig = {
     submodules: ModBlockExport<any>[],
@@ -22,27 +23,32 @@ class LoopModule_ extends ModuleBase<LoopModuleConfig> {
         repeats: 2 as Min<2>
     }
 
-    public generateCode(env: Environment, varSys: VariableSystem, cfg: LoopModuleConfig, isDirty: boolean): ModuleReturn {
-        // Gets the generated codes (The execution may end here do to an error beeing thrown)
-        var generatedCode:ModuleReturn = generateModuleCode(env,varSys,cfg.submodules, isDirty);
+    public registerFunction(env: Environment, config: LoopModuleConfig, funcGen: FunctionGenerator): void {
+        // Registers all functions for the submodules
+        config.submodules.forEach(mod=>mod.module.registerFunction(env,mod.config,funcGen));
+    }
 
-        // Requests the local variable
-        var vItr = varSys.requestLocalVariable("int","i","0");
+    public generateCode(env: Environment, varSys: VariableSystem, cfg: LoopModuleConfig, funcSup: FunctionSupplier, isDirty: boolean): ModuleCode {
+         // Gets the generated codes (The execution may end here do to an error beeing thrown)
+         var generatedCode:ModuleCode = generateModuleCode(env,varSys,cfg.submodules, funcSup, isDirty);
 
-        // Generates the new loop code
-        var loopCode = `
-            for(${vItr.declair()} ${vItr} < ${cfg.repeats}; ${vItr}++){
-                ${generatedCode.loop ?? ""}${pif(
-                    "FastLED.show();", generatedCode.isDirty as boolean
-                )}
-            }
-        `;
-
-        return {
-            setup: generatedCode.setup,
-            loop: loopCode,
-            isDirty: false
-        };
+         // Requests the local variable
+         var vItr = varSys.requestLocalVariable("int","i","0");
+ 
+         // Generates the new loop code
+         var loopCode = `
+             for(${vItr.declair()} ${vItr} < ${cfg.repeats}; ${vItr}++){
+                 ${generatedCode.loop ?? ""}${pif(
+                     "FastLED.show();", generatedCode.isDirty as boolean
+                 )}
+             }
+         `;
+ 
+         return {
+             setup: generatedCode.setup,
+             loop: loopCode,
+             isDirty: false
+         };
     }
 
     public calculateRuntime(env: Environment, cfg: LoopModuleConfig) : number {
