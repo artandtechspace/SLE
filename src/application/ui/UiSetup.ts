@@ -31,7 +31,7 @@ export async function setupUi(onEnvChange: ()=>void){
         registerSidebarIconChanger();
         
         // Gets specific elements
-        var codeArea = S("#codeArea") as HTMLTextAreaElement;
+        var codeArea = setupCodeArea();
         var runtimeDisplay = S("#runtime",S("#analyticsTab")) as HTMLSpanElement;
 
         var popupsystem = setupPopupsystem();
@@ -66,7 +66,11 @@ export async function setupUi(onEnvChange: ()=>void){
     }
 
 }
-
+// Setups the code-area and returns it
+function setupCodeArea() : HTMLTextAreaElement{
+    // Gets the area
+    return S("#codeArea") as HTMLTextAreaElement;
+}
 
 // Displays the given error inside the ui
 function displayLoadingError(error: any){
