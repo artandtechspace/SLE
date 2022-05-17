@@ -27,11 +27,11 @@
 
                 <!--Precompile editor-->
                 <div id="precompEditor">
-                    <p>Editing the Precompile-Code</p>
+                    <p>{{ ui.popup.editcode.title }}</p>
                     <textarea></textarea>
                     <div>
-                        <input type="button" value="Save" id="pce-save">
-                        <input type="button" value="Cancle" id="pce-cancle">
+                        <input type="button" id="pce-save">
+                        <input type="button" id="pce-cancle">
                     </div>
                 </div>
                 
@@ -46,7 +46,7 @@
             <!--Blockly will be inserted here-->
             <div id="blocklyDiv"></div>
             
-            <!--Bottom-info text for errors, warning or infosmations-->
+            <!--Bottom-info text for errors, warning or informations-->
             <div id="infobar">
                 <div class="wrapper">
                     <span>
@@ -64,9 +64,9 @@
                 <div id="wrapper">
                     <div id="previewPicker">
                         <div id="texts">
-                            <input type="button" id="btnTabCode" value="Code">
-                            <input type="button" id="btnTabAnimation" value="Animation">
-                            <input type="button" id="btnTabAnalytics" value="Analytics">
+                            <input type="button" id="btnTabCode">
+                            <input type="button" id="btnTabAnimation">
+                            <input type="button" id="btnTabAnalytics">
                         </div>
 
                         <div id="icons">
@@ -79,9 +79,9 @@
                     <div id="tabs">
                         <!--Code-tab-->
                         <div id="codeTab" class="tab">
-                            <textarea id="codeArea" placeholder="[Output Source-code]" disabled></textarea>
+                            <textarea id="codeArea" disabled></textarea>
                             <div id="codeActions">
-                                <input type="button" value="Copy Code" id="copy">
+                                <input type="button" id="copy">
                             </div>
                         </div>
     
@@ -90,7 +90,7 @@
     
                         <!--Raw-Analytics tab-->
                         <div id="analyticsTab" class="tab">
-                            <p>The Code/Animation will run for <span id="runtime"></span> seconds.</p>
+                            <p id="runtime"></p>
                         </div>
                     </div>
                 </div>
@@ -106,39 +106,39 @@
                     <!--Led-pin field-->
                     <div class="infoInput">
                         <div class="wrapper">
-                            <p>Led-Pin</p>
+                            <p> {{ ui.settings.led-pin }} </p>
                             <i class="fa fa-info" aria-hidden="true"></i>
                             <div class="wrapper">
                                 <div class="popup">
-                                    <p>Pin that the WS2812b-Stripe is connected to</p>
+                                    <p>{{ ui.settings.led-pin.info }}</p>
                                 </div>
                             </div>
                         </div>
-                        <input id="inpPin" style="width:200px" min="0" type="number" placeholder="Led-Pin"/>
+                        <input id="inpPin" style="width:200px" min="0" type="number"/>
                     </div>
 
                     <!--Led-amount field-->
                     <div class="infoInput">
                         <div class="wrapper">
-                            <p>Led-amount</p>
+                            <p> {{ ui.settings.led-amt }} </p>
                             <i class="fa fa-info" aria-hidden="true"></i>
                             <div class="wrapper">
                                 <div class="popup">
-                                    <p>How many leds are on the led-stripe</p>
+                                    <p> {{ ui.settings.led-amt.info }} </p>
                                 </div>
                             </div>
                         </div>
-                        <input id="inpAmt" style="width:200px" min="1" type="number" placeholder="Led-Amount"/>
+                        <input id="inpAmt" style="width:200px" min="1" type="number"/>
                     </div>
 
                     <!--Animation-type field-->
                     <div class="infoInput">
                         <div class="wrapper">
-                            <p>Preview-Image</p>
+                            <p> {{ ui.settings.preview-image }} </p>
                             <i class="fa fa-info" aria-hidden="true"></i>
                             <div class="wrapper">
                                 <div class="popup">
-                                    <p>Which preview shall be used for the arduino-simulation.</p>
+                                    <p> {{ ui.settings.preview-image.info }} </p>
                                 </div>
                             </div>
                         </div>
@@ -151,11 +151,11 @@
                     <div class="infoInput">
                         <input id="inpComments" type="checkbox"/>
                         <div class="wrapper">
-                            <p>Integrate comments?</p>
+                            <p> {{ ui.settings.comments }} </p>
                             <i class="fa fa-info" aria-hidden="true"></i>
                             <div class="wrapper">
                                 <div class="popup">
-                                    <p>If comments should be added to the final source-code</p>
+                                    <p> {{ If comments should be added to the final source-code }} </p>
                                 </div>
                             </div>
                         </div>
@@ -163,7 +163,7 @@
 
                     <!--Precompile-Code field-->
                     <div class="infoInput">
-                        <input id="inpPreCode" type="button" value="View/Edit Precompile-Code"/>
+                        <input id="inpPreCode" type="button"/>
                     </div>
                 </div>
             </div>

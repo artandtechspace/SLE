@@ -1,6 +1,7 @@
 import { Environment } from "../Environment.js";
 import { Error } from "../errorSystem/Error.js";
 import { InAppErrorSystem } from "../errorSystem/InAppErrorSystem.js";
+import { getFromLanguage, setupLanguageManager } from "../language/LanguageManager.js";
 import { PopupSystem } from "../popupSystem/PopupSystem.js";
 import { PRESET_SOURCECODE } from "../Preset.js";
 import { ArduinoSimulation } from "../simulation/ArduinoSimulation.js";
@@ -27,6 +28,9 @@ import { S } from "./utils/UiUtils.js";
 export async function setupUi(onEnvChange: ()=>void){
 
     try{
+        // Setups the language-system
+        await setupLanguageManager("en_us");
+
         registerSliderBars();
         registerSidebarIconChanger();
         
@@ -69,7 +73,12 @@ export async function setupUi(onEnvChange: ()=>void){
 // Setups the code-area and returns it
 function setupCodeArea() : HTMLTextAreaElement{
     // Gets the area
-    return S("#codeArea") as HTMLTextAreaElement;
+    var codeArea = S("#codeArea") as HTMLTextAreaElement;
+
+    // Binds display
+    codeArea.placeholder = getFromLanguage("ui.tabs.code.textarea.placeholder");
+
+    return codeArea;
 }
 
 // Displays the given error inside the ui
@@ -112,7 +121,7 @@ async function setupArduinoSimulation(){
     var simulation = new ArduinoSimulation(S("#animationTab"));
 
     // Loads the first preview
-    simulation.loadPreview(await loadSVG(PREVIEWS_FILE_PATH+DEFAULT_PREVIEW_NAME));
+    simulation.loadPreview(await loadSVG(PREVIEWS_FILE_PATH+DEFAULT_PREVIEW_NAME+".svg"));
 
     return simulation;
 }
@@ -127,7 +136,9 @@ function setupPopupsystem(){
     var popsys = new PopupSystem();
 
     // Appends the event handler to the control-button
-	S("#inpPreCode").addEventListener("click",()=>popsys.showPopup(codeEditElm));
+	var editCodeBtn = S("#inpPreCode") as HTMLInputElement;
+    editCodeBtn.value = getFromLanguage("ui.settings.edit-button");
+    editCodeBtn.addEventListener("click",()=>popsys.showPopup(codeEditElm));
     
 
 	return popsys;
@@ -141,14 +152,24 @@ function registerSidebarTabs(){
     var btns = S("#texts");
     var icons = S("#icons");
     var tabs = S("#tabs");
+
+    // Gets the tabs and binds their texts
+    var btnTabCode = S("#btnTabCode",btns) as HTMLInputElement;
+    btnTabCode.value = getFromLanguage("ui.tabs.code");
+
+    var btnTabAnimation = S("#btnTabAnimation",btns) as HTMLInputElement;
+    btnTabAnimation.value = getFromLanguage("ui.tabs.animation");
+
+    var btnTabAnalytics = S("#btnTabAnalytics",btns) as HTMLInputElement;
+    btnTabAnalytics.value = getFromLanguage("ui.tabs.analytics");
     
     // Creates the tab-buttons
     const BUTTONS: [HTMLElement,number][] = [
-        [S("#btnTabCode",btns),TAB_CODE],
+        [btnTabCode,TAB_CODE],
         [S("#tabCode",icons),TAB_CODE],
-        [S("#btnTabAnimation",btns),TAB_ANIMATION],
+        [btnTabAnimation,TAB_ANIMATION],
         [S("#tabAnimation",icons),TAB_ANIMATION],
-        [S("#btnTabAnalytics",btns),TAB_ANALYTICS],
+        [btnTabAnalytics,TAB_ANALYTICS],
         [S("#tabAnalytics",icons),TAB_ANALYTICS]
     ];
 
@@ -172,7 +193,9 @@ function handleTabCode(tabCode: HTMLDivElement){
     var textArea = S("textarea",tabCode) as HTMLTextAreaElement;
 
     // Gets the copy-button and registers the event-handler
-    S("#copy",tabCode).addEventListener("click",()=>navigator.clipboard.writeText(textArea.value));
+    var cpBtn = S("#copy",tabCode) as HTMLInputElement
+    cpBtn.value = getFromLanguage("ui.tabs.code.copy-button");
+    cpBtn.addEventListener("click",()=>navigator.clipboard.writeText(textArea.value));
 }
 
 

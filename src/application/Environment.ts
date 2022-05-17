@@ -42,7 +42,7 @@ export class Environment{
         if(!isInteger(obj.ledAmount) || !isMin(obj.ledAmount,1))
             throw new SystemError("ledAmount must be an integer >= 1");
 
-        if(typeof obj.selectedPreview !== "string" || PREVIEWS[obj.selectedPreview] === undefined)
+        if(typeof obj.selectedPreview !== "string" || !PREVIEWS.includes(obj.selectedPreview))
             throw new SystemError("selectedPreview must be an the index of a preview");
 
         return new Environment(obj.ledAmount, obj.withComments, obj.preprocessingCode, obj.ledPin, obj.selectedPreview);

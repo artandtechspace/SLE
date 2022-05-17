@@ -5,40 +5,42 @@ import registerControlBlocks from "./blocks/ControlBlocks.js";
 import registerSpecialBlocks from "./blocks/SpecialBlocks.js";
 import registerValueBlocks from "./blocks/ValueBlocks.js";
 import Theme from "./Theme.js";
-import { Toolbox } from "./Toolbox.js";
+import { buildToolBox as buildToolbox } from "./Toolbox.js";
 const Blockly = require("blockly");
 
 // Generates the options for blockly
-const BLOCKLY_OPTIONS = {
-	theme: Theme,
-	toolbox : Toolbox, 
-	collapse : false, 
-	comments : false, 
-	disable : false,
-	maxBlocks : Infinity, 
-	trashcan : true, 
-	horizontalLayout : false, 
-	toolboxPosition : 'start', 
-	css : true,
-	rtl : false, 
-	scrollbars : true, 
-	sounds : true, 
-	oneBasedIndex : true,
-	grid : {
-		spacing : 20, 
-		length : 1, 
-		colour : '#888', 
-		snap : false
-	}, 
-	zoom : {
-		controls : true, 
-		wheel : true, 
-		startScale : 1, 
-		maxScale : 3, 
-		minScale : 0.3, 
-		scaleSpeed : 1.2
-	}
-};
+function buildBlocklyOptions(){
+	return {
+		theme: Theme,
+		toolbox : buildToolbox(), 
+		collapse : false, 
+		comments : false, 
+		disable : false,
+		maxBlocks : Infinity, 
+		trashcan : true, 
+		horizontalLayout : false, 
+		toolboxPosition : 'start', 
+		css : true,
+		rtl : false, 
+		scrollbars : true, 
+		sounds : true, 
+		oneBasedIndex : true,
+		grid : {
+			spacing : 20, 
+			length : 1, 
+			colour : '#888', 
+			snap : false
+		}, 
+		zoom : {
+			controls : true, 
+			wheel : true, 
+			startScale : 1, 
+			maxScale : 3, 
+			minScale : 0.3, 
+			scaleSpeed : 1.2
+		}
+	};
+}
 
 // Function that registers all blockly-blocks
 // Returns the blockly-workspace
@@ -83,7 +85,7 @@ function injectBlocklyIntoPage(){
 	var blocklyDiv = S('#blocklyDiv');
 
 	// Creates the workspace
-	var workspace = Blockly.inject(blocklyDiv, BLOCKLY_OPTIONS);
+	var workspace = Blockly.inject(blocklyDiv, buildBlocklyOptions());
 	Blockly.svgResize(workspace);
 
 	// Awaits a resize event and updates blockly accordingly

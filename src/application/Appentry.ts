@@ -14,6 +14,7 @@ import { setupUi } from "./ui/UiSetup.js";
 import { TabHandler } from "./ui/utils/TabHandler.js";
 import { BlockWarning } from "./errorSystem/Warning.js";
 import { didWorkspaceChange, setWorkspaceInvalid } from "./blockly/WorkspaceChangeDetector.js";
+import { getFromLanguage } from "./language/LanguageManager.js";
 
 // Global environment
 var env: Environment;
@@ -115,7 +116,9 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 					break;
 				case TAB_ANALYTICS:
 					// Generates the runtime-analytics
-					runtimeDisplay.textContent = (getFullRuntime(env,modExports)/1000).toString();
+					runtimeDisplay.textContent = getFromLanguage("ui.tabs.analytics.runtime",{
+						"length": getFullRuntime(env,modExports)/1000
+					});
 					break;
 			}
 			
@@ -173,7 +176,7 @@ function onTabChange(tabId: number){
 	simulation.stopSimulation();
 	// Resets some elements
 	codeArea.value="";
-	runtimeDisplay.textContent="[x]";
+	runtimeDisplay.textContent="";
 
 	// Requests a recompilation to update the tab
 	requestBlocklyWsCompilation(true);

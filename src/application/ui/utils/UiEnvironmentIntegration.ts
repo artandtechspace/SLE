@@ -1,4 +1,5 @@
 import { Environment } from "../../Environment.js";
+import { getFromLanguage } from "../../language/LanguageManager.js";
 import { PopupSystem } from "../../popupSystem/PopupSystem.js";
 import { ArduinoSimulation } from "../../simulation/ArduinoSimulation.js";
 import { Min, PositiveNumber } from "../../types/Types.js";
@@ -9,17 +10,17 @@ import { S } from "./UiUtils.js";
 // Path to the preview-files
 export const PREVIEWS_FILE_PATH = "resources/arduinoPreviews/";
 
-// Holds the name and file-name for a preset preview
-export const PREVIEWS: {[key: string]: string} = {
-    "Googles.svg": "Googles",
-    "WS2812B-8x1.svg": "WS2812B (8x1)",
-    "WS2812B-8x2.svg": "WS2812B (8x2)",
-    "WS2812B-8x3.svg": "WS2812B (8x3)",
-    "WS2812B-8x4.svg": "WS2812B (8x4)"
-}
+// Holds the file-names for every known preview (Without the .svg extensions)
+export const PREVIEWS: string[] = [
+    "Googles",
+    "WS2812B-8x1",
+    "WS2812B-8x2",
+    "WS2812B-8x3",
+    "WS2812B-8x4"
+]
 
 // Default element for the preview
-export const DEFAULT_PREVIEW_NAME = Object.keys(PREVIEWS)[0];
+export const DEFAULT_PREVIEW_NAME = PREVIEWS[0];
 
 
 // Last/Preview selected index of the preview-picker
@@ -37,6 +38,12 @@ var envIntCol: EnvIntegrationCollection;
  export function setupEnvironment(env: Environment, popsys: PopupSystem, sim: ArduinoSimulation, onEnvChange: ()=>void){
     // Loads all elements
     envIntCol = loadEnvIntegrationCollection();
+
+    // Binds language
+    envIntCol.codeeditor.saveBtn.value = getFromLanguage("ui.popup.editcode.save-button");
+    envIntCol.codeeditor.cancleBtn.value = getFromLanguage("ui.popup.editcode.cancle-button");
+    envIntCol.pin.placeholder = getFromLanguage("ui.settings.led-pin");
+    envIntCol.amt.placeholder = getFromLanguage("ui.settings.led-amt");
 
     // Binds events etc.
     bindEnvironment(env, sim, popsys, onEnvChange);
@@ -151,12 +158,11 @@ function bindEnvironment(env: Environment, sim: ArduinoSimulation, popsys: Popup
 
 
     // Appends all preview-options for the animation
-    for(var file in PREVIEWS){
-        var name = PREVIEWS[file];
+    for(var file of PREVIEWS){
         
         // Creates the option
         envIntCol.previewSelect.appendChild(C("option",{
-            text: name,
+            text: getFromLanguage("ui.settings.preview-image.values."+file.toLowerCase()),
             attr: {
                 value: file
             }
@@ -176,7 +182,7 @@ function bindEnvironment(env: Environment, sim: ArduinoSimulation, popsys: Popup
             envIntCol.previewSelect.selectedIndex = selectedIndex;            
 
             // Gets the new animation and tries to load it
-            var svg = await loadSVG(PREVIEWS_FILE_PATH+filename);
+            var svg = await loadSVG(PREVIEWS_FILE_PATH+filename+".svg");
             sim.loadPreview(svg);
 
             // Updates the led-amount
