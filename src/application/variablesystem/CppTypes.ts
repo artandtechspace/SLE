@@ -6,6 +6,7 @@ export const CppFloat: CppType = "float" as CppType;
 export const CppInt: CppType = "int" as CppType;
 export const CppBool: CppType = "bool" as CppType;
 export const CppVoid: CppReturnType = "void" as CppReturnType;
+export const CppByte: CppType = "byte" as CppType;
 
 /**
  * Takes in a @param param cpp-type as the parameter type for a function and the @param value that shall be converted.
@@ -35,6 +36,17 @@ export function turnCppTypeToParameterCode(param: CppType, value: any){
         case CppBool:
             if(typeof value !== "boolean")
                 throw new SystemError("CppBool got passed non-boolean value.");
+            return value.toString();
+        case CppByte:
+            
+            // Ensures the parameter is a number
+            if(!Number.isInteger(value))
+                throw new SystemError("CppInt got passed non-numeric value.");
+
+            // Ensures that the value is in range
+            if(value < 0 || value > 255)
+                throw new SystemError("CppByte got passed a value > 255 or < 0.");
+
             return value.toString();
         case CppVoid:
             throw new SystemError("CppVoid cant be passed as an argument.");

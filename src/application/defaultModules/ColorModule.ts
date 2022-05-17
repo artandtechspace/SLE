@@ -2,15 +2,16 @@ import { Environment } from "../Environment.js";
 import { VariableSystem } from "../variablesystem/VariableSystem.js";
 import { ModuleBase } from "../modules/ModuleBase.js";
 import { printIfElse } from "../utils/WorkUtils.js";
-import { HexColor, Min, OpenObject, PositiveNumber as PositiveNumber } from "../types/Types.js";
+import { HexColor, Min, OpenObject, PositiveNumber as PositiveNumber, RGBNumber } from "../types/Types.js";
 import { FunctionGenerator } from "../variablesystem/CppFuncGenerator.js";
 import { ModuleCode } from "../codegenerator/CodeGenerator.js";
 import { FunctionSupplier } from "../variablesystem/CppFuncSupplier.js";
-import { CppInt, CppVoid } from "../variablesystem/CppTypes.js";
+import { CppByte, CppInt, CppVoid } from "../variablesystem/CppTypes.js";
 import { CppFuncParam, CppFuncParams, CppTypeDefintion } from "../variablesystem/CppFuncDefs.js";
 import { printEquation } from "../utils/EquationHandler.js";
 import { Variable } from "../variablesystem/Variable.js";
 import { Arduino } from "../simulation/Arduino.js";
+import { getCppRGBStringFromHex, getHexFromRGB, RGB } from "../utils/ColorUtils.js";
 
 export type ColorModuleConfig = {
     // Amount of leds per step
@@ -32,7 +33,9 @@ export type ColorModuleConfig = {
     delayAfterStep: PositiveNumber,
     
     // Color
-    rgbHex: HexColor
+    clr_r: RGBNumber,
+    clr_g: RGBNumber,
+    clr_b: RGBNumber,
 };
 
 // Which depth the color-module has to use
@@ -53,10 +56,13 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         delayAfterStep: 0 as PositiveNumber,
         delayPerLed: 0 as PositiveNumber,
         ledsPerStep: 1 as Min<1>,
-        rgbHex: "FF0000" as HexColor,
         space: 0 as PositiveNumber,
         start: 0 as PositiveNumber,
-        steps: 1 as Min<1>
+        steps: 1 as Min<1>,
+
+        clr_r: 255 as RGBNumber,
+        clr_g: 0 as RGBNumber,
+        clr_b: 0 as RGBNumber
     };
 
     // Takes in a config and returns it's depth
@@ -86,10 +92,12 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
             delayAfterStep: CppInt,
             delayPerLed: CppInt,
             ledsPerStep: CppInt,
-            rgbHex: CppInt,
             space: CppInt,
             start: CppInt,
-            steps: CppInt
+            steps: CppInt,
+            clr_r: CppByte,
+            clr_g: CppByte,
+            clr_b: CppByte
         }
     }
 
@@ -107,6 +115,10 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         );
     }
 
+    private getRGBCode(prms: CppFuncParams<ColorModuleConfig>){
+        return `CRGB(${prms.clr_r.value},${prms.clr_g.value},${prms.clr_b.value})`;
+    }
+
     // Generates the code for a single line depth
     private generateLine(env: Environment, varSys: VariableSystem, prms: CppFuncParams<ColorModuleConfig>) : string{
 
@@ -121,7 +133,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         );
         
         // Gets the color
-        var clr = prms.rgbHex.isStatic ? `0x${prms.rgbHex.value}` : prms.rgbHex.value;
+        var clr = this.getRGBCode(prms);
 
         return `
             for(${vLed.declair()} ${vLed} < ${prms.ledsPerStep.value}; ${vLed}++){
@@ -145,7 +157,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         );
         
         // Gets the color
-        var clr = prms.rgbHex.isStatic ? `0x${prms.rgbHex.value}` : prms.rgbHex.value;
+        var clr = this.getRGBCode(prms);
 
         return `
             for(${vStep.declair()} ${vStep} < ${prms.steps.value}; ${vStep}++){
@@ -182,7 +194,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         switch(depth){
             case ModDepth.SINGLE_LED:
                 return {
-                    loop: `leds[${cfg.start}] = 0x${cfg.rgbHex};`,
+                    loop: `leds[${cfg.start}] = CRGB(${cfg.clr_r},${cfg.clr_g},${cfg.clr_b})`,
                     isDirty: true
                 }
             case ModDepth.LED_LINE:
@@ -198,8 +210,11 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         }
     }
 
+    public simulateSetup(env: Environment, cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino): void {
+        ssot.clr = getHexFromRGB(cfg.clr_r,cfg.clr_g,cfg.clr_b);
+    }
 
-    public async simulateLoop(env: Environment, cfg: ColorModuleConfig, singleSourceOfTruth: OpenObject, arduino: Arduino): Promise<void> {
+    public async simulateLoop(env: Environment, cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino): Promise<void> {
         
         // Iterates over every step
         for(var step = 0; step < cfg.steps; step++){
@@ -207,7 +222,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
             for(var led = 0; led < cfg.ledsPerStep; led++){
 
                 // Updates the color
-                arduino.setLedHex(cfg.start+step * (cfg.space+cfg.ledsPerStep) + led, cfg.rgbHex);
+                arduino.setLedHex(cfg.start+step * (cfg.space+cfg.ledsPerStep) + led, ssot.clr);
                 
                 // Inserts a delay if required and pushes the update
                 if(cfg.delayPerLed > 0){

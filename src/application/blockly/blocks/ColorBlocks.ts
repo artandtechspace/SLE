@@ -3,10 +3,11 @@ import { Environment } from "../../Environment.js";
 import { BlockError } from "../../errorSystem/Error.js";
 import { ConfigBuilder } from "../../ConfigBuilder.js";
 import { HexColor, Min, PositiveNumber } from "../../types/Types.js";
-import { getHexFromCode, getNumberFromCodeAsMin } from "../BlocklyUtils.js";
+import { getHexFromCode, getNumberFromCodeAsMin, getRGBFromCode } from "../BlocklyUtils.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
 import { TB_COLOR_COLOR } from "../Toolbox.js";
 import FieldBrightness from "../fields/FieldBrightness.js";
+import { RGB } from "../../utils/ColorUtils.js";
 
 const Blockly = require("blockly");
 
@@ -62,7 +63,7 @@ function registerStepsColor(name: string){
         var skipStart: Min<1> = getNumberFromCodeAsMin(block,"step-length", 1, env);
 
         // Gets the color
-        var color: HexColor = getHexFromCode(block,"color");
+        var color: RGB = getRGBFromCode(block,"color");
 
         // Assembles the config
         return {
@@ -71,9 +72,11 @@ function registerStepsColor(name: string){
                 ...ColorModule.DEFAULT_CONFIG,
                 start,
                 ledsPerStep: skipStart,
-                rgbHex: color,
                 space: skipLen as any as PositiveNumber,
-                steps
+                steps,
+                clr_r: color.r,
+                clr_g: color.g,
+                clr_b: color.b
             },
             block
         }
@@ -103,7 +106,7 @@ function registerStripe(name: string){
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any, env: Environment) {
         var pos1: PositiveNumber = getNumberFromCodeAsMin(block,"start", 0, env);
         var pos2: PositiveNumber = getNumberFromCodeAsMin(block,"end", 0, env);
-        var color: HexColor = getHexFromCode(block,"color");
+        var color: RGB = getRGBFromCode(block,"color");
         
         // Checks if an invalid length got specified
         if(pos1 === pos2)
@@ -121,7 +124,9 @@ function registerStripe(name: string){
                 ...ColorModule.DEFAULT_CONFIG,
                 start,
                 ledsPerStep: amt,
-                rgbHex: color
+                clr_r: color.r,
+                clr_g: color.g,
+                clr_b: color.b
             },
             block
         }
@@ -150,14 +155,16 @@ function registerSingleLed(name: string){
         var start: PositiveNumber = getNumberFromCodeAsMin(block,"led",0, env);
 
         // Color
-        var color: HexColor = getHexFromCode(block,"color");
+        var color: RGB = getRGBFromCode(block,"color");
 
         return {
             module: ColorModule,
             config:{
                 ...ColorModule.DEFAULT_CONFIG,
                 start,
-                rgbHex: color
+                clr_r: color.r,
+                clr_g: color.g,
+                clr_b: color.b
             },
             block
         }

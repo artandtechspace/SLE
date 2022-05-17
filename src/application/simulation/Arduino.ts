@@ -34,7 +34,7 @@ export class Arduino{
      * @returns 
      */
     public millis(){
-        return this.startTime-Date.now();
+        return Date.now() - this.startTime;
     }
 
     /**

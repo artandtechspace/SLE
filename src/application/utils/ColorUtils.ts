@@ -1,10 +1,10 @@
-import { OpenObject } from "../types/Types";
+import { HexColor, OpenObject, RGBNumber } from "../types/Types";
 
 // RGB-object
 export interface RGB{
-    r: number, // 0 - 255
-    g: number, // 0 - 255
-    b: number  // 0 - 255
+    r: RGBNumber, // 0 - 255
+    g: RGBNumber, // 0 - 255
+    b: RGBNumber  // 0 - 255
 }
 
 // HSV-object
@@ -168,7 +168,14 @@ const PREDEFINED_COLORS = {
  * @param blue 0-255
  */
 export function getHexFromRGB(red: number, green: number, blue: number) : string{
-    return ((red<<16) | (green<<8) | blue).toString(16);;
+    // Generates the string
+    var hexStr = ((red<<16) | (green<<8) | blue).toString(16);
+
+    // Padds with leading zeros
+    while(hexStr.length < 6)
+        hexStr="0"+hexStr;
+
+    return hexStr;
 }
 
 /**
@@ -196,7 +203,7 @@ export function getFLEDColorDefinition(hex: string): [string,boolean]{
  * @param {number} v Value-Part (From 0.00 to 1.00)
  * @returns an object with keys of r, g and b and their respective values from 0 to 255
  */
-export function HSVtoRGB(h: number, s: number, v: number) : RGB {
+export function HSV2RGB(h: number, s: number, v: number) : RGB {
     // Variable declaration
     var r, g, b, i, f, p, q, t;
 
@@ -220,9 +227,9 @@ export function HSVtoRGB(h: number, s: number, v: number) : RGB {
 
     // Return as RGB-Colors
     return {
-        r: Math.round(r * 255),
-        g: Math.round(g * 255),
-        b: Math.round(b * 255)
+        r: Math.round(r * 255) as RGBNumber,
+        g: Math.round(g * 255) as RGBNumber,
+        b: Math.round(b * 255) as RGBNumber
     };
 }
 
@@ -243,7 +250,7 @@ function decToHexTwoDigits(dec: number){
  * @returns the hex-color in the following format: #RRGGBB
  */
 export function HSV2HEX(h: number,s: number,v: number, withoutSharp=false){
-    var {r,g,b} = HSVtoRGB(h,s,v);  
+    var {r,g,b} = HSV2RGB(h,s,v);  
     return `${withoutSharp ? "" : "#"}${decToHexTwoDigits(r)}${decToHexTwoDigits(g)}${decToHexTwoDigits(b)}`;
 }
 
@@ -259,4 +266,31 @@ export function isValidHUE(obj: OpenObject) : obj is HSV{
         return false;
 
     return Object.values(obj).every(val=>typeof val === "number" && val >= 0 && val <= 1);
+}
+
+/**
+ * Takes in a hex-color and returns the string that builds that color in cpp-programming using the fastled-library
+ */
+export function getCppRGBStringFromHex(hex: HexColor){
+    var rgb = getRGBFromHex(hex);
+    return `CRGB(${rgb.r},${rgb.g},${rgb.b})`;
+}
+
+/**
+ * Takes in a hex-color and returns the given color as an object with the rgb-numeric values
+ */
+export function getRGBFromHex(hex: HexColor){
+    // Gets the number
+    var hexNm = parseInt(hex,16);
+
+    // Ensures that the passed number is a hex-color
+    if(hexNm === NaN)
+        throw "Hex must be a valid number";
+
+    // Converts to rgb
+    return {
+        r: hexNm & 0xFF,
+        g: (hexNm >> 8) & 0xFF,
+        b: (hexNm >> 16) & 0xFF
+    }
 }

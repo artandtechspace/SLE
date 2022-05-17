@@ -1,3 +1,4 @@
+import { isPercentageNumber, PercentageNumber } from "../../types/Types.js";
 import { HSV2HEX } from "../../utils/ColorUtils.js";
 import { create as C } from "../../utils/HTMLBuilder.js";
 const Blockly = require("blockly");
@@ -7,11 +8,11 @@ const Blockly = require("blockly");
 export default class FieldBrightness extends Blockly.Field{
   
   // Default value for the field
-  static DEFAULT_VALUE: number = .5;
+  static DEFAULT_VALUE: PercentageNumber = 1 as PercentageNumber;
 
   SERIALIZABLE = true;
   
-  constructor(opt_value: number|null = null, opt_validator?: (value:number)=>boolean){
+  constructor(opt_value: PercentageNumber|null = null, opt_validator?: (value:number)=>boolean){
     opt_value = FieldBrightness.validateInputColor(opt_value);
     if(opt_value === null)
       opt_value = FieldBrightness.DEFAULT_VALUE;
@@ -20,12 +21,12 @@ export default class FieldBrightness extends Blockly.Field{
   }
   
     // Validates the input-color as an hsv-object. Return null if invalid and the object if valid.
-    private static validateInputColor(value: any): number|null{
+    private static validateInputColor(value: any): PercentageNumber|null{
         // Ensures the value is a number
         if(typeof value !== "number" || value === null)
           return null;
 
-        return value >= 0 && value <= 1 ? value : null;
+        return isPercentageNumber(value) ? value : null;
     }
 
     // Create an field from a given json object

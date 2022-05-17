@@ -1,7 +1,7 @@
 import { BlockError } from "../errorSystem/Error.js";
 import { ConfigBuilder } from "../ConfigBuilder.js";
-import { HexColor, Max, Min } from "../types/Types.js";
-import { HSV2HEX } from "../utils/ColorUtils.js";
+import { HexColor, isPercentageNumber, Max, Min, PercentageNumber } from "../types/Types.js";
+import { HSV2HEX, HSV2RGB, RGB } from "../utils/ColorUtils.js";
 import { Environment } from "../Environment.js";
 
 /** 
@@ -13,6 +13,30 @@ export function getHexFromCode(block: any, field: string) : HexColor{
 
     // Converts the color to a hex-color
     return HSV2HEX(hsv.h,hsv.s,hsv.v, true) as HexColor;
+}
+
+/**
+ * @returns the rgb-color from a custom-color-field. This expects to get passed a custom-color-field
+ */
+export function getRGBFromCode(block: any, field: string) : RGB{
+    // Gets the value
+    var hsv = block.getFieldValue(field);
+    return HSV2RGB(hsv.h,hsv.s,hsv.v);
+}
+
+/**
+ * @throws {BlockError} if anything is not perfectly expected with the number.
+ * @returns the searched number as a min
+ */
+ export function getNumberFromCodeAsPercentage(block: any, field: string, env: Environment) : PercentageNumber{
+    // Gets the number
+    var val = getNumberFromCode(block,field,env);
+
+    // Ensures that the number is within the required range.
+    if(!isPercentageNumber(val))
+        throw new BlockError(`The '${field}'-value must be a percentage-number`,block);
+
+    return val;
 }
 
 /**

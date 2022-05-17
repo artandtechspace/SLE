@@ -7,8 +7,10 @@ export type Min<min extends number> = Brand<number,`Min-${min}`>;
 export type Max<min extends number> = Brand<number,`Max-${min}`>;
 export type Range<min extends number, max extends number> = Brand<number,`Range-${min}-${max}`>;
 export type PositiveNumber = Min<0>
+export type PercentageNumber = Brand<number,"percentage_number">;
 
 export type HexColor = Brand<string, "HexColor">;
+export type RGBNumber = Range<0,255>;
 
 //#region Validators for the types
 
@@ -35,6 +37,16 @@ export function isPositive(x: number): x is PositiveNumber{
 // Returns if the given string is a hex-color
 export function isHexColor(x: string): x is HexColor{
     return isHexRGB(x);
+}
+
+// Returns if the given number is a percentage number
+export function isPercentageNumber(x: number): x is PercentageNumber{
+    return x >= 0 && x <= 1;
+}
+
+// Returns if the given number is an rgb-number (0,255)
+export function isRGBNumber(x: number) : x is RGBNumber{
+    return x >= 0 && x <= 255;
 }
 
 //#endregion

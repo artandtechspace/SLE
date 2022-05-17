@@ -51,6 +51,9 @@ export function printIf(element: string, condition: boolean) : string{
     return condition ? element : "";
 }
 
+/**
+ * Prints an element only if the given condition is true and otherwise returns the other element
+ */
 export function printIfElse(element: string, elseElement: string, condition: boolean): string{
     return condition ? element : elseElement;
 }

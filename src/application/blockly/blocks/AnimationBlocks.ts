@@ -1,9 +1,11 @@
 import { ConfigBuilder } from "../../ConfigBuilder.js";
 import { GradientModule, GradientModuleConfig } from "../../defaultModules/GradientModule.js";
+import { RainbowModule, RainbowModuleConfig } from "../../defaultModules/RainbowModule.js";
 import { Environment } from "../../Environment.js";
-import { PositiveNumber } from "../../types/Types.js";
+import { Min, PositiveNumber, Range } from "../../types/Types.js";
 import { HSV } from "../../utils/ColorUtils.js";
-import { getNumberFromCodeAsMin } from "../BlocklyUtils.js";
+import { getNumberFromCode, getNumberFromCodeAsMin, getNumberFromCodeAsPercentage } from "../BlocklyUtils.js";
+import FieldBrightness from "../fields/FieldBrightness.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
 import { TB_COLOR_ANIMATIONS } from "../Toolbox.js";
 
@@ -16,6 +18,62 @@ const Blockly = require("blockly");
 
 export default function registerAnimationBlocks(){
     registerGradientBlock('sle_animation_gradient');
+    registerRainbowBlock('sle_animation_rainbow');
+}
+
+// Rainbow-block
+function registerRainbowBlock(name: string){
+
+    Blockly.Blocks[name] = {
+        init: function() {
+        this.appendValueInput("from")
+            .setCheck("Number")
+            .appendField("Rainbow From: ");
+        this.appendValueInput("length")
+            .setCheck("Number")
+            .appendField("Length: ");
+        this.appendValueInput("offsetPerLed")
+            .setCheck("Number")
+            .appendField("OffPerLed: ");
+        this.appendValueInput("playLenght")
+            .setCheck("Number")
+            .appendField("AnimationLength: ");
+        this.appendValueInput("repeatLength")
+            .setCheck("Number")
+            .appendField("Until-Repeat-length: ");
+        this.appendDummyInput()
+            .appendField("Bright: ")
+            .appendField(new FieldBrightness(),"bright");
+          this.setColour(TB_COLOR_ANIMATIONS);
+          this.setPreviousStatement(true, null);
+          this.setNextStatement(true, null);
+          this.setInputsInline(true);
+        }
+    };
+
+    ConfigBuilder.registerModuleBlock<RainbowModuleConfig>(name, function(block:any, env: Environment) { 
+        var from: PositiveNumber = getNumberFromCodeAsMin(block,"from", 0, env);
+        var length = getNumberFromCodeAsMin(block,"length", 1, env);
+        var offsetPerLed = getNumberFromCode(block, "offsetPerLed", env);
+        var playLenght = getNumberFromCodeAsMin(block, "playLenght", 0, env);
+        var repeatLength = getNumberFromCodeAsMin(block, "repeatLength", 500, env);
+        
+        var brightness: number = block.getFieldValue("bright");
+    
+        return {
+            module: RainbowModule,
+            config: {
+                ledFrom: from,
+                ledLength: length,
+                offsetPerLedInMs: offsetPerLed,
+                playLength: playLenght,
+                repeatLengthInMs: repeatLength,
+                value: brightness * 255 as Range<0,255>,
+            },
+            block
+        }
+    });
+
 }
 
 // Gradient-block with all features
