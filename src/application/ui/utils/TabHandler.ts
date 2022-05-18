@@ -1,4 +1,5 @@
 import { SystemError } from "../../errorSystem/Errors.js";
+import { S, SM } from "./UiUtils.js";
 
 /**
  * The TabHandler removes/adds element to the page depending on the current tab.
@@ -25,19 +26,22 @@ export class TabHandler{
     private buttons: [HTMLElement, number][] = [];
 
     // Wrapper where the tabs will be added to
-    private tabWrapper: HTMLElement;
+    private tabParent: HTMLElement;
 
     // (Optional) Event handler for the tab-change event
     private onTabSelect?: (tabId: number)=>boolean|number|void;
 
-    constructor(tabButtons: [HTMLElement, number][], tabs: [HTMLElement, number][], selectedTab: number){
+    constructor(tabWrapper: HTMLElement, tabButtons: [HTMLElement, number][], tabs: [HTMLElement, number][], selectedTab: number){
         this.selectedTab = selectedTab;
 
         // Registers the tabs
-        this.tabWrapper = this.registerTabs(tabs);
+        this.tabParent = this.registerTabs(tabs);
 
         // Registers the buttons
         this.registerButtons(tabButtons);
+
+        // Registers the resize-handler for chaning from text to icons
+        this.registerResizehandler(S(".th-picker",tabWrapper));
 
         // Updates the ui with the currently selected tab
         this.update();
@@ -86,16 +90,16 @@ export class TabHandler{
 
             // Checks if the tab must be appended
             if(this.selectedTab === tabId)
-                this.tabWrapper.appendChild(tab);
+                this.tabParent.appendChild(tab);
         }
 
         // Updates the buttons
         for(let [btn, tabId] of this.buttons){            
             // Adds/Removes the selected class depending on if the button's tab is selected
             if(tabId === this.selectedTab)
-                btn.classList.add("select");
+                btn.classList.add("th-select");
             else
-                btn.classList.remove("select");
+                btn.classList.remove("th-select");
         }
     }
 
@@ -150,6 +154,28 @@ export class TabHandler{
             throw new SystemError("No tabs were registered");
 
         return parent;
+    }
+
+    private onResize(entrys: ResizeObserverEntry[]){
+        // Iterates over all changes
+        for (let entry of entrys) {
+            // Gets the parent
+            var parent = entry.target.parentElement as HTMLElement;
+
+            // Checks if some texts have already been moved to the second line
+            if(entry.contentRect.height > entry.target.children[0].clientHeight)
+                parent.classList.add("th-hide");
+            else
+                parent.classList.remove("th-hide");
+        }
+    }
+
+    private registerResizehandler(tabPicker: HTMLElement){
+        // Creates the observer
+        var res = new ResizeObserver(this.onResize.bind(this));
+
+        // Registers the listener
+        res.observe(S(".th-texts",tabPicker));
     }
 
 }

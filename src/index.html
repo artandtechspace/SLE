@@ -61,22 +61,22 @@
         <!--Sidebar-->
         <div id="sidebar">
             <div id="preview">
-                <div id="wrapper">
-                    <div id="previewPicker">
-                        <div id="texts">
+                <div id="wrapper" class="tabHandler">
+                    <div class="th-picker">
+                        <div class="th-texts">
                             <input type="button" id="btnTabCode">
                             <input type="button" id="btnTabAnimation">
                             <input type="button" id="btnTabAnalytics">
                         </div>
 
-                        <div id="icons">
+                        <div class="th-icons">
                             <i class="fa fa-code" id="tabCode" aria-hidden="true"></i>
                             <i class="fa fa-film" id="tabAnimation" aria-hidden="true"></i>
                             <i class="fa fa-cog" id="tabAnalytics" aria-hidden="true"></i>
                         </div>
                     </div>
-                    <!--Holds all tabs-->
-                    <div id="tabs">
+                    <!--Holds all tabs for the previews-->
+                    <div class="th-tabs">
                         <!--Code-tab-->
                         <div id="codeTab" class="tab">
                             <textarea id="codeArea" disabled></textarea>
@@ -100,8 +100,22 @@
             <!--Control-field-->
             <div id="controls">
 
+                <!--<div id="settingsPicker">
+                    <div id="texts">
+                        <input type="button" id="btnTabCode">
+                        <input type="button" id="btnTabAnimation">
+                        <input type="button" id="btnTabAnalytics">
+                    </div>
+
+                    <div id="icons">
+                        <i class="fa fa-code" id="tabCode" aria-hidden="true"></i>
+                        <i class="fa fa-film" id="tabAnimation" aria-hidden="true"></i>
+                        <i class="fa fa-cog" id="tabAnalytics" aria-hidden="true"></i>
+                    </div>
+                </div>-->
+
                 <!--All configuration fields-->
-                <div>
+                <div id="tabSettings">
 
                     <!--Led-pin field-->
                     <div class="infoInput">

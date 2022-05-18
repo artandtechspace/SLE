@@ -32,7 +32,6 @@ export async function setupUi(onEnvChange: ()=>void){
         await setupLanguageManager("en_us");
 
         registerSliderBars();
-        registerSidebarIconChanger();
         
         // Gets specific elements
         var codeArea = setupCodeArea();
@@ -165,43 +164,41 @@ function setupPopupsystem(){
 // Registers the sidebar-tabs and logic
 function registerSidebarTabs(){
 
-    // Gets the parents
-    var btns = S("#texts");
-    var icons = S("#icons");
-    var tabs = S("#tabs");
+    // Gets the sidebar-preview
+    var preview = S("#preview");
 
     // Gets the tabs and binds their texts
-    var btnTabCode = S("#btnTabCode",btns) as HTMLInputElement;
+    var btnTabCode = S("#btnTabCode",preview) as HTMLInputElement;
     btnTabCode.value = getFromLanguage("ui.tabs.code");
 
-    var btnTabAnimation = S("#btnTabAnimation",btns) as HTMLInputElement;
+    var btnTabAnimation = S("#btnTabAnimation",preview) as HTMLInputElement;
     btnTabAnimation.value = getFromLanguage("ui.tabs.animation");
 
-    var btnTabAnalytics = S("#btnTabAnalytics",btns) as HTMLInputElement;
+    var btnTabAnalytics = S("#btnTabAnalytics",preview) as HTMLInputElement;
     btnTabAnalytics.value = getFromLanguage("ui.tabs.analytics");
     
     // Creates the tab-buttons
     const BUTTONS: [HTMLElement,number][] = [
         [btnTabCode,TAB_CODE],
-        [S("#tabCode",icons),TAB_CODE],
+        [S("#tabCode",preview),TAB_CODE],
         [btnTabAnimation,TAB_ANIMATION],
-        [S("#tabAnimation",icons),TAB_ANIMATION],
+        [S("#tabAnimation",preview),TAB_ANIMATION],
         [btnTabAnalytics,TAB_ANALYTICS],
-        [S("#tabAnalytics",icons),TAB_ANALYTICS]
+        [S("#tabAnalytics",preview),TAB_ANALYTICS]
     ];
 
     // Handle the code-tab
-    var codeTab = S("#codeTab",tabs);
+    var codeTab = S("#codeTab",preview);
     handleTabCode(codeTab as HTMLDivElement);
     
     // Gets the tabs
     const TABS: [HTMLElement,number][] = [
         [codeTab,TAB_CODE],
-        [S("#animationTab",tabs),TAB_ANIMATION],
-        [S("#analyticsTab",tabs),TAB_ANALYTICS]
+        [S("#animationTab",preview),TAB_ANIMATION],
+        [S("#analyticsTab",preview),TAB_ANALYTICS]
     ]
 
-    return new TabHandler(BUTTONS,TABS,1);
+    return new TabHandler(S(".tabHandler",preview),BUTTONS,TABS,1);
 }
 
 // Inits the tab-code
@@ -220,31 +217,6 @@ function handleTabCode(tabCode: HTMLDivElement){
 function registerSliderBars(){
     SliderBar.register(S("#controls"), S(".sliderbar.y"), 50, 500, SliderBarDirection.DIRECTION_Y_BACKWARD);
     SliderBar.register(S("#sidebar"),S(".sliderbar.x"), 50, 800, SliderBarDirection.DIRECTION_X_BACKWARD);
-}
-
-
-
-// Registers the resize listener that handle the change from text to icons for the sidebar when it get's to small
-function registerSidebarIconChanger(){
-
-    // Creates the observer
-    var res = new ResizeObserver(entries=>{
-
-        // Iterates over all changes
-        for (let entry of entries) {
-            // Gets the parent
-            var parent = entry.target.parentElement as HTMLElement;
-
-            // Checks if some texts have already been moved to the second line
-            if(entry.contentRect.height > entry.target.children[0].clientHeight)
-                parent.classList.add("hide");
-            else
-                parent.classList.remove("hide");
-        }
-    });
-
-    // Registers the listener
-    res.observe(S("#texts"));
 }
 
 //#endregion
