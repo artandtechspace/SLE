@@ -1,15 +1,8 @@
 import { ModuleCode } from "../codegenerator/CodeGenerator.js";
 import { Environment } from "../Environment.js";
 import { ModuleBase } from "../modules/ModuleBase.js";
-import { PositiveNumber } from "../types/Types.js";
-import { FunctionSupplier } from "../variablesystem/CppFuncSupplier.js";
-import { VariableSystem } from "../variablesystem/VariableSystem.js";
-
-
-/**
- * This is a special module which can't be directly instanciated by a json-config.
- * To comment something, just write a string inside the modules
- */
+import { FunctionSupplier } from "../codegenerator/variablesystem/CppFuncSupplier.js";
+import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem.js";
 
 
 export type CommentModuleConfig = {

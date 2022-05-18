@@ -2,15 +2,10 @@ import { Environment } from "../Environment.js";
 import { Arduino } from "../simulation/Arduino.js";
 import { PositiveNumber } from "../types/Types.js";
 import { printIf as pIf } from "../utils/WorkUtils.js";
-import { VariableSystem } from "../variablesystem/VariableSystem.js";
+import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem.js";
 import { ModuleBase } from "../modules/ModuleBase.js";
 import { ModuleCode } from "../codegenerator/CodeGenerator.js";
-import { FunctionSupplier } from "../variablesystem/CppFuncSupplier.js";
-
-/**
- * This is a special module which can't be directly instanciated by a json-config.
- * To delay something, just write the integer in millis inside the array
- */
+import { FunctionSupplier } from "../codegenerator/variablesystem/CppFuncSupplier.js";
 
 export type DelayModuleConfig = {
     delay: PositiveNumber
@@ -27,7 +22,7 @@ class DelayModule_ extends ModuleBase<DelayModuleConfig> {
         if(config.delay === 0)
             return {};
         
-        // Generates a push-operation for any idle leds of there are any
+        // Generates a push-operation if there the stripe is dirty
         var opPush = pIf("FastLED.show();\n", isDirty);
 
         return {

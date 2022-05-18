@@ -1,4 +1,5 @@
-import { HSV, HSV2HEX, isValidHUE } from "../../utils/ColorUtils.js";
+import { HSV, PercentageNumber } from "../../types/Types.js";
+import { HSV2HEX, isValidHUE } from "../../utils/ColorUtils.js";
 import { create as C } from "../../utils/HTMLBuilder.js";
 const Blockly = require("blockly");
 
@@ -8,9 +9,9 @@ export default class FieldCustomColor extends Blockly.Field{
   
   // Default value for the field
   static DEFAULT_VALUE: HSV = {
-    h: 0,
-    s: 1,
-    v: 1
+    h: 0 as PercentageNumber,
+    s: 1 as PercentageNumber,
+    v: 1 as PercentageNumber
   };
 
   SERIALIZABLE = true;

@@ -1,5 +1,6 @@
 /**
- * Small file with small utilities to build html-elements using javascript. This is used in place of a big framework which would benefit little but contribute with a big size.
+ * Small file with small utilities to build html-elements using javascript.
+ * This is used in place of a big framework which would benefit little but contribute with a big size.
  */
 
 

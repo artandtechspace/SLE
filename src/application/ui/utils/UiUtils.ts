@@ -1,7 +1,7 @@
 
 // Short name for the queryselector-function
 
-import { SystemError } from "../../errorSystem/Error.js";
+import { SystemError } from "../../errorSystem/Errors.js";
 
 // Also throws a SystemError if the element couldn't be found
 export function S(name: string, base: HTMLElement = document.body): HTMLElement{

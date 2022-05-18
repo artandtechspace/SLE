@@ -1,6 +1,10 @@
 import { Environment } from "./Environment";
 import { ModuleBase } from "./modules/ModuleBase";
 
+/**
+ * This system is used in place of an ordenary programming-language-generator from blockly that can only return strings as code. 
+ */
+
 // Is returned by a mod-block when called from the Config-builder
 export interface ModBlockExport<T>{
     // Module that is used

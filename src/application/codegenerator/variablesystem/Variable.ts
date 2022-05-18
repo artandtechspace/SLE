@@ -23,14 +23,14 @@
     }
 
     /**
-     * @returns statement to declair the variable.
+     * @returns statement to declair the variable. Also directly has the semicolon at the end.
      */
     declair(){
         return this.type+" "+this.assign();
     }
 
     /**
-     * @returns statement to (re)assignes the variable.
+     * @returns statement to (re)assignes the variable. Also directly has the semicolon at the end.
      */
     assign(){
         return this.name+(this.initValue !== undefined ? ` = ${this.initValue};` : ";" ) 

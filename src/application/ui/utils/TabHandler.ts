@@ -1,12 +1,11 @@
-import { SystemError } from "../../errorSystem/Error.js";
+import { SystemError } from "../../errorSystem/Errors.js";
 
 /**
  * The TabHandler removes/adds element to the page depending on the current tab.
  * It takes in an array of tab-buttons which all have to have an attribute called "tab" that contains their tab-id.
- * These will be modified with a click-event and possibly design-changes depending on their tab's selection state.
+ * These will be modified with a click-event and design-changes depending on their tab's selection state.
  * 
  * Also this takes in an array of tab-elements. These must have the same parent which they will be removed from and readded to when their tab get's selected.
- * They also must have an attribute "tab" containing their tab-id
  * 
  * The selectedTab is the numeric-id of the first selected tab.
  * 
@@ -19,10 +18,10 @@ export class TabHandler{
     // Id of the current tab
     private selectedTab: number;
 
-    // Object with all tabs
+    // Array with all tabs (Element and their tab-id)
     private tabs: [HTMLElement, number][] = [];
 
-    // Tab-button elements
+    // Tab-button elements (Element and their tab-id)
     private buttons: [HTMLElement, number][] = [];
 
     // Wrapper where the tabs will be added to
@@ -40,7 +39,7 @@ export class TabHandler{
         // Registers the buttons
         this.registerButtons(tabButtons);
 
-        // Updates
+        // Updates the ui with the currently selected tab
         this.update();
     }
 

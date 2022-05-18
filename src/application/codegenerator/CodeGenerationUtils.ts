@@ -1,11 +1,12 @@
-import { CppFuncParam } from "../variablesystem/CppFuncDefs.js";
-import { printIf } from "./WorkUtils.js";
+import { CppFuncParam } from "./variablesystem/CppFuncDefs.js";
+import { printIf } from "../utils/WorkUtils.js";
 
 /**
  * All tenary-function below take in two parameter values and returns a string (CppCode) that is the tenary-result of the operation.
  * This return eighter the cpp-code for the operation of one or both parameters are non-static or just the result if they are both static.
  * Also the resulting string assignTrue and assignFalse are supplied using functions because not in all cases are all results required.
  */
+
 //#region Tenary-operations
 
 // Base-tenary-operation function
@@ -53,3 +54,5 @@ export function abs(prmOne: CppFuncParam<number>, prmTwo: CppFuncParam<number>){
         ()=>`${prmTwo.value} - ${prmOne.value}`
     )+")";
 }
+
+//#endregion

@@ -1,5 +1,5 @@
-import { Environment } from "../Environment.js";
-import { C } from "../utils/WorkUtils.js";
+import { Environment } from "../../Environment.js";
+import { C } from "../../utils/WorkUtils.js";
 import { UniqueNameSupplier } from "./UniqueNameSupplier.js";
 import { Variable } from "./Variable.js";
 
@@ -25,15 +25,6 @@ export class VariableSystem {
     public generateGlobalCode() : string{
         return `${C("Global variable-declarations",this.env)}\n${this.globalVars.map(va=>va.declair()).join("\n")}`;
     }
-
-
-
-
-
-   
-
-
-
 
 
 

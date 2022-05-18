@@ -1,17 +1,17 @@
 import { Environment } from "../Environment.js";
-import { VariableSystem } from "../variablesystem/VariableSystem.js";
+import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem.js";
 import { ModuleBase } from "../modules/ModuleBase.js";
 import { printIfElse } from "../utils/WorkUtils.js";
 import { HexColor, Min, OpenObject, PositiveNumber as PositiveNumber, RGBNumber } from "../types/Types.js";
-import { FunctionGenerator } from "../variablesystem/CppFuncGenerator.js";
+import { FunctionGenerator } from "../codegenerator/variablesystem/CppFuncGenerator.js";
 import { ModuleCode } from "../codegenerator/CodeGenerator.js";
-import { FunctionSupplier } from "../variablesystem/CppFuncSupplier.js";
-import { CppByte, CppInt, CppVoid } from "../variablesystem/CppTypes.js";
-import { CppFuncParam, CppFuncParams, CppTypeDefintion } from "../variablesystem/CppFuncDefs.js";
-import { printEquation } from "../utils/EquationHandler.js";
-import { Variable } from "../variablesystem/Variable.js";
+import { FunctionSupplier } from "../codegenerator/variablesystem/CppFuncSupplier.js";
+import { CppByte, CppInt, CppVoid } from "../codegenerator/variablesystem/CppTypes.js";
+import { CppFuncParam, CppFuncParams, CppTypeDefintion } from "../codegenerator/variablesystem/CppFuncDefs.js";
+import { printEquation } from "../utils/EquationUtils.js";
+import { Variable } from "../codegenerator/variablesystem/Variable.js";
 import { Arduino } from "../simulation/Arduino.js";
-import { getCppRGBStringFromHex, getHexFromRGB, RGB } from "../utils/ColorUtils.js";
+import { getHexFromRGB } from "../utils/ColorUtils.js";
 
 export type ColorModuleConfig = {
     // Amount of leds per step
@@ -49,7 +49,6 @@ enum ModDepth{
 }
 
 class ColorModule_ extends ModuleBase<ColorModuleConfig>{
-
 
     // Default configuration
     public readonly DEFAULT_CONFIG: ColorModuleConfig = {
@@ -115,6 +114,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         );
     }
 
+    // Converts the rgb-color to an crgb-string
     private getRGBCode(prms: CppFuncParams<ColorModuleConfig>){
         return `CRGB(${prms.clr_r.value},${prms.clr_g.value},${prms.clr_b.value})`;
     }
@@ -210,6 +210,8 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         }
     }
 
+
+
     public simulateSetup(env: Environment, cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino): void {
         ssot.clr = getHexFromRGB(cfg.clr_r,cfg.clr_g,cfg.clr_b);
     }
@@ -241,6 +243,9 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         // Updates the leds
         arduino.pushLeds(); 
     }
+
+
+
 
     public calculateRuntime(env: Environment, cfg: ColorModuleConfig) : number {
         // Checks if only a single led is given

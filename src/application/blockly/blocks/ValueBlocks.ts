@@ -1,22 +1,21 @@
 import { ConfigBuilder } from "../../ConfigBuilder.js";
 import { Environment } from "../../Environment.js";
-import { TB_COLOR_VALUES } from "../Toolbox.js";
+import { TB_COLOR_VALUES } from "../util/Toolbox.js";
 
 const Blockly = require("blockly");
 
 
 /**
- * This file registers all blocks that are used for the value-supplie of the sle. Eg. Numbers
+ * Registers all blocks that are used for the value-supplie. Eg. Numbers or variables
  */
 
 
- export default function registerValueBlocks(){
-    
+export default function registerValueBlocks(){
     registerNumberBlock();
-
     registerLedAmountBlock("sle_values_ledamount");
 }
 
+//#region BlockRegister
 
 // Math's num block
 function registerNumberBlock(){
@@ -43,3 +42,5 @@ function registerLedAmountBlock(name: string){
         return env.ledAmount;
     });
 }
+
+//#endregion

@@ -1,0 +1,52 @@
+The functionsystem works by letting modules register their configs to be passed to c++ functions if multiple modules have different values for a given config-entry.
+
+Lets say we have a module Test with the following config:
+{
+    ledId: number,
+    color_hue: number
+}
+
+If the module is called multiple times with exactle the same values, the codegenerator wont bother with passing all those values via c++ to the function. Instead if will automatically generate the function with all those values.
+However, if the module-calls have different values for some elements, the code generate will seperate those and pass them via the function-calls.
+
+In practice this means that if our config looks like this:
+{
+    ledId: 2,
+    color_hue: 120
+}
+for all calls of the module, the code will look like this for example:
+
+void test(){
+    led[2] = CHUV(120,0,0);
+}
+
+...
+
+loop(){
+    test();
+    test();
+}
+
+but lets say another call is added with the following config:
+{
+    ledId: 2,
+    color_hue: 130
+}
+then the code would look like this:
+
+void test(int var){
+    led[2] = CHUV(var,0,0);
+}
+
+...
+
+loop(){
+    test(120);
+    test(120);
+    test(130);
+}
+
+This is achieved by no longer generating code based on the config but rather based on parameters (CppFuncParam).
+These still represent the base config values but can operate based on if the value is static (Always the same) or dynamic (Sometimes different).
+
+The CppFuncParam contains a parameter isStatic that directly tells the program if the variable is static or dynamic and a value-object that can eigther be the correct value (if the parameter is static) or a variable for the correct value that can be used instead of the value.

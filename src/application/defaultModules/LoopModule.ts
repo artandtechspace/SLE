@@ -1,5 +1,5 @@
 import { Environment } from "../Environment.js";
-import { VariableSystem } from "../variablesystem/VariableSystem.js";
+import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem.js";
 import { ModuleBase } from "../modules/ModuleBase.js";
 import { printIf as pif } from "../utils/WorkUtils.js";
 import { generateModuleCode, ModuleCode } from "../codegenerator/CodeGenerator.js";
@@ -7,8 +7,8 @@ import { Arduino } from "../simulation/Arduino.js";
 import { getFullRuntime } from "../modules/ModuleUtils.js";
 import { ModBlockExport } from "../ConfigBuilder.js";
 import { Min, OpenObject } from "../types/Types.js";
-import { FunctionGenerator } from "../variablesystem/CppFuncGenerator.js";
-import { FunctionSupplier } from "../variablesystem/CppFuncSupplier.js";
+import { FunctionGenerator } from "../codegenerator/variablesystem/CppFuncGenerator.js";
+import { FunctionSupplier } from "../codegenerator/variablesystem/CppFuncSupplier.js";
 
 export type LoopModuleConfig = {
     submodules: ModBlockExport<any>[],

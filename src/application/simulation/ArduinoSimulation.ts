@@ -1,15 +1,15 @@
 import { StopableCallchain } from "../utils/StopableCallchain.js";
 import { Arduino } from "./Arduino.js";
 import { Environment } from "../Environment.js";
-import { SystemError } from "../errorSystem/Error.js";
+import { SystemError } from "../errorSystem/Errors.js";
 import { getFullRuntime } from "../modules/ModuleUtils.js";
 import { ModBlockExport } from "../ConfigBuilder.js";
-import { Min, PositiveNumber } from "../types/Types.js";
+import { Min } from "../types/Types.js";
 
 export class ArduinoSimulation{
 
     // Contains a list with all led-items from the preview (This exists for performance reasons)
-    // It is also always ensures that if loaded this element has at least one led
+    // It is also always ensured that, if loaded, this element has at least one led
     private leds: HTMLElement[] = [];
 
     // Callchain

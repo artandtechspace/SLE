@@ -4,10 +4,9 @@ import { OpenObject, PositiveNumber } from "../types/Types.js";
 import { ModuleBase } from "./ModuleBase.js";
 
 /**
- * Returns the combined infos of all given modules
+ * Returns the estimated runtime of the given configuration
  * @param env the environment
  * @param mods the modules
- * @returns some informations like the estimated runtime in millis
  */
 export function getFullRuntime(env: Environment, mods: ModBlockExport<any>[]) : number{
     // Calculates the runtime of all modules

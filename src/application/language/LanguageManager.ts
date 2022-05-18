@@ -1,4 +1,4 @@
-import { SystemError } from "../errorSystem/Error.js";
+import { SystemError } from "../errorSystem/Errors.js";
 
 // Regex to match variables inside the static html-page
 const HTML_MATCHER_REGEX = /^[ \t]*\{\{[ \t]*[\w\-\._]+[ \t]*\}\}[ \t]*$/gi;

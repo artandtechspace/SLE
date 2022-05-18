@@ -1,4 +1,4 @@
-import { SystemError } from "../errorSystem/Error.js";
+import { SystemError } from "../errorSystem/Errors.js";
 
 /**
  * Loads an svg from the given path.
@@ -9,7 +9,7 @@ import { SystemError } from "../errorSystem/Error.js";
  * @throws {SystemError} if there is a critical error. Like if it failed to load or the loaded file didn't contain an svg
  * @returns {SVGElement} the handle to the svg-image
  */
- export async function loadSVG(path: string): Promise<SVGElement>{
+export async function loadSVG(path: string): Promise<SVGElement>{
     // Gets the svg-image
     var res = await fetch(path);
     

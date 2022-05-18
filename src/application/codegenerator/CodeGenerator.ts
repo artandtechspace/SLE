@@ -1,29 +1,34 @@
 import { Environment } from "../Environment.js";
 import { ModBlockExport } from "../ConfigBuilder.js";
 import { C, printIf } from "../utils/WorkUtils.js";
-import { VariableSystem } from "../variablesystem/VariableSystem.js";
-import { FunctionSupplier } from "../variablesystem/CppFuncSupplier.js";
-import { FunctionGenerator } from "../variablesystem/CppFuncGenerator.js";
-import { UniqueNameSupplier } from "../variablesystem/UniqueNameSupplier.js";
+import { VariableSystem } from "./variablesystem/VariableSystem.js";
+import { FunctionSupplier } from "./variablesystem/CppFuncSupplier.js";
+import { FunctionGenerator } from "./variablesystem/CppFuncGenerator.js";
+import { UniqueNameSupplier } from "./variablesystem/UniqueNameSupplier.js";
 
 // Regexes to match env-variables and code-insert-points
 const CODE_REGEX = /\$\w+\$/gi;
 
-
+// Returned from any module's code-generator
 export interface ModuleCode {
+    // Code to run once at startup
     // If not returned, unused
     setup?: string
+
+    // Code to run over and over again
     // If not returned, unused
     loop?: string,
+
+    // Is the led-strip dirty after that code is run (Meaning do leds have to be updated)
     // If not returned is false
     isDirty?: boolean
 }
 
 /**
- * Takes in the whole config and an array with modules and their configs and generates their codes from it.
+ * Takes in the whole config and an array with modules and their configs. Then generates the cpp-code from it
  * @param env the environment
  * @param variablesystem the used variable-system
- * @param mods all mods to generate the config for
+ * @param mods all mods with their configs
  * @param beginDirtyState if the isDirty-state is dirty from the beginning
  * 
  * @returns the module-return for all modules. Meaning all setups and loop codes combined.
@@ -73,7 +78,7 @@ export function generateModuleCode(env: Environment, variablesystem: VariableSys
  * @param mods all modules specified with their settings.
  * @throws {Error} if an error occurred
  * 
- * @returns an object that contains the generated code and estimated runtime
+ * @returns the generated code
  */
 export function generateCode(env: Environment, mods: ModBlockExport<any>[]) : string {
 
@@ -90,7 +95,7 @@ export function generateCode(env: Environment, mods: ModBlockExport<any>[]) : st
     // Creates the var-system
     var varSys = new VariableSystem(env, unqSup);
 
-
+    // Will hold all codes (Loop, Setup and function-definitions)
     var definitionCode = C("Start of definition-code",env);
     var setupCode = C("Start of setup-code",env);
     var loopCode = C("Start of loop-code",env);
@@ -134,7 +139,7 @@ export function generateCode(env: Environment, mods: ModBlockExport<any>[]) : st
     if(generatedCode.setup)
         setupCode+=generatedCode.setup;
     
-    // Checks if the generated code is still dirty
+    // Checks if the generated code is still dirty and if so appends a push-operation
     loopCode+=printIf("\nFastLED.show();",generatedCode.isDirty as boolean);
 
     // Generates the final code

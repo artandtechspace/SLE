@@ -1,3 +1,7 @@
+/**
+ * The arduino-class is used to provide direct counterparts for cpp-elements that shall be useable inside the simulations.
+ */
+
 export class Arduino{
 
     // Delay function with an empty default callback

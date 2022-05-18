@@ -1,17 +1,21 @@
-import { Environment } from "../Environment.js";
-import { ModuleBase } from "../modules/ModuleBase.js";
+import { Environment } from "../../Environment.js";
+import { ModuleBase } from "../../modules/ModuleBase.js";
 import { CppFuncSupply } from "./CppFuncDefs.js";
 import { VariableSystem } from "./VariableSystem.js";
 import { turnCppTypeToParameterCode } from "./CppTypes.js";
 
 export class FunctionSupplier{
 
-    private functions;
+    // Contains all registered function with some base informations
+    private functions: CppFuncSupply<any>;
 
     constructor(functions: CppFuncSupply<any>){
         this.functions = functions;
     }
 
+    /**
+     * Generates the cpp-function-code to print above all function calls in the final cpp-code.
+     */
     public generateCppFuncDefinitions(env: Environment, varSys: VariableSystem) : string{
         // Contains the final generated code
         var code = "";
@@ -35,6 +39,9 @@ export class FunctionSupplier{
         return code;
     }
 
+    /**
+     * Takes in the requester, name and it's config and returns the string that is used to call the required and previously registered function
+     */
     public getCppFuncCall<T>(requester: ModuleBase<any>, name: string, cfg: T) : string{
         // Gets the function-key/name
         var key = requester.constructor.name+"_"+name;

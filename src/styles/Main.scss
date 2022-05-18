@@ -29,6 +29,9 @@ body{
     background: #252526;
     overflow-x: hidden;
 
+    &.loadingScreen{
+        overflow: hidden;
+    }
 }
 
 // Whats visible most of the time.

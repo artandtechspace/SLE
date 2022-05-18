@@ -45,10 +45,15 @@
     }
 
     // Will be added once the inital loading is done
-    &.hide{
+    &.disapear{
         transition: 1s;
         opacity: 0;
         visibility: hidden;
+
+    }
+    // Will be added after the disapear-animation has played
+    &.hide{
+        display: none;
     }
 }
 

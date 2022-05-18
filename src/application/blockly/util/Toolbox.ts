@@ -1,4 +1,4 @@
-import { getFromLanguage } from "../language/LanguageManager.js";
+import { getFromLanguage } from "../../language/LanguageManager.js";
 
 /**
  * Toolbox for the blockly workspace

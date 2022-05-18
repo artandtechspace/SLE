@@ -1,4 +1,4 @@
-import { Error, SystemError } from "../errorSystem/Error.js";
+import { Error, SystemError } from "../errorSystem/Errors.js";
 
 /**
  * Element that takes in a function that shall appear to run sync but internally runs async and can be intercepted.

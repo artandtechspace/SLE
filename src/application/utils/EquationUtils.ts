@@ -1,4 +1,4 @@
-import { Variable } from "../variablesystem/Variable";
+import { Variable } from "../codegenerator/variablesystem/Variable";
 
 // Takes in an equation and replaces the variables
 export function printEquation(equation: string, vars: {[key: string]: Variable|number}){

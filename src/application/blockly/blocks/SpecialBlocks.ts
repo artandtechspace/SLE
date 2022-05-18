@@ -1,5 +1,9 @@
 const Blockly = require("blockly");
 
+/**
+ * Registers all special blocks. Like the root block
+ */
+
 export default function registerSpecialBlocks(){
     registerRoot("sle_root");
 }

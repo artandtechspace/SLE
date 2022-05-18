@@ -1,19 +1,18 @@
-// Import
-import { registerBlockly } from "./blockly/BlockRegister.js";
+import { registerBlockly } from "./blockly/BlocklyRegister.js";
 import registerCustomFields from "./blockly/fields/FieldRegistry.js";
 import { generateCode } from "./codegenerator/CodeGenerator.js";
 import { Environment } from "./Environment.js";
-import { Error, SystemError } from "./errorSystem/Error.js";
+import { Error, SystemError } from "./errorSystem/Errors.js";
 import { InAppErrorSystem } from "./errorSystem/InAppErrorSystem.js";
 import { getFullRuntime, getOutOfBoundsModExports } from "./modules/ModuleUtils.js";
-import { PopupSystem } from "./popupSystem/PopupSystem.js";
+import { PopupSystem } from "./ui/popupSystem/PopupSystem.js";
 import { ArduinoSimulation } from "./simulation/ArduinoSimulation.js";
 import { ConfigBuilder, ModBlockExport } from "./ConfigBuilder.js";
 import { TAB_ANALYTICS, TAB_ANIMATION, TAB_CODE } from "./ui/Tabs.js";
 import { setupUi } from "./ui/UiSetup.js";
 import { TabHandler } from "./ui/utils/TabHandler.js";
-import { BlockWarning } from "./errorSystem/Warning.js";
-import { didWorkspaceChange, setWorkspaceInvalid } from "./blockly/WorkspaceChangeDetector.js";
+import { BlockWarning } from "./errorSystem/Warnings.js";
+import { didWorkspaceChange, setWorkspaceInvalid } from "./blockly/util/WorkspaceChangeDetector.js";
 import { getFromLanguage } from "./language/LanguageManager.js";
 
 // Global environment
@@ -211,7 +210,7 @@ export default async function onAppInitalize(){
 	registerCustomFields();
 
 	// Initalizes all blockly-stuff
-	workspace = registerBlockly();
+	workspace = registerBlockly(cfg.blocklyArea);
 	
 	// Registers the change-handler for blockly
 	(workspace as any).addChangeListener(onBlocklyChange);

@@ -1,11 +1,11 @@
 import { Environment } from "../Environment.js";
-import { VariableSystem } from "../variablesystem/VariableSystem.js";
+import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem.js";
 import { Arduino } from "../simulation/Arduino.js";
 import { Min, OpenObject, PositiveNumber as PositiveNumber, RGBNumber } from "../types/Types.js";
 import { ModuleAsFuncBase } from "../modules/ModuleAsFuncBase.js";
-import { CppTypeDefintion, CppFuncParams } from "../variablesystem/CppFuncDefs.js";
-import { CppFloat, CppInt } from "../variablesystem/CppTypes.js";
-import { printEquation } from "../utils/EquationHandler.js";
+import { CppTypeDefintion, CppFuncParams } from "../codegenerator/variablesystem/CppFuncDefs.js";
+import { CppFloat, CppInt } from "../codegenerator/variablesystem/CppTypes.js";
+import { printEquation } from "../utils/EquationUtils.js";
 
 export type RainbowModuleConfig = {
     value: RGBNumber,

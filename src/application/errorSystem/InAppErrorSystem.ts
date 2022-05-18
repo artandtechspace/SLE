@@ -1,9 +1,10 @@
 import { S } from "../ui/utils/UiUtils.js";
-import { BlockError, Error } from "./Error.js";
-import { BlockWarning, Warning } from "./Warning.js";
+import { BlockError, Error } from "./Errors.js";
+import { BlockWarning, Warning } from "./Warnings.js";
 import { ExceptionBase } from "./ExceptionBase.js";
+
 /*
- * Minor-error-handling system for inapp errors (After inital initalisation) 
+ * Minor-error-handling system for inapp errors (After inital initalisation/setup)
  */
 
 export class InAppErrorSystem{

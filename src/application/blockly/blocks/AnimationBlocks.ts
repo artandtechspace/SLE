@@ -2,24 +2,25 @@ import { ConfigBuilder } from "../../ConfigBuilder.js";
 import { GradientModule, GradientModuleConfig } from "../../defaultModules/GradientModule.js";
 import { RainbowModule, RainbowModuleConfig } from "../../defaultModules/RainbowModule.js";
 import { Environment } from "../../Environment.js";
-import { Min, PositiveNumber, Range } from "../../types/Types.js";
-import { HSV } from "../../utils/ColorUtils.js";
-import { getNumberFromCode, getNumberFromCodeAsMin, getNumberFromCodeAsPercentage } from "../BlocklyUtils.js";
+import { HSV, PercentageNumber, PositiveNumber, Range } from "../../types/Types.js";
+import { getNumberFromCode, getNumberFromCodeAsMin } from "../util/BlocklyBlockUtils.js";
 import FieldBrightness from "../fields/FieldBrightness.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
-import { TB_COLOR_ANIMATIONS } from "../Toolbox.js";
+import { TB_COLOR_ANIMATIONS } from "../util/Toolbox.js";
 
 const Blockly = require("blockly");
 
 
 /**
- * This file registers all blocks that are used for the value-supplie of the sle. Eg. Numbers
+ * Registers all blockly-blocks that are used for animations
  */
 
 export default function registerAnimationBlocks(){
     registerGradientBlock('sle_animation_gradient');
     registerRainbowBlock('sle_animation_rainbow');
 }
+
+//#region BlockRegister
 
 // Rainbow-block
 function registerRainbowBlock(name: string){
@@ -93,7 +94,7 @@ function registerGradientBlock(name: string){
               .appendField(") from")
               .appendField(new FieldCustomColor(), "colorFrom")
               .appendField("to")
-              .appendField(new FieldCustomColor({ h: 0.1, s: 1, v: 1 }), "colorTo")
+              .appendField(new FieldCustomColor({ h: 0.1 as PercentageNumber, s: 1 as PercentageNumber, v: 1 as PercentageNumber }), "colorTo")
               .appendField("with");
           this.appendValueInput("start")
               .setCheck("Number")
@@ -144,3 +145,5 @@ function registerGradientBlock(name: string){
         }
     });
 }
+
+//#endregion

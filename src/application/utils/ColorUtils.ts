@@ -1,18 +1,5 @@
-import { HexColor, OpenObject, RGBNumber } from "../types/Types";
+import { HexColor, HSV, OpenObject, RGB, RGBNumber } from "../types/Types";
 
-// RGB-object
-export interface RGB{
-    r: RGBNumber, // 0 - 255
-    g: RGBNumber, // 0 - 255
-    b: RGBNumber  // 0 - 255
-}
-
-// HSV-object
-export interface HSV{
-    h: number, // 0.00 - 1.00
-    s: number, // 0.00 - 1.00
-    v: number  // 0.00 - 1.00
-}
 
 // Contains all predefined colors of the fastled library.
 const PREDEFINED_COLORS = {

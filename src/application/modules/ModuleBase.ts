@@ -2,9 +2,9 @@ import { ModuleCode } from "../codegenerator/CodeGenerator.js";
 import { Environment } from "../Environment.js";
 import { Arduino } from "../simulation/Arduino.js";
 import { OpenObject, PositiveNumber } from "../types/Types.js";
-import { FunctionGenerator } from "../variablesystem/CppFuncGenerator.js";
-import { FunctionSupplier } from "../variablesystem/CppFuncSupplier.js";
-import { VariableSystem } from "../variablesystem/VariableSystem.js";
+import { FunctionGenerator } from "../codegenerator/variablesystem/CppFuncGenerator.js";
+import { FunctionSupplier } from "../codegenerator/variablesystem/CppFuncSupplier.js";
+import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem.js";
 
 /**
  * The module-base is the element that takes in a configuration file and generate the code based on the provided information and environment.
@@ -14,10 +14,20 @@ export abstract class ModuleBase<Config extends OpenObject>{
     
     //#region Code-generation
 
+    /**
+     * Here will the modules-code be generated. This takes the user-defined environment @param env, a variable-system @param varSys to requests it's variables,
+     * the defined config @param config, a function-supply that can be used to get call's for function that got registered inside the
+     * registerFunction-method and finally the isDirty-Flag @param isDirty that tells th e generator if there are still some led's that didn't get pushed to the stripe.
+     * 
+     * This @returns {ModuleCode} which contains all opationally loop-code, setup-code and again the is-dirty flag.
+     */
     public generateCode(env: Environment, varSys: VariableSystem, config: Config, funcSup: FunctionSupplier, isDirty: boolean): ModuleCode{
         return {}
     }
 
+    /**
+     * This method is used to register cpp-function that shall be called by the module
+     */
     public registerFunction(env: Environment, config: Config, funcGen: FunctionGenerator){}
 
 

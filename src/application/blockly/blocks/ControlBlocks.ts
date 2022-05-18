@@ -3,22 +3,24 @@ import { LoopModule, LoopModuleConfig } from "../../defaultModules/LoopModule.js
 import { Environment } from "../../Environment.js";
 import { ModBlockExport, ConfigBuilder } from "../../ConfigBuilder.js";
 import { Min, PositiveNumber } from "../../types/Types.js";
-import { getNumberFromCodeAsMin } from "../BlocklyUtils.js";
+import { getNumberFromCodeAsMin } from "../util/BlocklyBlockUtils.js";
 import { CommentModule, CommentModuleConfig } from "../../defaultModules/CommentModule.js";
-import { TB_COLOR_CONTROL } from "../Toolbox.js";
+import { TB_COLOR_CONTROL } from "../util/Toolbox.js";
+
 const Blockly = require("blockly");
 
 /**
- * This file registers all blocks that are used for the general logic of the sle
+ * Registers all blocks that are used for general logic like delay or repeat functions
  */
 
 
 export default function registerControlBlocks(){
-
     registerLoop("sle_control_loop");
     registerDelay("sle_control_delay");
     registerComment("sle_control_comment");
 }
+
+//#region BlockRegister
 
 function registerComment(name: string){
     Blockly.Blocks[name] = {
@@ -118,3 +120,5 @@ function registerDelay(name: string){
     });
 }
 
+
+//#endregion

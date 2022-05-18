@@ -2,8 +2,8 @@
  * Contains all definitions that are required for the function-system to work
  */
 
-import { Environment } from "../Environment.js";
-import { ModuleBase } from "../modules/ModuleBase.js";
+import { Environment } from "../../Environment.js";
+import { ModuleBase } from "../../modules/ModuleBase.js";
 import { Variable } from "./Variable.js";
 import { VariableSystem } from "./VariableSystem.js";
 
@@ -11,7 +11,7 @@ import { VariableSystem } from "./VariableSystem.js";
 // Strings that are cpp-datatypes (float, int, string, etc.)
 export type CppType = string & { __brand: "funcParam" };
 
-// Strings that are cpp-returnable-datatypes (float, int, void, etc.)
+// Strings that are cpp-function-returnable-datatypes (float, int, void, etc.)
 export type CppReturnType = CppType;
 
 
@@ -35,24 +35,21 @@ export type CppReturnType = CppType;
 export type CppTypeDefintion<X> = { [key in keyof X]: CppType }
 
 
-/**
- * If every cpp-func-call of the given function would have the same parameter, it can be removed and just directly be appended into the function.
- * This is what this type is about.
- * 
- * If the "isStatic" value is true, every call of the function has the same value (Which in that case would be inside the value-variable of th type).
- * If it's false, a variable is stored in it's place instead an can be called to get the value for the current function-call. 
- */
+// Cpp-function-parameter for the code-generator that represents a dynamic config value
 export type CppFuncParam<T> = {
     isStatic: boolean;
     value: Variable | T;
 }
 
-
+/**
+ * A collection of CppFuncParams for every type of the given config.
+ */
 export type CppFuncParams<T>= {[key in keyof T]: CppFuncParam<T[key]>};
 
-
+// Function to generate the cpp-function code with a given set of cpp-parameters
 export type CppFuncGeneratorFunction<T> = (env: Environment, varSys: VariableSystem, funcParams: CppFuncParams<T>) => string;
 
+// Condenced information for the function-supplyer
 export interface CppFuncSupply<T>{[key: string]: {
     header: string,
     functionParameters: {[key: string]: CppFuncParam<any>},

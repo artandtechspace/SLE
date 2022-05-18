@@ -1,18 +1,16 @@
 import { ColorModule, ColorModuleConfig } from "../../defaultModules/ColorModule.js";
 import { Environment } from "../../Environment.js";
-import { BlockError } from "../../errorSystem/Error.js";
+import { BlockError } from "../../errorSystem/Errors.js";
 import { ConfigBuilder } from "../../ConfigBuilder.js";
-import { HexColor, Min, PositiveNumber } from "../../types/Types.js";
-import { getHexFromCode, getNumberFromCodeAsMin, getRGBFromCode } from "../BlocklyUtils.js";
+import { Min, PositiveNumber, RGB } from "../../types/Types.js";
+import { getNumberFromCodeAsMin, getRGBFromCode } from "../util/BlocklyBlockUtils.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
-import { TB_COLOR_COLOR } from "../Toolbox.js";
-import FieldBrightness from "../fields/FieldBrightness.js";
-import { RGB } from "../../utils/ColorUtils.js";
+import { TB_COLOR_COLOR } from "../util/Toolbox.js";
 
 const Blockly = require("blockly");
 
 /**
- * This file registers all blocks that are using the color-module. Eg. generate configs for it
+ * Registers all blocks that are using the color-module
  */
 
 
@@ -22,7 +20,7 @@ export default function registerColorBlocks(){
     registerStepsColor('sle_steps_color');
 }
 
-
+//#region BlockRegister
 
 // General color module with spaces between leds
 function registerStepsColor(name: string){
@@ -170,3 +168,5 @@ function registerSingleLed(name: string){
         }
     });
 }
+
+//#endregion

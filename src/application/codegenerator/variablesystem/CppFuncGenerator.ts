@@ -1,4 +1,4 @@
-import { ModuleBase } from "../modules/ModuleBase.js";
+import { ModuleBase } from "../../modules/ModuleBase.js";
 import { CppFuncRegister, CppReturnType, CppTypeDefintion, CppFuncGeneratorFunction, CppFuncSupply, CppFuncParams } from "./CppFuncDefs.js";
 import { FunctionSupplier } from "./CppFuncSupplier.js";
 import { UniqueNameSupplier } from "./UniqueNameSupplier.js";
@@ -6,9 +6,19 @@ import { VariableSystem } from "./VariableSystem.js";
 
 export class FunctionGenerator{
 
+    // Contains all functions that got registered
     private registeredFunctions: {[key:string]: CppFuncRegister<any>} = {};
     
 
+    /**
+     * Registers a new cpp-function that will be generated and inserted into the final code
+     * @param requester the module that wants to register the function
+     * @param name the name of the function. Make sure that it's a valid cpp-function name. Otherwise the cpp compiler might be unhappy.
+     * @param returnType Returntype of the function (Cpp-Return-Type) eg. CppVoid, CppInt, etc
+     * @param typeDef the cpp-types that correspond to the module's config
+     * @param cfg the module-config that should be passable through cpp-parameters
+     * @param onGenerate the function-callback that would finally generate the code based on it's given cpp-function-parameters
+     */
     public registerCppFunc<T>(requester: ModuleBase<any>, name: string, returnType: CppReturnType, typeDef: CppTypeDefintion<T>, cfg: T, onGenerate: CppFuncGeneratorFunction<T>){
         // Gets the unique-key
         var key: string = requester.constructor.name+"_"+name;
@@ -63,6 +73,9 @@ export class FunctionGenerator{
     }
 
 
+    /**
+     * Converts the Function-generator where functions where registered into a function-supplier where the module can get their cpp-function-calls to call their registered functions.
+     */
     public toSupplier(varSys: VariableSystem, unqSup: UniqueNameSupplier) : FunctionSupplier{
 
         var fin: CppFuncSupply<any> = {};

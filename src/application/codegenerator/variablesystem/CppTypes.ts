@@ -1,4 +1,4 @@
-import { SystemError } from "../errorSystem/Error.js";
+import { SystemError } from "../../errorSystem/Errors.js";
 import { CppReturnType, CppType } from "./CppFuncDefs.js";
 
 // Defined cpp-types and cpp-return-types that are already implemented to be handled

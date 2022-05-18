@@ -1,11 +1,17 @@
 import { Environment } from "../../Environment.js";
 import { getFromLanguage } from "../../language/LanguageManager.js";
-import { PopupSystem } from "../../popupSystem/PopupSystem.js";
+import { PopupSystem } from "../popupSystem/PopupSystem.js";
 import { ArduinoSimulation } from "../../simulation/ArduinoSimulation.js";
 import { Min, PositiveNumber } from "../../types/Types.js";
 import { create as C } from "../../utils/HTMLBuilder.js";
 import { loadSVG } from "../../utils/SVGUtil.js";
 import { S } from "./UiUtils.js";
+
+
+/**
+ * Responsible for integrating the environment-objects into the ui (Loading and Storing)
+ */
+
 
 // Path to the preview-files
 export const PREVIEWS_FILE_PATH = "resources/arduinoPreviews/";

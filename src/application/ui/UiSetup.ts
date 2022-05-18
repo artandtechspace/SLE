@@ -1,8 +1,8 @@
 import { Environment } from "../Environment.js";
-import { Error } from "../errorSystem/Error.js";
+import { Error } from "../errorSystem/Errors.js";
 import { InAppErrorSystem } from "../errorSystem/InAppErrorSystem.js";
 import { getFromLanguage, setupLanguageManager } from "../language/LanguageManager.js";
-import { PopupSystem } from "../popupSystem/PopupSystem.js";
+import { PopupSystem } from "./popupSystem/PopupSystem.js";
 import { PRESET_SOURCECODE } from "../Preset.js";
 import { ArduinoSimulation } from "../simulation/ArduinoSimulation.js";
 import { Min, PositiveNumber } from "../types/Types.js";
@@ -37,6 +37,7 @@ export async function setupUi(onEnvChange: ()=>void){
         // Gets specific elements
         var codeArea = setupCodeArea();
         var runtimeDisplay = S("#runtime",S("#analyticsTab")) as HTMLSpanElement;
+        var blocklyArea = S("#blocklyDiv") as HTMLDivElement;
 
         var popupsystem = setupPopupsystem();
         var tabhandler = registerSidebarTabs();
@@ -52,6 +53,8 @@ export async function setupUi(onEnvChange: ()=>void){
         // Cleans all hidden popup-content
         popupsystem.closePopup();
 
+
+
         // Closes the loading-screen
         removeLoadingScreen();
     
@@ -62,7 +65,8 @@ export async function setupUi(onEnvChange: ()=>void){
             environment: env,
             errorsystem,
             codeArea,
-            runtimeDisplay
+            runtimeDisplay,
+            blocklyArea
         };
     }catch(error){
         displayLoadingError(error as Error);
@@ -70,6 +74,10 @@ export async function setupUi(onEnvChange: ()=>void){
     }
 
 }
+
+
+//#region Setup-functions
+
 // Setups the code-area and returns it
 function setupCodeArea() : HTMLTextAreaElement{
     // Gets the area
@@ -110,8 +118,17 @@ function displayLoadingError(error: any){
 
 // Removes the ui-loading screen
 function removeLoadingScreen(){
-    // Removes the loading-screen
-    S("#loadingScreen").classList.add("hide");
+    // Removes the loading-class from the body
+    document.body.classList.remove("loadingScreen");
+
+    // Gets the loading-screen
+    var ls = S("#loadingScreen");
+    
+    // Lets the loading-screen slowly disapear
+    ls.classList.add("disapear");
+
+    // Fully hides the loading-screen after the disapear-animation is over
+    setTimeout(()=>ls.classList.add("hide"), 2000);
 }
 
 // Setups the arduino-simulation and inserts it into the environment
@@ -229,3 +246,5 @@ function registerSidebarIconChanger(){
     // Registers the listener
     res.observe(S("#texts"));
 }
+
+//#endregion
