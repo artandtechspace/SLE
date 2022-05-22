@@ -50,3 +50,12 @@ So if you want to set it up on windows, go into the `package.json` file and chan
 This must be done before starting the setup.
 
 Until we eventually add webpack or some other management system for this, consider it a temporary fix.
+
+# How the software runs
+The point of entry for the electron app is `src/electron/index.js` which, using electron, creates a window that loads the webpage `src/index.html` and integration script `src/resources/script.js` for the main application.
+
+Said main application is written in typescript and lives under `src/application/` with `Appentry.ts` and the function `onAppInitalize` being the main point of entry once run with electron.
+
+Styling and resources live inside the `src/styles` and `src/resources` folders and will also later be "compiled" into the build.
+
+Using the `compileElectron` or just the `start` script with npm, a separate folder called `build` will be created that contains all those compiled files. When interested on the exact process, checkout the `scripts/` files with similar names to it's npm-script counterparts.
