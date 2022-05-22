@@ -32,6 +32,7 @@ In it's current state the project uses the following dependencies:
 |[Sass/Scss](https://sass-lang.com/)|Just because|
 
 ## How to setup
+
 Clone the repository and run
 ```bash
 npm i
@@ -41,3 +42,11 @@ to install all dependencies. Then run
 npm start
 ```
 to "compile" and run the application using electron.
+
+### Node to windows users
+The tool is mainly developed on linux.
+So if you want to set it up on windows, go into the `package.json` file and change the lines with the `runElectron`- and `compileElectron`-scripts to not call `<file>.sh` but instead `<file>.cmd`.
+
+This must be done before starting the setup.
+
+Until we eventually add webpack or some other management system for this, consider it a temporary fix.
