@@ -1,4 +1,4 @@
-import { HexColor, HSV, OpenObject, RGB, RGBNumber } from "../types/Types";
+import { HexColor, HSV, OpenObject, PercentageNumber, RGB, RGBNumber } from "../types/Types";
 
 
 // Contains all predefined colors of the fastled library.
@@ -280,4 +280,16 @@ export function getRGBFromHex(hex: HexColor){
         g: (hexNm >> 8) & 0xFF,
         b: (hexNm >> 16) & 0xFF
     }
+}
+
+/**
+ * Takes in a hue-percentage value from and one to value.
+ * Based on their positions, a function is returned that calculates a hue values based on a given percentage value of the progress of the animation.
+ *
+ * Basically this takes in start and end and returns a hue-calulator that calculates based on a percentage value.
+ */
+export function getHUECalulationFunction(from: PercentageNumber, to: PercentageNumber){
+    return from > to ?
+        (perc:PercentageNumber)=>((from+(to+1-from)*perc) % 1) :
+        (perc:PercentageNumber)=>(to-from)*perc+from;
 }

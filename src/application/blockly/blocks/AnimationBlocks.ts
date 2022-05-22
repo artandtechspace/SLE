@@ -1,12 +1,13 @@
 import { ConfigBuilder } from "../../ConfigBuilder.js";
-import { GradientModule, GradientModuleConfig } from "../../defaultModules/GradientModule.js";
-import { RainbowModule, RainbowModuleConfig } from "../../defaultModules/RainbowModule.js";
+import { GradientModule, GradientModuleConfig } from "../../defaultModules/animations/GradientModule.js";
+import { RainbowModule, RainbowModuleConfig } from "../../defaultModules/animations/RainbowModule.js";
 import { Environment } from "../../Environment.js";
-import { HSV, PercentageNumber, PositiveNumber, Range } from "../../types/Types.js";
+import { HSV, Min, PercentageNumber, PositiveNumber, Range } from "../../types/Types.js";
 import { getNumberFromCode, getNumberFromCodeAsMin } from "../util/BlocklyBlockUtils.js";
 import FieldBrightness from "../fields/FieldBrightness.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
 import { TB_COLOR_ANIMATIONS } from "../util/Toolbox.js";
+import { FadeModule, FadeModuleConfig } from "../../defaultModules/animations/FadeModule.js";
 
 const Blockly = require("blockly");
 
@@ -18,9 +19,71 @@ const Blockly = require("blockly");
 export default function registerAnimationBlocks(){
     registerGradientBlock('sle_animation_gradient');
     registerRainbowBlock('sle_animation_rainbow');
+    registerFadeBlock('sle_animation_fade');
 }
 
 //#region BlockRegister
+
+function registerFadeBlock(name: string){
+    Blockly.Blocks[name] = {
+        init: function() {
+            this.appendValueInput("anmLen")
+                .setCheck("Number")
+                .appendField("Fade");
+            this.appendValueInput("ledLength")
+                .setCheck("Number")
+                .appendField("ms from")
+                .appendField(new FieldCustomColor({h: .6 as PercentageNumber, s: .4 as PercentageNumber, v: 1 as PercentageNumber}), "clrFrom")
+                .appendField("to")
+                .appendField(new FieldCustomColor({h: .75 as PercentageNumber, s: .4 as PercentageNumber, v: 1 as PercentageNumber}), "clrTo")
+                .appendField("with");
+            this.appendValueInput("ledFrom")
+                .setCheck("Number")
+                .appendField("leds, starting from");
+            this.appendValueInput("fadeLen")
+                .setCheck("Number")
+                .appendField(". Fadelength is");
+            this.appendValueInput("ledOffset")
+                .setCheck("Number")
+                .appendField("with an offset of");
+            this.appendDummyInput()
+                .appendField("ms per led.");
+            this.setInputsInline(true);
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(TB_COLOR_ANIMATIONS);
+        }
+      };
+
+      ConfigBuilder.registerModuleBlock<FadeModuleConfig>(name, function(block:any, env: Environment) { 
+        var from: HSV = block.getFieldValue('clrFrom');
+        var to: HSV = block.getFieldValue('clrTo');
+        var ledfrom : PositiveNumber = getNumberFromCodeAsMin(block,"ledFrom", 0, env);
+        var ledlength : Min<1> = getNumberFromCodeAsMin(block,'ledLength',1,env);
+        var playlen : PositiveNumber = getNumberFromCodeAsMin(block,"fadeLen", 0, env);
+        var ledoffset : PositiveNumber = getNumberFromCodeAsMin(block,"ledOffset", 0, env);
+        var animLen : PositiveNumber = getNumberFromCodeAsMin(block,"anmLen", 0, env);
+    
+        return {
+            module: FadeModule,
+            config: {
+                ...FadeModule.DEFAULT_CONFIG,
+                color_frm_h: from.h,
+                color_frm_s: from.s,
+                color_frm_v: from.v,
+                color_to_h: to.h,
+                color_to_s: to.s,
+                color_to_v: to.v,
+                ledFrom: ledfrom,
+                ledLength: ledlength,
+                offsetPerLedInMs: ledoffset,
+                playLengthInMs: animLen,
+                repeatLengthInMs: playlen
+            },
+            block
+        }
+    });
+}
 
 // Rainbow-block
 function registerRainbowBlock(name: string){
@@ -64,10 +127,11 @@ function registerRainbowBlock(name: string){
         return {
             module: RainbowModule,
             config: {
+                ...RainbowModule.DEFAULT_CONFIG,
                 ledFrom: from,
                 ledLength: length,
                 offsetPerLedInMs: offsetPerLed,
-                playLength: playLenght,
+                playLengthInMs: playLenght,
                 repeatLengthInMs: repeatLength,
                 value: brightness * 255 as Range<0,255>,
             },

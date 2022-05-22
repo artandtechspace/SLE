@@ -1,24 +1,25 @@
-import { Environment } from "../Environment.js";
-import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem.js";
-import { Arduino } from "../simulation/Arduino.js";
-import { OpenObject, PositiveNumber as PositiveNumber } from "../types/Types.js";
-import { printIf, printIfElse } from "../utils/WorkUtils.js";
-import { Variable } from "../codegenerator/variablesystem/Variable.js";
-import { ModuleAsFuncBase } from "../modules/ModuleAsFuncBase.js";
-import { CppTypeDefintion, CppFuncParams, CppFuncParam } from "../codegenerator/variablesystem/CppFuncDefs.js";
-import { CppBool, CppFloat, CppInt } from "../codegenerator/variablesystem/CppTypes.js";
-import { tenaryBoolsEqual, tenaryLargerThan } from "../codegenerator/CodeGenerationUtils.js";
-import { printEquation } from "../utils/EquationUtils.js";
+import { Environment } from "../../Environment.js";
+import { VariableSystem } from "../../codegenerator/variablesystem/VariableSystem.js";
+import { Arduino } from "../../simulation/Arduino.js";
+import { OpenObject, PercentageNumber, PositiveNumber as PositiveNumber } from "../../types/Types.js";
+import { printIf, printIfElse } from "../../utils/WorkUtils.js";
+import { ModuleAsFuncBase } from "../../modules/ModuleAsFuncBase.js";
+import { CppTypeDefintion, CppFuncParams } from "../../codegenerator/variablesystem/CppFuncDefs.js";
+import { CppBool, CppFloat, CppInt } from "../../codegenerator/variablesystem/CppTypes.js";
+import { tenaryBoolsEqual } from "../../codegenerator/CodeGenerationUtils.js";
+import { printEquation } from "../../utils/EquationUtils.js";
+import { getHUECalulationFunction } from "../../utils/ColorUtils.js";
+import { generateHUECalculation, generateLinearScalingEquation as genLinScaleEQ } from "../../codegenerator/CommonCppCode.js";
 
 export type GradientModuleConfig = {    
     // The colors to fade between
-    color_frm_h: number,
-    color_frm_s: number,
-    color_frm_v: number,
+    color_frm_h: PercentageNumber,
+    color_frm_s: PercentageNumber,
+    color_frm_v: PercentageNumber,
 
-    color_to_h: number,
-    color_to_s: number,
-    color_to_v: number
+    color_to_h: PercentageNumber,
+    color_to_s: PercentageNumber,
+    color_to_v: PercentageNumber
 
     // Here the gradient starts
     ledFrom: PositiveNumber,
@@ -38,13 +39,13 @@ class GradientModule_ extends ModuleAsFuncBase<GradientModuleConfig> {
 
     // Default configuration
     public readonly DEFAULT_CONFIG: GradientModuleConfig = {
-        color_frm_h: 0,
-        color_frm_s: 1,
-        color_frm_v: 1,
+        color_frm_h: 0 as PercentageNumber,
+        color_frm_s: 1 as PercentageNumber,
+        color_frm_v: 1 as PercentageNumber,
 
-        color_to_h: 1,
-        color_to_s: 1,
-        color_to_v: 1,
+        color_to_h: 1 as PercentageNumber,
+        color_to_s: 1 as PercentageNumber,
+        color_to_v: 1 as PercentageNumber,
 
         ledFrom: 0 as PositiveNumber,
         ledLength: 5 as PositiveNumber,
@@ -56,35 +57,6 @@ class GradientModule_ extends ModuleAsFuncBase<GradientModuleConfig> {
     constructor(){
         super("Gradient")
     }
-
-
-    // Returns the calculation for the positive-hue value
-    private getPositiveHueCalc(perc: Variable, prms: CppFuncParams<GradientModuleConfig>){
-        // ((cfg.color_frm_h + (cfg.color_to_h + 1 - cfg.color_frm_h) * perc) * 255) % 255
-        return printEquation(
-            "(int)(255 * ( $clrFrm + ($clrTo + 1 - $clrFrm) * $perc)) % 255",
-            {
-                "clrFrm": prms.color_frm_h.value,
-                "clrTo": prms.color_to_h.value,
-                "perc": perc
-            }
-        );
-    }
-
-    // Returns the calculation for the negative-hue value
-    private getNegativeHueCalc(perc: Variable, prms: CppFuncParams<GradientModuleConfig>){
-        // ((cfg.color_to_h - cfg.color_frm_h) * perc + cfg.color_frm_h) * 255
-        return printEquation(
-            "255 * ($clrFrm + $perc * ($clrTo - $clrFrm))",
-            {
-                "clrFrm": prms.color_frm_h.value,
-                "clrTo": prms.color_to_h.value,
-                "perc": perc
-            }
-        );
-    }
-
-
 
     public generateFunctionCode(env: Environment, varSys: VariableSystem, prms: CppFuncParams<GradientModuleConfig>): string {
         // Requests the led variable
@@ -103,26 +75,8 @@ class GradientModule_ extends ModuleAsFuncBase<GradientModuleConfig> {
             "length": prms.ledLength.value
         }));
 
-        // Gets the calculator-string for the hue-value
-        var hueCalc: string = tenaryLargerThan(prms.color_frm_h,prms.color_to_h,
-            ()=>this.getPositiveHueCalc(vPerc,prms),
-            ()=>this.getNegativeHueCalc(vPerc,prms)
-        ) as string;
-
-
-
-        // Value and Saturation calulation
-        var valSatCalc = "255 * ($from + $perc * ($to - $from))";
-        var satCalc: string = printEquation(valSatCalc,{
-            "perc": vPerc,
-            "from": prms.color_frm_s.value,
-            "to": prms.color_to_s.value
-        });
-        var valCalc: string = printEquation(valSatCalc,{
-            "perc": vPerc,
-            "from": prms.color_frm_v.value,
-            "to": prms.color_to_v.value
-        });
+        // Generates the hue equation
+        var hueCalc = generateHUECalculation(vPerc,prms.color_frm_h,prms.color_to_h);
 
         // Gets the index of the next led
         // cfg.ledFrom + (cfg.directionReversed ? (cfg.ledLength-led-1) : led)
@@ -143,8 +97,8 @@ class GradientModule_ extends ModuleAsFuncBase<GradientModuleConfig> {
 
             leds[${idxCalc}] = CHSV(
                 ${hueCalc},
-                ${satCalc},
-                ${valCalc}
+                ${genLinScaleEQ(vPerc,prms.color_frm_s,prms.color_to_s, 255)},
+                ${genLinScaleEQ(vPerc,prms.color_frm_v,prms.color_to_v, 255)}
             );
 
             ${printIfElse(
@@ -190,11 +144,8 @@ class GradientModule_ extends ModuleAsFuncBase<GradientModuleConfig> {
 
 
     public simulateSetup(env: Environment, cfg: GradientModuleConfig, ssot: OpenObject, arduino: Arduino): void {
-        // Sets the hue-calculation function based on if the the color from is before or after the end-color
-        ssot.hueFunc =
-            cfg.color_frm_h > cfg.color_to_h ?
-            (perc:number)=>((cfg.color_frm_h+(cfg.color_to_h+1-cfg.color_frm_h)*perc) % 1) :
-            (perc:number)=>(cfg.color_to_h-cfg.color_frm_h)*perc+cfg.color_frm_h;
+        // Gets the hue-calculation function
+        ssot.hueFunc = getHUECalulationFunction(cfg.color_frm_h, cfg.color_to_h);
     }
 
     public async simulateLoop(env : Environment, cfg: GradientModuleConfig, ssot: OpenObject, arduino: Arduino){
@@ -231,7 +182,7 @@ class GradientModule_ extends ModuleAsFuncBase<GradientModuleConfig> {
 
     
     public calculateMaxAccessedLed(env: Environment, cfg: GradientModuleConfig): PositiveNumber|void {
-        return cfg.ledFrom+(cfg.ledLength-1) as PositiveNumber;
+        return cfg.ledFrom+cfg.ledLength-1 as PositiveNumber;
     }
 
     public calculateRuntime(env: Environment, config: GradientModuleConfig): number {

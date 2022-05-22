@@ -1,13 +1,14 @@
-import { Environment } from "../Environment.js";
-import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem.js";
-import { Arduino } from "../simulation/Arduino.js";
-import { Min, OpenObject, PositiveNumber as PositiveNumber, RGBNumber } from "../types/Types.js";
-import { ModuleAsFuncBase } from "../modules/ModuleAsFuncBase.js";
-import { CppTypeDefintion, CppFuncParams } from "../codegenerator/variablesystem/CppFuncDefs.js";
-import { CppFloat, CppInt } from "../codegenerator/variablesystem/CppTypes.js";
-import { printEquation } from "../utils/EquationUtils.js";
+import { Environment } from "../../Environment.js";
+import { VariableSystem } from "../../codegenerator/variablesystem/VariableSystem.js";
+import { Arduino } from "../../simulation/Arduino.js";
+import { Min, OpenObject, PositiveNumber as PositiveNumber, RGBNumber } from "../../types/Types.js";
+import { ModuleAsFuncBase } from "../../modules/ModuleAsFuncBase.js";
+import { CppTypeDefintion, CppFuncParams } from "../../codegenerator/variablesystem/CppFuncDefs.js";
+import { CppFloat, CppInt } from "../../codegenerator/variablesystem/CppTypes.js";
+import { printEquation } from "../../utils/EquationUtils.js";
 
 export type RainbowModuleConfig = {
+    // HSV-value part for the whole rainbow
     value: RGBNumber,
 
     // Here the Rainbow starts
@@ -15,14 +16,17 @@ export type RainbowModuleConfig = {
     // How long the Rainbow is
     ledLength: Min<1>,
 
-    // If the Rainbow is spread out over the x axis
+    // If the Rainbow is spread out over the x axis (in ms). This can also be a negative number to reverse the direction
     offsetPerLedInMs: number,
 
-    // How many ms it takes until the rainbow is finished
+    // How many ms it takes until the rainbow is finished (in ms)
     repeatLengthInMs: Min<500>,
 
-    // How long the animation should play
-    playLength: PositiveNumber
+    // How long the animation should play (in ms)
+    playLengthInMs: PositiveNumber,
+
+    // How many ms delay are between updates.
+    updateRateInMs: PositiveNumber
 };
 
 class RainbowModule_ extends ModuleAsFuncBase<RainbowModuleConfig> {
@@ -32,9 +36,10 @@ class RainbowModule_ extends ModuleAsFuncBase<RainbowModuleConfig> {
         ledFrom: 0 as PositiveNumber,
         ledLength: 1 as Min<1>,
         offsetPerLedInMs: 0,
-        playLength: 5000 as PositiveNumber,
+        playLengthInMs: 5000 as PositiveNumber,
         repeatLengthInMs: 500 as Min<500>,
-        value: 255 as RGBNumber
+        value: 255 as RGBNumber,
+        updateRateInMs: 50 as PositiveNumber
     };
 
     constructor(){
@@ -46,9 +51,10 @@ class RainbowModule_ extends ModuleAsFuncBase<RainbowModuleConfig> {
             ledFrom: CppInt,
             ledLength: CppInt,
             offsetPerLedInMs: CppInt,
-            playLength: CppInt,
+            playLengthInMs: CppInt,
             repeatLengthInMs: CppInt,
-            value: CppFloat
+            value: CppFloat,
+            updateRateInMs: CppInt
         }
     }
     public isDirtyAfterExecution(env: Environment, cfg: RainbowModuleConfig, isDirty: boolean): boolean {
@@ -61,7 +67,7 @@ class RainbowModule_ extends ModuleAsFuncBase<RainbowModuleConfig> {
 
     public async simulateLoop(env : Environment, cfg: RainbowModuleConfig, ssot: OpenObject, arduino: Arduino){
         // Calculates when to end the simulation
-        var end = arduino.millis()+cfg.playLength;
+        var end = arduino.millis()+cfg.playLengthInMs;
         
         // Repeats the required amount of times
         while(arduino.millis() < end){
@@ -78,7 +84,7 @@ class RainbowModule_ extends ModuleAsFuncBase<RainbowModuleConfig> {
             arduino.pushLeds();
 
             // Waits
-            await arduino.delay(50);
+            await arduino.delay(cfg.updateRateInMs);
         }
     }
 
@@ -87,12 +93,12 @@ class RainbowModule_ extends ModuleAsFuncBase<RainbowModuleConfig> {
     }
 
     public calculateRuntime(env: Environment, config: RainbowModuleConfig): number {
-        return config.playLength;
+        return config.playLengthInMs;
     }
 
     public generateFunctionCode(env: Environment, varSys: VariableSystem, prms: CppFuncParams<RainbowModuleConfig>): string {
         // Requests the end variable
-        var vEnd = varSys.requestLocalVariable("long","end",`millis() + ${prms.playLength.value}`);
+        var vEnd = varSys.requestLocalVariable("long","end",`millis() + ${prms.playLengthInMs.value}`);
         // Requests the led variable
         var vLed = varSys.requestLocalVariable("short","led", "0");
        
@@ -115,7 +121,7 @@ class RainbowModule_ extends ModuleAsFuncBase<RainbowModuleConfig> {
                     );
                 }
                 FastLED.show();
-                delay(50);
+                delay(${prms.updateRateInMs.value});
             }
        `;
     }
