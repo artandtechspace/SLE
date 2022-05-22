@@ -22,7 +22,9 @@ export const PREVIEWS: string[] = [
     "WS2812B-8x1",
     "WS2812B-8x2",
     "WS2812B-8x3",
-    "WS2812B-8x4"
+    "WS2812B-8x4",
+    "Ring-16-pxl",
+    "Ring-8-pxl"
 ]
 
 // Default element for the preview

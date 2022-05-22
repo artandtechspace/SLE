@@ -27,6 +27,8 @@
     "ui.settings.preview-image.values.ws2812b-8x2": "WS2812B (8x2)",
     "ui.settings.preview-image.values.ws2812b-8x3": "WS2812B (8x3)",
     "ui.settings.preview-image.values.ws2812b-8x4": "WS2812B (8x4)",
+    "ui.settings.preview-image.values.ring-16-pxl": "Ring (16 pixel)",
+    "ui.settings.preview-image.values.ring-8-pxl": "Ring (8 pixel)",
 
     "ui.popup.editcode.save-button": "Save",
     "ui.popup.editcode.cancle-button": "Cancle",

@@ -1,0 +1,24 @@
+<svg width="81mm" height="81mm" version="1.1" viewBox="0 0 81 81" xmlns="http://www.w3.org/2000/svg">
+ <g>
+  <g fill="#ececec" font-family="sans-serif" font-size="10.214px" stroke-width=".25536">
+   <text transform="scale(.99999 1)" x="14.39092" y="44.345234" style="line-height:1.25" xml:space="preserve"><tspan x="14.39092" y="44.345234" fill="#ececec" stroke-width=".25536">6</tspan></text>
+   <text transform="scale(.99999 1)" x="36.813347" y="21.956062" style="line-height:1.25" xml:space="preserve"><tspan x="36.813347" y="21.956062" fill="#ececec" stroke-width=".25536">0</tspan></text>
+   <text transform="scale(.99999 1)" x="58.896778" y="44.41386" style="line-height:1.25" xml:space="preserve"><tspan x="58.896778" y="44.41386" fill="#ececec" stroke-width=".25536">2</tspan></text>
+   <text transform="scale(.99999 1)" x="37.324116" y="64.701653" style="line-height:1.25" xml:space="preserve"><tspan x="37.324116" y="64.701653" fill="#ececec" stroke-width=".25536">4</tspan></text>
+  </g>
+  <ellipse cx="40.143" cy="40.144" rx="33.613" ry="33.614" fill="none" stroke="#999" stroke-width="13.06"/>
+  <ellipse cx="40.143" cy="40.144" rx="33.613" ry="33.614" fill="none" stroke="#2b2b2b" stroke-width="10.76"/>
+  <g stroke="#fff">
+   <rect transform="matrix(-.99999 .0040486 .01318 -.99991 0 0)" x="-10.153" y="-43.919" width="6.5953" height="6.6552" ry=".099803" stroke-width=".31965" led="6"/>
+   <rect transform="matrix(-.70996 -.70424 .71637 -.69773 0 0)" x="-60.668" y="-37.619" width="6.5953" height="6.6552" ry=".099803" stroke-width=".31965" led="5"/>
+   <rect transform="matrix(-.70996 -.70424 .71637 -.69773 0 0)" x="-59.782" y="29.617" width="6.5953" height="6.6552" ry=".099803" stroke-width=".32002" led="1"/>
+   <g stroke-width=".31965">
+    <rect transform="matrix(-.70996 -.70424 .71637 -.69773 0 0)" x="-93.841" y="-4.137" width="6.5953" height="6.6552" ry=".099803" led="3"/>
+    <rect transform="matrix(-.70996 -.70424 .71637 -.69773 0 0)" x="-26.61" y="-3.8648" width="6.5953" height="6.6552" ry=".099803" led="7"/>
+    <rect transform="matrix(-.99999 .0040486 .01318 -.99991 0 0)" x="-44.212" y="-77.673" width="6.5953" height="6.6552" ry=".099803" led="4"/>
+    <rect transform="matrix(-.99999 .0040486 .01318 -.99991 0 0)" x="-43.326" y="-10.437" width="6.5953" height="6.6552" ry=".099803" led="0"/>
+    <rect transform="matrix(-.99999 .0040486 .01318 -.99991 0 0)" x="-77.385" y="-44.191" width="6.5953" height="6.6552" ry=".099803" led="2"/>
+   </g>
+  </g>
+ </g>
+</svg>
