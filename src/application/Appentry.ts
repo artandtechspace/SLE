@@ -8,7 +8,7 @@ import { getFullRuntime, getOutOfBoundsModExports } from "./modules/ModuleUtils.
 import { PopupSystem } from "./ui/popupSystem/PopupSystem.js";
 import { ArduinoSimulation } from "./simulation/ArduinoSimulation.js";
 import { ConfigBuilder, ModBlockExport } from "./ConfigBuilder.js";
-import { TAB_ANALYTICS, TAB_ANIMATION, TAB_CODE } from "./ui/Tabs.js";
+import { TAB_PREVIEW_ANALYTICS, TAB_PREVIEW_ANIMATION, TAB_PREVIEW_CODE } from "./ui/Tabs.js";
 import { setupUi } from "./ui/UiSetup.js";
 import { TabHandler } from "./ui/utils/TabHandler.js";
 import { BlockWarning } from "./errorSystem/Warnings.js";
@@ -24,8 +24,9 @@ var workspace: object;
 // Arduino-simulation
 var simulation: ArduinoSimulation;
 
-// Tab-handler for the sidebar
-var tabhandler: TabHandler;
+// Tab-handlers for the sidebar
+var previewTabHandler: TabHandler;
+var controlTabHandler: TabHandler;
 
 // Popupsystem
 var popsys: PopupSystem;
@@ -104,18 +105,18 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 				return;
 
 			// Checks what to do
-			switch(tabhandler.getSelectedTab()){
-				case TAB_ANIMATION:
+			switch(previewTabHandler.getSelectedTab()){
+				case TAB_PREVIEW_ANIMATION:
 					// Starts the simulation
 					simulation.startSimulation(env,modExports);
 					break;
-				case TAB_CODE:
+				case TAB_PREVIEW_CODE:
 					// Generates the code and appends it to the code-area
 					codeArea.value = generateCode(env,modExports);
 					break;
-				case TAB_ANALYTICS:
+				case TAB_PREVIEW_ANALYTICS:
 					// Generates the runtime-analytics
-					runtimeDisplay.textContent = getFromLanguage("ui.tabs.analytics.runtime",{
+					runtimeDisplay.textContent = getFromLanguage("ui.tabs.preview.analytics.runtime",{
 						"length": getFullRuntime(env,modExports)/1000
 					});
 					break;
@@ -194,7 +195,8 @@ export default async function onAppInitalize(){
 		return;
 
 	// Stores all variables
-	tabhandler = cfg.tabhandler;
+	previewTabHandler = cfg.previewTabHandler;
+	controlTabHandler = cfg.controlTabHandler;
 	popsys = cfg.popupsystem;
 	simulation = cfg.simulation;
 	env = cfg.environment;
@@ -203,7 +205,7 @@ export default async function onAppInitalize(){
 	runtimeDisplay = cfg.runtimeDisplay;
 
 	// Appends the tab-change event
-	tabhandler.setTabChangeHandler(onTabChange);
+	previewTabHandler.setTabChangeHandler(onTabChange);
 
 
 	// Inits all custom blockly-fields

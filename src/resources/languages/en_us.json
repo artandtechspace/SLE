@@ -4,14 +4,20 @@
     "ui.blockly.toolbox.categorys.values": "Values",
     "ui.blockly.toolbox.categorys.animations": "Animations",
 
-    "ui.tabs.code": "Code",
-    "ui.tabs.code.textarea.placeholder": "[Output Source-code]",
-    "ui.tabs.code.copy-button": "Copy Code",
+    "ui.tabs.preview.code": "Code",
+    "ui.tabs.preview.code.textarea.placeholder": "[Output Source-code]",
+    "ui.tabs.preview.code.copy-button": "Copy Code",
 
-    "ui.tabs.animation": "Animation",
+    "ui.tabs.preview.animation": "Animation",
 
-    "ui.tabs.analytics": "Analytics",
-    "ui.tabs.analytics.runtime": "The Code/Animation will run for $length$ seconds.",
+    "ui.tabs.preview.analytics": "Analytics",
+    "ui.tabs.preview.analytics.runtime": "The Code/Animation will run for $length$ seconds.",
+
+
+    "ui.tabs.controls.env": "Environment",
+    "ui.tabs.controls.vars": "Variables",
+    "ui.tabs.controls.settings": "Settings",
+
 
     "ui.settings.edit-button": "View/Edit Precompile-Code",
     "ui.settings.led-pin": "Led-Pin",

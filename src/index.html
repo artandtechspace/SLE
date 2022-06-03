@@ -78,7 +78,7 @@
                     <!--Holds all tabs for the previews-->
                     <div class="th-tabs">
                         <!--Code-tab-->
-                        <div id="codeTab" class="tab">
+                        <div id="codeTab">
                             <textarea id="codeArea" disabled></textarea>
                             <div id="codeActions">
                                 <input type="button" id="copy">
@@ -86,10 +86,10 @@
                         </div>
     
                         <!--Animation-tab-->
-                        <div id="animationTab" class="tab"></div>
+                        <div id="animationTab"></div>
     
                         <!--Raw-Analytics tab-->
-                        <div id="analyticsTab" class="tab">
+                        <div id="analyticsTab">
                             <p id="runtime"></p>
                         </div>
                     </div>
@@ -98,88 +98,95 @@
             <div class="sliderbar y" id="controlsBar"></div>
             
             <!--Control-field-->
-            <div id="controls">
+            <div id="controls" class="tabHandler">
 
-                <!--<div id="settingsPicker">
-                    <div id="texts">
-                        <input type="button" id="btnTabCode">
-                        <input type="button" id="btnTabAnimation">
-                        <input type="button" id="btnTabAnalytics">
+                <div id="settingsPicker" class="th-picker">
+                    <div class="th-texts">
+                        <input type="button" id="btnTabEnv">
+                        <input type="button" id="btnTabVars">
+                        <input type="button" id="btnTabSettings">
                     </div>
 
-                    <div id="icons">
-                        <i class="fa fa-code" id="tabCode" aria-hidden="true"></i>
-                        <i class="fa fa-film" id="tabAnimation" aria-hidden="true"></i>
-                        <i class="fa fa-cog" id="tabAnalytics" aria-hidden="true"></i>
-                    </div>
-                </div>-->
-
-                <!--All configuration fields-->
-                <div id="tabSettings">
-
-                    <!--Led-pin field-->
-                    <div class="infoInput">
-                        <div class="wrapper">
-                            <p> {{ ui.settings.led-pin }} </p>
-                            <i class="fa fa-info" aria-hidden="true"></i>
-                            <div class="wrapper">
-                                <div class="popup">
-                                    <p>{{ ui.settings.led-pin.info }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <input id="inpPin" style="width:200px" min="0" type="number"/>
-                    </div>
-
-                    <!--Led-amount field-->
-                    <div class="infoInput">
-                        <div class="wrapper">
-                            <p> {{ ui.settings.led-amt }} </p>
-                            <i class="fa fa-info" aria-hidden="true"></i>
-                            <div class="wrapper">
-                                <div class="popup">
-                                    <p> {{ ui.settings.led-amt.info }} </p>
-                                </div>
-                            </div>
-                        </div>
-                        <input id="inpAmt" style="width:200px" min="1" type="number"/>
-                    </div>
-
-                    <!--Animation-type field-->
-                    <div class="infoInput">
-                        <div class="wrapper">
-                            <p> {{ ui.settings.preview-image }} </p>
-                            <i class="fa fa-info" aria-hidden="true"></i>
-                            <div class="wrapper">
-                                <div class="popup">
-                                    <p> {{ ui.settings.preview-image.info }} </p>
-                                </div>
-                            </div>
-                        </div>
-                        <select id="inpSelect">
-                            <!--Here will be all options for the animation-preview-selection-->
-                        </select>
-                    </div>
-
-                    <!--With comments field-->
-                    <div class="infoInput">
-                        <input id="inpComments" type="checkbox"/>
-                        <div class="wrapper">
-                            <p> {{ ui.settings.comments }} </p>
-                            <i class="fa fa-info" aria-hidden="true"></i>
-                            <div class="wrapper">
-                                <div class="popup">
-                                    <p> {{ If comments should be added to the final source-code }} </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!--Precompile-Code field-->
-                    <div class="infoInput">
-                        <input id="inpPreCode" type="button"/>
+                    <div class="th-icons">
+                        <i class="fa fa-code" id="tabEnv" aria-hidden="true"></i>
+                        <i class="fa fa-film" id="tabVars" aria-hidden="true"></i>
+                        <i class="fa fa-cog" id="tabSettings" aria-hidden="true"></i>
                     </div>
                 </div>
+
+                <!--Holds all tabs for the lower area-->
+                <div class="th-tabs">
+                    <!--Tab for the environment-configuration-->
+                    <div id="envTab">
+    
+                        <!--Led-pin field-->
+                        <div class="infoInput">
+                            <div class="wrapper">
+                                <p> {{ ui.settings.led-pin }} </p>
+                                <i class="fa fa-info" aria-hidden="true"></i>
+                                <div class="wrapper">
+                                    <div class="popup">
+                                        <p>{{ ui.settings.led-pin.info }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <input id="inpPin" style="width:200px" min="0" type="number"/>
+                        </div>
+    
+                        <!--Led-amount field-->
+                        <div class="infoInput">
+                            <div class="wrapper">
+                                <p> {{ ui.settings.led-amt }} </p>
+                                <i class="fa fa-info" aria-hidden="true"></i>
+                                <div class="wrapper">
+                                    <div class="popup">
+                                        <p> {{ ui.settings.led-amt.info }} </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <input id="inpAmt" style="width:200px" min="1" type="number"/>
+                        </div>
+    
+                        <!--Animation-type field-->
+                        <div class="infoInput">
+                            <div class="wrapper">
+                                <p> {{ ui.settings.preview-image }} </p>
+                                <i class="fa fa-info" aria-hidden="true"></i>
+                                <div class="wrapper">
+                                    <div class="popup">
+                                        <p> {{ ui.settings.preview-image.info }} </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <select id="inpSelect">
+                                <!--Here will be all options for the animation-preview-selection-->
+                            </select>
+                        </div>
+    
+                        <!--With comments field-->
+                        <div class="infoInput">
+                            <input id="inpComments" type="checkbox"/>
+                            <div class="wrapper">
+                                <p> {{ ui.settings.comments }} </p>
+                                <i class="fa fa-info" aria-hidden="true"></i>
+                                <div class="wrapper">
+                                    <div class="popup">
+                                        <p> {{ If comments should be added to the final source-code }} </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <!--Precompile-Code field-->
+                        <div class="infoInput">
+                            <input id="inpPreCode" type="button"/>
+                        </div>
+                    </div>
+
+                    <div id="varsTab"></div>
+                    <div id="settingsTab"></div>
+                </div>
+
             </div>
         </div>
     </div>

@@ -7,7 +7,7 @@ import { PRESET_SOURCECODE } from "../Preset.js";
 import { ArduinoSimulation } from "../simulation/ArduinoSimulation.js";
 import { Min, PositiveNumber } from "../types/Types.js";
 import { loadSVG } from "../utils/SVGUtil.js";
-import { TAB_ANIMATION, TAB_CODE, TAB_ANALYTICS } from "./Tabs.js";
+import { TAB_PREVIEW_ANIMATION, TAB_PREVIEW_CODE, TAB_PREVIEW_ANALYTICS, TAB_CONTROLS_ENVS, TAB_CONTROLS_VARS, TAB_CONTROLS_SETTINGS } from "./Tabs.js";
 import { SliderBar, SliderBarDirection } from "./utils/SliderBar.js";
 import { TabHandler } from "./utils/TabHandler.js";
 import { PREVIEWS_FILE_PATH, PREVIEWS, DEFAULT_PREVIEW_NAME, setupEnvironment } from "./utils/UiEnvironmentIntegration.js";
@@ -39,16 +39,19 @@ export async function setupUi(onEnvChange: ()=>void){
         var blocklyArea = S("#blocklyDiv") as HTMLDivElement;
 
         var popupsystem = setupPopupsystem();
-        var tabhandler = registerSidebarTabs();
         var simulation = await setupArduinoSimulation();
         var errorsystem = new InAppErrorSystem();
-    
+        
         // Builds the environment
         var env = new Environment(simulation.getLedAmount() as any as Min<1>,true,PRESET_SOURCECODE,0 as PositiveNumber, DEFAULT_PREVIEW_NAME);
-    
+        
         // Binds the environment-settings to the ui
         setupEnvironment(env,popupsystem,simulation,onEnvChange);
-    
+        
+        // Setups the tabs
+        var previewTabHandler = registerPreviewTabs();
+        var controlTabHandler = registerControlsTabs();
+        
         // Cleans all hidden popup-content
         popupsystem.closePopup();
 
@@ -58,7 +61,8 @@ export async function setupUi(onEnvChange: ()=>void){
         removeLoadingScreen();
     
         return {
-            tabhandler,
+            previewTabHandler,
+            controlTabHandler,
             popupsystem,
             simulation,
             environment: env,
@@ -83,7 +87,7 @@ function setupCodeArea() : HTMLTextAreaElement{
     var codeArea = S("#codeArea") as HTMLTextAreaElement;
 
     // Binds display
-    codeArea.placeholder = getFromLanguage("ui.tabs.code.textarea.placeholder");
+    codeArea.placeholder = getFromLanguage("ui.tabs.preview.code.textarea.placeholder");
 
     return codeArea;
 }
@@ -155,36 +159,69 @@ function setupPopupsystem(){
 	var editCodeBtn = S("#inpPreCode") as HTMLInputElement;
     editCodeBtn.value = getFromLanguage("ui.settings.edit-button");
     editCodeBtn.addEventListener("click",()=>popsys.showPopup(codeEditElm));
-    
 
 	return popsys;
 }
 
+// Registers the controls tabs for the below sidebar
+function registerControlsTabs(){
+     // Gets the controls-area
+     var controls = S("#controls");
 
-// Registers the sidebar-tabs and logic
-function registerSidebarTabs(){
+     // Gets the tabs and binds their texts
+     var btnTabEnv = S("#btnTabEnv",controls) as HTMLInputElement;
+     btnTabEnv.value = getFromLanguage("ui.tabs.controls.env");
+ 
+     var btnTabVars = S("#btnTabVars",controls) as HTMLInputElement;
+     btnTabVars.value = getFromLanguage("ui.tabs.controls.vars");
+ 
+     var btnTabSettings = S("#btnTabSettings",controls) as HTMLInputElement;
+     btnTabSettings.value = getFromLanguage("ui.tabs.controls.settings");
+     
+     // Creates the tab-buttons
+     const BUTTONS: [HTMLElement,number][] = [
+         [btnTabEnv,TAB_CONTROLS_ENVS],
+         [S("#tabEnv",controls),TAB_CONTROLS_ENVS],
+         [btnTabVars,TAB_CONTROLS_VARS],
+         [S("#tabVars",controls),TAB_CONTROLS_VARS],
+         [btnTabSettings,TAB_CONTROLS_SETTINGS],
+         [S("#tabSettings",controls),TAB_CONTROLS_SETTINGS]
+     ];
+     
+     // Gets the tabs
+     const TABS: [HTMLElement,number][] = [
+         [S("#envTab",controls),TAB_CONTROLS_ENVS],
+         [S("#varsTab",controls),TAB_CONTROLS_VARS],
+         [S("#settingsTab",controls),TAB_CONTROLS_SETTINGS]
+     ]
+ 
+     return new TabHandler(controls,BUTTONS,TABS,TAB_CONTROLS_ENVS);
+}
+
+// Registers the tabs that show different pre-view's in the above sidebar
+function registerPreviewTabs(){
 
     // Gets the sidebar-preview
     var preview = S("#preview");
 
     // Gets the tabs and binds their texts
     var btnTabCode = S("#btnTabCode",preview) as HTMLInputElement;
-    btnTabCode.value = getFromLanguage("ui.tabs.code");
+    btnTabCode.value = getFromLanguage("ui.tabs.preview.code");
 
     var btnTabAnimation = S("#btnTabAnimation",preview) as HTMLInputElement;
-    btnTabAnimation.value = getFromLanguage("ui.tabs.animation");
+    btnTabAnimation.value = getFromLanguage("ui.tabs.preview.animation");
 
     var btnTabAnalytics = S("#btnTabAnalytics",preview) as HTMLInputElement;
-    btnTabAnalytics.value = getFromLanguage("ui.tabs.analytics");
+    btnTabAnalytics.value = getFromLanguage("ui.tabs.preview.analytics");
     
     // Creates the tab-buttons
     const BUTTONS: [HTMLElement,number][] = [
-        [btnTabCode,TAB_CODE],
-        [S("#tabCode",preview),TAB_CODE],
-        [btnTabAnimation,TAB_ANIMATION],
-        [S("#tabAnimation",preview),TAB_ANIMATION],
-        [btnTabAnalytics,TAB_ANALYTICS],
-        [S("#tabAnalytics",preview),TAB_ANALYTICS]
+        [btnTabCode,TAB_PREVIEW_CODE],
+        [S("#tabCode",preview),TAB_PREVIEW_CODE],
+        [btnTabAnimation,TAB_PREVIEW_ANIMATION],
+        [S("#tabAnimation",preview),TAB_PREVIEW_ANIMATION],
+        [btnTabAnalytics,TAB_PREVIEW_ANALYTICS],
+        [S("#tabAnalytics",preview),TAB_PREVIEW_ANALYTICS]
     ];
 
     // Handle the code-tab
@@ -193,12 +230,12 @@ function registerSidebarTabs(){
     
     // Gets the tabs
     const TABS: [HTMLElement,number][] = [
-        [codeTab,TAB_CODE],
-        [S("#animationTab",preview),TAB_ANIMATION],
-        [S("#analyticsTab",preview),TAB_ANALYTICS]
+        [codeTab,TAB_PREVIEW_CODE],
+        [S("#animationTab",preview),TAB_PREVIEW_ANIMATION],
+        [S("#analyticsTab",preview),TAB_PREVIEW_ANALYTICS]
     ]
 
-    return new TabHandler(S(".tabHandler",preview),BUTTONS,TABS,1);
+    return new TabHandler(S(".tabHandler",preview),BUTTONS,TABS,TAB_PREVIEW_ANIMATION);
 }
 
 // Inits the tab-code
@@ -208,7 +245,7 @@ function handleTabCode(tabCode: HTMLDivElement){
 
     // Gets the copy-button and registers the event-handler
     var cpBtn = S("#copy",tabCode) as HTMLInputElement
-    cpBtn.value = getFromLanguage("ui.tabs.code.copy-button");
+    cpBtn.value = getFromLanguage("ui.tabs.preview.code.copy-button");
     cpBtn.addEventListener("click",()=>navigator.clipboard.writeText(textArea.value));
 }
 
