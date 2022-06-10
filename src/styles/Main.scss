@@ -48,12 +48,6 @@ body{
     flex-grow: 1;
     height:100%;
     flex-direction: column;
-    
-    // Blockly-workspace
-    #blocklyDiv{
-        flex-grow: 1;
-        user-select: none;
-    }
 
     // Info-icons
     #infobar{

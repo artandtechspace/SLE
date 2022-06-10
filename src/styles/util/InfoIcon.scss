@@ -1,0 +1,52 @@
+// Small icons that shows some infos on hover
+i.infoIcon{
+    font-size: 15px;
+    border: 2px solid $textColor;
+    border-radius: 50%;
+    padding: 2px 6px;
+    margin-left: 0;
+    cursor: pointer;
+    margin-left: .5rem;
+    position: relative;
+
+    &:hover>.popup{
+        visibility: visible;
+        opacity: 1;
+        transition: .2s;
+    }
+
+    
+    // Element that will popup
+    &>.popup{
+        visibility: hidden;
+        opacity: 0;
+        transition: .2s;
+        position: relative;
+        position: absolute;
+        transform: translateX(-100%) translateY(-100%);
+        border: 2px solid #c3c3c3;
+        bottom: 0;
+        left: 22px;
+        border-radius: 5px;
+        z-index: 20;
+
+        p{
+            border-radius: 5px;
+            background: #252526;
+            padding: 5px 10px;
+        }
+
+        &::after{
+            content: '';
+            position: absolute;
+            background: #252526;
+            width: 10px;
+            height: 10px;
+            right: 5px;
+            bottom: -5px;
+            transform: rotateZ(45deg);
+            z-index: -1;
+            border: 2px solid #c3c3c3;
+        }
+    }
+}

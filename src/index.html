@@ -43,8 +43,14 @@
     <!--Splits main work area and sidebar-->
     <div id="content">
         <div id="mainArea">
-            <!--Blockly will be inserted here-->
-            <div id="blocklyDiv"></div>
+            
+            <div id="blocklyArea">
+                <!--Popup for "hidden" blockly-block settings-->
+                <div id="blockly-settingsui"></div>
+                
+                <!--Blockly will be inserted here-->
+                <div id="blocklyDiv"></div>
+            </div>
             
             <!--Bottom-info text for errors, warning or informations-->
             <div id="infobar">
@@ -123,12 +129,11 @@
                         <div class="infoInput">
                             <div class="wrapper">
                                 <p> {{ ui.settings.led-pin }} </p>
-                                <i class="fa fa-info" aria-hidden="true"></i>
-                                <div class="wrapper">
+                                <i class="infoIcon fa fa-info" aria-hidden="true">
                                     <div class="popup">
                                         <p>{{ ui.settings.led-pin.info }}</p>
                                     </div>
-                                </div>
+                                </i>
                             </div>
                             <input id="inpPin" style="width:200px" min="0" type="number"/>
                         </div>
@@ -137,12 +142,11 @@
                         <div class="infoInput">
                             <div class="wrapper">
                                 <p> {{ ui.settings.led-amt }} </p>
-                                <i class="fa fa-info" aria-hidden="true"></i>
-                                <div class="wrapper">
+                                <i class="infoIcon fa fa-info" aria-hidden="true">
                                     <div class="popup">
                                         <p> {{ ui.settings.led-amt.info }} </p>
                                     </div>
-                                </div>
+                                </i>
                             </div>
                             <input id="inpAmt" style="width:200px" min="1" type="number"/>
                         </div>
@@ -151,12 +155,11 @@
                         <div class="infoInput">
                             <div class="wrapper">
                                 <p> {{ ui.settings.preview-image }} </p>
-                                <i class="fa fa-info" aria-hidden="true"></i>
-                                <div class="wrapper">
+                                <i class="infoIcon fa fa-info" aria-hidden="true">
                                     <div class="popup">
                                         <p> {{ ui.settings.preview-image.info }} </p>
                                     </div>
-                                </div>
+                                </i>
                             </div>
                             <select id="inpSelect">
                                 <!--Here will be all options for the animation-preview-selection-->
@@ -168,12 +171,11 @@
                             <input id="inpComments" type="checkbox"/>
                             <div class="wrapper">
                                 <p> {{ ui.settings.comments }} </p>
-                                <i class="fa fa-info" aria-hidden="true"></i>
-                                <div class="wrapper">
+                                <i class="infoIcon fa fa-info" aria-hidden="true">
                                     <div class="popup">
-                                        <p> {{ If comments should be added to the final source-code }} </p>
+                                        <p> {{ ui.settings.comments.info }} </p>
                                     </div>
-                                </div>
+                                </i>
                             </div>
                         </div>
     
