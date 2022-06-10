@@ -143,5 +143,5 @@ export function generateCode(env: Environment, mods: ModBlockExport<any>[]) : st
     loopCode+=printIf("\nFastLED.show();",generatedCode.isDirty as boolean);
 
     // Generates the final code
-    return env.preprocessingCode.replace(CODE_REGEX,replaceCodes);
+    return env.preprocessingCode.replace(CODE_REGEX,replaceCodes)+"\n";
 }

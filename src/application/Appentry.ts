@@ -14,6 +14,8 @@ import { TabHandler } from "./ui/utils/TabHandler.js";
 import { BlockWarning } from "./errorSystem/Warnings.js";
 import { didWorkspaceChange, setWorkspaceInvalid } from "./blockly/util/WorkspaceChangeDetector.js";
 import { getFromLanguage } from "./language/LanguageManager.js";
+import { SettingsUIManager } from "./blockly/settingsui/Manager.js";
+import { Manager as SettingsUiManager } from "./blockly/settingsui/SettingsUI.js";
 
 // Global environment
 var env: Environment;
@@ -161,6 +163,12 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 
 // Eventhandler for blockly-events
 function onBlocklyChange(evt: any){
+	// Executes the blockly-block menu if a block get's selected
+	if(evt.type==="selected"){
+		SettingsUiManager.onBlockSelect((workspace as any).getBlockById(evt.newElementId))
+		return;
+	}
+
 	// Ignores all changes that are not drag, delete or ending block-change events
 	// If the event is undefined this will be treated as the init-event
 	if(evt !== undefined && (evt.type !== "drag" || evt.isStart) && evt.type !== "change" && evt.type !== "delete")

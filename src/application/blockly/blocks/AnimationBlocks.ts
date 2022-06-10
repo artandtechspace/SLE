@@ -8,6 +8,7 @@ import FieldBrightness from "../fields/FieldBrightness.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
 import { TB_COLOR_ANIMATIONS } from "../util/Toolbox.js";
 import { FadeModule, FadeModuleConfig } from "../../defaultModules/animations/FadeModule.js";
+import { createUI } from "../settingsui/SettingsUI.js";
 
 const Blockly = require("blockly");
 
@@ -52,6 +53,11 @@ function registerFadeBlock(name: string){
             this.setPreviousStatement(true, null);
             this.setNextStatement(true, null);
             this.setColour(TB_COLOR_ANIMATIONS);
+            this.settingsui = createUI()
+                .addText("Testtext")
+                .addLineSeperator()
+                .addNumericField("JSON", "Json: ", 5, { min: 0 })
+                .build();
         }
       };
 

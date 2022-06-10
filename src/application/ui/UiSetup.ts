@@ -12,6 +12,7 @@ import { SliderBar, SliderBarDirection } from "./utils/SliderBar.js";
 import { TabHandler } from "./utils/TabHandler.js";
 import { PREVIEWS_FILE_PATH, PREVIEWS, DEFAULT_PREVIEW_NAME, setupEnvironment } from "./utils/UiEnvironmentIntegration.js";
 import { S } from "./utils/UiUtils.js";
+import { Manager as SettingsUiManager } from "../blockly/settingsui/SettingsUI.js";
 
 // Executes to setup the ui
 // Returns an object with all important elements
@@ -19,13 +20,13 @@ import { S } from "./utils/UiUtils.js";
 /**
  * Setups the ui-environment
  * 
- * @param onEnvChange callback that executes every time a environment-variable changes
+ * @param onSettingsChange callback that executes every time a critical part of the ui changes (Meaning a part that affects the final code or animation, eg. env or submenu of blocks)
  * 
  * @returns an object with all generated element for the ui or false if an error occurred
  * setting up the ui. If an error occurres it's only required to stop further init-code as
  * the error will already be displayed inside the ui.
  */
-export async function setupUi(onEnvChange: ()=>void){
+export async function setupUi(onSettingsChange: ()=>void){
 
     try{
         // Setups the language-system
@@ -40,13 +41,15 @@ export async function setupUi(onEnvChange: ()=>void){
 
         var popupsystem = setupPopupsystem();
         var simulation = await setupArduinoSimulation();
-        var errorsystem = new InAppErrorSystem();
+        var errorsystem = new InAppErrorSystem();        
         
+        SettingsUiManager.attachToUI(S("#blockly-settingsui") as HTMLDivElement, onSettingsChange);
+
         // Builds the environment
         var env = new Environment(simulation.getLedAmount() as any as Min<1>,true,PRESET_SOURCECODE,0 as PositiveNumber, DEFAULT_PREVIEW_NAME);
         
         // Binds the environment-settings to the ui
-        setupEnvironment(env,popupsystem,simulation,onEnvChange);
+        setupEnvironment(env,popupsystem,simulation,onSettingsChange);
         
         // Setups the tabs
         var previewTabHandler = registerPreviewTabs();
