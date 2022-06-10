@@ -57,6 +57,11 @@ function registerFadeBlock(name: string){
                 .addText("Testtext")
                 .addLineSeperator()
                 .addNumericField("JSON", "Json: ", 5, { min: 0 })
+                .addNumericField("JSON", "Json: ", 5, { min: 0 })
+                .addNumericField("JSON", "Json: ", 5, { min: 0 })
+                .addNumericFieldWithInfo("JSON","json",5, {}, "YOooo")
+                .addNumericFieldWithInfo("JSON","json",5, {}, "YOooo")
+                .addNumericFieldWithInfo("JSON","json",5, {}, "YOooo")
                 .build();
         }
       };

@@ -29,8 +29,15 @@
         border: 3px solid #474747;
         border-radius: 8px;
 
+        &>*{
+            display: inline-block;
+            vertical-align: middle;
+            line-height: normal;
+        }
+
         // For number-input fields
         .bsg-number-input{
+            margin-bottom: 5px;
 
             input{
                 font-size: 1.4rem;
@@ -63,11 +70,11 @@
 
         // Line-seperator with a bit of space below
         .bsg-line-seperator{
+            display: block;
             height: 2px;
             background: #6a6a6a;
             margin-bottom: 8px;
             border-radius: 5px;
-            width: 60%;
         }
 
         &.hidden{

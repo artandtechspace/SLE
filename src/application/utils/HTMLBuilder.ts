@@ -23,7 +23,7 @@ export function create(tag: string, {cls = undefined, id = undefined, text = und
 
   // Appends class
   if(cls)
-    elm.classList.add(cls);
+    elm.className = cls;
 
   // Appends id
   if(id)
