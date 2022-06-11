@@ -1,5 +1,6 @@
-import { create } from "../../../utils/HTMLBuilder.js";
-import { SupplierElement } from "./BaseElement.js";
+import { create, createIf } from "../../../utils/HTMLBuilder.js";
+import { Element, ElementBuilderBase, SupplierElement } from "./BaseElement.js";
+import { InfoIconElement } from "./InfoIconElement.js";
 
 export enum ParseMode{
     FLOAT, INT
@@ -9,7 +10,9 @@ export type NumericFieldSettings = {
     min?: number,
     max?: number,
     steps?: number,
-    parseMode: ParseMode 
+    parseMode: ParseMode,
+    suffix?: string,
+    infoText?: string
 }
 
 export class NumericFieldElement extends SupplierElement<number>{
@@ -23,9 +26,15 @@ export class NumericFieldElement extends SupplierElement<number>{
     }
 
     public render(): HTMLElement {
+        // Optionally create an info-icon
+        var optInfoIcon = this.settings.infoText === undefined ? undefined : new InfoIconElement(this.settings.infoText).render();
+
         return create("div",{
             chld: [
+                // Text
                 create("p",{ text: this.displayText }),
+                
+                // Input
                 create("input", {
                     attr: {
                         "type": "number",
@@ -37,7 +46,19 @@ export class NumericFieldElement extends SupplierElement<number>{
                     evts: {
                         "change": this.onFieldChange.bind(this)
                     }
-                })
+                }),
+                
+                // Suffix
+                createIf("p",{
+                    text: this.settings.suffix,
+                    cls: "suffix"
+                },this.settings.suffix !== undefined),
+                
+                // Info-icon
+                optInfoIcon,
+
+                // Next-line
+                create("br")
             ],
             cls: "bsg-number-input"
         })
@@ -69,5 +90,57 @@ export class NumericFieldElement extends SupplierElement<number>{
         this.setValue(psd);
 
         return true;
+    }
+}
+
+export class NumericFieldBuilder<Base> extends ElementBuilderBase<Base>{
+
+    // Optionsl settings
+    private readonly settings: NumericFieldSettings = {
+        parseMode: ParseMode.INT
+    };
+
+    // Required base settings
+    private readonly key: string;
+    private readonly value: number;
+    private readonly displayText: string;
+
+    constructor(base: Base, key: string, value: number, displayText: string){
+        super(base);
+        this.key = key;
+        this.value = value;
+        this.displayText = displayText;
+    }
+
+    public hasMin(min: number){
+        this.settings.min = min;
+        return this;
+    }
+    public hasMax(max: number){
+        this.settings.max = max;
+        return this;
+    }
+
+    public withSteps(steps: number){
+        this.settings.steps = steps;
+    }
+
+    public useParseModeFloat(){
+        this.settings.parseMode = ParseMode.FLOAT;
+        return this;
+    }
+
+    public withInfoIcon(infoText: string){
+        this.settings.infoText = infoText;
+        return this;
+    }
+
+    public withSuffix(suffix: string){
+        this.settings.suffix = suffix;
+        return this;
+    }
+
+    public __getBuild(): Element {
+        return new NumericFieldElement(this.key, this.value, this.displayText, this.settings);
     }
 }

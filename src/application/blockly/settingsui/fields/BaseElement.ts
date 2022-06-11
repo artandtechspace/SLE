@@ -51,3 +51,21 @@ export abstract class SupplierElement<T> extends Element{
     // Serializes the current value to a string
     abstract serialize() : string;
 }
+
+export abstract class ElementBuilderBase<Base>{
+    // Base to return the chain-method back to when the user pushes the final modification
+    private readonly base: Base;
+
+    constructor(base: Base){
+        this.base = base;
+    }
+
+    // Pushes the build Element
+    public push(){
+        return this.base;
+    }
+
+    // Builds the final required element (This should not be used by the user, only by the system to assemble the elements)
+    public abstract __getBuild() : Element;
+
+}

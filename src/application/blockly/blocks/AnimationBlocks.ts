@@ -27,6 +27,14 @@ export default function registerAnimationBlocks(){
 //#region BlockRegister
 
 function registerFadeBlock(name: string){
+    // Names for the variables
+    const getFrom = "from";
+    const getLength = "length";
+    const getFadeLength = "fadeLen";
+    const getLedOffset = "ledOffset";
+    const getColorFrom = "clrFrom";
+    const getColorTo = "clrTo";
+
     Blockly.Blocks[name] = {
         init: function() {
             this.appendValueInput("anmLen")
@@ -58,7 +66,11 @@ function registerFadeBlock(name: string){
             createUI()
                 .addText("Testtext")
                 .addLineSeperator()
-                .addNumericFieldWithInfo("ledfrm", "Led-From: ", 5, { min: 0, parseMode: ParseMode.INT }, "yooooo")
+                .addNumericField("ledfrm", "Led-From:", 5)
+                    .hasMin(0)
+                    .withSuffix("ms")
+                    .withInfoIcon("Yooooooooo")
+                    .push()
             .buildTo(this);
         }
       };

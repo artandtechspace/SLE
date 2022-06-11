@@ -35,6 +35,11 @@
             line-height: normal;
         }
 
+        // Styles for the info-icons
+        .infoIcon{
+            display: inline;
+        }
+
         // For number-input fields
         .bsg-number-input{
             margin-bottom: 5px;
@@ -53,7 +58,12 @@
             }
 
             p{
-                margin-right: 0.8rem;
+                margin-right: .8rem;
+
+                &.suffix{
+                    margin-right: 0;
+                    margin-left: .8rem;
+                }
             }
 
             &>*{

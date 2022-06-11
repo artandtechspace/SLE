@@ -3,7 +3,14 @@
  * This is used in place of a big framework which would benefit little but contribute with a big size.
  */
 
-
+export type CreateArguments = {
+  cls?: string,
+  id?: string,
+  chld?: (HTMLElement|undefined)[],
+  attr?: {[key: string]: any},
+  evts?: {[key: string]: any},
+  text?: string
+}
 
 /**
  * Function to create html-element with little code
@@ -17,7 +24,7 @@
  * @param {String} text (Optional) text to set as the textContent of the element
  * @returns the fully created HTML-Element
  */
-export function create(tag: string, {cls = undefined, id = undefined, text = undefined, chld = [], attr = {}, evts = {}}: any = {}) : HTMLElement{
+export function create(tag: string, {cls,id,text,chld,attr,evts}: CreateArguments = {}) : HTMLElement{
   // Creates the element
   var elm = document.createElement(tag);
 
@@ -34,8 +41,10 @@ export function create(tag: string, {cls = undefined, id = undefined, text = und
     elm.textContent = text;
 
   // Appends children
-  for(var x of chld)
-    elm.appendChild(x);
+  if(chld !== undefined)
+    for(var x of chld)
+      if(x !== undefined)
+        elm.appendChild(x);
 
   // Appends children
   for(var y in attr)
@@ -46,4 +55,10 @@ export function create(tag: string, {cls = undefined, id = undefined, text = und
     elm.addEventListener(z,evts[z as keyof typeof evts]);
 
   return elm;
+}
+
+
+// Performs the create-function only if the given equation resolves to true
+export function createIf(tag: string, args: CreateArguments, equation: boolean) : HTMLElement|undefined {
+  return equation ? create(tag, args) : undefined;
 }
