@@ -40,4 +40,14 @@ export abstract class SupplierElement<T> extends Element{
         this.currentValue = value;
         this.changeCB();
     }
+
+    /**
+     * Trys to load a previously serialized value back into the field. This should however be considered an outside value and therefor must be validated.
+     * @param raw the raw value to load
+     * @returns {boolean} if the load was successful
+     */
+    abstract deserialize(raw: string) : boolean;
+
+    // Serializes the current value to a string
+    abstract serialize() : string;
 }

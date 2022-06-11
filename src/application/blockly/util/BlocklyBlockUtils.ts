@@ -3,6 +3,15 @@ import { ConfigBuilder } from "../../ConfigBuilder.js";
 import { HexColor, isPercentageNumber, Max, Min, PercentageNumber, RGB } from "../../types/Types.js";
 import { HSV2HEX, HSV2RGB } from "../../utils/ColorUtils.js";
 import { Environment } from "../../Environment.js";
+import { SettingsUI } from "../settingsui/SettingsUI.js";
+
+/**
+ * @throws {SystemError} if the programmer/blockdesigner made a mistake
+ * @returns the searched number from the settings-ui-field (Reference by the @param name)
+ */
+export function getNumberFromSettingsUI(block: any, name: string){
+    return (block.settingsui as SettingsUI)?.getValueByName<number>(name);
+}
 
 /** 
  * @returns the hex-color from a custom-color-field. This expects to get passed a custom-color-field

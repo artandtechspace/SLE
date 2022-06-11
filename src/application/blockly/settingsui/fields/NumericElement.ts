@@ -1,10 +1,15 @@
 import { create } from "../../../utils/HTMLBuilder.js";
 import { SupplierElement } from "./BaseElement.js";
 
+export enum ParseMode{
+    FLOAT, INT
+}
+
 export type NumericFieldSettings = {
     min?: number,
     max?: number,
-    steps?: number
+    steps?: number,
+    parseMode: ParseMode 
 }
 
 export class NumericFieldElement extends SupplierElement<number>{
@@ -46,5 +51,23 @@ export class NumericFieldElement extends SupplierElement<number>{
 
         // Updates the set value
         this.setValue(evt.target.valueAsNumber)
+    }
+
+    serialize(): string {
+        return this.getValue().toString();
+    }
+
+    deserialize(raw: string): boolean {
+        // Loads the value
+        var psd = this.settings.parseMode === ParseMode.FLOAT ? parseFloat(raw) : parseInt(raw);
+
+        // Checks if the value failed to load
+        if(isNaN(psd))
+            return false;
+
+        // Updates value
+        this.setValue(psd);
+
+        return true;
     }
 }

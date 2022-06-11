@@ -3,12 +3,13 @@ import { GradientModule, GradientModuleConfig } from "../../defaultModules/anima
 import { RainbowModule, RainbowModuleConfig } from "../../defaultModules/animations/RainbowModule.js";
 import { Environment } from "../../Environment.js";
 import { HSV, Min, PercentageNumber, PositiveNumber, Range } from "../../types/Types.js";
-import { getNumberFromCode, getNumberFromCodeAsMin } from "../util/BlocklyBlockUtils.js";
+import { getNumberFromCode, getNumberFromCodeAsMin, getNumberFromSettingsUI } from "../util/BlocklyBlockUtils.js";
 import FieldBrightness from "../fields/FieldBrightness.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
 import { TB_COLOR_ANIMATIONS } from "../util/Toolbox.js";
 import { FadeModule, FadeModuleConfig } from "../../defaultModules/animations/FadeModule.js";
 import { createUI } from "../settingsui/SettingsUI.js";
+import { ParseMode } from "../settingsui/fields/NumericElement.js";
 
 const Blockly = require("blockly");
 
@@ -53,16 +54,12 @@ function registerFadeBlock(name: string){
             this.setPreviousStatement(true, null);
             this.setNextStatement(true, null);
             this.setColour(TB_COLOR_ANIMATIONS);
-            this.settingsui = createUI()
+            
+            createUI()
                 .addText("Testtext")
                 .addLineSeperator()
-                .addNumericField("JSON", "Json: ", 5, { min: 0 })
-                .addNumericField("JSON", "Json: ", 5, { min: 0 })
-                .addNumericField("JSON", "Json: ", 5, { min: 0 })
-                .addNumericFieldWithInfo("JSON","json",5, {}, "YOooo")
-                .addNumericFieldWithInfo("JSON","json",5, {}, "YOooo")
-                .addNumericFieldWithInfo("JSON","json",5, {}, "YOooo")
-                .build();
+                .addNumericFieldWithInfo("ledfrm", "Led-From: ", 5, { min: 0, parseMode: ParseMode.INT }, "yooooo")
+            .buildTo(this);
         }
       };
 
@@ -74,7 +71,8 @@ function registerFadeBlock(name: string){
         var playlen : PositiveNumber = getNumberFromCodeAsMin(block,"fadeLen", 0, env);
         var ledoffset : PositiveNumber = getNumberFromCodeAsMin(block,"ledOffset", 0, env);
         var animLen : PositiveNumber = getNumberFromCodeAsMin(block,"anmLen", 0, env);
-    
+        var ledfrom: PositiveNumber = getNumberFromSettingsUI(block, "ledfrm") as Min<0>;
+
         return {
             module: FadeModule,
             config: {

@@ -46,10 +46,10 @@ export class SettingsUIBuilder{
         return this;
     }
 
-    // Generates and builds the finished-ui. The finished ui is returned
-    build(){
+    // Generates and builds the finished-ui, then appends it to the supplied block.
+    buildTo(block: any){
         // Appends the change-cb to every element and executes the init-event
         this.elements.forEach(elm=>elm.init(this.changeCb));
-        return new SettingsUI(this.elements);
+        block.settingsui = new SettingsUI(this.elements);
     }
 }
