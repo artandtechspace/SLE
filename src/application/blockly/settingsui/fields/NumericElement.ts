@@ -99,6 +99,7 @@ export class NumericFieldBuilder<Base> extends ElementBuilderBase<Base>{
 
     public withSteps(steps: number){
         this.settings.steps = steps;
+        return this;
     }
 
     public useParseModeFloat(){

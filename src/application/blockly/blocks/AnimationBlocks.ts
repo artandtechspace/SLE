@@ -28,8 +28,9 @@ export default function registerAnimationBlocks(){
 
 function registerFadeBlock(name: string){
     // Names for the variables
-    const getFrom = "from";
-    const getLength = "length";
+    const getAnimationLength = "amtLen";
+    const getLedFrom = "from";
+    const getLedLength = "length";
     const getFadeLength = "fadeLen";
     const getLedOffset = "ledOffset";
     const getColorFrom = "clrFrom";
@@ -37,27 +38,11 @@ function registerFadeBlock(name: string){
 
     Blockly.Blocks[name] = {
         init: function() {
-            this.appendValueInput("anmLen")
-                .setCheck("Number")
-                .appendField("Fade");
-            this.appendValueInput("ledLength")
-                .setCheck("Number")
-                .appendField("ms from")
-                .appendField(new FieldCustomColor({h: .6 as PercentageNumber, s: .4 as PercentageNumber, v: 1 as PercentageNumber}), "clrFrom")
-                .appendField("to")
-                .appendField(new FieldCustomColor({h: .75 as PercentageNumber, s: .4 as PercentageNumber, v: 1 as PercentageNumber}), "clrTo")
-                .appendField("with");
-            this.appendValueInput("ledFrom")
-                .setCheck("Number")
-                .appendField("leds, starting from");
-            this.appendValueInput("fadeLen")
-                .setCheck("Number")
-                .appendField(". Fadelength is");
-            this.appendValueInput("ledOffset")
-                .setCheck("Number")
-                .appendField("with an offset of");
-            this.appendDummyInput()
-                .appendField("ms per led.");
+            this.appendDummyInput("ledLength")
+                .appendField("Fade between")
+                .appendField(new FieldCustomColor({h: .6 as PercentageNumber, s: .4 as PercentageNumber, v: 1 as PercentageNumber}), getColorFrom)
+                .appendField("and")
+                .appendField(new FieldCustomColor({h: .75 as PercentageNumber, s: .4 as PercentageNumber, v: 1 as PercentageNumber}), getColorTo);
             this.setInputsInline(true);
             this.setPreviousStatement(true, null);
             this.setNextStatement(true, null);
@@ -66,12 +51,31 @@ function registerFadeBlock(name: string){
             createUI()
                 .addText("Testtext").breakLine()
                 .addLineSeperator().breakLine()
+                
                 .addText("Fade for")
-                .addNumericField("fadeLen", 5000)
-                    .hasMin(0)
-                    .andThen()
+                .addNumericField(getAnimationLength, 5000).withSteps(100).hasMin(0).andThen()
                 .addText("ms")
-                .addInfoIcon("Yooooo")
+                .addInfoIcon("How long the animation will play before moving on to the next block.")
+                .breakLine()
+
+                .addText("from led")
+                .addNumericField(getLedFrom, 0).hasMin(0).andThen()
+                .addText("over")
+                .addNumericField(getLedLength,32).hasMin(1).andThen()
+                .addText("leds.")
+                .addInfoIcon("Specify the animation's starting led and led-length.")
+                .breakLine()
+
+                .addText("It takes")
+                .addNumericField(getFadeLength, 500).withSteps(100).hasMin(100).andThen()
+                .addText("ms, until one fade-cycle is finished.")
+                .addInfoIcon("How long one fade-cycle takes.")
+                .breakLine()
+
+                .addText("Every led has an offset of")
+                .addNumericField(getLedOffset, 50).withSteps(10).hasMin(1).andThen()
+                .addText("ms from the previous led.")
+                .addInfoIcon("Use this to create flow through the stripe.")
             .buildTo(this);
         }
       };
@@ -79,12 +83,11 @@ function registerFadeBlock(name: string){
       ConfigBuilder.registerModuleBlock<FadeModuleConfig>(name, function(block:any, env: Environment) { 
         var from: HSV = block.getFieldValue('clrFrom');
         var to: HSV = block.getFieldValue('clrTo');
-        var ledfrom : PositiveNumber = getNumberFromCodeAsMin(block,"ledFrom", 0, env);
-        var ledlength : Min<1> = getNumberFromCodeAsMin(block,'ledLength',1,env);
-        var playlen : PositiveNumber = getNumberFromCodeAsMin(block,"fadeLen", 0, env);
-        var ledoffset : PositiveNumber = getNumberFromCodeAsMin(block,"ledOffset", 0, env);
-        var animLen : PositiveNumber = getNumberFromCodeAsMin(block,"anmLen", 0, env);
-        var ledfrom: PositiveNumber = getNumberFromSettingsUI(block, "ledfrm") as Min<0>;
+        var ledfrom: PositiveNumber = getNumberFromSettingsUI(block,getLedFrom) as PositiveNumber;
+        var ledlength: Min<1> = getNumberFromSettingsUI(block,getLedLength) as Min<1>;
+        var ledoffset: PositiveNumber = getNumberFromSettingsUI(block,getLedOffset) as PositiveNumber;
+        var animLen: PositiveNumber = getNumberFromSettingsUI(block,getAnimationLength) as PositiveNumber;
+        var playlen: PositiveNumber = getNumberFromSettingsUI(block,getFadeLength) as PositiveNumber;
 
         return {
             module: FadeModule,

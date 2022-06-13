@@ -61,17 +61,7 @@ export function buildToolBox(){
             "playLenght": inputNumber(5000),
             "repeatLength": inputNumber(5000)
           }),
-          block("sle_animation_fade", {
-            "ledFrom": inputNumber(0),
-            "ledLength": {
-              block: {
-                type: "sle_values_ledamount"
-              }
-            },
-            "fadeLen": inputNumber(2000),
-            "ledOffset": inputNumber(50),
-            "anmLen": inputNumber(5000)
-          })
+          block("sle_animation_fade")
         ])
       ]
   
