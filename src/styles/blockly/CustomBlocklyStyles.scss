@@ -19,6 +19,7 @@
 
     // Popup for "hidden" blockly-block settings
     #blockly-settingsui{
+        margin-left: 20px;
         position: absolute;
         z-index: 100;
         bottom: 2rem;
@@ -61,11 +62,28 @@
 
         // For number-input fields
         .bsg-number-input{
-            input{
+            position: relative;
+
+            input, p{
                 font-size: 1.3rem;
-                width: 5rem;
                 padding-bottom: 0;
                 padding-top: 0;
+            }
+
+            // Decoy element to size the input to fit it's content length
+            p{
+                &::after{
+                    // About the size of the number-dropup/down-buttons
+                    content: '------';
+                }
+            }
+
+            input{
+                position: absolute;
+                top:0;
+                left:0;
+                right:0;
+                bottom:0;
                 transition: .2s;
 
                 &:invalid{

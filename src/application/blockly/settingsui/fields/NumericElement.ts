@@ -22,6 +22,8 @@ export class NumericFieldElement extends SupplierElement<number>{
     public render(): HTMLElement {
         return create("div",{
             chld: [
+                // Decoy element for sizing the input element like it's input text
+                create("p", { cls: "decoy", text: this.getValue().toString() }),
                 // Input
                 create("input", {
                     attr: {
@@ -31,7 +33,7 @@ export class NumericFieldElement extends SupplierElement<number>{
                         "value": this.getValue()
                     },
                     evts: {
-                        "change": this.onFieldChange.bind(this)
+                        "input": this.onFieldInput.bind(this)
                     }
                 })
             ],
@@ -39,14 +41,16 @@ export class NumericFieldElement extends SupplierElement<number>{
         })
     }
 
-    // Event: When the value of this field changes
-    private onFieldChange(evt: any){
+    // Event: When the value of this field changes (Fires on every single small change)
+    private onFieldInput(evt: any){
         // Ensures that the value is valid
         if(!evt.target.validity.valid)
             return;
-
+    
         // Updates the set value
-        this.setValue(evt.target.valueAsNumber)
+        this.setValue(evt.target.valueAsNumber);
+        // Updates the decoy-element
+        evt.target.parentElement.children[0].textContent = evt.target.value;
     }
 
     serialize(): string {
