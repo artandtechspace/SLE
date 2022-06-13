@@ -61,7 +61,7 @@ export abstract class ElementBuilderBase<Base>{
     }
 
     // Pushes the build Element
-    public push(){
+    public andThen(){
         return this.base;
     }
 

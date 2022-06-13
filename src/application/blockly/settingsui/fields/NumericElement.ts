@@ -10,30 +10,20 @@ export type NumericFieldSettings = {
     min?: number,
     max?: number,
     steps?: number,
-    parseMode: ParseMode,
-    suffix?: string,
-    infoText?: string
+    parseMode: ParseMode
 }
 
 export class NumericFieldElement extends SupplierElement<number>{
     public readonly settings: NumericFieldSettings;
-    public readonly displayText: string;
 
-    constructor(key: string, value: number, displayText: string, settings: NumericFieldSettings){
+    constructor(key: string, value: number, settings: NumericFieldSettings){
         super(key, value);
         this.settings=settings;
-        this.displayText = displayText;
     }
 
     public render(): HTMLElement {
-        // Optionally create an info-icon
-        var optInfoIcon = this.settings.infoText === undefined ? undefined : new InfoIconElement(this.settings.infoText).render();
-
         return create("div",{
             chld: [
-                // Text
-                create("p",{ text: this.displayText }),
-                
                 // Input
                 create("input", {
                     attr: {
@@ -46,19 +36,7 @@ export class NumericFieldElement extends SupplierElement<number>{
                     evts: {
                         "change": this.onFieldChange.bind(this)
                     }
-                }),
-                
-                // Suffix
-                createIf("p",{
-                    text: this.settings.suffix,
-                    cls: "suffix"
-                },this.settings.suffix !== undefined),
-                
-                // Info-icon
-                optInfoIcon,
-
-                // Next-line
-                create("br")
+                })
             ],
             cls: "bsg-number-input"
         })
@@ -103,13 +81,11 @@ export class NumericFieldBuilder<Base> extends ElementBuilderBase<Base>{
     // Required base settings
     private readonly key: string;
     private readonly value: number;
-    private readonly displayText: string;
 
-    constructor(base: Base, key: string, value: number, displayText: string){
+    constructor(base: Base, key: string, value: number){
         super(base);
         this.key = key;
         this.value = value;
-        this.displayText = displayText;
     }
 
     public hasMin(min: number){
@@ -130,17 +106,7 @@ export class NumericFieldBuilder<Base> extends ElementBuilderBase<Base>{
         return this;
     }
 
-    public withInfoIcon(infoText: string){
-        this.settings.infoText = infoText;
-        return this;
-    }
-
-    public withSuffix(suffix: string){
-        this.settings.suffix = suffix;
-        return this;
-    }
-
     public __getBuild(): Element {
-        return new NumericFieldElement(this.key, this.value, this.displayText, this.settings);
+        return new NumericFieldElement(this.key, this.value, this.settings);
     }
 }

@@ -1,19 +1,29 @@
 import { SystemError } from "../../errorSystem/Errors.js";
+import { create } from "../../utils/HTMLBuilder.js";
 import { SettingsUIBuilder } from "./Builder.js";
 import { Element, SupplierElement } from "./fields/BaseElement.js";
 import { SettingsUIManager } from "./Manager.js";
 
+// Line of elements for the settings-ui
+export type SettingsUiLine = Element[];
+
 export class SettingsUI{
     // Basic element-structure
-    private elements: Element[];
+    private lines: SettingsUiLine[];
 
-    constructor(elements: Element[]){
-        this.elements = elements;
+    constructor(lines: SettingsUiLine[]){
+        this.lines = lines;
     }
 
     // Builds the html-tree from the settings
     public render() : HTMLElement[]{
-        return this.elements.map(elm=>elm.render());
+        // Creates a line-list where all elements on a line are wrapped inside a "div.line"-element
+        return this.lines.map(line=>{
+            return create("div",{
+                cls: "line",
+                chld: line.map(elm=>elm.render())
+            })
+        })
     }
 
     /**
@@ -22,9 +32,10 @@ export class SettingsUI{
      */
     public getValueByName<T>(name: string) : T{
         // Searches for the element with that name
-        for(var elm of this.elements)
-            if(elm instanceof SupplierElement && name===elm.key)
-                return elm.getValue() as T;
+        for(var line of this.lines)
+            for(var elmnt of line)
+                if(elmnt instanceof SupplierElement && name===elmnt.key)
+                    return elmnt.getValue() as T;
 
         throw new SystemError("Failed to find ui-element with name '"+name+"'.");
     }

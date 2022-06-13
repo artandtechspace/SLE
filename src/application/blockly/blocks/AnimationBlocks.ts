@@ -64,13 +64,14 @@ function registerFadeBlock(name: string){
             this.setColour(TB_COLOR_ANIMATIONS);
             
             createUI()
-                .addText("Testtext")
-                .addLineSeperator()
-                .addNumericField("ledfrm", "Led-From:", 5)
+                .addText("Testtext").breakLine()
+                .addLineSeperator().breakLine()
+                .addText("Fade for")
+                .addNumericField("fadeLen", 5000)
                     .hasMin(0)
-                    .withSuffix("ms")
-                    .withInfoIcon("Yooooooooo")
-                    .push()
+                    .andThen()
+                .addText("ms")
+                .addInfoIcon("Yooooo")
             .buildTo(this);
         }
       };
