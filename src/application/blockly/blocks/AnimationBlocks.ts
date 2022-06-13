@@ -53,7 +53,7 @@ function registerFadeBlock(name: string){
                 .addLineSeperator().breakLine()
                 
                 .addText("Fade for")
-                .addNumericField(getAnimationLength, 5000).withSteps(100).hasMin(0).andThen()
+                .addNumericField(getAnimationLength, 5000).hasMin(0).andThen()
                 .addText("ms")
                 .addInfoIcon("How long the animation will play before moving on to the next block.")
                 .breakLine()
@@ -67,13 +67,13 @@ function registerFadeBlock(name: string){
                 .breakLine()
 
                 .addText("It takes")
-                .addNumericField(getFadeLength, 500).withSteps(100).hasMin(100).andThen()
+                .addNumericField(getFadeLength, 500).hasMin(100).andThen()
                 .addText("ms, until one fade-cycle is finished.")
                 .addInfoIcon("How long one fade-cycle takes.")
                 .breakLine()
 
                 .addText("Every led has an offset of")
-                .addNumericField(getLedOffset, 50).withSteps(10).hasMin(1).andThen()
+                .addNumericField(getLedOffset, 50).hasMin(1).andThen()
                 .addText("ms from the previous led.")
                 .addInfoIcon("Use this to create flow through the stripe.")
             .buildTo(this);

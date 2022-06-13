@@ -1,6 +1,5 @@
-import { create, createIf } from "../../../utils/HTMLBuilder.js";
+import { create } from "../../../utils/HTMLBuilder.js";
 import { Element, ElementBuilderBase, SupplierElement } from "./BaseElement.js";
-import { InfoIconElement } from "./InfoIconElement.js";
 
 export enum ParseMode{
     FLOAT, INT
@@ -9,7 +8,6 @@ export enum ParseMode{
 export type NumericFieldSettings = {
     min?: number,
     max?: number,
-    steps?: number,
     parseMode: ParseMode
 }
 
@@ -30,7 +28,6 @@ export class NumericFieldElement extends SupplierElement<number>{
                         "type": "number",
                         "min": this.settings.min,
                         "max": this.settings.max,
-                        "step": this.settings.steps,
                         "value": this.getValue()
                     },
                     evts: {
@@ -94,11 +91,6 @@ export class NumericFieldBuilder<Base> extends ElementBuilderBase<Base>{
     }
     public hasMax(max: number){
         this.settings.max = max;
-        return this;
-    }
-
-    public withSteps(steps: number){
-        this.settings.steps = steps;
         return this;
     }
 

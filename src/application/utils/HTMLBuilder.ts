@@ -42,13 +42,14 @@ export function create(tag: string, {cls,id,text,chld,attr,evts}: CreateArgument
 
   // Appends children
   if(chld !== undefined)
-    for(var x of chld)
-      if(x !== undefined)
-        elm.appendChild(x);
+    for(var child of chld)
+      if(child !== undefined)
+        elm.appendChild(child);
 
-  // Appends children
-  for(var y in attr)
-    elm.setAttribute(y,attr[y as keyof typeof attr]);
+  // Appends attributes
+  for(var attribute in attr)
+    if(attribute !== undefined)
+      elm.setAttribute(attribute,attr[attribute as keyof typeof attr]);
     
   // Appends events
   for(var z in evts)
