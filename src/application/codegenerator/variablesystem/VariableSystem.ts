@@ -5,17 +5,13 @@ import { Variable } from "./Variable.js";
 
 export class VariableSystem {
 
-    // The configured environment to use
-    private env: Environment;
-
     // Global variables that the system will automatically assign.
     private globalVars: Variable[] = [];
 
     // Supplier for unique names
     private unqSup: UniqueNameSupplier;
 
-    constructor(env: Environment, uniqueSupplier: UniqueNameSupplier) {
-        this.env = env;
+    constructor(uniqueSupplier: UniqueNameSupplier) {
         this.unqSup = uniqueSupplier;
     }
 
@@ -23,7 +19,7 @@ export class VariableSystem {
      * Generates the global variable code and returns that as a single string which must be printed at the top of the document.
      */
     public generateGlobalCode() : string{
-        return `${C("Global variable-declarations",this.env)}\n${this.globalVars.map(va=>va.declair()).join("\n")}`;
+        return `${C("Global variable-declarations")}\n${this.globalVars.map(va=>va.declair()).join("\n")}`;
     }
 
 

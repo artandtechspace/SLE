@@ -1,13 +1,13 @@
 import { Environment } from "../Environment.js";
+import { getEnvironment } from "../SharedObjects.js";
 
 /**
  * Takes in a comment and the current environment. Based on these settings the command will be printed or not.
  * @param comment which can be printed
- * @param env that determins if and how the comment will be printed.
  * @returns a string for string-interpolation.
  */
-export function C(comment: string, env: Environment) : string{
-    return env.withComments ? ("// "+comment+"\n") : "";
+export function C(comment: string) : string{
+    return getEnvironment().withComments ? ("// "+comment+"\n") : "";
 }
 
 /**

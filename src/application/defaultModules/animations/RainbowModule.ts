@@ -57,15 +57,15 @@ class RainbowModule_ extends ModuleAsFuncBase<RainbowModuleConfig> {
             updateRateInMs: CppInt
         }
     }
-    public isDirtyAfterExecution(env: Environment, cfg: RainbowModuleConfig, isDirty: boolean): boolean {
+    public isDirtyAfterExecution(cfg: RainbowModuleConfig, isDirty: boolean): boolean {
         return false;
     }
 
-    public simulateSetup(env: Environment, cfg: RainbowModuleConfig, ssot: OpenObject, arduino: Arduino): void {
+    public simulateSetup(cfg: RainbowModuleConfig, ssot: OpenObject, arduino: Arduino): void {
         ssot.value = cfg.value/255;
     }
 
-    public async simulateLoop(env : Environment, cfg: RainbowModuleConfig, ssot: OpenObject, arduino: Arduino){
+    public async simulateLoop(cfg: RainbowModuleConfig, ssot: OpenObject, arduino: Arduino){
         // Calculates when to end the simulation
         var end = arduino.millis()+cfg.playLengthInMs;
         
@@ -88,15 +88,15 @@ class RainbowModule_ extends ModuleAsFuncBase<RainbowModuleConfig> {
         }
     }
 
-    public calculateMaxAccessedLed(env: Environment, cfg: RainbowModuleConfig): PositiveNumber|void {
+    public calculateMaxAccessedLed(cfg: RainbowModuleConfig): PositiveNumber|void {
         return cfg.ledFrom+(cfg.ledLength-1) as PositiveNumber;
     }
 
-    public calculateRuntime(env: Environment, config: RainbowModuleConfig): number {
+    public calculateRuntime(config: RainbowModuleConfig): number {
         return config.playLengthInMs;
     }
 
-    public generateFunctionCode(env: Environment, varSys: VariableSystem, prms: CppFuncParams<RainbowModuleConfig>): string {
+    public generateFunctionCode(varSys: VariableSystem, prms: CppFuncParams<RainbowModuleConfig>): string {
         // Requests the end variable
         var vEnd = varSys.requestLocalVariable("long","end",`millis() + ${prms.playLengthInMs.value}`);
         // Requests the led variable

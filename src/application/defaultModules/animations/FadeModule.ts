@@ -79,11 +79,11 @@ class FadeModule_ extends ModuleAsFuncBase<FadeModuleConfig> {
         }
     }
 
-    public isDirtyAfterExecution(env: Environment, cfg: FadeModuleConfig, isDirty: boolean): boolean {
+    public isDirtyAfterExecution(cfg: FadeModuleConfig, isDirty: boolean): boolean {
         return false;
     }
 
-    public generateFunctionCode(env: Environment, varSys: VariableSystem, prms: CppFuncParams<FadeModuleConfig>): string {
+    public generateFunctionCode(varSys: VariableSystem, prms: CppFuncParams<FadeModuleConfig>): string {
 
         // Requests the end variable
         var vEnd = varSys.requestLocalVariable("long","end",`millis() + ${prms.playLengthInMs.value}`);
@@ -120,12 +120,12 @@ class FadeModule_ extends ModuleAsFuncBase<FadeModuleConfig> {
     `;
     }
 
-    public simulateSetup(env: Environment, cfg: FadeModuleConfig, ssot: OpenObject, arduino: Arduino): void {
+    public simulateSetup(cfg: FadeModuleConfig, ssot: OpenObject, arduino: Arduino): void {
         // Gets the hue-calculation function
         ssot.hueFunc = getHUECalulationFunction(cfg.color_frm_h, cfg.color_to_h);
     }
 
-    public async simulateLoop(env : Environment, cfg: FadeModuleConfig, ssot: OpenObject, arduino: Arduino){        
+    public async simulateLoop(cfg: FadeModuleConfig, ssot: OpenObject, arduino: Arduino){        
         // Calculates when to end the simulation
         var end = arduino.millis()+cfg.playLengthInMs;
 
@@ -161,11 +161,11 @@ class FadeModule_ extends ModuleAsFuncBase<FadeModuleConfig> {
 
     }
 
-    public calculateRuntime(env: Environment, config: FadeModuleConfig): number {
+    public calculateRuntime(config: FadeModuleConfig): number {
         return config.playLengthInMs;
     }
 
-    public calculateMaxAccessedLed(env: Environment, config: FadeModuleConfig): void | PositiveNumber {
+    public calculateMaxAccessedLed(config: FadeModuleConfig): void | PositiveNumber {
         return config.ledFrom+config.ledLength-1 as PositiveNumber;
     }
 

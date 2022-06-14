@@ -120,7 +120,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
     }
 
     // Generates the code for a single line depth
-    private generateLine(env: Environment, varSys: VariableSystem, prms: CppFuncParams<ColorModuleConfig>) : string{
+    private generateLine(varSys: VariableSystem, prms: CppFuncParams<ColorModuleConfig>) : string{
 
         // Requests the led variable
         var vLed = varSys.requestLocalVariable("int", "led", "0");
@@ -143,7 +143,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
     }
 
     // Generates the code for multiple steps depth
-    private generateFullSteps(env: Environment, varSys: VariableSystem, prms: CppFuncParams<ColorModuleConfig>) : string{
+    private generateFullSteps(varSys: VariableSystem, prms: CppFuncParams<ColorModuleConfig>) : string{
 
         // Gets the variables
         var vStep = varSys.requestLocalVariable("int", "steps", "0");
@@ -173,7 +173,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
 
     
 
-    public registerFunction(env: Environment, config: ColorModuleConfig, funcGen: FunctionGenerator): void {
+    public registerFunction(config: ColorModuleConfig, funcGen: FunctionGenerator): void {
         // Gets the depth
         var depth = this.getConfigDepth(config);
 
@@ -187,7 +187,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         }
     }
 
-    public generateCode(env: Environment, varSys: VariableSystem, cfg: ColorModuleConfig, funcSup: FunctionSupplier, isDirty: boolean): ModuleCode {
+    public generateCode(varSys: VariableSystem, cfg: ColorModuleConfig, funcSup: FunctionSupplier, isDirty: boolean): ModuleCode {
         // Gets the depth
         var depth = this.getConfigDepth(cfg);
 
@@ -212,11 +212,11 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
 
 
 
-    public simulateSetup(env: Environment, cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino): void {
+    public simulateSetup(cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino): void {
         ssot.clr = getHexFromRGB(cfg.clr_r,cfg.clr_g,cfg.clr_b);
     }
 
-    public async simulateLoop(env: Environment, cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino): Promise<void> {
+    public async simulateLoop(cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino): Promise<void> {
         
         // Iterates over every step
         for(var step = 0; step < cfg.steps; step++){
@@ -247,7 +247,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
 
 
 
-    public calculateRuntime(env: Environment, cfg: ColorModuleConfig) : number {
+    public calculateRuntime(cfg: ColorModuleConfig) : number {
         // Checks if only a single led is given
         if(cfg.ledsPerStep === 1 && cfg.steps === 1)
             return 0;
@@ -255,7 +255,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         return (cfg.delayPerLed * cfg.ledsPerStep + cfg.delayAfterStep) * cfg.steps
     }
 
-    public calculateMaxAccessedLed(env: Environment, cfg: ColorModuleConfig): PositiveNumber|void {
+    public calculateMaxAccessedLed(cfg: ColorModuleConfig): PositiveNumber|void {
         return cfg.start+cfg.steps*cfg.ledsPerStep+(cfg.steps-1)*cfg.space-1 as PositiveNumber;
     }
 }

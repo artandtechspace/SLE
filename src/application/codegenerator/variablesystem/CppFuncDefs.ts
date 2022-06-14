@@ -47,7 +47,7 @@ export type CppFuncParam<T> = {
 export type CppFuncParams<T>= {[key in keyof T]: CppFuncParam<T[key]>};
 
 // Function to generate the cpp-function code with a given set of cpp-parameters
-export type CppFuncGeneratorFunction<T> = (env: Environment, varSys: VariableSystem, funcParams: CppFuncParams<T>) => string;
+export type CppFuncGeneratorFunction<T> = (varSys: VariableSystem, funcParams: CppFuncParams<T>) => string;
 
 // Condenced information for the function-supplyer
 export interface CppFuncSupply<T>{[key: string]: {

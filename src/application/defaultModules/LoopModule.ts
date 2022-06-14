@@ -23,14 +23,14 @@ class LoopModule_ extends ModuleBase<LoopModuleConfig> {
         repeats: 2 as Min<2>
     }
 
-    public registerFunction(env: Environment, config: LoopModuleConfig, funcGen: FunctionGenerator): void {
+    public registerFunction(config: LoopModuleConfig, funcGen: FunctionGenerator): void {
         // Registers all functions for the submodules
-        config.submodules.forEach(mod=>mod.module.registerFunction(env,mod.config,funcGen));
+        config.submodules.forEach(mod=>mod.module.registerFunction(mod.config,funcGen));
     }
 
-    public generateCode(env: Environment, varSys: VariableSystem, cfg: LoopModuleConfig, funcSup: FunctionSupplier, isDirty: boolean): ModuleCode {
+    public generateCode(varSys: VariableSystem, cfg: LoopModuleConfig, funcSup: FunctionSupplier, isDirty: boolean): ModuleCode {
          // Gets the generated codes (The execution may end here do to an error beeing thrown)
-         var generatedCode:ModuleCode = generateModuleCode(env,varSys,cfg.submodules, funcSup, isDirty);
+         var generatedCode:ModuleCode = generateModuleCode(varSys,cfg.submodules, funcSup, isDirty);
 
          // Requests the local variable
          var vItr = varSys.requestLocalVariable("int","i","0");
@@ -51,13 +51,13 @@ class LoopModule_ extends ModuleBase<LoopModuleConfig> {
          };
     }
 
-    public calculateRuntime(env: Environment, cfg: LoopModuleConfig) : number {
-        return getFullRuntime(env, cfg.submodules) * cfg.repeats;
+    public calculateRuntime(cfg: LoopModuleConfig) : number {
+        return getFullRuntime(cfg.submodules) * cfg.repeats;
     }
 
 
 
-    public simulateSetup(env : Environment, cfg: LoopModuleConfig, singleSourceOfTruth: OpenObject, arduino: Arduino){
+    public simulateSetup(cfg: LoopModuleConfig, singleSourceOfTruth: OpenObject, arduino: Arduino){
         // Simulates the setup for the submodules
         var mods = cfg.submodules.map(mod=>{
             // Generates the new module-object
@@ -67,7 +67,7 @@ class LoopModule_ extends ModuleBase<LoopModuleConfig> {
             };
 
             // Executes the setup
-            modObj.module.simulateSetup(env,modObj.config,modObj.ssot,arduino);
+            modObj.module.simulateSetup(modObj.config,modObj.ssot,arduino);
 
             return modObj;
         });
@@ -79,7 +79,7 @@ class LoopModule_ extends ModuleBase<LoopModuleConfig> {
         singleSourceOfTruth.repeats = cfg.repeats;
     }
 
-    public async simulateLoop(env : Environment, config: LoopModuleConfig, singleSourceOfTruth: {[k: string]: any}, arduino: Arduino){
+    public async simulateLoop(config: LoopModuleConfig, singleSourceOfTruth: {[k: string]: any}, arduino: Arduino){
         // Gets the mods
         var mods = singleSourceOfTruth.mods as (ModBlockExport<any> & {ssot: {}})[];
 
@@ -88,7 +88,7 @@ class LoopModule_ extends ModuleBase<LoopModuleConfig> {
 
             // Executes the loop for the modules
             for(var modObj of mods)
-                await modObj.module.simulateLoop(env, modObj.config,modObj.ssot,arduino);
+                await modObj.module.simulateLoop(modObj.config,modObj.ssot,arduino);
         }
     }
 }

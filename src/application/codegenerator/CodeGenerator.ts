@@ -1,10 +1,10 @@
-import { Environment } from "../Environment.js";
 import { ModBlockExport } from "../ConfigBuilder.js";
 import { C, printIf } from "../utils/WorkUtils.js";
 import { VariableSystem } from "./variablesystem/VariableSystem.js";
 import { FunctionSupplier } from "./variablesystem/CppFuncSupplier.js";
 import { FunctionGenerator } from "./variablesystem/CppFuncGenerator.js";
 import { UniqueNameSupplier } from "./variablesystem/UniqueNameSupplier.js";
+import { getEnvironment } from "../SharedObjects.js";
 
 // Regexes to match env-variables and code-insert-points
 const CODE_REGEX = /\$\w+\$/gi;
@@ -26,14 +26,13 @@ export interface ModuleCode {
 
 /**
  * Takes in the whole config and an array with modules and their configs. Then generates the cpp-code from it
- * @param env the environment
  * @param variablesystem the used variable-system
  * @param mods all mods with their configs
  * @param beginDirtyState if the isDirty-state is dirty from the beginning
  * 
  * @returns the module-return for all modules. Meaning all setups and loop codes combined.
  */
-export function generateModuleCode(env: Environment, variablesystem: VariableSystem, mods: ModBlockExport<any>[], funcSup: FunctionSupplier, beginDirtyState: boolean = false) : ModuleCode{
+export function generateModuleCode(variablesystem: VariableSystem, mods: ModBlockExport<any>[], funcSup: FunctionSupplier, beginDirtyState: boolean = false) : ModuleCode{
     
     // Final code storage
     var setupCode = "";
@@ -45,7 +44,7 @@ export function generateModuleCode(env: Environment, variablesystem: VariableSys
     // Generates the code for the modules and appends it to the setup and loop strings
     function onGenCode(element: ModBlockExport<any>){
         // Generates the code
-        var code: ModuleCode = element.module.generateCode(env,variablesystem,element.config, funcSup, isDirty);
+        var code: ModuleCode = element.module.generateCode(variablesystem,element.config, funcSup, isDirty);
 
         // Checks if loop-code got added
         if(code.loop !== undefined)
@@ -74,13 +73,12 @@ export function generateModuleCode(env: Environment, variablesystem: VariableSys
 /**
  * Takes in all configurations and generates the code from them.
  * 
- * @param env environment passed by the user to the config.
  * @param mods all modules specified with their settings.
  * @throws {Error} if an error occurred
  * 
  * @returns the generated code
  */
-export function generateCode(env: Environment, mods: ModBlockExport<any>[]) : string {
+export function generateCode(mods: ModBlockExport<any>[]) : string {
 
     // Creates the supplier for unique names
     var unqSup = new UniqueNameSupplier();
@@ -89,16 +87,18 @@ export function generateCode(env: Environment, mods: ModBlockExport<any>[]) : st
     var funcGen = new FunctionGenerator();
 
     // Registers all functions
-    mods.forEach(mod=>mod.module.registerFunction(env,mod.config,funcGen));
+    mods.forEach(mod=>mod.module.registerFunction(mod.config,funcGen));
 
+    // Gets the current env
+    var env = getEnvironment();
 
     // Creates the var-system
-    var varSys = new VariableSystem(env, unqSup);
+    var varSys = new VariableSystem(unqSup);
 
     // Will hold all codes (Loop, Setup and function-definitions)
-    var definitionCode = C("Start of definition-code",env);
-    var setupCode = C("Start of setup-code",env);
-    var loopCode = C("Start of loop-code",env);
+    var definitionCode = C("Start of definition-code");
+    var setupCode = C("Start of setup-code");
+    var loopCode = C("Start of loop-code");
 
     // Replace-function to insert code and env-variables into the environment
     function replaceCodes(match: string) : string{
@@ -128,10 +128,10 @@ export function generateCode(env: Environment, mods: ModBlockExport<any>[]) : st
     var funcSup = funcGen.toSupplier(varSys, unqSup);
 
     // Generates the function definitions
-    definitionCode += funcSup.generateCppFuncDefinitions(env,varSys);
+    definitionCode += funcSup.generateCppFuncDefinitions(varSys);
 
     // Gets the generated codes (The execution may end here do to an error beeing thrown)
-    var generatedCode: ModuleCode = generateModuleCode(env,varSys,mods, funcSup);
+    var generatedCode: ModuleCode = generateModuleCode(varSys,mods, funcSup);
 
     // Appends the codes
     if(generatedCode.loop)

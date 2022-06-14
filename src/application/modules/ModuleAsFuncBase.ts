@@ -31,23 +31,23 @@ export abstract class ModuleAsFuncBase<Config extends OpenObject> extends Module
       /**
        * Takes in the env, it's config and the previous dirty-state and returns if the leds are, after the module-code has, still dirty.
        */
-      public abstract isDirtyAfterExecution(env: Environment, cfg: Config, isDirty: boolean): boolean;
+      public abstract isDirtyAfterExecution(cfg: Config, isDirty: boolean): boolean;
       /**
        * This module must use this function to generate it's code. The normal generateCode method has already been overriden and will automatically call the function.
        */
-      public abstract generateFunctionCode(env: Environment, varSys: VariableSystem, funcParams: CppFuncParams<Config>) : string;
+      public abstract generateFunctionCode(varSys: VariableSystem, funcParams: CppFuncParams<Config>) : string;
 
     //#region Overrides
 
-    public generateCode(env: Environment, varSys: VariableSystem, config: Config, funcSup: FunctionSupplier, isDirty: boolean): ModuleCode{
+    public generateCode(varSys: VariableSystem, config: Config, funcSup: FunctionSupplier, isDirty: boolean): ModuleCode{
         return {
             loop: funcSup.getCppFuncCall(this,this.modName,config),
-            isDirty: this.isDirtyAfterExecution(env, config, isDirty)
+            isDirty: this.isDirtyAfterExecution(config, isDirty)
         }
     }
 
     
-    public registerFunction(env: Environment, config: Config, funcGen: FunctionGenerator): void {
+    public registerFunction(config: Config, funcGen: FunctionGenerator): void {
         funcGen.registerCppFunc(this,this.modName,CppVoid,this.getCppTypeDefinition(),config,this.generateFunctionCode.bind(this));
     }
 

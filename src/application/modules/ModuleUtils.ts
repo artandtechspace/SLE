@@ -2,26 +2,29 @@ import { Environment } from "../Environment.js";
 import { ModBlockExport } from "../ConfigBuilder.js";
 import { OpenObject, PositiveNumber } from "../types/Types.js";
 import { ModuleBase } from "./ModuleBase.js";
+import { getEnvironment } from "../SharedObjects.js";
 
 /**
  * Returns the estimated runtime of the given configuration
  * @param env the environment
  * @param mods the modules
  */
-export function getFullRuntime(env: Environment, mods: ModBlockExport<any>[]) : number{
+export function getFullRuntime(mods: ModBlockExport<any>[]) : number{
     // Calculates the runtime of all modules
-    return mods.map(exp=> exp.module.calculateRuntime(env, exp.config)).reduce((a,b)=>a+b,0);
+    return mods.map(exp=> exp.module.calculateRuntime(exp.config)).reduce((a,b)=>a+b,0);
 }
 
 /**
  * Return all mod-exports that are accessing an led which is out of bounds
- * @param env the environment
  * @param mods the mod-exports
  */
-export function getOutOfBoundsModExports(env: Environment, mods: ModBlockExport<any>[]) {
+export function getOutOfBoundsModExports(mods: ModBlockExport<any>[]) {
+    // Gets current env
+    var env = getEnvironment();
+
     return mods.map(exp=>{
         // Calculates the led-index (if given)
-        var ledIndex = exp.module.calculateMaxAccessedLed(env,exp.config);
+        var ledIndex = exp.module.calculateMaxAccessedLed(exp.config);
 
         // Ensures that the module has an index
         if(ledIndex === undefined)

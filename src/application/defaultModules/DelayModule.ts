@@ -13,11 +13,11 @@ export type DelayModuleConfig = {
 
 class DelayModule_ extends ModuleBase<DelayModuleConfig> {
 
-    public calculateRuntime(env: Environment, config: DelayModuleConfig) : number {
+    public calculateRuntime(config: DelayModuleConfig) : number {
         return config.delay;
     }
 
-    public generateCode(env: Environment, varSys: VariableSystem, config: DelayModuleConfig, funcSup: FunctionSupplier, isDirty: boolean): ModuleCode {
+    public generateCode(varSys: VariableSystem, config: DelayModuleConfig, funcSup: FunctionSupplier, isDirty: boolean): ModuleCode {
          // Ensures that there is actually a delay set
         if(config.delay === 0)
             return {};
@@ -31,7 +31,7 @@ class DelayModule_ extends ModuleBase<DelayModuleConfig> {
         };
     }
 
-    public async simulateLoop(env : Environment, config: DelayModuleConfig, singleSourceOfTruth: {[k: string]: any}, arduino: Arduino){
+    public async simulateLoop(config: DelayModuleConfig, singleSourceOfTruth: {[k: string]: any}, arduino: Arduino){
         await arduino.delay(config.delay);
     }
 }

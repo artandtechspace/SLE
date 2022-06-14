@@ -58,7 +58,7 @@ class GradientModule_ extends ModuleAsFuncBase<GradientModuleConfig> {
         super("Gradient")
     }
 
-    public generateFunctionCode(env: Environment, varSys: VariableSystem, prms: CppFuncParams<GradientModuleConfig>): string {
+    public generateFunctionCode(varSys: VariableSystem, prms: CppFuncParams<GradientModuleConfig>): string {
         // Requests the led variable
         var vLed = varSys.requestLocalVariable("int","led","0");
 
@@ -137,18 +137,18 @@ class GradientModule_ extends ModuleAsFuncBase<GradientModuleConfig> {
         }
     }
 
-    public isDirtyAfterExecution(env: Environment, cfg: GradientModuleConfig, isDirty: boolean): boolean {
+    public isDirtyAfterExecution(cfg: GradientModuleConfig, isDirty: boolean): boolean {
         return cfg.delayPerLed <= 0 || isDirty;
     }
 
 
 
-    public simulateSetup(env: Environment, cfg: GradientModuleConfig, ssot: OpenObject, arduino: Arduino): void {
+    public simulateSetup(cfg: GradientModuleConfig, ssot: OpenObject, arduino: Arduino): void {
         // Gets the hue-calculation function
         ssot.hueFunc = getHUECalulationFunction(cfg.color_frm_h, cfg.color_to_h);
     }
 
-    public async simulateLoop(env : Environment, cfg: GradientModuleConfig, ssot: OpenObject, arduino: Arduino){
+    public async simulateLoop(cfg: GradientModuleConfig, ssot: OpenObject, arduino: Arduino){
         // Updates every led      
         for(var led = 0; led < cfg.ledLength; led++){
             // Gets the percentual state of the gradient (Also calculates if the direction or color is reversed and because if that if the percentage calculation must be different)
@@ -181,11 +181,11 @@ class GradientModule_ extends ModuleAsFuncBase<GradientModuleConfig> {
 
 
     
-    public calculateMaxAccessedLed(env: Environment, cfg: GradientModuleConfig): PositiveNumber|void {
+    public calculateMaxAccessedLed(cfg: GradientModuleConfig): PositiveNumber|void {
         return cfg.ledFrom+cfg.ledLength-1 as PositiveNumber;
     }
 
-    public calculateRuntime(env: Environment, config: GradientModuleConfig): number {
+    public calculateRuntime(config: GradientModuleConfig): number {
         return config.delayPerLed*config.ledLength;
     }
 

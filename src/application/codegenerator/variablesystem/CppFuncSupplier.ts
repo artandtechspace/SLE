@@ -16,7 +16,7 @@ export class FunctionSupplier{
     /**
      * Generates the cpp-function-code to print above all function calls in the final cpp-code.
      */
-    public generateCppFuncDefinitions(env: Environment, varSys: VariableSystem) : string{
+    public generateCppFuncDefinitions(varSys: VariableSystem) : string{
         // Contains the final generated code
         var code = "";
 
@@ -26,7 +26,7 @@ export class FunctionSupplier{
 
 
             // Generates the body
-            var body = func.onGenerate(env,varSys,func.functionParameters);
+            var body = func.onGenerate(varSys,func.functionParameters);
             
             // Generates the full function definition
             code += `

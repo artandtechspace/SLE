@@ -1,7 +1,5 @@
-import { registerBlockly } from "./blockly/BlocklyRegister.js";
 import registerCustomFields from "./blockly/fields/FieldRegistry.js";
 import { generateCode } from "./codegenerator/CodeGenerator.js";
-import { Environment } from "./Environment.js";
 import { Error, SystemError } from "./errorSystem/Errors.js";
 import { InAppErrorSystem } from "./errorSystem/InAppErrorSystem.js";
 import { getFullRuntime, getOutOfBoundsModExports } from "./modules/ModuleUtils.js";
@@ -106,23 +104,23 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 			switch(previewTabHandler.getSelectedTab()){
 				case TAB_PREVIEW_ANIMATION:
 					// Starts the simulation
-					simulation.startSimulation(env,modExports);
+					simulation.startSimulation(modExports);
 					break;
 				case TAB_PREVIEW_CODE:
 					// Generates the code and appends it to the code-area
-					codeArea.value = generateCode(env,modExports);
+					codeArea.value = generateCode(modExports);
 					break;
 				case TAB_PREVIEW_ANALYTICS:
 					// Generates the runtime-analytics
 					runtimeDisplay.textContent = getFromLanguage("ui.tabs.preview.analytics.runtime",{
-						"length": getFullRuntime(env,modExports)/1000
+						"length": getFullRuntime(modExports)/1000
 					});
 					break;
 			}
 			
 
 			// Checks if any module would shoot over the specified led-amount
-			var oobMods = getOutOfBoundsModExports(env,modExports);
+			var oobMods = getOutOfBoundsModExports(modExports);
 
 			// Checks if there are any out of bounds mods
 			if(oobMods.length > 0){
