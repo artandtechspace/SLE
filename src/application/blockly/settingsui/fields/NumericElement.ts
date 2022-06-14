@@ -17,6 +17,7 @@ export class NumericFieldElement extends SupplierElement<number>{
     constructor(key: string, value: number, settings: NumericFieldSettings){
         super(key, value);
         this.settings=settings;
+        
     }
 
     public render(): HTMLElement {
@@ -43,30 +44,47 @@ export class NumericFieldElement extends SupplierElement<number>{
 
     // Event: When the value of this field changes (Fires on every single small change)
     private onFieldInput(evt: any){
-        // Ensures that the value is valid
-        if(!evt.target.validity.valid)
-            return;
-    
         // Updates the set value
         this.setValue(evt.target.valueAsNumber);
         // Updates the decoy-element
         evt.target.parentElement.children[0].textContent = evt.target.value;
     }
 
-    serialize(): string {
-        return this.getValue().toString();
+    isValueValid(): string|void {
+        // Gets the value
+        var val = this.getValue();
+
+        // Performs all kinds of checks for the value
+        
+        // Numeric check (Should normally always be okay)
+        if(isNaN(val))
+            return "nan";
+        // Min check
+        if(this.settings.min !== undefined && val < this.settings.min)
+            return "min";
+        // Max check
+        if(this.settings.max !== undefined && val < this.settings.max)
+            return "max";
+        // Float/Int check
+        if(this.settings.parseMode===ParseMode.INT && !Number.isInteger(val))
+            return "val";
     }
 
-    deserialize(raw: string): boolean {
-        // Loads the value
-        var psd = this.settings.parseMode === ParseMode.FLOAT ? parseFloat(raw) : parseInt(raw);
+    serialize(): any {
+        return this.getValue();
+    }
 
+    deserialize(raw: any): boolean {
         // Checks if the value failed to load
-        if(isNaN(psd))
+        if(isNaN(raw))
             return false;
 
+        // Checks if int expected, but float found
+        if(this.settings.parseMode === ParseMode.INT && !Number.isInteger(raw))
+            return false;
+        
         // Updates value
-        this.setValue(psd);
+        this.setValue(raw);
 
         return true;
     }

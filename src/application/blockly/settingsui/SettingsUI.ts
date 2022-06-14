@@ -1,4 +1,5 @@
 import { SystemError } from "../../errorSystem/Errors.js";
+import { OpenObject } from "../../types/Types.js";
 import { create } from "../../utils/HTMLBuilder.js";
 import { SettingsUIBuilder } from "./Builder.js";
 import { Element, SupplierElement } from "./fields/BaseElement.js";
@@ -30,14 +31,54 @@ export class SettingsUI{
      * Returns the field value from the field with the name of @param name
      * @throws {SystemError} if the field couldn't be found.
      */
-    public getValueByName<T>(name: string) : T{
+    public getValueByName<T>(name: string) : T|string{
         // Searches for the element with that name
         for(var line of this.lines)
             for(var elmnt of line)
                 if(elmnt instanceof SupplierElement && name===elmnt.key)
-                    return elmnt.getValue() as T;
+                    // Checks if the value is valid and if not returns the error
+                    return elmnt.isValueValid() ?? elmnt.getValue() as T;
 
         throw new SystemError("Failed to find ui-element with name '"+name+"'.");
+    }
+
+    /**
+     * Saves the block-ui's state as a json-object. The same object can later be loaded by the deserialize function
+     */
+    public serialize() : OpenObject{
+        // Object that stores all serialized values as key:value (Both strings)
+        var serialized: OpenObject = {};
+
+        // Iterates over all elements and stores these serialized values
+        for(var line of this.lines)
+            for(var elmnt of line)
+                if(elmnt instanceof SupplierElement)
+                    serialized[elmnt.key] = elmnt.serialize();
+        
+        return serialized;
+    }
+
+    /**
+     * Loads previously serialized content into the settingsui.
+     * @param content the raw loaded values to deserialize to the values.
+     * @throws {SystemError} if a value got serialized invalid and can't be deserialized
+     */
+    public deserialize(content: OpenObject){
+        // Loads all serialized values back in
+        for(var line of this.lines)
+            for(var elmnt of line)
+                if(elmnt instanceof SupplierElement){
+                    // Gets value
+                    var val = content[elmnt.key];
+
+                    // Ensures the value is given
+                    if(val === undefined)
+                        continue;
+
+                    // Deserializes the value
+                    if(!elmnt.deserialize(val))
+                        throw new SystemError(`Failed to load field '${elmnt.key}'. Invalid value detected.`);
+                }
     }
 }
 

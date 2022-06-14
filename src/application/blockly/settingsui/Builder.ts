@@ -1,4 +1,4 @@
-import { Range } from "../../types/Types.js";
+import { OpenObject, Range } from "../../types/Types.js";
 import { Element, ElementBuilderBase } from "./fields/BaseElement.js";
 import { InfoIconElement } from "./fields/InfoIconElement.js";
 import { LineSeperatorElement } from "./fields/LineSeperatorElement.js";
@@ -66,6 +66,11 @@ export class SettingsUIBuilder{
 
         // Appends the change-cb to every element and executes the init-event
         resolvedLines.forEach(line=>line.forEach(elm=>elm.init(this.changeCb.bind(this))));
-        block.settingsui = new SettingsUI(resolvedLines);
+        // Creates the ui and appends it to the block
+        var setui = block.settingsui = new SettingsUI(resolvedLines);
+
+        // Appends the setting-ui to be serialized by the blockly-serializsation
+        block.saveExtraState = ()=>setui.serialize;
+        block.loadExtraState = (obj: OpenObject)=>setui.deserialize(obj);
     }
 }

@@ -1,4 +1,4 @@
-import { BlockError } from "../../errorSystem/Errors.js";
+import { BlockError, SystemError } from "../../errorSystem/Errors.js";
 import { ConfigBuilder } from "../../ConfigBuilder.js";
 import { HexColor, isPercentageNumber, Max, Min, PercentageNumber, RGB } from "../../types/Types.js";
 import { HSV2HEX, HSV2RGB } from "../../utils/ColorUtils.js";
@@ -10,7 +10,23 @@ import { SettingsUI } from "../settingsui/SettingsUI.js";
  * @returns the searched number from the settings-ui-field (Reference by the @param name)
  */
 export function getNumberFromSettingsUI(block: any, name: string){
-    return (block.settingsui as SettingsUI)?.getValueByName<number>(name);
+    // Gets the settingsui
+    var setUi: SettingsUI = (block.settingsui as SettingsUI);
+
+    // Checks if the ui is set
+    if(setUi === undefined)
+        throw new SystemError("There is no settings-ui defined but the element '"+name+"' is expected.");
+
+    // Gets the value
+    var ret = setUi.getValueByName<number>(name);
+
+    // Checks for an error
+    if(typeof ret === "string")
+        // TODO: Replace with language-file-lookup
+        throw new SystemError(ret);
+
+    // Gives back the valid value
+    return ret;
 }
 
 /** 

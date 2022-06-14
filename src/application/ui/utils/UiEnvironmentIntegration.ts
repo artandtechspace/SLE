@@ -113,7 +113,7 @@ function loadEnvIntegrationCollection() : EnvIntegrationCollection{
 /**
  * Takes in the environment and the environment-integration-collction and applies the new values
  */
-function writeEnvironmentToPage(env: Environment){
+export function writeEnvironmentToPage(env: Environment){
     envIntCol.amt.value = env.ledAmount;
     envIntCol.pin.value = env.ledPin;
     envIntCol.comments.checked = env.withComments;

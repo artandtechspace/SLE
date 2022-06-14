@@ -30,6 +30,11 @@ export abstract class SupplierElement<T> extends Element{
         this.changeCB = changeCB;
     }
 
+    /**
+     * Returns if the currently set value is valid. If that's not the case, a string with the reason is returned. Otherwise this returns void
+     */
+    abstract isValueValid() : string|void;
+
     // Returns the current value of the ui-element
     getValue() : T {
         return this.currentValue;
@@ -46,10 +51,10 @@ export abstract class SupplierElement<T> extends Element{
      * @param raw the raw value to load
      * @returns {boolean} if the load was successful
      */
-    abstract deserialize(raw: string) : boolean;
+    abstract deserialize(raw: any) : boolean;
 
-    // Serializes the current value to a string
-    abstract serialize() : string;
+    // Serializes the current value to something that can be reloaded by the deserialize function
+    abstract serialize() : any;
 }
 
 export abstract class ElementBuilderBase<Base>{

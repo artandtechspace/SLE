@@ -29,8 +29,8 @@ export default function registerAnimationBlocks(){
 function registerFadeBlock(name: string){
     // Names for the variables
     const getAnimationLength = "amtLen";
-    const getLedFrom = "from";
-    const getLedLength = "length";
+    const getLedFrom = "ledFrom";
+    const getLedLength = "ledLength";
     const getFadeLength = "fadeLen";
     const getLedOffset = "ledOffset";
     const getColorFrom = "clrFrom";
@@ -49,8 +49,6 @@ function registerFadeBlock(name: string){
             this.setColour(TB_COLOR_ANIMATIONS);
             
             createUI()
-                .addText("Testtext").breakLine()
-                .addLineSeperator().breakLine()
                 
                 .addText("Fade for")
                 .addNumericField(getAnimationLength, 5000).hasMin(0).andThen()
@@ -73,7 +71,7 @@ function registerFadeBlock(name: string){
                 .breakLine()
 
                 .addText("Every led has an offset of")
-                .addNumericField(getLedOffset, 50).hasMin(1).andThen()
+                .addNumericField(getLedOffset, 50).hasMin(0).andThen()
                 .addText("ms from the previous led.")
                 .addInfoIcon("Use this to create flow through the stripe.")
             .buildTo(this);
@@ -81,8 +79,8 @@ function registerFadeBlock(name: string){
       };
 
       ConfigBuilder.registerModuleBlock<FadeModuleConfig>(name, function(block:any, env: Environment) { 
-        var from: HSV = block.getFieldValue('clrFrom');
-        var to: HSV = block.getFieldValue('clrTo');
+        var from: HSV = block.getFieldValue(getColorFrom);
+        var to: HSV = block.getFieldValue(getColorTo);
         var ledfrom: PositiveNumber = getNumberFromSettingsUI(block,getLedFrom) as PositiveNumber;
         var ledlength: Min<1> = getNumberFromSettingsUI(block,getLedLength) as Min<1>;
         var ledoffset: PositiveNumber = getNumberFromSettingsUI(block,getLedOffset) as PositiveNumber;
@@ -113,48 +111,68 @@ function registerFadeBlock(name: string){
 // Rainbow-block
 function registerRainbowBlock(name: string){
 
+    const getLedFrom = "ledFrom";
+    const getLedLength = "ledLength";
+    const getLedOffset = "ledoffset";
+    const getAnimationLength = "anmLength";
+    const getRepeatLength = "repLength";
+    const getBrightness = "bright";
+
     Blockly.Blocks[name] = {
         init: function() {
-        this.appendValueInput("from")
-            .setCheck("Number")
-            .appendField("Rainbow From: ");
-        this.appendValueInput("length")
-            .setCheck("Number")
-            .appendField("Length: ");
-        this.appendValueInput("offsetPerLed")
-            .setCheck("Number")
-            .appendField("OffPerLed: ");
-        this.appendValueInput("playLenght")
-            .setCheck("Number")
-            .appendField("AnimationLength: ");
-        this.appendValueInput("repeatLength")
-            .setCheck("Number")
-            .appendField("Until-Repeat-length: ");
         this.appendDummyInput()
-            .appendField("Bright: ")
-            .appendField(new FieldBrightness(),"bright");
-          this.setColour(TB_COLOR_ANIMATIONS);
-          this.setPreviousStatement(true, null);
-          this.setNextStatement(true, null);
-          this.setInputsInline(true);
+            .appendField("Rainbow with a brightness of")
+            .appendField(new FieldBrightness(),getBrightness);
+        this.setColour(TB_COLOR_ANIMATIONS);
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setInputsInline(true);
+          
+          
+        createUI()
+            .addText("Create a Rainbow for")
+            .addNumericField(getAnimationLength,500).hasMin(100).andThen()
+            .addText("ms.")
+            .addInfoIcon("How long the Rainbow is shown before moving to the next block.")
+            .breakLine()
+
+            .addText("Start from led")
+            .addNumericField(getLedFrom,0).hasMin(0).andThen()
+            .addText("and draw")
+            .addNumericField(getLedLength,32).hasMin(0).andThen()
+            .addText("leds.")
+            .addInfoIcon("Specify the animation's starting led and led-length.")
+            .breakLine()
+
+            .addText("Every led is offset by")
+            .addNumericField(getLedOffset,-500).andThen()
+            .addText("ms from the previous led.")
+            .addInfoIcon("Use this to create flow through the stripe.")
+            .breakLine()
+
+            .addText("It takes")
+            .addNumericField(getRepeatLength, 5000).hasMin(500).andThen()
+            .addText("ms for the rainbow to conclude one cycle.")
+            .addInfoIcon("How long it takes for the rainbow to cycle around once.")
+        .buildTo(this);
         }
     };
 
     ConfigBuilder.registerModuleBlock<RainbowModuleConfig>(name, function(block:any, env: Environment) { 
-        var from: PositiveNumber = getNumberFromCodeAsMin(block,"from", 0, env);
-        var length = getNumberFromCodeAsMin(block,"length", 1, env);
-        var offsetPerLed = getNumberFromCode(block, "offsetPerLed", env);
-        var playLenght = getNumberFromCodeAsMin(block, "playLenght", 0, env);
-        var repeatLength = getNumberFromCodeAsMin(block, "repeatLength", 500, env);
+        var ledFrom: PositiveNumber = getNumberFromSettingsUI(block, getLedFrom) as PositiveNumber;
+        var ledLength: Min<1> = getNumberFromSettingsUI(block,getLedLength) as Min<1>;
+        var offsetPerLed: number = getNumberFromSettingsUI(block, getLedOffset);
+        var playLenght: PositiveNumber = getNumberFromSettingsUI(block, getAnimationLength) as PositiveNumber;
+        var repeatLength: Min<500> = getNumberFromSettingsUI(block, getRepeatLength) as Min<500>;
         
-        var brightness: number = block.getFieldValue("bright");
+        var brightness: number = block.getFieldValue(getBrightness);
     
         return {
             module: RainbowModule,
             config: {
                 ...RainbowModule.DEFAULT_CONFIG,
-                ledFrom: from,
-                ledLength: length,
+                ledFrom: ledFrom,
+                ledLength: ledLength,
                 offsetPerLedInMs: offsetPerLed,
                 playLengthInMs: playLenght,
                 repeatLengthInMs: repeatLength,
@@ -174,41 +192,56 @@ function registerGradientBlock(name: string){
     const MODUS_REVERSE_COLOR     = "rev_col";
     const MODUS_BOTH              = "both";
 
+    const getMode = "mode";
+    const getLedFrom = "ledfrom";
+    const getLedLength = "ledlength";
+    const getLedDelay = "leddelay";
+    const getColorFrom = "colorfrom";
+    const getColorTo = "colorto";
+
     Blockly.Blocks[name] = {
         init: function() {
-          this.appendValueInput("length")
-              .setCheck("Number")
-              .appendField("Gradient (")
-              .appendField(new Blockly.FieldDropdown([["normal",MODUS_NORMAL], ["Reverse-Color",MODUS_REVERSE_COLOR], ["Reverse-Direction",MODUS_REVERSE_DIRECTION], ["Reverse (Color and Direction)",MODUS_BOTH]]), "modus")
-              .appendField(") from")
-              .appendField(new FieldCustomColor(), "colorFrom")
-              .appendField("to")
-              .appendField(new FieldCustomColor({ h: 0.1 as PercentageNumber, s: 1 as PercentageNumber, v: 1 as PercentageNumber }), "colorTo")
-              .appendField("with");
-          this.appendValueInput("start")
-              .setCheck("Number")
-              .appendField("leds, starting from");
-          this.appendValueInput("delay")
-              .setCheck("Number")
-              .appendField("and a delay between leds of");
-          this.appendDummyInput()
-              .appendField("ms");
-          this.setColour(TB_COLOR_ANIMATIONS);
-          this.setPreviousStatement(true, null);
-          this.setNextStatement(true, null);
-          this.setInputsInline(true);
+            this.appendValueInput("length")
+                .setCheck("Number")
+                    .appendField("Gradient from")
+                .appendField(new FieldCustomColor(), getColorFrom)
+                .appendField("to")
+                .appendField(new FieldCustomColor({ h: 0.1 as PercentageNumber, s: 1 as PercentageNumber, v: 1 as PercentageNumber }), getColorTo)
+                .appendField("with ")
+                .appendField(new Blockly.FieldDropdown([["normal",MODUS_NORMAL], ["Reverse-Color",MODUS_REVERSE_COLOR], ["Reverse-Direction",MODUS_REVERSE_DIRECTION], ["Reverse (Color and Direction)",MODUS_BOTH]]), getMode)
+                .appendField("mode")
+            this.setColour(TB_COLOR_ANIMATIONS);
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setInputsInline(true);
+            
+            createUI()
+                .addText("Gradient from led")
+                .addNumericField(getLedFrom,0).hasMin(0).andThen()
+                .addText("over")
+                .addNumericField(getLedLength,32).hasMin(0).andThen()
+                .addText("leds.")
+                .addInfoIcon("Specify the animation's starting led and led-length.")
+                .breakLine()
+
+                .addText("Wait")
+                .addNumericField(getLedDelay,100).hasMin(0).andThen()
+                .addText("ms between turning on leds.")
+                .addInfoIcon("This waits a given amount of time before turning the next led on.")
+            .buildTo(this);
+        
         }
     };
 
     ConfigBuilder.registerModuleBlock<GradientModuleConfig>(name, function(block:any, env: Environment) { 
-        var start: PositiveNumber = getNumberFromCodeAsMin(block,"start", 0, env);
-        var length: PositiveNumber = getNumberFromCodeAsMin(block,"length", 0, env);
-        var colorFrom: HSV = block.getFieldValue("colorFrom");
-        var colorTo: HSV = block.getFieldValue("colorTo");
-        var delay: PositiveNumber = getNumberFromCodeAsMin(block,"delay", 0, env);
+        var start: PositiveNumber = getNumberFromSettingsUI(block,getLedFrom) as PositiveNumber;
+        var length: PositiveNumber = getNumberFromSettingsUI(block,getLedLength) as PositiveNumber;
+        var colorFrom: HSV = block.getFieldValue(getColorFrom);
+        var colorTo: HSV = block.getFieldValue(getColorTo);
+        var delay: PositiveNumber = getNumberFromSettingsUI(block,getLedLength) as PositiveNumber;
     
         // Selected modus
-        var modus:string = block.getFieldValue('modus');
+        var modus:string = block.getFieldValue(getMode);
 
         var reversedDirection = modus === MODUS_BOTH || modus === MODUS_REVERSE_DIRECTION;
         var reversedColor     = modus === MODUS_BOTH || modus === MODUS_REVERSE_COLOR;

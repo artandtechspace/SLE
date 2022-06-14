@@ -32,6 +32,7 @@
 
         // For all lines that contain the actual elements
         .line{
+            white-space: nowrap;
             margin-bottom: .6rem;
             &:last-child{
                 margin-bottom: 0;
@@ -54,10 +55,6 @@
         .infoIcon{
             display: inline;
             margin: 0;
-
-            &>div.popup{
-                white-space: nowrap;
-            }
         }
 
         // For number-input fields

@@ -14,14 +14,9 @@ import { TabHandler } from "./ui/utils/TabHandler.js";
 import { BlockWarning } from "./errorSystem/Warnings.js";
 import { didWorkspaceChange, setWorkspaceInvalid } from "./blockly/util/WorkspaceChangeDetector.js";
 import { getFromLanguage } from "./language/LanguageManager.js";
-import { SettingsUIManager } from "./blockly/settingsui/Manager.js";
 import { Manager as SettingsUiManager } from "./blockly/settingsui/SettingsUI.js";
-
-// Global environment
-var env: Environment;
-
-// Workspace for blockly
-var workspace: object;
+import { getEnvironment, getWorkspace, initSharedObjects } from "./SharedObjects.js";
+import { writeEnvironmentToPage } from "./ui/utils/UiEnvironmentIntegration.js";
 
 // Arduino-simulation
 var simulation: ArduinoSimulation;
@@ -53,7 +48,7 @@ var runtimeDisplay: HTMLSpanElement; // Holds how long the given configuration w
  */
 function getRootBlock(){
 	// Gets all blocks that
-	var blocks = (workspace as any).getTopBlocks().filter((block:any)=>!block.disabled);
+	var blocks = getWorkspace().getTopBlocks().filter((block:any)=>!block.disabled);
 
 	// Checks the length
 	if(blocks.length <= 0)
@@ -91,7 +86,8 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 
 	// Actual function to compile the workspace
 	function compileWs(){
-		console.log("Compiled workspace");
+		// Gets the current env
+		var env = getEnvironment();
 		
 		// Resets the timeout-variable
 		compileTimeout = undefined;
@@ -165,7 +161,7 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 function onBlocklyChange(evt: any){
 	// Executes the blockly-block menu if a block get's selected
 	if(evt.type==="selected"){
-		SettingsUiManager.onBlockSelect((workspace as any).getBlockById(evt.newElementId))
+		SettingsUiManager.onBlockSelect(getWorkspace().getBlockById(evt.newElementId))
 		return;
 	}
 
@@ -190,11 +186,20 @@ function onTabChange(tabId: number){
 	requestBlocklyWsCompilation(true);
 }
 
+// Event: When a new environment get's loaded
+function onNewEnvLoaded(){
+	// Updates the ui
+	writeEnvironmentToPage(getEnvironment());
+}
+
 
 /**
  * Gets called once the general environment for the app got setup. Eg. the electron browser-window or the inbrowser setup got done.
  */
 export default async function onAppInitalize(){
+	// Inits all custom blockly-fields
+	registerCustomFields();
+	
 	// Performs the ui-setup
 	var cfg = await setupUi(()=>requestBlocklyWsCompilation(true));
 
@@ -207,7 +212,6 @@ export default async function onAppInitalize(){
 	controlTabHandler = cfg.controlTabHandler;
 	popsys = cfg.popupsystem;
 	simulation = cfg.simulation;
-	env = cfg.environment;
 	errsys = cfg.errorsystem;
 	codeArea = cfg.codeArea;
 	runtimeDisplay = cfg.runtimeDisplay;
@@ -215,13 +219,9 @@ export default async function onAppInitalize(){
 	// Appends the tab-change event
 	previewTabHandler.setTabChangeHandler(onTabChange);
 
-
-	// Inits all custom blockly-fields
-	registerCustomFields();
-
-	// Initalizes all blockly-stuff
-	workspace = registerBlockly(cfg.blocklyArea);
-	
 	// Registers the change-handler for blockly
-	(workspace as any).addChangeListener(onBlocklyChange);
+	cfg.blocklyWorkspace.addChangeListener(onBlocklyChange);
+
+	// Inits the shared objects
+	initSharedObjects(cfg.blocklyWorkspace, cfg.environment, onNewEnvLoaded);
 }

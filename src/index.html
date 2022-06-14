@@ -46,7 +46,7 @@
             
             <div id="blocklyArea">
                 <!--Popup for "hidden" blockly-block settings-->
-                <div id="blockly-settingsui"></div>
+                <div id="blockly-settingsui" class="hidden"></div>
                 
                 <!--Blockly will be inserted here-->
                 <div id="blocklyDiv"></div>
@@ -186,7 +186,21 @@
                     </div>
 
                     <div id="varsTab"></div>
-                    <div id="settingsTab"></div>
+
+                    <!--Tab to perform some actions inside the app-->
+                    <div id="settingsTab">
+                        <div id="import-export">
+                            <p>Export/Export from file</p>
+                            <i class="infoIcon fa fa-info" aria-hidden="true">
+                                <div class="popup">
+                                    <p> {{ ui.settings.comments.info }} </p>
+                                </div>
+                            </i>
+                            <input type="button" value="Import File" id="import"/>
+                            <input type="button" value="Export File" id="export"/>
+                        </div>
+
+                    </div>
                 </div>
 
             </div>

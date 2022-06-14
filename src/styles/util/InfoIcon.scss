@@ -14,10 +14,11 @@ i.infoIcon{
         opacity: 1;
         transition: .2s;
     }
-
+    
     
     // Element that will popup
     &>.popup{
+        white-space: nowrap;
         visibility: hidden;
         opacity: 0;
         transition: .2s;

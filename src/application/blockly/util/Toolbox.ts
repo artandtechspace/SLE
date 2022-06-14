@@ -49,18 +49,8 @@ export function buildToolBox(){
           block("sle_values_ledamount")
         ]),
         category("animations", TB_COLOR_ANIMATIONS, [
-          block("sle_animation_gradient",{
-            "start": inputNumber(0),
-            "length": inputNumber(5),
-            "delay": inputNumber(100)
-          }),
-          block("sle_animation_rainbow",{
-            "from": inputNumber(0),
-            "length": inputNumber(5),
-            "offsetPerLed": inputNumber(-500),
-            "playLenght": inputNumber(5000),
-            "repeatLength": inputNumber(5000)
-          }),
+          block("sle_animation_gradient"),
+          block("sle_animation_rainbow"),
           block("sle_animation_fade")
         ])
       ]

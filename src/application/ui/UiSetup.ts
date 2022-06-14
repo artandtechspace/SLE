@@ -10,9 +10,11 @@ import { loadSVG } from "../utils/SVGUtil.js";
 import { TAB_PREVIEW_ANIMATION, TAB_PREVIEW_CODE, TAB_PREVIEW_ANALYTICS, TAB_CONTROLS_ENVS, TAB_CONTROLS_VARS, TAB_CONTROLS_SETTINGS } from "./Tabs.js";
 import { SliderBar, SliderBarDirection } from "./utils/SliderBar.js";
 import { TabHandler } from "./utils/TabHandler.js";
-import { PREVIEWS_FILE_PATH, PREVIEWS, DEFAULT_PREVIEW_NAME, setupEnvironment } from "./utils/UiEnvironmentIntegration.js";
+import { PREVIEWS_FILE_PATH, DEFAULT_PREVIEW_NAME, setupEnvironment } from "./utils/UiEnvironmentIntegration.js";
 import { S } from "./utils/UiUtils.js";
 import { Manager as SettingsUiManager } from "../blockly/settingsui/SettingsUI.js";
+import { registerBlockly } from "../blockly/BlocklyRegister.js";
+import { setupExportFeature } from "./utils/UiExportFeature.js";
 
 // Executes to setup the ui
 // Returns an object with all important elements
@@ -32,12 +34,15 @@ export async function setupUi(onSettingsChange: ()=>void){
         // Setups the language-system
         await setupLanguageManager("en_us");
 
+        // Initalizes all blockly-stuff and init's the blockly-area
+        var workspace = registerBlockly(S("#blocklyDiv") as HTMLDivElement);
+
+        // Registers the slider-bars for the sidebar tabs
         registerSliderBars();
         
         // Gets specific elements
         var codeArea = setupCodeArea();
         var runtimeDisplay = S("#runtime",S("#analyticsTab")) as HTMLSpanElement;
-        var blocklyArea = S("#blocklyDiv") as HTMLDivElement;
 
         var popupsystem = setupPopupsystem();
         var simulation = await setupArduinoSimulation();
@@ -51,13 +56,15 @@ export async function setupUi(onSettingsChange: ()=>void){
         // Binds the environment-settings to the ui
         setupEnvironment(env,popupsystem,simulation,onSettingsChange);
         
+        // Setups the export/import feature
+        setupImportExport(workspace);
+        
         // Setups the tabs
         var previewTabHandler = registerPreviewTabs();
         var controlTabHandler = registerControlsTabs();
-        
+
         // Cleans all hidden popup-content
         popupsystem.closePopup();
-
 
 
         // Closes the loading-screen
@@ -72,7 +79,7 @@ export async function setupUi(onSettingsChange: ()=>void){
             errorsystem,
             codeArea,
             runtimeDisplay,
-            blocklyArea
+            blocklyWorkspace: workspace
         };
     }catch(error){
         displayLoadingError(error as Error);
@@ -83,6 +90,16 @@ export async function setupUi(onSettingsChange: ()=>void){
 
 
 //#region Setup-functions
+
+// Setups the export/import feature
+function setupImportExport(workspace: any){
+    // Gets the export/import button
+    var tab = S("#import-export");
+    var expBtn = S("#export",tab) as HTMLInputElement;
+    var impBtn = S("#import",tab) as HTMLInputElement;
+
+    setupExportFeature(workspace,expBtn,impBtn);
+}
 
 // Setups the code-area and returns it
 function setupCodeArea() : HTMLTextAreaElement{
