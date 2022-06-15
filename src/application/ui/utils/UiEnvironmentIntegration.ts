@@ -48,12 +48,6 @@ var envIntCol: EnvIntegrationCollection;
     // Loads all elements
     envIntCol = loadEnvIntegrationCollection();
 
-    // Binds language
-    envIntCol.codeeditor.saveBtn.value = getFromLanguage("ui.popup.editcode.save-button");
-    envIntCol.codeeditor.cancleBtn.value = getFromLanguage("ui.popup.editcode.cancle-button");
-    envIntCol.pin.placeholder = getFromLanguage("ui.settings.led-pin");
-    envIntCol.amt.placeholder = getFromLanguage("ui.settings.led-amt");
-
     // Binds events etc.
     bindEnvironment(sim, popsys, onEnvChange);
 

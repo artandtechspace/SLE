@@ -105,12 +105,7 @@ function setupImportExport(){
 // Setups the code-area and returns it
 function setupCodeArea() : HTMLTextAreaElement{
     // Gets the area
-    var codeArea = S("#codeArea") as HTMLTextAreaElement;
-
-    // Binds display
-    codeArea.placeholder = getFromLanguage("ui.tabs.preview.code.textarea.placeholder");
-
-    return codeArea;
+    return S("#codeArea") as HTMLTextAreaElement;
 }
 
 // Displays the given error inside the ui
@@ -178,7 +173,6 @@ function setupPopupsystem(){
 
     // Appends the event handler to the control-button
 	var editCodeBtn = S("#inpPreCode") as HTMLInputElement;
-    editCodeBtn.value = getFromLanguage("ui.settings.edit-button");
     editCodeBtn.addEventListener("click",()=>popsys.showPopup(codeEditElm));
 
 	return popsys;
@@ -189,23 +183,13 @@ function registerControlsTabs(){
      // Gets the controls-area
      var controls = S("#controls");
 
-     // Gets the tabs and binds their texts
-     var btnTabEnv = S("#btnTabEnv",controls) as HTMLInputElement;
-     btnTabEnv.value = getFromLanguage("ui.tabs.controls.env");
- 
-     var btnTabVars = S("#btnTabVars",controls) as HTMLInputElement;
-     btnTabVars.value = getFromLanguage("ui.tabs.controls.vars");
- 
-     var btnTabSettings = S("#btnTabSettings",controls) as HTMLInputElement;
-     btnTabSettings.value = getFromLanguage("ui.tabs.controls.settings");
-     
      // Creates the tab-buttons
      const BUTTONS: [HTMLElement,number][] = [
-         [btnTabEnv,TAB_CONTROLS_ENVS],
+         [S("#btnTabEnv",controls),TAB_CONTROLS_ENVS],
          [S("#tabEnv",controls),TAB_CONTROLS_ENVS],
-         [btnTabVars,TAB_CONTROLS_VARS],
+         [ S("#btnTabVars",controls),TAB_CONTROLS_VARS],
          [S("#tabVars",controls),TAB_CONTROLS_VARS],
-         [btnTabSettings,TAB_CONTROLS_SETTINGS],
+         [S("#btnTabSettings",controls),TAB_CONTROLS_SETTINGS],
          [S("#tabSettings",controls),TAB_CONTROLS_SETTINGS]
      ];
      
@@ -225,23 +209,13 @@ function registerPreviewTabs(){
     // Gets the sidebar-preview
     var preview = S("#preview");
 
-    // Gets the tabs and binds their texts
-    var btnTabCode = S("#btnTabCode",preview) as HTMLInputElement;
-    btnTabCode.value = getFromLanguage("ui.tabs.preview.code");
-
-    var btnTabAnimation = S("#btnTabAnimation",preview) as HTMLInputElement;
-    btnTabAnimation.value = getFromLanguage("ui.tabs.preview.animation");
-
-    var btnTabAnalytics = S("#btnTabAnalytics",preview) as HTMLInputElement;
-    btnTabAnalytics.value = getFromLanguage("ui.tabs.preview.analytics");
-    
     // Creates the tab-buttons
     const BUTTONS: [HTMLElement,number][] = [
-        [btnTabCode,TAB_PREVIEW_CODE],
+        [S("#btnTabCode",preview),TAB_PREVIEW_CODE],
         [S("#tabCode",preview),TAB_PREVIEW_CODE],
-        [btnTabAnimation,TAB_PREVIEW_ANIMATION],
+        [S("#btnTabAnimation",preview),TAB_PREVIEW_ANIMATION],
         [S("#tabAnimation",preview),TAB_PREVIEW_ANIMATION],
-        [btnTabAnalytics,TAB_PREVIEW_ANALYTICS],
+        [S("#btnTabAnalytics",preview),TAB_PREVIEW_ANALYTICS],
         [S("#tabAnalytics",preview),TAB_PREVIEW_ANALYTICS]
     ];
 
@@ -266,7 +240,6 @@ function handleTabCode(tabCode: HTMLDivElement){
 
     // Gets the copy-button and registers the event-handler
     var cpBtn = S("#copy",tabCode) as HTMLInputElement
-    cpBtn.value = getFromLanguage("ui.tabs.preview.code.copy-button");
     cpBtn.addEventListener("click",()=>navigator.clipboard.writeText(textArea.value));
 }
 

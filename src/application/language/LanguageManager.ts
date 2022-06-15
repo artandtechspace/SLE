@@ -1,13 +1,13 @@
 import { SystemError } from "../errorSystem/Errors.js";
 
 // Regex to match variables inside the static html-page
-const HTML_MATCHER_REGEX = /^[ \t]*\{\{[ \t]*[\w\-\._]+[ \t]*\}\}[ \t]*$/gi;
+const HTML_MATCHER_REGEX = /^[ \t]*\{\{[ \t]*[\w\-\._]+[ \t]*\}\}[ \t]*$/i;
 
 // Regex used to filter the variable-name from the whole variable-string
-const VAR_NAME_MATCH_REGEX = /[\w\-\._]+/gi;
+const LANG_KEY_MATCH_REGEX = /[\w\-\._]+/i;
 
 // Regex to validate the file-name of language files
-const LANGUAGE_NAME_REGEX = /^\w{2}_\w{2}$/gi;
+const LANGUAGE_NAME_REGEX = /^\w{2}_\w{2}$/i;
 
 // Holds the loaded language if one got loaded
 var loadedLanguage: {[key: string]: string};
@@ -47,19 +47,49 @@ async function loadLanguage(name: string){
  * Scanns the whole static html-page and replaced variables with the actuall language-code
  */
 function cleanHTMLPage(){
-    // Filters all html-elements that contain a variable-language string
-    var varNodes = Array.from(document.querySelectorAll("*")).filter(x=>HTML_MATCHER_REGEX.test(x.textContent || ""));
+    Array.from(document.querySelectorAll("*")).forEach(checkElement);
+}
 
-    // Function the take in an html-element that is sure to have a variable-context and updates it
-    function apply2Node(elm: Element){
-        // Gets the variable-name
-        var varname = elm.textContent!.match(VAR_NAME_MATCH_REGEX)![0];
-        // Updates the element
-        elm.textContent = getFromLanguage(varname);
+// Takes in a single html-tag, checks it's properties and replaces them if a language-key is found
+function checkElement(elm: any){
+    function handle(text:string, onSet: (text: string)=>void){
+        // Checks if the text is a language-text
+        if(!HTML_MATCHER_REGEX.test(text || ""))
+            return;
+
+        // Gets the language-key
+        var langKey = text.match(LANG_KEY_MATCH_REGEX)![0];
+
+        // Applies the lanuage-element
+        onSet(getFromLanguage(langKey));
     }
 
-    // Applys the document-changes
-    varNodes.forEach(apply2Node);
+    // Checks tag-type
+    switch(elm.tagName.toLowerCase()){
+        case "input":
+
+            // Checks input-type
+            switch(elm.type){
+                case "button":
+                    handle(elm.value, (set: string)=>elm.value = set);
+                    break;
+                case "text": case "password":
+                    handle(elm.placeholder, (set: string)=>elm.placeholder = set);
+                    break;
+            }
+            // Inputs only work with buttons
+            if(elm.type !== "button")
+                return;
+
+            break;
+        case "textarea":
+            handle(elm.placeholder, (set: string)=>elm.placeholder = set);
+            break;
+        
+        default:
+            handle(elm.textContent, (set: string)=>elm.textContent = set);
+            break;
+    }
 }
 
 /**

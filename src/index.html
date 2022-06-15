@@ -30,8 +30,8 @@
                     <p>{{ ui.popup.editcode.title }}</p>
                     <textarea></textarea>
                     <div>
-                        <input type="button" id="pce-save">
-                        <input type="button" id="pce-cancle">
+                        <input type="button" value="{{ ui.popup.editcode.save-button }}" id="pce-save">
+                        <input type="button" value="{{ ui.popup.editcode.cancle-button }}" id="pce-cancle">
                     </div>
                 </div>
             </div>
@@ -69,9 +69,9 @@
                 <div id="wrapper" class="tabHandler">
                     <div class="th-picker">
                         <div class="th-texts">
-                            <input type="button" id="btnTabCode">
-                            <input type="button" id="btnTabAnimation">
-                            <input type="button" id="btnTabAnalytics">
+                            <input type="button" value="{{ ui.tabs.preview.code }}" id="btnTabCode">
+                            <input type="button" value="{{ ui.tabs.preview.animation }}" id="btnTabAnimation">
+                            <input type="button" value="{{ ui.tabs.preview.analytics }}" id="btnTabAnalytics">
                         </div>
 
                         <div class="th-icons">
@@ -84,9 +84,9 @@
                     <div class="th-tabs">
                         <!--Code-tab-->
                         <div id="codeTab">
-                            <textarea id="codeArea" disabled></textarea>
+                            <textarea id="codeArea" placeholder="{{ ui.tabs.preview.code.textarea.placeholder }}" disabled></textarea>
                             <div id="codeActions">
-                                <input type="button" id="copy">
+                                <input type="button" value="{{ ui.tabs.preview.code.copy-button }}" id="copy">
                             </div>
                         </div>
     
@@ -107,9 +107,9 @@
 
                 <div id="settingsPicker" class="th-picker">
                     <div class="th-texts">
-                        <input type="button" id="btnTabEnv">
-                        <input type="button" id="btnTabVars">
-                        <input type="button" id="btnTabSettings">
+                        <input type="button" value="{{ ui.tabs.controls.env }}" id="btnTabEnv">
+                        <input type="button" value="{{ ui.tabs.controls.vars }}" id="btnTabVars">
+                        <input type="button" value="{{ ui.tabs.controls.settings }}" id="btnTabSettings">
                     </div>
 
                     <div class="th-icons">
@@ -134,7 +134,7 @@
                                     </div>
                                 </i>
                             </div>
-                            <input id="inpPin" style="width:200px" min="0" type="number"/>
+                            <input id="inpPin" placeholder="{{ ui.settings.led-pin }}" style="width:200px" min="0" type="number"/>
                         </div>
     
                         <!--Led-amount field-->
@@ -147,7 +147,7 @@
                                     </div>
                                 </i>
                             </div>
-                            <input id="inpAmt" style="width:200px" min="1" type="number"/>
+                            <input id="inpAmt"  placeholder="{{ ui.settings.led-amt }}" style="width:200px" min="1" type="number"/>
                         </div>
     
                         <!--Animation-type field-->
@@ -180,7 +180,7 @@
     
                         <!--Precompile-Code field-->
                         <div class="infoInput">
-                            <input id="inpPreCode" type="button"/>
+                            <input id="inpPreCode" value="{{ ui.settings.edit-button }}" type="button"/>
                         </div>
                     </div>
 
