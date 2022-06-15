@@ -34,7 +34,6 @@
                         <input type="button" id="pce-cancle">
                     </div>
                 </div>
-                
             </div>
 
         </div>
@@ -189,15 +188,20 @@
 
                     <!--Tab to perform some actions inside the app-->
                     <div id="settingsTab">
-                        <div id="import-export">
-                            <p>Export/Export from file</p>
-                            <i class="infoIcon fa fa-info" aria-hidden="true">
-                                <div class="popup">
-                                    <p> {{ ui.settings.comments.info }} </p>
-                                </div>
-                            </i>
-                            <input type="button" value="Import File" id="import"/>
-                            <input type="button" value="Export File" id="export"/>
+                        <div id="import-export" class="infoInput">
+                            <div class="wrapper">
+                                <p>Export/Export from file</p>
+                                <i class="infoIcon fa fa-info" aria-hidden="true">
+                                    <div class="popup">
+                                        <p> Export-Info </p>
+                                    </div>
+                                </i>
+                            </div>
+                            <div id="buttons">
+                                <input type="button" value="Import File" id="import"/>
+                                <input type="file" style="display: none" id="import_helper"/>
+                                <input type="button" value="Export File" id="export"/>
+                            </div>
                         </div>
 
                     </div>

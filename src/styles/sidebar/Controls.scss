@@ -6,32 +6,45 @@
     width: 100%;
     min-height: 300px;
     
-    #envTab{
+    #envTab, #settingsTab{
         padding: .8rem;
+    }
 
-        &>.infoInput{
-            display: inline-block;
-            width: 250px;
-            margin-bottom: .5rem;
+    #settingsTab{
+        
+        #buttons{
+            display: flex;
+            margin-top: 0.6rem;
+            justify-content: space-between;
 
-            &>.wrapper{
-                display: inline-flex;
-                margin-bottom: .25rem;
-                padding-left: .6rem;
-                white-space: nowrap;
-    
-    
-                // Title-text
-                p{
-                    font-size: 1.2rem;
-                    display: inline-block;
-                }
+            &>*{
+                font-size: 1.3rem;
             }
+        }
+    }
 
-            // Options elements for select-inputs
-            select option{
-                background-color: #303030;
+    .infoInput{
+        display: inline-block;
+        width: 250px;
+        margin-bottom: .5rem;
+
+        &>.wrapper{
+            display: inline-flex;
+            margin-bottom: .25rem;
+            padding-left: .6rem;
+            white-space: nowrap;
+
+
+            // Title-text
+            p{
+                font-size: 1.2rem;
+                display: inline-block;
             }
+        }
+
+        // Options elements for select-inputs
+        select option{
+            background-color: #303030;
         }
     }
 }

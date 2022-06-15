@@ -1,13 +1,58 @@
+import { getEnvironment, getWorkspace, loadNewEnvironment } from "../SharedObjects.js";
+import {Environment} from "../Environment.js";
+import { SystemError } from "../errorSystem/Errors.js";
+import { OpenObject } from "../types/Types.js";
 
 const Blockly = require("blockly");
 
-export function exportToString(workspace: any){
+// Export-strings
+const exportStringEnv = "environment";
+const exportStringWs = "workspace";
+
+// Exports the current workspace to a string that can also again be loaded by the importFromString-function
+export function exportToString(){
     // Exports the workspace
-    var wsExp = Blockly.serialization.workspaces.save(workspace);
+    var wsExp = Blockly.serialization.workspaces.save(getWorkspace());
 
+    // Exports the environment
+    var env = Environment.serialize(getEnvironment());
 
+    return JSON.stringify({
+        [exportStringEnv]: env,
+        [exportStringWs]: wsExp
+    });
 }
 
-export function importFromString(workspace: any, data: string){
-    
+
+/**
+ * Tries to import the given string @param data as a project
+ * @throws {SystemError} if the data is invalid
+ */
+export function importFromString(data: string){
+    // Tries to parse
+    var parsedJson: OpenObject;
+    try{
+        parsedJson = JSON.parse(data);
+    }catch(exc){
+        throw new SystemError("Failed to parse-file.");
+    }
+
+    // Small function to verify an object
+    const isObj = (obj:any)=>typeof obj === "object" && obj.constructor.name === "Object";
+
+    // Ensures the elements are set
+    if(!isObj(parsedJson[exportStringEnv]) || !isObj(parsedJson[exportStringWs]))
+        throw new SystemError("Invalid workspace or environment.");
+
+    // Tries to parse the environment
+    var env = Environment.deserialize(parsedJson[exportStringEnv]);
+
+    // Tries to load the workspace
+    try{
+        Blockly.serialization.workspaces.load(parsedJson[exportStringWs], getWorkspace());
+    }catch(exc){
+        throw new SystemError("Invalid workspace.")
+    }
+    // Loads the env
+    loadNewEnvironment(env);
 }

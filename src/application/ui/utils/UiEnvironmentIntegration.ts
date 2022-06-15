@@ -6,6 +6,7 @@ import { Min, PositiveNumber } from "../../types/Types.js";
 import { create as C } from "../../utils/HTMLBuilder.js";
 import { loadSVG } from "../../utils/SVGUtil.js";
 import { S } from "./UiUtils.js";
+import { getEnvironment } from "../../SharedObjects.js";
 
 
 /**
@@ -54,7 +55,7 @@ var envIntCol: EnvIntegrationCollection;
     envIntCol.amt.placeholder = getFromLanguage("ui.settings.led-amt");
 
     // Binds events etc.
-    bindEnvironment(env, sim, popsys, onEnvChange);
+    bindEnvironment(sim, popsys, onEnvChange);
 
     // Writes the first environment
     writeEnvironmentToPage(env);
@@ -136,30 +137,30 @@ export function writeEnvironmentToPage(env: Environment){
 /**
  * Takes in multiple required elements and bind the document-environment with all events and initalizsation stuff
  */
-function bindEnvironment(env: Environment, sim: ArduinoSimulation, popsys: PopupSystem, onEnvChange: ()=>void){
+function bindEnvironment(sim: ArduinoSimulation, popsys: PopupSystem, onEnvChange: ()=>void){
     
     // Adds event below
     envIntCol.pin.addEventListener("change",(_: any)=>{
-        env.ledPin=envIntCol.pin.value as PositiveNumber;
+        getEnvironment().ledPin=envIntCol.pin.value as PositiveNumber;
         onEnvChange();
     });
     envIntCol.amt.addEventListener("change",(_: any)=>{
-        env.ledAmount=envIntCol.amt.value as Min<1>
+        getEnvironment().ledAmount=envIntCol.amt.value as Min<1>
         onEnvChange();
     });
     envIntCol.comments.addEventListener("change",(_: any)=>{
-        env.withComments=envIntCol.comments.checked
+        getEnvironment().withComments=envIntCol.comments.checked
         onEnvChange();
     });
     envIntCol.precodeBtn.addEventListener("click",(_: any)=>{
         popsys.showPopup(envIntCol.codeeditor.popup);
-        envIntCol.codeeditor.editor.value = env.preprocessingCode;
+        envIntCol.codeeditor.editor.value = getEnvironment().preprocessingCode;
     });
 
     // Adds codeeditor events
     envIntCol.codeeditor.cancleBtn.addEventListener("click",popsys.closePopup);
     envIntCol.codeeditor.saveBtn.addEventListener("click",(_: any)=>{
-        env.preprocessingCode = envIntCol.codeeditor.editor.value
+        getEnvironment().preprocessingCode = envIntCol.codeeditor.editor.value
         popsys.closePopup();
         onEnvChange();
     });
@@ -180,6 +181,9 @@ function bindEnvironment(env: Environment, sim: ArduinoSimulation, popsys: Popup
     // Adds preview-events
     envIntCol.previewSelect.addEventListener("change",async()=>{        
         
+        // Gets the env
+        var env = getEnvironment();
+
         try{
             // Gets the new index
             var newIndex = envIntCol.previewSelect.selectedIndex;

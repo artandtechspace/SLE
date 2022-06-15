@@ -188,6 +188,10 @@ function onTabChange(tabId: number){
 function onNewEnvLoaded(){
 	// Updates the ui
 	writeEnvironmentToPage(getEnvironment());
+	// Recompiles
+	requestBlocklyWsCompilation(true);
+	// Removes focus from the settings-ui
+	SettingsUiManager.onBlockSelect(null);
 }
 
 

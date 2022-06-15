@@ -57,7 +57,7 @@ export async function setupUi(onSettingsChange: ()=>void){
         setupEnvironment(env,popupsystem,simulation,onSettingsChange);
         
         // Setups the export/import feature
-        setupImportExport(workspace);
+        setupImportExport();
         
         // Setups the tabs
         var previewTabHandler = registerPreviewTabs();
@@ -92,13 +92,14 @@ export async function setupUi(onSettingsChange: ()=>void){
 //#region Setup-functions
 
 // Setups the export/import feature
-function setupImportExport(workspace: any){
+function setupImportExport(){
     // Gets the export/import button
     var tab = S("#import-export");
     var expBtn = S("#export",tab) as HTMLInputElement;
     var impBtn = S("#import",tab) as HTMLInputElement;
+    var impHelper = S("#import_helper",tab) as HTMLInputElement;
 
-    setupExportFeature(workspace,expBtn,impBtn);
+    setupExportFeature(expBtn,impBtn, impHelper);
 }
 
 // Setups the code-area and returns it

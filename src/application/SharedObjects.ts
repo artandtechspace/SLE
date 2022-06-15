@@ -1,4 +1,4 @@
-import { Environment } from "./Environment";
+import { Environment } from "./Environment.js";
 
 // Objects that are shared
 var workspaceRef: any;
