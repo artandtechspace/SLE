@@ -1,4 +1,4 @@
-import { ColorModule, ColorModuleConfig } from "../../defaultModules/ColorModule.js";
+import { ColorModule, ColorModuleConfig, StepMode } from "../../defaultModules/ColorModule.js";
 import { Environment } from "../../Environment.js";
 import { BlockError } from "../../errorSystem/Errors.js";
 import { ConfigBuilder } from "../../ConfigBuilder.js";
@@ -41,7 +41,12 @@ function registerStepsColor(name: string){
                 .appendField("leds space every")
                 .setCheck("Number");
             this.appendDummyInput()
-                .appendField("leds.");
+                .appendField("leds. IsParallel")
+                .appendField(new Blockly.FieldCheckbox("TRUE"), "isParallel")
+                .appendField("DelAfterStep:")
+                .appendField(new Blockly.FieldNumber(0), "delAfterStep")
+                .appendField("  DelPerLed:")
+                .appendField(new Blockly.FieldNumber(0), "delPerLed")
             this.setColour(TB_COLOR_COLOR);
             this.setPreviousStatement(true, null);
             this.setNextStatement(true, null);
@@ -55,13 +60,18 @@ function registerStepsColor(name: string){
         var steps: Min<1> = getNumberFromCodeAsMin(block,"steps", 1);
 
         // How many leds to skip between steps
-        var skipLen: Min<1> = getNumberFromCodeAsMin(block,"space-between-steps", 1);
+        var skipLen: PositiveNumber = getNumberFromCodeAsMin(block,"space-between-steps", 0);
 
         // How long each step is
         var skipStart: Min<1> = getNumberFromCodeAsMin(block,"step-length", 1);
 
         // Gets the color
         var color: RGB = getRGBFromCode(block,"color");
+
+        var mod: StepMode =  block.getFieldValue('isParallel') === 'TRUE' ? StepMode.PARALLEL : StepMode.SERIES;
+
+        var delPerLed = block.getFieldValue('delPerLed') as number;
+        var delAfterStep = block.getFieldValue('delAfterStep') as number;
 
         // Assembles the config
         return {
@@ -70,11 +80,14 @@ function registerStepsColor(name: string){
                 ...ColorModule.DEFAULT_CONFIG,
                 start,
                 ledsPerStep: skipStart,
-                space: skipLen as any as PositiveNumber,
+                space: skipLen,
                 steps,
                 clr_r: color.r,
                 clr_g: color.g,
-                clr_b: color.b
+                clr_b: color.b,
+                modus: mod,
+                delayAfterStep: delAfterStep as PositiveNumber,
+                delayPerLed: delPerLed as PositiveNumber
             },
             block
         }

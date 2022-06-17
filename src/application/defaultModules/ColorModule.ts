@@ -1,12 +1,11 @@
-import { Environment } from "../Environment.js";
 import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem.js";
 import { ModuleBase } from "../modules/ModuleBase.js";
 import { printIfElse } from "../utils/WorkUtils.js";
-import { HexColor, Min, OpenObject, PositiveNumber as PositiveNumber, RGBNumber } from "../types/Types.js";
+import { Min, OpenObject, PositiveNumber as PositiveNumber, RGBNumber } from "../types/Types.js";
 import { FunctionGenerator } from "../codegenerator/variablesystem/CppFuncGenerator.js";
 import { ModuleCode } from "../codegenerator/CodeGenerator.js";
 import { FunctionSupplier } from "../codegenerator/variablesystem/CppFuncSupplier.js";
-import { CppByte, CppInt, CppVoid } from "../codegenerator/variablesystem/CppTypes.js";
+import { CppBool, CppByte, CppInt, CppVoid } from "../codegenerator/variablesystem/CppTypes.js";
 import { CppFuncParam, CppFuncParams, CppTypeDefintion } from "../codegenerator/variablesystem/CppFuncDefs.js";
 import { printEquation } from "../utils/EquationUtils.js";
 import { Variable } from "../codegenerator/variablesystem/Variable.js";
@@ -36,7 +35,20 @@ export type ColorModuleConfig = {
     clr_r: RGBNumber,
     clr_g: RGBNumber,
     clr_b: RGBNumber,
+
+    
+    modus: StepMode
 };
+
+export enum StepMode{
+    PARALLEL,
+    SERIES
+}
+
+// Returns the name of the mode-function
+function getModeName(mode: StepMode) : string{
+    return "ColorSteps"+(mode === StepMode.PARALLEL ? "Parallel" : "Series")
+}
 
 // Which depth the color-module has to use
 enum ModDepth{
@@ -61,7 +73,9 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
 
         clr_r: 255 as RGBNumber,
         clr_g: 0 as RGBNumber,
-        clr_b: 0 as RGBNumber
+        clr_b: 0 as RGBNumber,
+
+        modus: StepMode.SERIES
     };
 
     // Takes in a config and returns it's depth
@@ -96,7 +110,8 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
             steps: CppInt,
             clr_r: CppByte,
             clr_g: CppByte,
-            clr_b: CppByte
+            clr_b: CppByte,
+            modus: CppBool
         }
     }
 
@@ -143,7 +158,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
     }
 
     // Generates the code for multiple steps depth
-    private generateFullSteps(varSys: VariableSystem, prms: CppFuncParams<ColorModuleConfig>) : string{
+    private generateFullSteps(varSys: VariableSystem, prms: CppFuncParams<ColorModuleConfig>, mode: StepMode) : string{
 
         // Gets the variables
         var vStep = varSys.requestLocalVariable("int", "steps", "0");
@@ -159,14 +174,33 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         // Gets the color
         var clr = this.getRGBCode(prms);
 
-        return `
-            for(${vStep.declair()} ${vStep} < ${prms.steps.value}; ${vStep}++){
-                for(${vLed.declair()} ${vLed} < ${prms.ledsPerStep.value}; ${vLed}++){
-                    leds[${idxCalc}] = ${clr};${this.generateDelayCode(prms.delayPerLed)}
-                }${this.generateDelayCode(prms.delayAfterStep)}
+        // Generates the code-fragments
+        var forStep = `for(${vStep.declair()} ${vStep} < ${prms.steps.value}; ${vStep}++) {`;
+        var forLeds = `for(${vLed.declair()} ${vLed} < ${prms.ledsPerStep.value}; ${vLed}++) {`;
+        var ledSet = `leds[${idxCalc}] = ${clr};`;
+        var delPerLed = `${this.generateDelayCode(prms.delayPerLed)}`;
+        var delPerStep = `${this.generateDelayCode(prms.delayAfterStep)}`;
+
+        // Assembles the code based on the mode
+        if(mode === StepMode.SERIES){
+            return `
+            ${forStep}
+                ${forLeds}
+                    ${ledSet}${delPerLed}
+                }
+                ${delPerStep}
             }
-        
-        `;
+            `;
+        }else{
+            return `
+            ${forLeds}
+            ${forStep}
+                    ${ledSet}${delPerStep}
+                }
+                ${delPerLed}
+            }
+            `;
+        }
     }
 
 
@@ -179,7 +213,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
 
         switch(depth){
             case ModDepth.FULL_STEPS:
-                funcGen.registerCppFunc(this,"ColorSteps",CppVoid,this.getCppTypeDefinition(),config,this.generateFullSteps.bind(this));
+                funcGen.registerCppFunc(this,getModeName(config.modus),CppVoid,this.getCppTypeDefinition(),config,(varSys, params)=>this.generateFullSteps(varSys,params, config.modus));
                 break;
             case ModDepth.LED_LINE:
                 funcGen.registerCppFunc(this,"ColorLine",CppVoid,this.getCppTypeDefinition(),config,this.generateLine.bind(this));
@@ -204,21 +238,31 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
                 };
             case ModDepth.FULL_STEPS:
                 return {
-                    loop: funcSup.getCppFuncCall(this,"ColorSteps",cfg),
+                    loop: funcSup.getCppFuncCall(this,getModeName(cfg.modus),cfg),
                     isDirty: cfg.delayPerLed <= 0 && cfg.delayAfterStep <= 0
                 };
         }
     }
 
 
-
-    public simulateSetup(cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino): void {
-        ssot.clr = getHexFromRGB(cfg.clr_r,cfg.clr_g,cfg.clr_b);
+    private async simulateSingleLed(cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino) : Promise<void>{
+        arduino.setLedHex(cfg.start, ssot.clr);
     }
 
-    public async simulateLoop(cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino): Promise<void> {
-        
-        // Iterates over every step
+    private async simulateLedStripe(cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino) : Promise<void>{
+        for(var led = 0; led < cfg.ledsPerStep; led++){
+             // Updates the color
+             arduino.setLedHex(cfg.start + led, ssot.clr);
+                
+             // Inserts a delay if required and pushes the update
+             if(cfg.delayPerLed > 0){
+                 arduino.pushLeds();
+                 await arduino.delay(cfg.delayPerLed);
+             }
+        }
+    }
+
+    private async simulateFullStripeInSERIES(cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino) : Promise<void> {
         for(var step = 0; step < cfg.steps; step++){
             // For every led of that step
             for(var led = 0; led < cfg.ledsPerStep; led++){
@@ -239,6 +283,53 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
                 await arduino.delay(cfg.delayAfterStep);
             }
         }
+    }
+
+    private async simulateFullStripeParallel(cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino) : Promise<void> {
+        // For every led of that step
+        for(var led = 0; led < cfg.ledsPerStep; led++){
+
+            // Updates the color
+            for(var step = 0; step < cfg.steps; step++){
+                arduino.setLedHex(cfg.start+step * (cfg.space+cfg.ledsPerStep) + led, ssot.clr);
+
+                if(cfg.delayAfterStep > 0){
+                    arduino.pushLeds()
+                    await arduino.delay(cfg.delayAfterStep);
+                }
+            }
+            
+            // Inserts a delay if required and pushes the update
+            if(cfg.delayPerLed > 0){
+                arduino.pushLeds();
+                await arduino.delay(cfg.delayPerLed);
+            }
+        }
+    }
+
+    public simulateSetup(cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino): void {
+        ssot.clr = getHexFromRGB(cfg.clr_r,cfg.clr_g,cfg.clr_b);
+        
+        // Gets the depth
+        var depth = this.getConfigDepth(cfg);
+
+        // Gets the function to execute the simulation
+        switch(depth){
+            case ModDepth.LED_LINE: default:
+                ssot.executor = this.simulateSingleLed;
+                break;
+            case ModDepth.LED_LINE:
+                ssot.executor = this.simulateLedStripe;
+                break;
+            case ModDepth.FULL_STEPS:
+                ssot.executor = cfg.modus === StepMode.PARALLEL ? this.simulateFullStripeParallel : this.simulateFullStripeInSERIES;
+                break;
+        }
+    }
+
+    public async simulateLoop(cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino): Promise<void> {
+        // Executes the simulation-function
+        await ssot.executor(cfg,ssot,arduino);
 
         // Updates the leds
         arduino.pushLeds(); 
