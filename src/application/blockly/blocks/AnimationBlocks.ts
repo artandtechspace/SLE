@@ -22,9 +22,61 @@ export default function registerAnimationBlocks(){
     registerGradientBlock('sle_animation_gradient');
     registerRainbowBlock('sle_animation_rainbow');
     registerFadeBlock('sle_animation_fade');
+    registerDebug('sle_debug');
 }
 
 //#region BlockRegister
+
+function registerDebug(name: string){
+    Blockly.Blocks[name] = {
+        init: function() {
+          this.appendDummyInput()
+              .appendField("Create a gradiant from")
+              .appendField(new Blockly.FieldColour("#ff0000"), "a")
+              .appendField("to")
+              .appendField(new Blockly.FieldColour("#ff0000"), "b")
+              .appendField("using mode")
+              .appendField(new Blockly.FieldDropdown([["option","OPTIONNAME"], ["option","OPTIONNAME"], ["option","OPTIONNAME"]]), "c")
+              .appendField(".");
+          this.appendDummyInput()
+              .appendField("It has a length of")
+              .appendField(new Blockly.FieldNumber(0), "d")
+              .appendField("leds and starts from led")
+              .appendField(new Blockly.FieldNumber(0), "e")
+              .appendField(".");
+          this.appendDummyInput()
+              .appendField("Wait")
+              .appendField(new Blockly.FieldNumber(0), "f")
+              .appendField("ms between turning on leds.");
+          this.setPreviousStatement(true, null);
+          this.setNextStatement(true, null);
+          this.setColour(TB_COLOR_ANIMATIONS);
+            this.setTooltip("");
+            this.setHelpUrl("");
+        }
+      };
+
+    ConfigBuilder.registerModuleBlock<FadeModuleConfig>(name, function(block:any) { 
+        return {
+            block,
+            module: FadeModule,
+            config: {
+                ...FadeModule.DEFAULT_CONFIG,
+                color_frm_h: 0 as PercentageNumber,
+                color_frm_s: 1 as PercentageNumber,
+                color_frm_v: 1 as PercentageNumber,
+                color_to_h: 1 as PercentageNumber,
+                color_to_s: 1 as PercentageNumber,
+                color_to_v: 1 as PercentageNumber,
+                ledFrom: 0 as PositiveNumber,
+                ledLength: 32 as Min<1>,
+                offsetPerLedInMs: 50 as PositiveNumber,
+                playLengthInMs: 5000 as PositiveNumber,
+                repeatLengthInMs: 1000 as PositiveNumber
+            }
+        }
+    });
+}
 
 function registerFadeBlock(name: string){
     // Names for the variables
@@ -65,7 +117,7 @@ function registerFadeBlock(name: string){
                 .breakLine()
 
                 .addText("It takes")
-                .addNumericField(getFadeLength, 500).hasMin(100).andThen()
+                .addNumericField(getFadeLength, 5000).hasMin(100).andThen()
                 .addText("ms, until one fade-cycle is finished.")
                 .addInfoIcon("How long one fade-cycle takes.")
                 .breakLine()
@@ -78,7 +130,7 @@ function registerFadeBlock(name: string){
         }
       };
 
-      ConfigBuilder.registerModuleBlock<FadeModuleConfig>(name, function(block:any, env: Environment) { 
+      ConfigBuilder.registerModuleBlock<FadeModuleConfig>(name, function(block:any) { 
         var from: HSV = block.getFieldValue(getColorFrom);
         var to: HSV = block.getFieldValue(getColorTo);
         var ledfrom: PositiveNumber = getNumberFromSettingsUI(block,getLedFrom) as PositiveNumber;
@@ -158,7 +210,7 @@ function registerRainbowBlock(name: string){
         }
     };
 
-    ConfigBuilder.registerModuleBlock<RainbowModuleConfig>(name, function(block:any, env: Environment) { 
+    ConfigBuilder.registerModuleBlock<RainbowModuleConfig>(name, function(block:any) { 
         var ledFrom: PositiveNumber = getNumberFromSettingsUI(block, getLedFrom) as PositiveNumber;
         var ledLength: Min<1> = getNumberFromSettingsUI(block,getLedLength) as Min<1>;
         var offsetPerLed: number = getNumberFromSettingsUI(block, getLedOffset);
@@ -231,7 +283,7 @@ function registerGradientBlock(name: string){
         }
     };
 
-    ConfigBuilder.registerModuleBlock<GradientModuleConfig>(name, function(block:any, env: Environment) { 
+    ConfigBuilder.registerModuleBlock<GradientModuleConfig>(name, function(block:any) { 
         var start: PositiveNumber = getNumberFromSettingsUI(block,getLedFrom) as PositiveNumber;
         var length: PositiveNumber = getNumberFromSettingsUI(block,getLedLength) as PositiveNumber;
         var colorFrom: HSV = block.getFieldValue(getColorFrom);

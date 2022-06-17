@@ -36,7 +36,7 @@ function registerComment(name: string){
         }
     };
 
-    ConfigBuilder.registerModuleBlock<CommentModuleConfig>(name, function(block:any, env: Environment) {
+    ConfigBuilder.registerModuleBlock<CommentModuleConfig>(name, function(block:any) {
         return {
             module: CommentModule,
             config: {
@@ -67,12 +67,12 @@ function registerLoop(name: string){
         }
     };
 
-    ConfigBuilder.registerModuleBlock<LoopModuleConfig>(name, function(block:any, env: Environment) {
+    ConfigBuilder.registerModuleBlock<LoopModuleConfig>(name, function(block:any) {
         // Gets the submodules
-        var submodules: ModBlockExport<any>[] = ConfigBuilder.generateModuleExports(block.getInputTargetBlock("loops"), env);
+        var submodules: ModBlockExport<any>[] = ConfigBuilder.generateModuleExports(block.getInputTargetBlock("loops"));
 
         // Gets the amount of loops
-        var loopAmt: Min<2> = getNumberFromCodeAsMin(block,"repeat-amount", 2,env);
+        var loopAmt: Min<2> = getNumberFromCodeAsMin(block,"repeat-amount", 2);
 
         return {
             module: LoopModule,
@@ -102,8 +102,8 @@ function registerDelay(name: string){
         }
     };
 
-    ConfigBuilder.registerModuleBlock<DelayModuleConfig>(name, function(block:any, env: Environment) {
-        var waitTime: PositiveNumber = getNumberFromCodeAsMin(block,"time", 0,env);
+    ConfigBuilder.registerModuleBlock<DelayModuleConfig>(name, function(block:any) {
+        var waitTime: PositiveNumber = getNumberFromCodeAsMin(block,"time", 0);
         var timeUnit = block.getFieldValue('timeUnit');
 
         // Gets the multiplicator based on the time-unit

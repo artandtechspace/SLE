@@ -55,9 +55,9 @@ export function getRGBFromCode(block: any, field: string) : RGB{
  * @throws {BlockError} if anything is not alright
  * @returns the searched number as a percentage
  */
-export function getNumberFromCodeAsPercentage(block: any, field: string, env: Environment) : PercentageNumber{
+export function getNumberFromCodeAsPercentage(block: any, field: string) : PercentageNumber{
     // Gets the number
-    var val = getNumberFromCode(block,field,env);
+    var val = getNumberFromCode(block,field);
 
     // Ensures that the number is within the required range.
     if(!isPercentageNumber(val))
@@ -70,9 +70,9 @@ export function getNumberFromCodeAsPercentage(block: any, field: string, env: En
  * @throws {BlockError} if anything is not alright
  * @returns the searched number as a min
  */
-export function getNumberFromCodeAsMin<minimum extends number>(block: any, field: string, min: minimum, env: Environment) : Min<minimum>{
+export function getNumberFromCodeAsMin<minimum extends number>(block: any, field: string, min: minimum) : Min<minimum>{
     // Gets the number
-    var val = getNumberFromCode(block,field,env);
+    var val = getNumberFromCode(block,field);
 
     // Ensures that the number is within the required range.
     if(val < min)
@@ -85,9 +85,9 @@ export function getNumberFromCodeAsMin<minimum extends number>(block: any, field
  * @throws {BlockError} if anything is not alright
  * @returns the searched number as a max
  */
-export function getNumberFromCodeAsMax<maximum extends number>(block: any, field: string, max: maximum, env: Environment) : Max<maximum>{
+export function getNumberFromCodeAsMax<maximum extends number>(block: any, field: string, max: maximum) : Max<maximum>{
     // Gets the number
-    var val = getNumberFromCode(block,field,env);
+    var val = getNumberFromCode(block,field);
 
     // Ensures that the number is within the required range.
     if(val > max)
@@ -100,9 +100,9 @@ export function getNumberFromCodeAsMax<maximum extends number>(block: any, field
  * @throws {BlockError} if anything is not alright
  * @returns the searched number from the field
  */
-export function getNumberFromCode(block: any,field: string, env:Environment) {
+export function getNumberFromCode(block: any,field: string) {
     // Reads the value and passes it
-    var val = parseInt(ConfigBuilder.getValueFromSupplier(block.getInputTargetBlock(field), env));
+    var val = parseInt(ConfigBuilder.getValueFromSupplier(block.getInputTargetBlock(field)));
 
     // Ensures that the number is valid
     if(isNaN(val))

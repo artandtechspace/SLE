@@ -49,16 +49,16 @@ function registerStepsColor(name: string){
         }
     };
 
-    ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any, env: Environment) {
+    ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
         // Variables
-        var start: PositiveNumber = getNumberFromCodeAsMin(block,"start", 0, env);
-        var steps: Min<1> = getNumberFromCodeAsMin(block,"steps", 1, env);
+        var start: PositiveNumber = getNumberFromCodeAsMin(block,"start", 0);
+        var steps: Min<1> = getNumberFromCodeAsMin(block,"steps", 1);
 
         // How many leds to skip between steps
-        var skipLen: Min<1> = getNumberFromCodeAsMin(block,"space-between-steps", 1, env);
+        var skipLen: Min<1> = getNumberFromCodeAsMin(block,"space-between-steps", 1);
 
         // How long each step is
-        var skipStart: Min<1> = getNumberFromCodeAsMin(block,"step-length", 1, env);
+        var skipStart: Min<1> = getNumberFromCodeAsMin(block,"step-length", 1);
 
         // Gets the color
         var color: RGB = getRGBFromCode(block,"color");
@@ -101,9 +101,9 @@ function registerStripe(name: string){
         }
     };
 
-    ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any, env: Environment) {
-        var pos1: PositiveNumber = getNumberFromCodeAsMin(block,"start", 0, env);
-        var pos2: PositiveNumber = getNumberFromCodeAsMin(block,"end", 0, env);
+    ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
+        var pos1: PositiveNumber = getNumberFromCodeAsMin(block,"start", 0);
+        var pos2: PositiveNumber = getNumberFromCodeAsMin(block,"end", 0);
         var color: RGB = getRGBFromCode(block,"color");
         
         // Checks if an invalid length got specified
@@ -148,9 +148,9 @@ function registerSingleLed(name: string){
         }
     };
 
-    ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any, env: Environment) {
+    ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
         // Start
-        var start: PositiveNumber = getNumberFromCodeAsMin(block,"led",0, env);
+        var start: PositiveNumber = getNumberFromCodeAsMin(block,"led",0);
 
         // Color
         var color: RGB = getRGBFromCode(block,"color");

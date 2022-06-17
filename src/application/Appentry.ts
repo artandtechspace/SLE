@@ -84,9 +84,6 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 
 	// Actual function to compile the workspace
 	function compileWs(){
-		// Gets the current env
-		var env = getEnvironment();
-		
 		// Resets the timeout-variable
 		compileTimeout = undefined;
 
@@ -94,7 +91,7 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 			// Ensures that only the root element exists on the workspace
 
 			// Gets the raw string config
-			var modExports: ModBlockExport<any>[] = ConfigBuilder.generateModuleExports(getRootBlock().getNextBlock(),env);	
+			var modExports: ModBlockExport<any>[] = ConfigBuilder.generateModuleExports(getRootBlock().getNextBlock());
 			
 			// Checks if the checksum has changed
 			if(!didWorkspaceChange(modExports) && !ignoreNoChanges)
@@ -127,7 +124,7 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 				// Gets the first problem
 				var prob = oobMods[0];
 				// Writes the warning
-				errsys.show(new BlockWarning(`Your settings (${prob.ledIndex+1} leds) for a block are overflowing your led-stripe's (${env.ledAmount} leds) length.`,prob.block));
+				errsys.show(new BlockWarning(`Your settings (${prob.ledIndex+1} leds) for a block are overflowing your led-stripe's (${getEnvironment().ledAmount} leds) length.`,prob.block));
 			}else
 				// Removes and previous error-messages
 				errsys.clearScreen();			

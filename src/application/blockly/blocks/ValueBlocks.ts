@@ -1,5 +1,6 @@
 import { ConfigBuilder } from "../../ConfigBuilder.js";
 import { Environment } from "../../Environment.js";
+import { getEnvironment } from "../../SharedObjects.js";
 import { TB_COLOR_VALUES } from "../util/Toolbox.js";
 
 const Blockly = require("blockly");
@@ -22,7 +23,7 @@ function registerNumberBlock(){
     // Name of the block
     const name = "math_number";
 
-    ConfigBuilder.registerValueSupplier(name,(block: any, env:Environment)=>{
+    ConfigBuilder.registerValueSupplier(name,(block: any)=>{
         return block.getFieldValue("NUM");
     });
 }
@@ -38,8 +39,8 @@ function registerLedAmountBlock(name: string){
         }
     };
 
-    ConfigBuilder.registerValueSupplier(name,(block: any, env:Environment)=>{
-        return env.ledAmount;
+    ConfigBuilder.registerValueSupplier(name,(block: any)=>{
+        return getEnvironment().ledAmount;
     });
 }
 

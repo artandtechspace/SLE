@@ -16,9 +16,9 @@ export interface ModBlockExport<T>{
 }
 
 // Function for blockly-blocks that supplie mod-block-exports
-export type ModBlockFunc<T> = (block: any, env: Environment)=>ModBlockExport<T>;
+export type ModBlockFunc<T> = (block: any)=>ModBlockExport<T>;
 // Function for blockly-blocks that supplie values
-export type SupplierFunc = (block: any, env: Environment)=>any;
+export type SupplierFunc = (block: any)=>any;
 
 class ConfigBuilder_{
 
@@ -50,8 +50,8 @@ class ConfigBuilder_{
      * Returns the value of a given supplier-block (Inline-blockly-block)
      * @param block the blockly-block
      */
-    getValueFromSupplier(block: any, env: Environment): any{
-        return block === null ? null : this.blockSuppliers[block.type](block, env);
+    getValueFromSupplier(block: any): any{
+        return block === null ? null : this.blockSuppliers[block.type](block);
     }
 
     /**
@@ -59,7 +59,7 @@ class ConfigBuilder_{
      * @param startBlock the starting block
      * @param env the environment that got supplied
      */
-    generateModuleExports(startBlock: any, env: Environment): ModBlockExport<any>[]{
+    generateModuleExports(startBlock: any): ModBlockExport<any>[]{
         // Next block
         var next = startBlock;
 
@@ -68,7 +68,7 @@ class ConfigBuilder_{
 
         // Generates the exports and moves to the next block
         while(next !== null){
-            exports.push(this.modblockGenerators[next.type](next, env));
+            exports.push(this.modblockGenerators[next.type](next));
 
             next = next.getNextBlock();
         }

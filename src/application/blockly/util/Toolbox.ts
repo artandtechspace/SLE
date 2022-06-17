@@ -51,7 +51,8 @@ export function buildToolBox(){
         category("animations", TB_COLOR_ANIMATIONS, [
           block("sle_animation_gradient"),
           block("sle_animation_rainbow"),
-          block("sle_animation_fade")
+          block("sle_animation_fade"),
+          block("sle_debug")
         ])
       ]
   
