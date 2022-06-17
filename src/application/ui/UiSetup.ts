@@ -1,7 +1,7 @@
 import { Environment } from "../Environment.js";
 import { Error } from "../errorSystem/Errors.js";
 import { InAppErrorSystem } from "../errorSystem/InAppErrorSystem.js";
-import { getFromLanguage, setupLanguageManager } from "../language/LanguageManager.js";
+import { setupLanguageManager } from "../language/LanguageManager.js";
 import { PopupSystem } from "./popupSystem/PopupSystem.js";
 import { PRESET_SOURCECODE } from "../Preset.js";
 import { ArduinoSimulation } from "../simulation/ArduinoSimulation.js";
@@ -150,7 +150,11 @@ function removeLoadingScreen(){
     setTimeout(()=>ls.classList.add("hide"), 2000);
 }
 
-// Setups the arduino-simulation and inserts it into the environment
+/**
+ * Setups the arduino-simulation and inserts it into the environment
+ * 
+ * @throws any error that could arrise
+ */
 async function setupArduinoSimulation(){
 
     // Creates the simulation with the preview-element

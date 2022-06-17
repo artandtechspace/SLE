@@ -1,6 +1,6 @@
 import { StopableCallchain } from "../utils/StopableCallchain.js";
 import { Arduino } from "./Arduino.js";
-import { SystemError } from "../errorSystem/Errors.js";
+import { InvalidValueError } from "../errorSystem/Errors.js";
 import { getFullRuntime } from "../modules/ModuleUtils.js";
 import { ModBlockExport } from "../ConfigBuilder.js";
 import { Min } from "../types/Types.js";
@@ -59,7 +59,7 @@ export class ArduinoSimulation{
      * 
      * @param svg the preview-element
      * 
-     * @throws {SystemError} if there is an error with loading the preview-element
+     * @throws {InvalidValueError} if there is an error with loading the preview-element
      */
     public loadPreview(svg: SVGElement){
         // Gets all leds
@@ -67,7 +67,7 @@ export class ArduinoSimulation{
 
         // Ensures that the leds could be loaded
         if(leds.length <= 0)
-            throw new SystemError("No leds could be found.");
+            throw new InvalidValueError("No leds could be found.");
 
         this.leds = leds;
 

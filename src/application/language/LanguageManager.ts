@@ -1,4 +1,6 @@
-import { SystemError } from "../errorSystem/Errors.js";
+import { LoadingError } from "../errorSystem/Errors.js";
+import { handleProgrammingError } from "../errorSystem/ProgrammingErrorSystem.js";
+import { SM } from "../ui/utils/UiUtils.js";
 
 // Regex to match variables inside the static html-page
 const HTML_MATCHER_REGEX = /^[ \t]*\{\{[ \t]*[\w\-\._]+[ \t]*\}\}[ \t]*$/i;
@@ -16,12 +18,12 @@ var loadedLanguage: {[key: string]: string};
  * Tries to load a given language file.
  * 
  * @param name the name of the file (Without extension). Must comply with the naming schema.
- * @throws {SystemError} if something goes wrong
+ * @throws {LoadingError} if something goes wrong
  */
 async function loadLanguage(name: string){
     // Ensures the loading-name is compliant with the loading schema
     if(!LANGUAGE_NAME_REGEX.test(name))
-        throw new SystemError("Failed to load language, requested language file name '"+name+"' does not comply with the file-nameing schema.");
+        throw new LoadingError("Failed to load language, requested language file name '"+name+"' does not comply with the file-nameing schema.");
 
     try{
     
@@ -39,7 +41,7 @@ async function loadLanguage(name: string){
         // Stores the loaded language
         loadedLanguage = langAsJson;
     }catch(e){
-        throw new SystemError("Failed to catch language-file '"+name+"': "+e);
+        throw new LoadingError("Failed to catch language-file '"+name+"': "+e);
     }
 }
 
@@ -47,7 +49,7 @@ async function loadLanguage(name: string){
  * Scanns the whole static html-page and replaced variables with the actuall language-code
  */
 function cleanHTMLPage(){
-    Array.from(document.querySelectorAll("*")).forEach(checkElement);
+    Array.from(SM("*")).forEach(checkElement);
 }
 
 // Takes in a single html-tag, checks it's properties and replaces them if a language-key is found
@@ -96,7 +98,7 @@ function checkElement(elm: any){
  * Setup the language manager and loads the specified language-file.
  * 
  * @param langFileName the file-name of the language-file without extension. Must comply to the defined name-schema.
- * @throws {SystemError} if something goes wrong (In that case the application is unable to operate)
+ * @throws {LoadingError} if something goes wrong (In that case the application is unable to operate)
  */
 export async function setupLanguageManager(langFileName: string){
     // Tries to load the language file
@@ -109,17 +111,17 @@ export async function setupLanguageManager(langFileName: string){
 /**
  * Returns the language-value of the current language that is corresponding to the current key and optionally replaces variable-values with the given variables if they are given.
  * 
- * @throws {SystemError} if the given key doesn't correspond to any values inside the language-table.
+ * @throws {LoadingError} if the given key doesn't correspond to any values inside the language-table.
  * 
  * !Node! this can and should only be called after the inital setup of the language-manager
  */
-export function getFromLanguage(key: string, variables?: {[key:string]: (number|string|boolean)}){
+export function getFromLanguage(key: string, variables?: {[key:string]: (number|string|boolean)}) : string{
     // Gets the value
     var val = loadedLanguage[key];
 
     // Checks if the key exists
     if(val === undefined)
-        throw new SystemError("Failed to find language key '"+key+"'.");
+        return handleProgrammingError("Failed to find language key '"+key+"'.");
 
     // If no variables are given
     if(variables === undefined)

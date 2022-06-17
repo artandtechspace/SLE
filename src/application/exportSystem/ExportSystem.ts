@@ -1,6 +1,6 @@
 import { getEnvironment, getWorkspace, loadNewEnvironment } from "../SharedObjects.js";
 import {Environment} from "../Environment.js";
-import { SystemError } from "../errorSystem/Errors.js";
+import { LoadingError } from "../errorSystem/Errors.js";
 import { OpenObject } from "../types/Types.js";
 
 const Blockly = require("blockly");
@@ -26,7 +26,7 @@ export function exportToString(){
 
 /**
  * Tries to import the given string @param data as a project
- * @throws {SystemError} if the data is invalid
+ * @throws {LoadingError|SerialisationError} if the data is invalid
  */
 export function importFromString(data: string){
     // Tries to parse
@@ -34,7 +34,7 @@ export function importFromString(data: string){
     try{
         parsedJson = JSON.parse(data);
     }catch(exc){
-        throw new SystemError("Failed to parse-file.");
+        throw new LoadingError("Failed to parse-file.");
     }
 
     // Small function to verify an object
@@ -42,16 +42,15 @@ export function importFromString(data: string){
 
     // Ensures the elements are set
     if(!isObj(parsedJson[exportStringEnv]) || !isObj(parsedJson[exportStringWs]))
-        throw new SystemError("Invalid workspace or environment.");
+        throw new LoadingError("Invalid workspace or environment.");
 
-    // Tries to parse the environment
-    var env = Environment.deserialize(parsedJson[exportStringEnv]);
+    var env: Environment = Environment.deserialize(parsedJson[exportStringEnv]);
 
     // Tries to load the workspace
     try{
         Blockly.serialization.workspaces.load(parsedJson[exportStringWs], getWorkspace());
     }catch(exc){
-        throw new SystemError("Invalid workspace.")
+        throw new LoadingError("Invalid workspace.")
     }
     // Loads the env
     loadNewEnvironment(env);

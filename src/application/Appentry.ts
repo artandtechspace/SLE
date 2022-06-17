@@ -1,6 +1,6 @@
 import registerCustomFields from "./blockly/fields/FieldRegistry.js";
 import { generateCode } from "./codegenerator/CodeGenerator.js";
-import { Error, SystemError } from "./errorSystem/Errors.js";
+import { DesyncedWorkspaceError, Error } from "./errorSystem/Errors.js";
 import { InAppErrorSystem } from "./errorSystem/InAppErrorSystem.js";
 import { getFullRuntime, getOutOfBoundsModExports } from "./modules/ModuleUtils.js";
 import { PopupSystem } from "./ui/popupSystem/PopupSystem.js";
@@ -42,7 +42,7 @@ var runtimeDisplay: HTMLSpanElement; // Holds how long the given configuration w
 /**
  * Gets the root block from the workspace.
  * 
- * @throws {Error} If there are multiple non-disabled blocks or non-disabled and non-root blocks
+ * @throws {DesyncedWorkspaceError} If there are multiple non-disabled blocks or non-disabled and non-root blocks
  */
 function getRootBlock(){
 	// Gets all blocks that
@@ -50,18 +50,18 @@ function getRootBlock(){
 
 	// Checks the length
 	if(blocks.length <= 0)
-		throw new SystemError("No root-block found. Did something go wrong while loading?");
+		throw new DesyncedWorkspaceError("No root-block found. Did something go wrong while loading?");
 
 	// Checks the length
 	if(blocks.length > 1)
-		throw new SystemError("Found multiple non-disabled blocks on the workspace. Did something go wrong while loading?");
+		throw new DesyncedWorkspaceError("Found multiple non-disabled blocks on the workspace. Did something go wrong while loading?");
 	
 	// Gets the block
 	var blg = blocks[0];
 
 	// Ensures that the block is the root
 	if(blg.type !== "sle_root")
-		throw new SystemError("Found a single non-root block on the workspace but nothing else. Did something go wrong while loading?");
+		throw new DesyncedWorkspaceError("Found a single non-root block on the workspace but nothing else. Did something go wrong while loading?");
 
 	return blg;
 }
@@ -146,7 +146,6 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 				alert("We have detected a critical error, please restart the application.");
 				return;
 			}
-					
 
 			// Shows the error
 			errsys.show(e);
@@ -187,7 +186,7 @@ function onTabChange(tabId: number){
 // Event: When a new environment get's loaded
 function onNewEnvLoaded(){
 	// Updates the ui
-	writeEnvironmentToPage(getEnvironment());
+	writeEnvironmentToPage(getEnvironment(), true);
 	// Recompiles
 	requestBlocklyWsCompilation(true);
 	// Removes focus from the settings-ui

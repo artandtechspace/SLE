@@ -41,8 +41,6 @@ var envIntCol: EnvIntegrationCollection;
 
 /**
  * Setups the environment
- * 
- * @throws {SystemError} if anything failed to load 
  */
  export function setupEnvironment(env: Environment, popsys: PopupSystem, sim: ArduinoSimulation, onEnvChange: ()=>void){
     // Loads all elements
@@ -80,7 +78,6 @@ interface EnvIntegrationCollection {
 /**
  * Loads all env-integration elements from the document.
  * 
- * @throws {SystemError} if any element couldn't be fetched
  * @returns an object with all objects well and structured
  */
 function loadEnvIntegrationCollection() : EnvIntegrationCollection{
@@ -108,7 +105,7 @@ function loadEnvIntegrationCollection() : EnvIntegrationCollection{
 /**
  * Takes in the environment and the environment-integration-collction and applies the new values
  */
-export function writeEnvironmentToPage(env: Environment){
+export function writeEnvironmentToPage(env: Environment, withUpdate = false){
     envIntCol.amt.value = env.ledAmount;
     envIntCol.pin.value = env.ledPin;
     envIntCol.comments.checked = env.withComments;
@@ -126,6 +123,9 @@ export function writeEnvironmentToPage(env: Environment){
         }
     }
 
+    // Fires the change event
+    if(withUpdate)
+        envIntCol.previewSelect.dispatchEvent(new Event("change"));
 }
 
 /**

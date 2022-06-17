@@ -1,5 +1,6 @@
-import { SystemError } from "../../errorSystem/Errors.js";
-import { S, SM } from "./UiUtils.js";
+import {  } from "../../errorSystem/Errors.js";
+import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem.js";
+import { S } from "./UiUtils.js";
 
 /**
  * The TabHandler removes/adds element to the page depending on the current tab.
@@ -120,7 +121,6 @@ export class TabHandler{
      * Takes in an array of @param rawTabs and maps it into a loopup-table to save globally.
      * Unmounts the tabs from the document and returns the parent element that the tabs are mounted at. This is their entry point.
      * 
-     * @throws {SystemError} if there is a critical error
      * @returns {HTMLElement} the parent element of all tabs
      */
     private registerTabs(rawTabs: [HTMLElement, number][]): HTMLElement{
@@ -134,13 +134,13 @@ export class TabHandler{
         for(let [tab, _] of rawTabs){
             // Ensures that they are mounted
             if(tab.parentElement === undefined)
-                throw new SystemError("Tab is not mounted on the document.");
+                return handleProgrammingError("Tab is not mounted on the document.");
             
             // Checks if the parent is currently unset
             if(parent !== undefined){
                 // Checks if the parent match up
                 if(parent !== tab.parentElement)
-                    throw new SystemError("Two tabs don't share the same parents.");
+                    return handleProgrammingError("Two tabs don't share the same parents.");
             }else
                 // Sets the mount point
                 parent = tab.parentElement as HTMLElement;
@@ -151,7 +151,7 @@ export class TabHandler{
 
         // Ensures that at least one tab got registered
         if(parent === undefined)
-            throw new SystemError("No tabs were registered");
+            return handleProgrammingError("No tabs were registered");
 
         return parent;
     }

@@ -33,12 +33,14 @@ function onExportFileButtonClicked(){
 // Event: When the import button get's clicked
 function onImportFileButtonClicked(evt: any){
     var file = evt.target.files[0];
-    if (!file) {
-        return;
-    }
+    if (!file)
+        return false;
+
     var reader = new FileReader();
     reader.onload = onImportFile;
     reader.readAsText(file);
+
+    return false;
 }
 
 // Event: When the user has selected a file to upload

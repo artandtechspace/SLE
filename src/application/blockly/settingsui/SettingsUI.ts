@@ -1,4 +1,5 @@
-import { SystemError } from "../../errorSystem/Errors.js";
+import { SerialisationError } from "../../errorSystem/Errors.js";
+import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem.js";
 import { OpenObject } from "../../types/Types.js";
 import { create } from "../../utils/HTMLBuilder.js";
 import { SettingsUIBuilder } from "./Builder.js";
@@ -29,7 +30,6 @@ export class SettingsUI{
 
     /**
      * Returns the field value from the field with the name of @param name
-     * @throws {SystemError} if the field couldn't be found.
      */
     public getValueByName<T>(name: string) : T|string{
         // Searches for the element with that name
@@ -39,7 +39,7 @@ export class SettingsUI{
                     // Checks if the value is valid and if not returns the error
                     return elmnt.isValueValid() ?? elmnt.getValue() as T;
 
-        throw new SystemError("Failed to find ui-element with name '"+name+"'.");
+        return handleProgrammingError("Failed to find ui-element with name '"+name+"'");
     }
 
     /**
@@ -61,7 +61,7 @@ export class SettingsUI{
     /**
      * Loads previously serialized content into the settingsui.
      * @param content the raw loaded values to deserialize to the values.
-     * @throws {SystemError} if a value got serialized invalid and can't be deserialized
+     * @throws {SerialisationError} if a value got serialized invalid and can't be deserialized
      */
     public deserialize(content: OpenObject){
         // Loads all serialized values back in
@@ -77,7 +77,7 @@ export class SettingsUI{
 
                     // Deserializes the value
                     if(!elmnt.deserialize(val))
-                        throw new SystemError(`Failed to load field '${elmnt.key}'. Invalid value detected.`);
+                        throw new SerialisationError(`Failed to load field '${elmnt.key}'. Invalid value detected.`);
                 }
     }
 }

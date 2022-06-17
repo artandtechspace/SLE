@@ -1,4 +1,4 @@
-import { SystemError } from "../../errorSystem/Errors.js";
+import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem.js";
 import { CppReturnType, CppType } from "./CppFuncDefs.js";
 
 // Defined cpp-types and cpp-return-types that are already implemented to be handled
@@ -12,15 +12,13 @@ export const CppByte: CppType = "byte" as CppType;
  * Takes in a @param param cpp-type as the parameter type for a function and the @param value that shall be converted.
  * 
  * Returns the converted value that can be directly printed into the cpp-code's function call
- * 
- * @throws {SystemError} if the value is invalid or unsuited for the given Cpp-Type (This should never happen)
  */
 export function turnCppTypeToParameterCode(param: CppType, value: any){
     switch(param){
         case CppFloat:
             // Ensures the parameter is a number
             if(typeof value !== "number" || isNaN(value))
-                throw new SystemError("CppFloat got passed non-numeric value.");
+                return handleProgrammingError("CppFloat got passed non-numeric value.")
 
             // Turns the number to it's sting value with always a number behin the decimal point
             return value.toFixed(8).replace(/0+$/gi,"0").replace(/\.$/gi,".0");
@@ -31,26 +29,26 @@ export function turnCppTypeToParameterCode(param: CppType, value: any){
 
             // Ensures the parameter is a number
             if(!Number.isInteger(value))
-                throw new SystemError("CppInt got passed non-numeric value.");
+                return handleProgrammingError("CppInt got passed non-numeric value.");
+
             return value.toString();
         case CppBool:
             if(typeof value !== "boolean")
-                throw new SystemError("CppBool got passed non-boolean value.");
+                return handleProgrammingError("CppBool got passed non-boolean value.");
+
             return value.toString();
         case CppByte:
             
             // Ensures the parameter is a number
             if(!Number.isInteger(value))
-                throw new SystemError("CppInt got passed non-numeric value.");
+                return handleProgrammingError("CppInt got passed non-numeric value.");
 
             // Ensures that the value is in range
             if(value < 0 || value > 255)
-                throw new SystemError("CppByte got passed a value > 255 or < 0.");
+            return handleProgrammingError("CppByte got passed a value > 255 or < 0.");
 
             return value.toString();
-        case CppVoid:
-            throw new SystemError("CppVoid cant be passed as an argument.");
         default:
-            throw "Invalid parameter type got passed.";
+            return handleProgrammingError("Invalid parameter type got passed to turnCppTypeToParameterCode");
     }
 }

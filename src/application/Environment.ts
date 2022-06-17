@@ -1,4 +1,4 @@
-import { SystemError } from "./errorSystem/Errors.js";
+import { SerialisationError } from "./errorSystem/Errors.js";
 import { isMin, Min, OpenObject, PositiveNumber } from "./types/Types.js";
 import { PREVIEWS } from "./ui/utils/UiEnvironmentIntegration.js";
 
@@ -31,23 +31,23 @@ export class Environment{
     /**
      * Deserializes the given object to an environment
      * 
-     * @throws {SystemError} if any value is invalid
+     * @throws {SerialisationError} if any value is invalid
      */
     static deserialize(obj: OpenObject){
         if(typeof obj.withComments !== "boolean")
-            throw new SystemError("withComments must be a boolean");
+            throw new SerialisationError("withComments must be a boolean");
 
         if(typeof obj.preprocessingCode !== "string")
-            throw new SystemError("preprocessingCode must be a string");
+            throw new SerialisationError("preprocessingCode must be a string");
 
         if(!Number.isInteger(obj.ledPin) || !isMin(obj.ledPin,0))
-            throw new SystemError("ledPin must be a positive integer");
+            throw new SerialisationError("ledPin must be a positive integer");
 
         if(!Number.isInteger(obj.ledAmount) || !isMin(obj.ledAmount,1))
-            throw new SystemError("ledAmount must be an integer >= 1");
+            throw new SerialisationError("ledAmount must be an integer >= 1");
 
         if(typeof obj.selectedPreview !== "string" || !PREVIEWS.includes(obj.selectedPreview))
-            throw new SystemError("selectedPreview must be an the index of a preview");
+            throw new SerialisationError("selectedPreview must be an the index of a preview");
 
         return new Environment(obj.ledAmount, obj.withComments, obj.preprocessingCode, obj.ledPin, obj.selectedPreview);
     }

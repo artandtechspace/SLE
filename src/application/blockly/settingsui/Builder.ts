@@ -71,6 +71,8 @@ export class SettingsUIBuilder{
 
         // Appends the setting-ui to be serialized by the blockly-serializsation
         block.saveExtraState = ()=>setui.serialize;
+        // If the setui.deserialize-function throws an error, it will be catched by the general
+        // deserialize-logic inside the ErrorSystem.importFromString with the blockly-serializsation logic
         block.loadExtraState = (obj: OpenObject)=>setui.deserialize(obj);
     }
 }

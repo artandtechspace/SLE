@@ -1,29 +1,29 @@
-import { BlockError, SystemError } from "../../errorSystem/Errors.js";
+import { BlockError, InvalidValueError } from "../../errorSystem/Errors.js";
 import { ConfigBuilder } from "../../ConfigBuilder.js";
 import { HexColor, isPercentageNumber, Max, Min, PercentageNumber, RGB } from "../../types/Types.js";
 import { HSV2HEX, HSV2RGB } from "../../utils/ColorUtils.js";
 import { Environment } from "../../Environment.js";
 import { SettingsUI } from "../settingsui/SettingsUI.js";
+import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem.js";
 
 /**
- * @throws {SystemError} if the programmer/blockdesigner made a mistake
+ * @throws {InvalidValueError} if the value on the block is currently invalid
  * @returns the searched number from the settings-ui-field (Reference by the @param name)
  */
-export function getNumberFromSettingsUI(block: any, name: string){
+export function getNumberFromSettingsUI(block: any, name: string) : number{
     // Gets the settingsui
     var setUi: SettingsUI = (block.settingsui as SettingsUI);
 
     // Checks if the ui is set
     if(setUi === undefined)
-        throw new SystemError("There is no settings-ui defined but the element '"+name+"' is expected.");
+        return handleProgrammingError("There is no settings-ui defined but the element '"+name+"' is expected.");
 
     // Gets the value
     var ret = setUi.getValueByName<number>(name);
 
     // Checks for an error
     if(typeof ret === "string")
-        // TODO: Replace with language-file-lookup
-        throw new SystemError(ret);
+        throw new InvalidValueError(ret);
 
     // Gives back the valid value
     return ret;

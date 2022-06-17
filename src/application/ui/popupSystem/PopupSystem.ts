@@ -1,3 +1,5 @@
+import { S } from "../utils/UiUtils.js";
+
 export class PopupSystem{
  
     // HTML-Elements from the system
@@ -7,9 +9,9 @@ export class PopupSystem{
 
     constructor(){
         // Gets the overlay, popup and close button
-        this.overlay = document.querySelector("#popup-overlay") as HTMLElement;
-        this.contentHolder = this.overlay.querySelector("#popup-content") as HTMLElement;
-        this.closeBtn = this.overlay.querySelector("#popup-close") as HTMLInputElement;
+        this.overlay = S("#popup-overlay");
+        this.contentHolder = S("#popup-content", this.overlay);
+        this.closeBtn = S("#popup-close", this.overlay) as HTMLInputElement;
 
         // Appends the close event to the button
         this.closeBtn.addEventListener("click",this.closePopup);        

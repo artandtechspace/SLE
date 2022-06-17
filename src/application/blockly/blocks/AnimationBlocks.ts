@@ -201,15 +201,13 @@ function registerGradientBlock(name: string){
 
     Blockly.Blocks[name] = {
         init: function() {
-            this.appendValueInput("length")
-                .setCheck("Number")
-                    .appendField("Gradient from")
+            this.appendDummyInput()
+                .appendField("Gradient from")
                 .appendField(new FieldCustomColor(), getColorFrom)
                 .appendField("to")
                 .appendField(new FieldCustomColor({ h: 0.1 as PercentageNumber, s: 1 as PercentageNumber, v: 1 as PercentageNumber }), getColorTo)
-                .appendField("with ")
-                .appendField(new Blockly.FieldDropdown([["normal",MODUS_NORMAL], ["Reverse-Color",MODUS_REVERSE_COLOR], ["Reverse-Direction",MODUS_REVERSE_DIRECTION], ["Reverse (Color and Direction)",MODUS_BOTH]]), getMode)
-                .appendField("mode")
+                .appendField("with mode")
+                .appendField(new Blockly.FieldDropdown([["normal",MODUS_NORMAL], ["Reverse-Color",MODUS_REVERSE_COLOR], ["Reverse-Direction",MODUS_REVERSE_DIRECTION], ["Reverse (Color and Direction)",MODUS_BOTH]]), getMode);
             this.setColour(TB_COLOR_ANIMATIONS);
             this.setPreviousStatement(true, null);
             this.setNextStatement(true, null);
@@ -238,7 +236,7 @@ function registerGradientBlock(name: string){
         var length: PositiveNumber = getNumberFromSettingsUI(block,getLedLength) as PositiveNumber;
         var colorFrom: HSV = block.getFieldValue(getColorFrom);
         var colorTo: HSV = block.getFieldValue(getColorTo);
-        var delay: PositiveNumber = getNumberFromSettingsUI(block,getLedLength) as PositiveNumber;
+        var delay: PositiveNumber = getNumberFromSettingsUI(block,getLedDelay) as PositiveNumber;
     
         // Selected modus
         var modus:string = block.getFieldValue(getMode);
