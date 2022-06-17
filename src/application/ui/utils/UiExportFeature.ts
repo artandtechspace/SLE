@@ -52,7 +52,7 @@ function onImportFile(evt: any){
         // Tries to load the environment from that file
         importFromString(cont);
     }catch(exc){
-        // TODO
-        console.log(exc);
+        // TODO: Implement using popup-system
+        alert(exc);
     }
 }
