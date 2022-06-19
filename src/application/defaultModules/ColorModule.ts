@@ -78,45 +78,10 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         modus: StepMode.SERIES
     };
 
-    // Takes in a config and returns it's depth
-    private getConfigDepth(cfg: ColorModuleConfig) : ModDepth{
-        // Checks if there is only a single step
-        if (cfg.steps === 1)
-            // Return if there is only a single led or multiple leds
-            return cfg.ledsPerStep <= 1 ? ModDepth.SINGLE_LED : ModDepth.LED_LINE;
+    //#region Code-Generation
 
-        return ModDepth.FULL_STEPS;
-    }
-
-    // Returns the mapped values for equations
-    private getEquationsConfig(prms: CppFuncParams<ColorModuleConfig>, led: Variable, step?: Variable){
-        return {
-            "start": prms.start.value,
-            "space": prms.space.value,
-            "ledsPerStep": prms.ledsPerStep.value,
-            "led": led,
-            "step": step ?? 0
-        };
-    }
-
-    // Returns the type-definitions for the module-config
-    private getCppTypeDefinition() : CppTypeDefintion<ColorModuleConfig>{
-        return {
-            delayAfterStep: CppInt,
-            delayPerLed: CppInt,
-            ledsPerStep: CppInt,
-            space: CppInt,
-            start: CppInt,
-            steps: CppInt,
-            clr_r: CppByte,
-            clr_g: CppByte,
-            clr_b: CppByte,
-            modus: CppBool
-        }
-    }
-
-    // Takes in a delay-parameter from the cpp-parameters and returns the code depending on the value of the parameter
-    private generateDelayCode(delayParam: CppFuncParam<number>){
+     // Takes in a delay-parameter from the cpp-parameters and returns the code depending on the value of the parameter
+     private generateDelayCode(delayParam: CppFuncParam<number>){
         var delayCode = "\nFastLED.show();\ndelay("+delayParam.value+");";
         return printIfElse(
             delayParam.value > 0 ? delayCode : ``,
@@ -205,7 +170,8 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
 
 
 
-    
+
+
 
     public registerFunction(config: ColorModuleConfig, funcGen: FunctionGenerator): void {
         // Gets the depth
@@ -244,11 +210,17 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         }
     }
 
+    //#endregion
 
+    //#region Simulation
+
+
+    // Function to simulate a single led
     private async simulateSingleLed(cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino) : Promise<void>{
         arduino.setLedHex(cfg.start, ssot.clr);
     }
 
+    // Function to simulate an array (stripe) of leds
     private async simulateLedStripe(cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino) : Promise<void>{
         for(var led = 0; led < cfg.ledsPerStep; led++){
              // Updates the color
@@ -262,7 +234,8 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         }
     }
 
-    private async simulateFullStripeInSERIES(cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino) : Promise<void> {
+    // Function to simulate a full stripe with mode in series
+    private async simulateFullStripeInSeries(cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino) : Promise<void> {
         for(var step = 0; step < cfg.steps; step++){
             // For every led of that step
             for(var led = 0; led < cfg.ledsPerStep; led++){
@@ -285,6 +258,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         }
     }
 
+    // Function to simulate a full stripe with mode in parallel
     private async simulateFullStripeParallel(cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino) : Promise<void> {
         // For every led of that step
         for(var led = 0; led < cfg.ledsPerStep; led++){
@@ -307,6 +281,10 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         }
     }
 
+
+
+
+
     public simulateSetup(cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino): void {
         ssot.clr = getHexFromRGB(cfg.clr_r,cfg.clr_g,cfg.clr_b);
         
@@ -315,14 +293,14 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
 
         // Gets the function to execute the simulation
         switch(depth){
-            case ModDepth.LED_LINE: default:
+            case ModDepth.SINGLE_LED: default:
                 ssot.executor = this.simulateSingleLed;
                 break;
             case ModDepth.LED_LINE:
                 ssot.executor = this.simulateLedStripe;
                 break;
             case ModDepth.FULL_STEPS:
-                ssot.executor = cfg.modus === StepMode.PARALLEL ? this.simulateFullStripeParallel : this.simulateFullStripeInSERIES;
+                ssot.executor = cfg.modus === StepMode.PARALLEL ? this.simulateFullStripeParallel : this.simulateFullStripeInSeries;
                 break;
         }
     }
@@ -334,6 +312,52 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         // Updates the leds
         arduino.pushLeds(); 
     }
+
+
+    //#endregion
+
+    // Takes in a config and returns it's depth
+    private getConfigDepth(cfg: ColorModuleConfig) : ModDepth{
+        // Checks if there is only a single step
+        if (cfg.steps === 1)
+            // Return if there is only a single led or multiple leds
+            return cfg.ledsPerStep <= 1 ? ModDepth.SINGLE_LED : ModDepth.LED_LINE;
+
+        return ModDepth.FULL_STEPS;
+    }
+
+    // Returns the mapped values for equations
+    private getEquationsConfig(prms: CppFuncParams<ColorModuleConfig>, led: Variable, step?: Variable){
+        return {
+            "start": prms.start.value,
+            "space": prms.space.value,
+            "ledsPerStep": prms.ledsPerStep.value,
+            "led": led,
+            "step": step ?? 0
+        };
+    }
+
+    // Returns the type-definitions for the module-config
+    private getCppTypeDefinition() : CppTypeDefintion<ColorModuleConfig>{
+        return {
+            delayAfterStep: CppInt,
+            delayPerLed: CppInt,
+            ledsPerStep: CppInt,
+            space: CppInt,
+            start: CppInt,
+            steps: CppInt,
+            clr_r: CppByte,
+            clr_g: CppByte,
+            clr_b: CppByte,
+            modus: CppBool
+        }
+    }
+
+   
+
+
+
+    
 
 
 
