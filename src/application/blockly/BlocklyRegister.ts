@@ -3,7 +3,6 @@ import registerAnimationBlocks from "./blocks/AnimationBlocks.js";
 import registerColorBlocks from "./blocks/ColorBlocks.js";
 import registerControlBlocks from "./blocks/ControlBlocks.js";
 import registerSpecialBlocks from "./blocks/SpecialBlocks.js";
-import registerValueBlocks from "./blocks/ValueBlocks.js";
 import Theme from "./util/Theme.js";
 import { buildToolBox } from "./util/Toolbox.js";
 const Blockly = require("blockly");
@@ -32,7 +31,6 @@ function registerBlocks(){
 	
 	registerColorBlocks();
 	registerControlBlocks();
-	registerValueBlocks();
 	registerAnimationBlocks();
 }
 

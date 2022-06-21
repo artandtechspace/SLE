@@ -5,7 +5,6 @@ import { getFromLanguage } from "../../language/LanguageManager.js";
  */
 export const TB_COLOR_COLOR = 45;
 export const TB_COLOR_CONTROL = 210;
-export const TB_COLOR_VALUES = 20;
 export const TB_COLOR_ANIMATIONS = 120;
 
 // Builds the toolbox
@@ -14,39 +13,16 @@ export function buildToolBox(){
       "kind": "categoryToolbox",
       "contents": [
         category("color", TB_COLOR_COLOR,[
-          block("sle_simple_single_color",{
-            "led": inputNumber(0)
-          }),
+          block("sle_simple_single_color"),
   
-          block("sle_simple_stripe_color",{
-            "start": inputNumber(0),
-            "end": {
-              block: {
-                type: "sle_values_ledamount"
-              }
-            }
-          }),
-          block("sle_steps_color",{
-            "start": inputNumber(0),
-            "steps": inputNumber(1),
-            "space-between-steps": inputNumber(1),
-            "step-length": inputNumber(1),
-          })
+          block("sle_simple_stripe_color"),
         ]),
         
         category("control", TB_COLOR_CONTROL,[
-          block("sle_control_delay",{
-            "time": inputNumber(50)
-          }),
+          block("sle_control_delay"),
   
-          block("sle_control_loop",{
-            "repeat-amount": inputNumber(2)
-          }),
+          block("sle_control_loop"),
           block("sle_control_comment")
-        ]),
-        category("values", TB_COLOR_VALUES, [
-          block("math_number"),
-          block("sle_values_ledamount")
         ]),
         category("animations", TB_COLOR_ANIMATIONS, [
           block("sle_animation_gradient"),

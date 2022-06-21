@@ -49,15 +49,17 @@ function registerComment(name: string){
 
 // Loop-block
 function registerLoop(name: string){
+
+    const getRepeats = "led";
+    const getSubcode = "subcode";
+
     Blockly.Blocks[name] = {
         init: function() {
             this.appendDummyInput()
                 .appendField("Repeat")
-            this.appendValueInput("repeat-amount")
-                .setCheck("Number")
-            this.appendDummyInput()
+                .appendField(new Blockly.FieldNumber(2, 2), getRepeats)
                 .appendField("times");
-            this.appendStatementInput("loops")
+            this.appendStatementInput(getSubcode)
                 .setCheck(null);
             this.setInputsInline(false);
             this.setPreviousStatement(true, null);
@@ -69,10 +71,10 @@ function registerLoop(name: string){
 
     ConfigBuilder.registerModuleBlock<LoopModuleConfig>(name, function(block:any) {
         // Gets the submodules
-        var submodules: ModBlockExport<any>[] = ConfigBuilder.generateModuleExports(block.getInputTargetBlock("loops"));
+        var submodules: ModBlockExport<any>[] = ConfigBuilder.generateModuleExports(block.getInputTargetBlock(getSubcode));
 
         // Gets the amount of loops
-        var loopAmt: Min<2> = getNumberFromCodeAsMin(block,"repeat-amount", 2);
+        var loopAmt: Min<2> = block.getFieldValue(getRepeats);
 
         return {
             module: LoopModule,
@@ -87,13 +89,15 @@ function registerLoop(name: string){
 
 // Delay-register
 function registerDelay(name: string){
+
+    const getTime = "time";
+
     Blockly.Blocks[name] = {
         init: function() {
             this.appendDummyInput()
-                .appendField("wait")
-            this.appendValueInput("time")
-                .setCheck("Number")
-                .appendField(new Blockly.FieldDropdown([["ms","millis"],["seconds","seconds"]]), "timeUnit");
+                .appendField("Wait")
+                .appendField(new Blockly.FieldNumber(500, 5), getTime)
+                .appendField("ms");
             this.setInputsInline(false);
             this.setPreviousStatement(true, null);
             this.setNextStatement(true, null);
@@ -103,17 +107,13 @@ function registerDelay(name: string){
     };
 
     ConfigBuilder.registerModuleBlock<DelayModuleConfig>(name, function(block:any) {
-        var waitTime: PositiveNumber = getNumberFromCodeAsMin(block,"time", 0);
-        var timeUnit = block.getFieldValue('timeUnit');
-
-        // Gets the multiplicator based on the time-unit
-        var multiplicator = timeUnit === "seconds" ? 1000 : 1; 
+        var waitTime = block.getFieldValue(getTime);
 
         // Assembles the config
         return {
             module: DelayModule,
             config: {
-                delay: (waitTime * multiplicator) as PositiveNumber
+                delay: waitTime as PositiveNumber
             },
             block
         }
