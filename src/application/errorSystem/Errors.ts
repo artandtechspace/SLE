@@ -35,3 +35,12 @@ export class InvalidValueError extends Error{
         super(message);
     }
 }
+
+export class CalculationError extends Error{
+    public readonly details?: any;
+
+    public constructor(message: string, details?: any){
+        super(message);
+        this.details = details;
+    }
+}
