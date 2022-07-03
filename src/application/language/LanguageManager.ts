@@ -1,6 +1,7 @@
 import { LoadingError } from "../errorSystem/Errors.js";
 import { handleProgrammingError } from "../errorSystem/ProgrammingErrorSystem.js";
 import { SM } from "../ui/utils/UiUtils.js";
+import { isObjectEV, isStringEV } from "../utils/ElementValidation.js";
 
 // Regex to match variables inside the static html-page
 const HTML_MATCHER_REGEX = /^[ \t]*\{\{[ \t]*[\w\-\._]+[ \t]*\}\}[ \t]*$/i;
@@ -31,11 +32,11 @@ async function loadLanguage(name: string){
         var langAsJson = await (await fetch("resources/languages/"+name+".json")).json();
 
         // Ensures the file is valid
-        if(typeof langAsJson !== "object" || langAsJson.constructor.name !== "Object")
+        if(!isObjectEV(langAsJson))
             throw "Requested language file doesn't contain a valid language-object.";
 
         // Ensures the file contains only an object with string values
-        if(!Object.values(langAsJson).every(x=>typeof x === "string"))
+        if(!Object.values(langAsJson).every(isStringEV))
             throw "Requested language file doesn't contain a valid language-object.";
         
         // Stores the loaded language

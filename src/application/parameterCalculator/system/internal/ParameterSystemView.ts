@@ -8,10 +8,10 @@ import { isSystemParameter, ParameterModel, SysParameterView, UParameterModel, U
 export class ParameterSystemView {
 
     // Holds all form-views of the uparameters
-    public userBindings: UParameterView[] = [];
+    private userBindings: UParameterView[] = [];
 
     // Holds all form-views of the sysparameters
-    public sysBindings: SysParameterView[] = [];
+    private sysBindings: SysParameterView[] = [];
 
     // Base element to append all view elements to
     private tableBody: HTMLElement = null as any as HTMLElement;
@@ -29,21 +29,38 @@ export class ParameterSystemView {
         this.tableBody = tableBody;
         this.onParameterChange = onParameterChange;
 
+        // Performs the first load (So not technically a reload)
+        this.reloadViewFromModel(false);
+    }
+
+    /**
+     * Completely clears the view and reloads every parameter from the model (Also the sys-parameters)
+     * 
+     * @param isReload if the loading is an actual reload or the first load (from inside)
+     */
+    public reloadViewFromModel(isReload=true){
         // Clears any previous stuff
-        tableBody.innerHTML = "";
+        this.tableBody.innerHTML = "";
+        this.sysBindings = [];
+        this.userBindings = [];
 
         // Adds all already existing parameters to the view (User & System)
         [...PSModel.getSysParameters(),...PSModel.getUParameters()].forEach(this.loadParameterToForm.bind(this));
 
         // Appends the preview
         this.createAndAttachPreviewElement();
+        this.checkForInvalidParameterNames();
+
+        // Updates the system-parameters
+        if(isReload)
+            this.updateSystemParameters();
     }
 
     /**
      * Takes in a parameter and create a view for it
      * @param param the parameter to append to the document
      */
-    public loadParameterToForm(param: ParameterModel){
+    private loadParameterToForm(param: ParameterModel){
         // Creates the form-bind
         var {body, nameInput, valueInput} = this.createParameterBody(param);
 
@@ -97,19 +114,24 @@ export class ParameterSystemView {
      * @returns the html-tree as body and the important fields inside an object
      */
     private createParameterBody(param?: ParameterModel){
+        // Used to check which type of parameter is passed
         var isPreview = param === undefined;
         var isSys = !isPreview && isSystemParameter(param!);
         var isNormal = !isPreview && !isSys;
-        
+
         // Creates the inputs (name and value)
         var valueInput =  C("input", {
             attr:{
                 type:"text",
                 placeholder: "...",
                 value: isNormal ? (param as UParameterModel).value : "0",
-                readonly: isPreview ? undefined : ""
+                readonly: isSys ? "" : undefined
             },
-            cls: "valueInp"
+            cls: "valueInp",
+            evts:{
+                "change": isNormal ? this.onChangeParamterValue.bind(this) : undefined,
+                "input": isNormal ? this.onInputParameterValue.bind(this) : undefined
+            }
         }) as HTMLInputElement;
 
 
@@ -118,11 +140,12 @@ export class ParameterSystemView {
                 type: "text",
                 placeholder: "...",
                 value: isPreview ? "" : param!.name,
-                readonly: isPreview ? undefined : ""
+                readonly: isSys ? "" : undefined
             },
             cls: "nameInp",
             evts: {
-                "input": isPreview ? this.onPreviewInputVarName : undefined
+                "input": isPreview ? this.onPreviewInputVarName : (isNormal ? this.onInputParameterName.bind(this) : undefined),
+                "change": isNormal ? this.onChangeParameterName.bind(this) : undefined
             }
         }) as HTMLInputElement;
 
@@ -162,11 +185,11 @@ export class ParameterSystemView {
                                 ]
                             }
                         ),
-                        isPreview
+                        !isSys
                     )
                 ]})
             ],
-            cls: `preview${printIf(" system",isSys)}`
+            cls: `${printIf("preview",isPreview)}${printIf(" system",isSys)}`
         });
 
         return {
@@ -189,7 +212,7 @@ export class ParameterSystemView {
             return;
 
         // Sends the delete to the parameter-system
-        PSModel.deleteParameter(bind.instanceId);
+        PSModel.deleteUParameter(bind.instanceId);
 
         // Removes the body from the document
         this.tableBody.removeChild(bind.body);

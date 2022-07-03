@@ -1,4 +1,5 @@
 import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem.js";
+import { isBooleanEV, isNumberEV, isStringEV } from "../../utils/ElementValidation.js";
 import { CppReturnType, CppType } from "./CppFuncDefs.js";
 
 // Defined cpp-types and cpp-return-types that are already implemented to be handled
@@ -17,14 +18,14 @@ export function turnCppTypeToParameterCode(param: CppType, value: any){
     switch(param){
         case CppFloat:
             // Ensures the parameter is a number
-            if(typeof value !== "number" || isNaN(value))
+            if(!isNumberEV(value) || isNaN(value))
                 return handleProgrammingError("CppFloat got passed non-numeric value.")
 
             // Turns the number to it's sting value with always a number behin the decimal point
             return value.toFixed(8).replace(/0+$/gi,"0").replace(/\.$/gi,".0");
         case CppInt:
             // Checks if the parameter might be a hex-string
-            if(typeof value === "string" && /^[\dA-Fa-f]+$/gi.test(value))
+            if(isStringEV(value) && /^[\dA-Fa-f]+$/gi.test(value))
                 return "0x"+value;
 
             // Ensures the parameter is a number
@@ -33,7 +34,7 @@ export function turnCppTypeToParameterCode(param: CppType, value: any){
 
             return value.toString();
         case CppBool:
-            if(typeof value !== "boolean")
+            if(!isBooleanEV(value))
                 return handleProgrammingError("CppBool got passed non-boolean value.");
 
             return value.toString();

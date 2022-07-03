@@ -1,5 +1,6 @@
 import { isPercentageNumber, PercentageNumber } from "../../types/Types.js";
 import { HSV2HEX } from "../../utils/ColorUtils.js";
+import { isNumberEV } from "../../utils/ElementValidation.js";
 import { create as C } from "../../utils/HTMLBuilder.js";
 const Blockly = require("blockly");
 
@@ -23,7 +24,7 @@ export default class FieldBrightness extends Blockly.Field {
   // Validates the input-color as an hsv-object. Return null if invalid and the object if valid.
   private static validateInputColor(value: any): PercentageNumber | null {
     // Ensures the value is a number
-    if (typeof value !== "number" || value === null)
+    if (!isNumberEV(value) || value === null)
       return null;
 
     return isPercentageNumber(value) ? value : null;

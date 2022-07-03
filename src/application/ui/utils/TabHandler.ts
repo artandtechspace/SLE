@@ -1,5 +1,6 @@
 import {  } from "../../errorSystem/Errors.js";
 import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem.js";
+import { isNumberEV } from "../../utils/ElementValidation.js";
 import { S } from "./UiUtils.js";
 
 /**
@@ -69,7 +70,7 @@ export class TabHandler{
                 return;
 
             // Checks for an update
-            if(typeof res === "number")
+            if(isNumberEV(res))
                 id = res;
         }
 

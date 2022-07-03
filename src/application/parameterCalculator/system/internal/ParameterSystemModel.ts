@@ -135,7 +135,7 @@ export class ParameterSystemModel {
     }
 
     // Delete the user-parameter with the given instance-id (Wont update the view automatically)
-    public deleteParameter(instanceId: number){
+    public deleteUParameter(instanceId: number){
         this.userparams = this.userparams.filter(x=>x.instanceId !== instanceId);
     }
 
@@ -164,6 +164,11 @@ export class ParameterSystemModel {
         // Parameter couldn't be found
         // TODO: Language lookup
         throw new CalculationError("Failed to find parameter '"+name+"'.");
+    }
+
+    // Deletes all user-parameters (Wont update the view automatically)
+    public deleteAllUParameters(){
+        this.userparams = [];
     }
 
 

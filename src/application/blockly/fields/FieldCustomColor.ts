@@ -1,5 +1,6 @@
 import { HSV, PercentageNumber } from "../../types/Types.js";
 import { HSV2HEX, isValidHUE } from "../../utils/ColorUtils.js";
+import { isObjectEV } from "../../utils/ElementValidation.js";
 import { create as C } from "../../utils/HTMLBuilder.js";
 const Blockly = require("blockly");
 
@@ -49,7 +50,7 @@ export default class FieldCustomColor extends Blockly.Field{
     // Validates the input-color as an hsv-object. Return null if invalid and the object if valid.
     private static validateInputColor(value: any): HSV|null{
         // Ensures the value is an object
-        if(typeof value !== "object" || value === null)
+        if(!isObjectEV(value) || value === null)
           return null;
 
         return isValidHUE(value) ? value : null;

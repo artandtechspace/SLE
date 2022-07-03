@@ -5,6 +5,7 @@ import { HSV2HEX, HSV2RGB } from "../../utils/ColorUtils.js";
 import { SettingsUI } from "../settingsui/SettingsUI.js";
 import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem.js";
 import { performCalculation } from "../../parameterCalculator/Calculator.js";
+import { isStringEV } from "../../utils/ElementValidation.js";
 
 /**
  * @throws {InvalidValueError} if the value on the block is currently invalid
@@ -22,7 +23,7 @@ export function getNumberFromSettingsUI(block: any, name: string) : number{
     var ret = setUi.getValueByName<number>(name);
 
     // Checks for an error
-    if(typeof ret === "string")
+    if(isStringEV(ret))
         throw new InvalidValueError(ret);
 
     // Gives back the valid value

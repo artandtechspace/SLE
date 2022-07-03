@@ -40,6 +40,9 @@ function onImportFileButtonClicked(evt: any){
     reader.onload = onImportFile;
     reader.readAsText(file);
 
+    // Reset
+    evt.target.value = "";
+
     return false;
 }
 

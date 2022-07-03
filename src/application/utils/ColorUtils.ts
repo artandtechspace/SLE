@@ -1,4 +1,5 @@
-import { HexColor, HSV, OpenObject, PercentageNumber, RGB, RGBNumber } from "../types/Types";
+import { HexColor, HSV, OpenObject, PercentageNumber, RGB, RGBNumber } from "../types/Types.js";
+import { isNumberEV } from "./ElementValidation.js";
 
 
 // Contains all predefined colors of the fastled library.
@@ -252,7 +253,7 @@ export function isValidHUE(obj: OpenObject) : obj is HSV{
     if(obj["h"] === undefined || obj["s"] === undefined || obj["v"] === undefined)
         return false;
 
-    return Object.values(obj).every(val=>typeof val === "number" && val >= 0 && val <= 1);
+    return Object.values(obj).every(val=>isNumberEV(val) && val >= 0 && val <= 1);
 }
 
 /**
