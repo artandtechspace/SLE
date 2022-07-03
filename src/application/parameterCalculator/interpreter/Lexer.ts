@@ -1,4 +1,6 @@
 import { CalculationError } from "../../errorSystem/Errors.js";
+import { isValidFirstCharacter, isValidMiddleCharacter, isValidParameterName } from "../ParameterCheck.js";
+import { PSModel } from "../system/internal/ParameterSystemController.js";
 import { NumberToken, Token, TokenTypes } from "../Token.js";
 
 // Chars the can be ignored
@@ -53,7 +55,7 @@ export class Lexer {
             }
 
             // Tries to parse a parameter
-            if(this.isValidParameterStart()){
+            if(isValidFirstCharacter(this.currentChar)){
                 // Ensures no parameter just got directly appended to a number
                 if(this.prevWasNumber)
                     throw new CalculationError("Parameter's cant start with numbers.");
@@ -71,23 +73,6 @@ export class Lexer {
         tokens.push({ type: TokenTypes.EOF });
 
         return tokens;
-    }
-
-
-    // Returns if the current char is a valid parameter-name first character
-    private isValidParameterStart(){
-        // All special-chars that are allowed within parameter names
-        const SPECIAL_CHARS = "_$%".split("");
-
-        // Ensures the element is defined
-        if(this.currentChar === undefined)
-            return false;
-
-        // Checks alphabetic characters
-        if(this.currentChar >= 'a' && this.currentChar <= 'z')
-            return true;
-
-        return SPECIAL_CHARS.includes(this.currentChar);
     }
 
     // Advances the current code-curser by one to the right (Until the end is reached)
@@ -180,15 +165,14 @@ export class Lexer {
         var prmName: string = "";
         
         // Iterates as long as a valid var start char or digit is found
-        while(this.currentChar !== undefined && (this.isValidParameterStart() || this.isCharDigit())){
+        while(this.currentChar !== undefined && isValidMiddleCharacter(this.currentChar)){
             prmName+=this.currentChar;
             this.advance();
         }
         
-        // Tries to load the parameter
-        // TODO: Implement this
+        // Tries to load the parameter and returns it
         return {
-            value: 0,
+            value: PSModel.getParamValueByName(prmName),
             type: TokenTypes.NUMBER
         }
     }

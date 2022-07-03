@@ -83,9 +83,9 @@ export class SliderBar{
 
         // Updates the size
         if(isX)
-            this.scallingElement.style.minWidth = newSize+"px";
+            this.scallingElement.style.minWidth = this.scallingElement.style.width = newSize+"px";
         else
-            this.scallingElement.style.minHeight = newSize+"px";
+            this.scallingElement.style.minHeight = this.scallingElement.style.height = newSize+"px";
     }
 
     // Event: When the sidebar gets released

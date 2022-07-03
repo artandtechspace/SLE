@@ -37,6 +37,7 @@ body{
 // Whats visible most of the time.
 // Stuff like popups etc. goes outside of this
 #content{
+    overflow: hidden;
     display: flex;
     flex-grow: 1;
 }

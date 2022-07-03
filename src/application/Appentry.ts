@@ -15,6 +15,7 @@ import { getFromLanguage } from "./language/LanguageManager.js";
 import { Manager as SettingsUiManager } from "./blockly/settingsui/SettingsUI.js";
 import { getEnvironment, getWorkspace, initSharedObjects } from "./SharedObjects.js";
 import { writeEnvironmentToPage } from "./ui/utils/UiEnvironmentIntegration.js";
+import { checkParametersForErrors } from "./parameterCalculator/system/ParameterSystem.js";
 
 // Arduino-simulation
 var simulation: ArduinoSimulation;
@@ -88,10 +89,15 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 		compileTimeout = undefined;
 
 		try{
+
+			// Ensures that there are no errors with any parameters
+			checkParametersForErrors();
+
 			// Ensures that only the root element exists on the workspace
+			var rootBlock = getRootBlock().getNextBlock();
 
 			// Gets the raw string config
-			var modExports: ModBlockExport<any>[] = ConfigBuilder.generateModuleExports(getRootBlock().getNextBlock());
+			var modExports: ModBlockExport<any>[] = ConfigBuilder.generateModuleExports(rootBlock);
 			
 			// Checks if the checksum has changed
 			if(!didWorkspaceChange(modExports) && !ignoreNoChanges)

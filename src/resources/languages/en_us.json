@@ -15,7 +15,7 @@
 
 
     "ui.tabs.controls.env": "Environment",
-    "ui.tabs.controls.vars": "Variables",
+    "ui.tabs.controls.params": "Parameters",
     "ui.tabs.controls.settings": "Settings",
 
 

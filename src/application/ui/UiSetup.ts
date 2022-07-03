@@ -7,7 +7,7 @@ import { PRESET_SOURCECODE } from "../Preset.js";
 import { ArduinoSimulation } from "../simulation/ArduinoSimulation.js";
 import { Min, PositiveNumber } from "../types/Types.js";
 import { loadSVG } from "../utils/SVGUtil.js";
-import { TAB_PREVIEW_ANIMATION, TAB_PREVIEW_CODE, TAB_PREVIEW_ANALYTICS, TAB_CONTROLS_ENVS, TAB_CONTROLS_VARS, TAB_CONTROLS_SETTINGS } from "./Tabs.js";
+import { TAB_PREVIEW_ANIMATION, TAB_PREVIEW_CODE, TAB_PREVIEW_ANALYTICS, TAB_CONTROLS_ENVS, TAB_CONTROLS_PARAMS, TAB_CONTROLS_SETTINGS } from "./Tabs.js";
 import { SliderBar, SliderBarDirection } from "./utils/SliderBar.js";
 import { TabHandler } from "./utils/TabHandler.js";
 import { PREVIEWS_FILE_PATH, DEFAULT_PREVIEW_NAME, setupEnvironment } from "./utils/UiEnvironmentIntegration.js";
@@ -15,6 +15,7 @@ import { S } from "./utils/UiUtils.js";
 import { Manager as SettingsUiManager } from "../blockly/settingsui/SettingsUI.js";
 import { registerBlockly } from "../blockly/BlocklyRegister.js";
 import { setupExportFeature } from "./utils/UiExportFeature.js";
+import { onRenderTab, startParameterSystem } from "../parameterCalculator/system/ParameterSystem.js";
 
 // Executes to setup the ui
 // Returns an object with all important elements
@@ -22,13 +23,13 @@ import { setupExportFeature } from "./utils/UiExportFeature.js";
 /**
  * Setups the ui-environment
  * 
- * @param onSettingsChange callback that executes every time a critical part of the ui changes (Meaning a part that affects the final code or animation, eg. env or submenu of blocks)
+ * @param doRecompile callback that executes every time a critical part of the ui changes (Meaning a part that affects the final code or animation, eg. env or submenu of blocks)
  * 
  * @returns an object with all generated element for the ui or false if an error occurred
  * setting up the ui. If an error occurres it's only required to stop further init-code as
  * the error will already be displayed inside the ui.
  */
-export async function setupUi(onSettingsChange: ()=>void){
+export async function setupUi(doRecompile: ()=>void){
 
     try{
         // Setups the language-system
@@ -48,16 +49,19 @@ export async function setupUi(onSettingsChange: ()=>void){
         var simulation = await setupArduinoSimulation();
         var errorsystem = new InAppErrorSystem();        
         
-        SettingsUiManager.attachToUI(S("#blockly-settingsui") as HTMLDivElement, onSettingsChange);
+        SettingsUiManager.attachToUI(S("#blockly-settingsui") as HTMLDivElement, doRecompile);
 
         // Builds the environment
         var env = new Environment(simulation.getLedAmount() as any as Min<1>,true,PRESET_SOURCECODE,0 as PositiveNumber, DEFAULT_PREVIEW_NAME);
         
         // Binds the environment-settings to the ui
-        setupEnvironment(env,popupsystem,simulation,onSettingsChange);
+        setupEnvironment(env,popupsystem,simulation,doRecompile);
         
         // Setups the export/import feature
         setupImportExport();
+
+        // Setups the parameter-system
+        var paramSys = setupParameterSystem(doRecompile);
         
         // Setups the tabs
         var previewTabHandler = registerPreviewTabs();
@@ -79,7 +83,8 @@ export async function setupUi(onSettingsChange: ()=>void){
             errorsystem,
             codeArea,
             runtimeDisplay,
-            blocklyWorkspace: workspace
+            blocklyWorkspace: workspace,
+            paramSys
         };
     }catch(error){
         displayLoadingError(error as Error);
@@ -90,6 +95,15 @@ export async function setupUi(onSettingsChange: ()=>void){
 
 
 //#region Setup-functions
+
+// Setups the parameter-system
+function setupParameterSystem(onParameterChange: ()=>void){
+    // Gets the table-body element for the parameter system
+    var tbody = S("tbody",S("#paramsTab"));
+
+    // Creates the parameter system
+    startParameterSystem(tbody, onParameterChange);
+}
 
 // Setups the export/import feature
 function setupImportExport(){
@@ -184,27 +198,32 @@ function setupPopupsystem(){
 
 // Registers the controls tabs for the below sidebar
 function registerControlsTabs(){
-     // Gets the controls-area
-     var controls = S("#controls");
+    // Gets the controls-area
+    var controls = S("#controls");
 
-     // Creates the tab-buttons
-     const BUTTONS: [HTMLElement,number][] = [
-         [S("#btnTabEnv",controls),TAB_CONTROLS_ENVS],
-         [S("#tabEnv",controls),TAB_CONTROLS_ENVS],
-         [ S("#btnTabVars",controls),TAB_CONTROLS_VARS],
-         [S("#tabVars",controls),TAB_CONTROLS_VARS],
-         [S("#btnTabSettings",controls),TAB_CONTROLS_SETTINGS],
-         [S("#tabSettings",controls),TAB_CONTROLS_SETTINGS]
-     ];
-     
-     // Gets the tabs
-     const TABS: [HTMLElement,number][] = [
-         [S("#envTab",controls),TAB_CONTROLS_ENVS],
-         [S("#varsTab",controls),TAB_CONTROLS_VARS],
-         [S("#settingsTab",controls),TAB_CONTROLS_SETTINGS]
-     ]
+    // Creates the tab-buttons
+    const BUTTONS: [HTMLElement,number][] = [
+        [S("#btnTabEnv",controls),TAB_CONTROLS_ENVS],
+        [S("#tabEnv",controls),TAB_CONTROLS_ENVS],
+        [ S("#btnTabParams",controls),TAB_CONTROLS_PARAMS],
+        [S("#tabParams",controls),TAB_CONTROLS_PARAMS],
+        [S("#btnTabSettings",controls),TAB_CONTROLS_SETTINGS],
+        [S("#tabSettings",controls),TAB_CONTROLS_SETTINGS]
+    ];
+    
+    // Gets the tabs
+    const TABS: [HTMLElement,number][] = [
+        [S("#envTab",controls),TAB_CONTROLS_ENVS],
+        [S("#paramsTab",controls),TAB_CONTROLS_PARAMS],
+        [S("#settingsTab",controls),TAB_CONTROLS_SETTINGS]
+    ]
  
-     return new TabHandler(controls,BUTTONS,TABS,TAB_CONTROLS_ENVS);
+    var handler = new TabHandler(controls,BUTTONS,TABS,TAB_CONTROLS_ENVS);
+
+    // Adds the change handler
+    handler.setTabChangeHandler(onRenderTab);
+
+    return handler;
 }
 
 // Registers the tabs that show different pre-view's in the above sidebar

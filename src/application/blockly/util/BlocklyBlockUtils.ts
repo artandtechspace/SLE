@@ -1,10 +1,10 @@
-import { BlockError, InvalidValueError } from "../../errorSystem/Errors.js";
+import { BlockError, CalculationError, InvalidValueError } from "../../errorSystem/Errors.js";
 import { ConfigBuilder } from "../../ConfigBuilder.js";
-import { HexColor, isPercentageNumber, Max, Min, PercentageNumber, RGB } from "../../types/Types.js";
+import { HexColor, isMax, isMin, isPercentageNumber, isRange, Max, Min, PercentageNumber, RGB } from "../../types/Types.js";
 import { HSV2HEX, HSV2RGB } from "../../utils/ColorUtils.js";
-import { Environment } from "../../Environment.js";
 import { SettingsUI } from "../settingsui/SettingsUI.js";
 import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem.js";
+import { performCalculation } from "../../parameterCalculator/Calculator.js";
 
 /**
  * @throws {InvalidValueError} if the value on the block is currently invalid
@@ -109,4 +109,62 @@ export function getNumberFromCode(block: any,field: string) {
         throw new BlockError(`The '${field}'-value is not given.`,block);
 
     return val;
+}
+
+
+
+
+
+export function getParametricNumberFromUI(block: any, field: string, allowFloat: boolean = true) : number {
+    // Gets the settingsui
+    var setUi: SettingsUI = (block.settingsui as SettingsUI);
+
+    // Checks if the ui is set
+    if(setUi === undefined)
+        return handleProgrammingError("There is no settings-ui defined but the element '"+name+"' is expected.");
+
+    // Gets the value
+    var ret = setUi.getValueByName<string>(field);
+
+    try{
+         // Performs the calculation
+        var value = performCalculation(ret);
+
+        return allowFloat ? value : Math.round(value);
+    }catch(e){
+        throw new BlockError((e as CalculationError).message, block);
+    }
+   
+}
+
+export function getParametricNumber(block: any, field: string, allowFloat: boolean = true){
+    // Reads the value and passes it
+    var val: string = block.getFieldValue(field);
+
+    try{
+        // Performs the calculation
+        var value = performCalculation(val);
+    
+        return allowFloat ? value : Math.round(value);
+    }catch(e){
+        throw new BlockError((e as CalculationError).message, block);
+    }
+}
+
+export function getParametricNumberMin<minimum extends number>(block: any, field: string, min: minimum, allowFloat: boolean = true) {
+    var x = getParametricNumber(block,field, allowFloat);
+
+    if(isMin(x, min))
+        return x;
+    
+    throw new BlockError(`The '${field}'-value must be >= ${min}. Is '${x}'`, block);
+}
+
+export function getParametricNumberMinFromUi<minimum extends number>(block: any, field: string, min: minimum, allowFloat: boolean = true) {
+    var x = getParametricNumberFromUI(block,field, allowFloat);
+
+    if(isMin(x, min))
+        return x;
+    
+    throw new BlockError(`The '${field}'-value must be >= ${min}. Is '${x}'`, block);
 }

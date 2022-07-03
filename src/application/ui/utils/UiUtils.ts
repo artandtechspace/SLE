@@ -25,3 +25,11 @@ export function SM(name: string, base: HTMLElement = document.body): NodeListOf<
 
     return x as NodeListOf<HTMLElement>;
 }
+
+// Basically a classList.setClass replacement
+export function setClass(element: HTMLElement, name: string, toggle: boolean){
+    if(toggle)
+        element.classList.add(name);
+    else
+        element.classList.remove(name);
+}

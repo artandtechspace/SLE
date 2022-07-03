@@ -47,9 +47,12 @@ export function create(tag: string, {cls,id,text,chld,attr,evts}: CreateArgument
         elm.appendChild(child);
 
   // Appends attributes
-  for(var attribute in attr)
-    if(attribute !== undefined)
-      elm.setAttribute(attribute,attr[attribute as keyof typeof attr]);
+  for(var attribute in attr){
+    // Gets value
+    var val = attr[attribute as keyof typeof attr];
+    if(val !== undefined)
+      elm.setAttribute(attribute,val);
+  }
     
   // Appends events
   for(var z in evts)
@@ -59,7 +62,12 @@ export function create(tag: string, {cls,id,text,chld,attr,evts}: CreateArgument
 }
 
 
-// Performs the create-function only if the given equation resolves to true
-export function createIf(tag: string, args: CreateArguments, equation: boolean) : HTMLElement|undefined {
-  return equation ? create(tag, args) : undefined;
+// Executes the html-create callback if the condition is true
+export function createIf(cb: ()=>HTMLElement, condition: boolean){
+  return condition ? cb() : undefined;
+}
+
+// Executes either the true or false html-callback depending on the given condition
+export function createIfElse(cbTrue: ()=>HTMLElement, cbFalse: ()=>HTMLElement, condition: boolean){
+  return condition ? cbTrue() : cbFalse();
 }

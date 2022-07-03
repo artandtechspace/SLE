@@ -2,7 +2,7 @@ import { ColorModule, ColorModuleConfig, StepMode } from "../../defaultModules/C
 import { BlockError } from "../../errorSystem/Errors.js";
 import { ConfigBuilder } from "../../ConfigBuilder.js";
 import { Min, PositiveNumber, RGB } from "../../types/Types.js";
-import { getNumberFromCodeAsMin, getRGBFromCode } from "../util/BlocklyBlockUtils.js";
+import { getParametricNumber, getParametricNumberMin, getRGBFromCode } from "../util/BlocklyBlockUtils.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
 import { TB_COLOR_COLOR } from "../util/Toolbox.js";
 
@@ -84,7 +84,7 @@ function registerSingleLed(name: string){
         init: function() {
             this.appendDummyInput()
                 .appendField("Color led")
-                .appendField(new Blockly.FieldNumber(0, 0), getLed)
+                .appendField(new Blockly.FieldTextInput("default"), getLed)
                 .appendField("in")
                 .appendField(new FieldCustomColor(), getColor);
             this.setColour(TB_COLOR_COLOR);
@@ -96,7 +96,8 @@ function registerSingleLed(name: string){
 
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
         // Start
-        var start: PositiveNumber = block.getFieldValue(getLed);
+        //var start: PositiveNumber = block.getFieldValue(getLed);
+        var start: Min<0> = getParametricNumberMin(block, getLed, 0, false);
 
         // Color
         var color: RGB = getRGBFromCode(block,getColor);

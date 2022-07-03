@@ -48,13 +48,13 @@ export type RGBNumber = Range<0,255>;
 //#region Validators for the types
 
 // Returns if the given number has the given minimum
-export function isMin<value extends number>(x: number, m: value) : x is Min<value> {
-    return x >= m;
+export function isMin<value extends number>(x: number, min: value) : x is Min<value> {
+    return x >= min;
 }
 
 // Returns if the given number has the given maximum
-export function isMax<value extends number>(x: number, m: value) : x is Max<value> {
-    return x <= m;
+export function isMax<value extends number>(x: number, min: value) : x is Max<value> {
+    return x <= min;
 }
 
 // Returns if the given number has the given maximum

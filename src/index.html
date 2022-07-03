@@ -77,7 +77,7 @@
                         <div class="th-icons">
                             <i class="fa fa-code" id="tabCode" aria-hidden="true"></i>
                             <i class="fa fa-film" id="tabAnimation" aria-hidden="true"></i>
-                            <i class="fa fa-cog" id="tabAnalytics" aria-hidden="true"></i>
+                            <i class="fa fa-line-chart" id="tabAnalytics" aria-hidden="true"></i>
                         </div>
                     </div>
                     <!--Holds all tabs for the previews-->
@@ -108,13 +108,13 @@
                 <div id="settingsPicker" class="th-picker">
                     <div class="th-texts">
                         <input type="button" value="{{ ui.tabs.controls.env }}" id="btnTabEnv">
-                        <input type="button" value="{{ ui.tabs.controls.vars }}" id="btnTabVars">
+                        <input type="button" value="{{ ui.tabs.controls.params }}" id="btnTabParams">
                         <input type="button" value="{{ ui.tabs.controls.settings }}" id="btnTabSettings">
                     </div>
 
                     <div class="th-icons">
-                        <i class="fa fa-code" id="tabEnv" aria-hidden="true"></i>
-                        <i class="fa fa-film" id="tabVars" aria-hidden="true"></i>
+                        <i class="fa fa-leaf" id="tabEnv" aria-hidden="true"></i>
+                        <i class="fa fa-sliders" id="tabParams" aria-hidden="true"></i>
                         <i class="fa fa-cog" id="tabSettings" aria-hidden="true"></i>
                     </div>
                 </div>
@@ -184,7 +184,22 @@
                         </div>
                     </div>
 
-                    <div id="varsTab"></div>
+                    <div id="paramsTab">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Value</th>
+                                    <th><!--Action/Info column--></th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                            </tbody>
+                        </table>
+
+
+                    </div>
 
                     <!--Tab to perform some actions inside the app-->
                     <div id="settingsTab">

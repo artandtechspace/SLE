@@ -1,50 +1,142 @@
 /*
  * Sidebar controls style
  */
-#sidebar>#controls{
-    position: relative;
-    width: 100%;
-    min-height: 300px;
-    
-    #envTab, #settingsTab{
-        padding: .8rem;
-    }
 
-    #settingsTab{
+#sidebar {
+    &>#controls{
+        position: relative;
+        width: 100%;
+        min-height: 300px;
+        display: flex;
+        flex-direction: column;
         
-        #buttons{
-            display: flex;
-            margin-top: 0.6rem;
-            justify-content: space-between;
-
-            &>*{
-                font-size: 1.3rem;
-            }
-        }
-    }
-
-    .infoInput{
-        display: inline-block;
-        width: 250px;
-        margin-bottom: .5rem;
-
-        &>.wrapper{
-            display: inline-flex;
-            margin-bottom: .25rem;
-            padding-left: .6rem;
-            white-space: nowrap;
-
-
-            // Title-text
-            p{
-                font-size: 1.2rem;
-                display: inline-block;
-            }
+        #envTab, #settingsTab{
+            padding: .8rem;
         }
 
-        // Options elements for select-inputs
-        select option{
-            background-color: #303030;
+        #paramsTab{
+
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                margin-bottom: 0.5rem;
+
+                thead{
+                    tr{
+                        font-size: 110%;
+                    }
+
+                    th{
+                        padding: 10px;
+                    }
+                }
+
+                tbody{
+
+                    tr{
+                        &:hover{
+                            background-color: rgb(42, 42, 42);
+                        }
+
+                        &.preview{
+                            i.fa-trash{
+                                display: none;
+                            }
+                        }
+                        &.system{
+        
+                            input{
+                                cursor: not-allowed;
+                                color: #6a6a6a;
+                            }
+                        }
+                        td{
+                            i {
+                                margin: 0 0.8rem;
+                            }
+            
+                            &:first-child{
+                                border-right: 2px solid gray;
+                            }
+            
+                            &:last-child{
+                                display: flex;
+                                justify-content: center;
+                                height: 100%;
+                                align-items: center;
+            
+                                i.fa-trash{
+                                    cursor: pointer;
+                                    transition: .2s;
+                                    font-size: 130%;
+            
+                                    &:hover{
+                                        color: #d46868;
+                                    }
+                                }
+                            }
+
+
+
+                            input{
+                                background: transparent;
+                                border: none;
+                                display: block;
+                                width: 80%;
+                                margin: auto;
+                                text-align: center;
+                                transition: .2s;
+
+                                &.invalid{
+                                    transition: .2s;
+                                    color: red;
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+
+
+        }
+
+        #settingsTab{
+            
+            #buttons{
+                display: flex;
+                margin-top: 0.6rem;
+                justify-content: space-between;
+
+                &>*{
+                    font-size: 1.3rem;
+                }
+            }
+        }
+
+        .infoInput{
+            display: inline-block;
+            width: 250px;
+            margin-bottom: .5rem;
+
+            &>.wrapper{
+                display: inline-flex;
+                margin-bottom: .25rem;
+                padding-left: .6rem;
+                white-space: nowrap;
+
+
+                // Title-text
+                p{
+                    font-size: 1.2rem;
+                    display: inline-block;
+                }
+            }
+
+            // Options elements for select-inputs
+            select option{
+                background-color: #303030;
+            }
         }
     }
 }
