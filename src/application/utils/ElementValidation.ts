@@ -7,7 +7,7 @@ export function isArrayEV(element: any) : element is []{
 
 // Returns if the element is an object
 export function isObjectEV(element: any) : element is OpenObject{
-    return typeof element === "object" && element.constructor.name === "Object";
+    return typeof element === "object" && element !== null && element.constructor.name === "Object";
 }
 
 // Returns if the element is a boolean
