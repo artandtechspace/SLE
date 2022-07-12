@@ -8,7 +8,7 @@ import { performCalculation } from "../../parameterCalculator/Calculator.js";
 import { isStringEV } from "../../utils/ElementValidation.js";
 
 /**
- * @throws {InvalidValueError} if the value on the block is currently invalid
+ * @throws {BlockError} if the value on the block is currently invalid
  * @returns the searched number from the settings-ui-field (Reference by the @param name)
  */
 export function getNumberFromSettingsUI(block: any, name: string) : number{
@@ -20,11 +20,11 @@ export function getNumberFromSettingsUI(block: any, name: string) : number{
         return handleProgrammingError("There is no settings-ui defined but the element '"+name+"' is expected.");
 
     // Gets the value
-    var ret = setUi.getValueByName<number>(name);
+    var ret = setUi.validateAndGetValueByName<number>(name);
 
     // Checks for an error
     if(isStringEV(ret))
-        throw new InvalidValueError(ret);
+        throw new BlockError(ret, block);
 
     // Gives back the valid value
     return ret;
@@ -116,28 +116,6 @@ export function getNumberFromCode(block: any,field: string) {
 
 
 
-export function getParametricNumberFromUI(block: any, field: string, allowFloat: boolean = true) : number {
-    // Gets the settingsui
-    var setUi: SettingsUI = (block.settingsui as SettingsUI);
-
-    // Checks if the ui is set
-    if(setUi === undefined)
-        return handleProgrammingError("There is no settings-ui defined but the element '"+name+"' is expected.");
-
-    // Gets the value
-    var ret = setUi.getValueByName<string>(field);
-
-    try{
-         // Performs the calculation
-        var value = performCalculation(ret);
-
-        return allowFloat ? value : Math.round(value);
-    }catch(e){
-        throw new BlockError((e as CalculationError).message, block);
-    }
-   
-}
-
 export function getParametricNumber(block: any, field: string, allowFloat: boolean = true){
     // Reads the value and passes it
     var val: string = block.getFieldValue(field);
@@ -154,15 +132,6 @@ export function getParametricNumber(block: any, field: string, allowFloat: boole
 
 export function getParametricNumberMin<minimum extends number>(block: any, field: string, min: minimum, allowFloat: boolean = true) {
     var x = getParametricNumber(block,field, allowFloat);
-
-    if(isMin(x, min))
-        return x;
-    
-    throw new BlockError(`The '${field}'-value must be >= ${min}. Is '${x}'`, block);
-}
-
-export function getParametricNumberMinFromUi<minimum extends number>(block: any, field: string, min: minimum, allowFloat: boolean = true) {
-    var x = getParametricNumberFromUI(block,field, allowFloat);
 
     if(isMin(x, min))
         return x;
