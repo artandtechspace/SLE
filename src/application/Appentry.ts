@@ -55,7 +55,10 @@ function getRootBlock(){
 
 	// Checks the length
 	if(blocks.length > 1)
-		throw new DesyncedWorkspaceError("Found multiple non-disabled blocks on the workspace. Did something go wrong while loading?");
+		// Checks if there is one block beeing dragged
+		if(!getWorkspace().isDragging())
+			throw new DesyncedWorkspaceError("Found multiple non-disabled blocks on the workspace. Did something go wrong while loading?");
+	
 	
 	// Gets the block
 	var blg = blocks[0];
