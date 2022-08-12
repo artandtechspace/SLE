@@ -1,6 +1,6 @@
 import { HSV, PercentageNumber } from "../../types/Types.js";
 import { HSVColorPicker } from "../../ui/utils/HSVColorPicker.js";
-import { HSV2HEX, isValidHUE } from "../../utils/ColorUtils.js";
+import { HSV2HEX, isValidHSV } from "../../utils/ColorUtils.js";
 import { isObjectEV } from "../../utils/ElementValidation.js";
 const Blockly = require("blockly");
 
@@ -11,6 +11,7 @@ export default class FieldCustomColor extends Blockly.Field{
   // Makes the field serializeable
   public SERIALIZABLE = true;
 
+  // Color-picker popup element
   private colorPicker: HSVColorPicker;
 
   constructor(opt_value: HSV|any = null){
@@ -39,10 +40,10 @@ export default class FieldCustomColor extends Blockly.Field{
   // Validates the input-color as an hsv-object. Return null if invalid and the object if valid.
   private static validateInputColor(value: any, defaultReturn: any): HSV|null{
       // Ensures the value is an object
-      if(!isObjectEV(value) || value === null)
+      if(!isObjectEV(value))
         return defaultReturn;
 
-      return isValidHUE(value) ? value : defaultReturn;
+      return isValidHSV(value) ? value : defaultReturn;
   }
 
   // Create an field from a given json object

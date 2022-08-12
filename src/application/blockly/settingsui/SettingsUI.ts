@@ -31,13 +31,13 @@ export class SettingsUI{
     /**
      * Returns the field value from the field with the name of @param name
      */
-    public getValueByName<T>(name: string) : T|string{
+    public validateAndGetValueByName<T>(name: string) : T|string{
         // Searches for the element with that name
         for(var line of this.lines)
             for(var elmnt of line)
                 if(elmnt instanceof SupplierElement && name===elmnt.key)
                     // Checks if the value is valid and if not returns the error
-                    return elmnt.isValueValid() ?? elmnt.getValue() as T;
+                    return elmnt.validateParseAndGetValue()as T;
 
         return handleProgrammingError("Failed to find ui-element with name '"+name+"'");
     }

@@ -1,5 +1,3 @@
-@import 'fields/FieldCustomColor.scss';
-
 // Removes some annoying styles
 .blocklyMainBackground{
     stroke: none;
@@ -57,45 +55,6 @@
             margin: 0;
         }
 
-        // For number-input fields
-        .bsg-number-input{
-            position: relative;
-
-            input, p{
-                font-size: 1.3rem;
-                padding-bottom: 0;
-                padding-top: 0;
-            }
-
-            // Decoy element to size the input to fit it's content length
-            p{
-                &::after{
-                    // About the size of the number-dropup/down-buttons
-                    content: '------';
-                }
-            }
-
-            input{
-                position: absolute;
-                top:0;
-                left:0;
-                right:0;
-                bottom:0;
-                transition: .2s;
-
-                &:invalid{
-                    box-shadow: 0px 0px 3px 2px red;
-                    transition: .2s;
-                }
-            }
-
-            &>*{
-                display: inline;
-                vertical-align: middle;
-                line-height: normal;
-            }
-        }
-
         // Simple text element
         .bsg-text{
             font-size: 1.3rem;
@@ -108,6 +67,46 @@
             background: #6a6a6a;
             margin-bottom: 8px;
             border-radius: 5px;
+        }
+
+        // Rect which is the preview of the color-picker
+        .bsg-color-rect{
+            position: relative;
+            width: 20px;
+            height: 15px;
+            cursor: pointer;
+            border-radius: 2px;
+
+            &:focus-within > .hsv-color-picker_popup, &:focus > .hsv-color-picker_popup{
+                display: block;
+            }
+
+            & > .hsv-color-picker_popup{
+                display: none;
+
+                position: absolute;
+                bottom: calc(100% + 5px);
+                right: -40px;
+                background-color: #696969;
+                padding: 5px;
+                border-radius: 4px;
+                bottom: 34px;
+
+                &::before{
+                    content: '';
+                    position: absolute;
+                    width: 20px;
+                    right: 40px;
+                    bottom: -10px;
+                    height: 20px;
+                    transform: rotate(45deg);
+                    background: #696969;
+                }
+            }
+
+            &:hover{
+                outline: 2px solid white
+            }
         }
 
         &.hidden{

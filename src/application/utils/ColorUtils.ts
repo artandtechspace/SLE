@@ -243,7 +243,7 @@ export function HSV2HEX(h: number,s: number,v: number, withoutSharp=false){
 }
 
 // Takes in an object and returns if that object is a valid HSV-object
-export function isValidHUE(obj: OpenObject) : obj is HSV{
+export function isValidHSV(obj: OpenObject) : obj is HSV{
     
     // Checks for the keys
     if(Object.keys(obj).length !== 3 )

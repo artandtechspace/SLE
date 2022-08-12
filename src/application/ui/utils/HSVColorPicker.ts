@@ -21,8 +21,8 @@ export class HSVColorPicker{
         v: 1 as PercentageNumber
     }
 
-    // Current color
-    private _color : HSV;
+    // Current color (If set, the picker must be rerendered)
+    public color : HSV;
 
     // Form-bindings that are only present if the slider has currently an open gui
     private fromBindings?: InternalFormBindings;
@@ -31,7 +31,7 @@ export class HSVColorPicker{
     private valueChangeListener?: (value: HSV)=>void;
 
     constructor(startColor? : HSV, ){
-        this._color = startColor === undefined ? {...HSVColorPicker.DEFAULT_COLOR} : startColor;
+        this.color = startColor === undefined ? {...HSVColorPicker.DEFAULT_COLOR} : startColor;
     }
     
     public setChangeListener(onValueChange?: (value: HSV)=>void){
@@ -42,7 +42,7 @@ export class HSVColorPicker{
     private onSliderValueInput(name: keyof HSV, value: Range<0,1000>){
 
         // Updates the color
-        this._color[name] = value/1000 as PercentageNumber;
+        this.color[name] = value/1000 as PercentageNumber;
         
         // Updates the gui (Rerenders the other sliders)
         switch(name){
@@ -65,6 +65,7 @@ export class HSVColorPicker{
             this.valueChangeListener(this.color);
     }
 
+    // Renders/Rerenders every canvas-slider
     public reRender(){
 
         // Ensures that the form is open
@@ -77,6 +78,7 @@ export class HSVColorPicker{
         this.renderSlider("v");
     }
 
+    // Takes in an base element which the gui will be appended to
     public openGuiAt(element: HTMLElement){
         var {body, bindings} = this.buildDropoutGUI();
 
@@ -93,10 +95,11 @@ export class HSVColorPicker{
         this.fromBindings = undefined;
     }
 
-    public buildDropoutGUI(){
+    // Creates the html-gui for the popup
+    private buildDropoutGUI(){
 
         // Gets the current values
-        var {h, s, v} = this._color;
+        var {h, s, v} = this.color;
   
         // Event-mapper (Takes in the input-event from one of the sliders
         // and forwards it to the handler-method with only the name h,s or v and it's
@@ -183,7 +186,7 @@ export class HSVColorPicker{
         var {canvas, ctx} = this.fromBindings![type];
 
         // Gets the values
-        var {h: cH, s: cS, v: cV} = this._color;
+        var {h: cH, s: cS, v: cV} = this.color;
     
         // Size of the canvas
         var w = canvas.width;
@@ -211,9 +214,4 @@ export class HSVColorPicker{
         }
     }
   
-    // Getter for the color
-    public get color() {
-        return {...this._color};
-    }
-
 }

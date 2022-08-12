@@ -6,12 +6,12 @@ export abstract class Element{
     init(changeCB: ()=>void) {}
 }
 
-export abstract class SupplierElement<T> extends Element{
+export abstract class SupplierElement<Storage, Giveback> extends Element{
     // Current value of the supplier-element
-    private currentValue: T;
+    private currentValue: Storage;
 
     // Inital value of the element
-    public readonly initValue: T;
+    public readonly initValue: Storage;
 
     // Key-name of the element (Used to get the value)
     public readonly key: string;
@@ -20,7 +20,7 @@ export abstract class SupplierElement<T> extends Element{
     // This will be set correctly once when the outer menu get's build
     private changeCB: ()=>void = null as any as ()=>void;
 
-    constructor(key: string, initValue: T){
+    constructor(key: string, initValue: Storage){
         super();
         this.initValue = this.currentValue = initValue;
         this.key = key;
@@ -29,19 +29,22 @@ export abstract class SupplierElement<T> extends Element{
     init(changeCB: ()=>void): void {
         this.changeCB = changeCB;
     }
-
+    
     /**
-     * Returns if the currently set value is valid. If that's not the case, a string with the reason is returned. Otherwise this returns void
+     * Takes the set value, parses the giveback-value and validates it.
+     * 
+     * @returns either a string, which is the errormessage because the element didn't get set propertly,
+     * or the actual parsed value
      */
-    abstract isValueValid() : string|void;
+    abstract validateParseAndGetValue(): string|Giveback;
 
     // Returns the current value of the ui-element
-    getValue() : T {
+    protected getValue() : Storage {
         return this.currentValue;
     }
 
     // Sets the value of the ui-element
-    setValue(value: T){
+    protected setValue(value: Storage){
         this.currentValue = value;
         this.changeCB();
     }

@@ -1,3 +1,7 @@
+import { CalculationError } from "../../../errorSystem/Errors.js";
+import { performCalculation } from "../../../parameterCalculator/Calculator.js";
+import { createSizeableTF } from "../../../ui/utils/SizeableTF.js";
+import { isStringEV } from "../../../utils/ElementValidation.js";
 import { create } from "../../../utils/HTMLBuilder.js";
 import { Element, ElementBuilderBase, SupplierElement } from "./BaseElement.js";
 
@@ -11,63 +15,52 @@ export type NumericFieldSettings = {
     parseMode: ParseMode
 }
 
-export class NumericFieldElement extends SupplierElement<number>{
+export class NumericFieldElement extends SupplierElement<string, number>{
     public readonly settings: NumericFieldSettings;
 
-    constructor(key: string, value: number, settings: NumericFieldSettings){
+    constructor(key: string, value: string, settings: NumericFieldSettings){
         super(key, value);
         this.settings=settings;
-        
     }
 
     public render(): HTMLElement {
-        return create("div",{
-            chld: [
-                // Decoy element for sizing the input element like it's input text
-                create("p", { cls: "decoy", text: this.getValue().toString() }),
-                // Input
-                create("input", {
-                    attr: {
-                        "type": "number",
-                        "min": this.settings.min,
-                        "max": this.settings.max,
-                        "value": this.getValue()
-                    },
-                    evts: {
-                        "input": this.onFieldInput.bind(this)
-                    }
-                })
-            ],
-            cls: "bsg-number-input"
-        })
+        return createSizeableTF(create("input",{
+            attr: {
+                "value": this.getValue()
+            },
+            evts: {
+                "input": (evt: any)=>this.setValue(evt.target.value)
+            }
+        }) as HTMLInputElement);
     }
 
-    // Event: When the value of this field changes (Fires on every single small change)
-    private onFieldInput(evt: any){
-        // Updates the set value
-        this.setValue(evt.target.valueAsNumber);
-        // Updates the decoy-element
-        evt.target.parentElement.children[0].textContent = evt.target.value;
-    }
+    validateParseAndGetValue(): string|number {
 
-    isValueValid(): string|void {
-        // Gets the value
-        var val = this.getValue();
+        try{
 
-        // Performs all kinds of checks for the value
-        
-        // Numeric check (Should normally always be okay)
-        if(isNaN(val))
-            return "nan";
-        // Min check
-        if(this.settings.min !== undefined && val < this.settings.min)
-            return "min";
-        // Max check
-        if(this.settings.max !== undefined && val < this.settings.max)
-            return "max";
-        // Float/Int check
-        if(this.settings.parseMode===ParseMode.INT && !Number.isInteger(val))
-            return "val";
+            // Performs the calculation
+            var value = performCalculation(this.getValue());
+    
+            // Performs all kinds of checks for the value
+    
+            // Numeric check (Should normally always be okay)
+            if(isNaN(value))
+                return "nan";
+            // Min check
+            if(this.settings.min !== undefined && value < this.settings.min)
+                return "min";
+            // Max check
+            if(this.settings.max !== undefined && value < this.settings.max)
+                return "max";
+            // Float/Int check
+            if(this.settings.parseMode===ParseMode.INT && !Number.isInteger(value))
+                return "val";
+
+            return value;
+        }catch(err){
+            return (err as CalculationError).message;
+        }
+
     }
 
     serialize(): any {
@@ -75,12 +68,19 @@ export class NumericFieldElement extends SupplierElement<number>{
     }
 
     deserialize(raw: any): boolean {
+        // Checks if the value is a string
+        if(!isStringEV(raw))
+            return false;
+
+        // Tries to parse the number
+        var asNm : number = parseFloat(raw);
+
         // Checks if the value failed to load
-        if(isNaN(raw))
+        if(isNaN(asNm))
             return false;
 
         // Checks if int expected, but float found
-        if(this.settings.parseMode === ParseMode.INT && !Number.isInteger(raw))
+        if(this.settings.parseMode === ParseMode.INT && !Number.isInteger(asNm))
             return false;
         
         // Updates value
@@ -92,7 +92,7 @@ export class NumericFieldElement extends SupplierElement<number>{
 
 export class NumericFieldBuilder<Base> extends ElementBuilderBase<Base>{
 
-    // Optionsl settings
+    // Options settings
     private readonly settings: NumericFieldSettings = {
         parseMode: ParseMode.INT
     };
@@ -122,6 +122,6 @@ export class NumericFieldBuilder<Base> extends ElementBuilderBase<Base>{
     }
 
     public __getBuild(): Element {
-        return new NumericFieldElement(this.key, this.value, this.settings);
+        return new NumericFieldElement(this.key, this.value.toString(), this.settings);
     }
 }

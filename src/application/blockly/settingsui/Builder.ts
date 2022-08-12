@@ -1,8 +1,10 @@
-import { OpenObject, Range } from "../../types/Types.js";
+import { HSV, OpenObject, PercentageNumber, Range } from "../../types/Types.js";
 import { Element, ElementBuilderBase } from "./fields/BaseElement.js";
+import { BrightnessPickerElement } from "./fields/BrightnessPickerElement.js";
+import { ColorPickerElement } from "./fields/ColorPickerElement.js";
 import { InfoIconElement } from "./fields/InfoIconElement.js";
 import { LineSeperatorElement } from "./fields/LineSeperatorElement.js";
-import { NumericFieldBuilder, NumericFieldElement, NumericFieldSettings } from "./fields/NumericElement.js";
+import { NumericFieldBuilder } from "./fields/NumericElement.js";
 import { TextElement } from "./fields/TextElement.js";
 import { SettingsUI } from "./SettingsUI.js";
 
@@ -45,6 +47,19 @@ export class SettingsUIBuilder{
         return builder;
     }
 
+    // Adds a color field element to the ui
+    addColorField(key: string, value?: HSV){
+        this.currentLine.push(new ColorPickerElement(key, value));
+        return this;
+    }
+
+    // Adds a brightness-field element to the ui
+    addBrightnessField(key: string, value?: PercentageNumber){
+        this.currentLine.push(new BrightnessPickerElement(key, value));
+        return this;
+    }
+
+    // Breaks the line to add elements to the next one
     breakLine(){
         // Moves all elements to the next line
         this.lines.push(this.currentLine);
@@ -70,7 +85,7 @@ export class SettingsUIBuilder{
         var setui = block.settingsui = new SettingsUI(resolvedLines);
 
         // Appends the setting-ui to be serialized by the blockly-serializsation
-        block.saveExtraState = ()=>setui.serialize;
+        block.saveExtraState = ()=>setui.serialize();
         // If the setui.deserialize-function throws an error, it will be catched by the general
         // deserialize-logic inside the ErrorSystem.importFromString with the blockly-serializsation logic
         block.loadExtraState = (obj: OpenObject)=>setui.deserialize(obj);

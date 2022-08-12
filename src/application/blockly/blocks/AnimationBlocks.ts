@@ -53,6 +53,12 @@ function registerDebug(name: string){
           this.setColour(TB_COLOR_ANIMATIONS);
             this.setTooltip("");
             this.setHelpUrl("");
+
+            createUI()
+            .addText("Lul").breakLine()
+                .addText("Lul").addColorField("test").addBrightnessField("Yooo").addText("Lul")
+                .breakLine().addText("Lul")
+            .buildTo(this);
         }
       };
 
