@@ -1,4 +1,4 @@
-import { SerialisationError } from "./errorSystem/Errors.js";
+import { EnvDeserialisationError } from "./errorSystem/Errors.js";
 import { isMin, Min, OpenObject, PositiveNumber } from "./types/Types.js";
 import { PREVIEWS } from "./ui/utils/UiEnvironmentIntegration.js";
 import { isBooleanEV, isIntegerEV, isStringEV } from "./utils/ElementValidation.js";
@@ -35,26 +35,20 @@ export class Environment{
      * @throws {SerialisationError} if any value is invalid
      */
     static deserialize(obj: OpenObject){
-
         if(!isBooleanEV(obj.withComments))
-            // TODO: Add language lookup
-            throw new SerialisationError("withComments must be a boolean");
+            throw new EnvDeserialisationError("import.error.general.withcomments");
 
         if(!isStringEV(obj.preprocessingCode))
-            // TODO: Add language lookup
-            throw new SerialisationError("preprocessingCode must be a string");
+            throw new EnvDeserialisationError("import.error.general.preproccode");
 
         if(!isIntegerEV(obj.ledPin) || !isMin(obj.ledPin,0))
-            // TODO: Add language lookup
-            throw new SerialisationError("ledPin must be a positive integer");
+            throw new EnvDeserialisationError("import.error.general.ledpin");
 
         if(!isIntegerEV(obj.ledAmount) || !isMin(obj.ledAmount,1))
-            // TODO: Add language lookup
-            throw new SerialisationError("ledAmount must be an integer >= 1");
+            throw new EnvDeserialisationError("import.error.general.ledamount");
 
         if(!isStringEV(obj.selectedPreview) || !PREVIEWS.includes(obj.selectedPreview))
-            // TODO: Add language lookup
-            throw new SerialisationError("selectedPreview must be an the index of a preview");
+            throw new EnvDeserialisationError("import.error.general.selectedpreview");
 
         return new Environment(obj.ledAmount, obj.withComments, obj.preprocessingCode, obj.ledPin, obj.selectedPreview);
     }

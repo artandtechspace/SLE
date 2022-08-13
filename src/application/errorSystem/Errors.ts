@@ -31,9 +31,10 @@ export class DesyncedWorkspaceError extends Error{
     }
 }
 
-export class SerialisationError extends Error{
-    public constructor(message: string){
-        super(message);
+// Used when an Environment get's deserialized
+export class EnvDeserialisationError extends Error{
+    public constructor(langKey: string){
+        super(Language.get(langKey));
     }
 }
 

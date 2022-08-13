@@ -1,4 +1,4 @@
-import { SerialisationError } from "../../errorSystem/Errors.js";
+import { LoadingError, EnvDeserialisationError } from "../../errorSystem/Errors.js";
 import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem.js";
 import { OpenObject } from "../../types/Types.js";
 import { create } from "../../utils/HTMLBuilder.js";
@@ -61,7 +61,7 @@ export class SettingsUI{
     /**
      * Loads previously serialized content into the settingsui.
      * @param content the raw loaded values to deserialize to the values.
-     * @throws {SerialisationError} if a value got serialized invalid and can't be deserialized
+     * @throws {LoadingError} if a value got serialized invalid and can't be deserialized
      */
     public deserialize(content: OpenObject){
         // Loads all serialized values back in
@@ -78,7 +78,7 @@ export class SettingsUI{
                     // Deserializes the value
                     if(!elmnt.deserialize(val))
                         // TODO: Add language lookup
-                        throw new SerialisationError(`Failed to load field '${elmnt.key}'. Invalid value detected.`);
+                        throw new LoadingError(`Failed to load field '${elmnt.key}'. Invalid value detected.`);
                 }
     }
 }

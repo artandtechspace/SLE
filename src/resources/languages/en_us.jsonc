@@ -68,7 +68,17 @@
 
     // #region Other-Errors and Warnings
 
-        "ui.warnings.led-overflow": "Your settings ($user_leds$ leds) for a block are overflowing your led-stripe's ($stripe_leds$ leds) length."
+        "ui.warnings.led-overflow": "Your settings ($user_leds$ leds) for a block are overflowing your led-stripe's ($stripe_leds$ leds) length.",
+
+    // #endregion
+
+    // #region Import/Export
+
+    "import.error.general.withcomments": "Failed to import enviornment, 'withComments' must be a boolean",
+    "import.error.general.preproccode": "Failed to import enviornment, 'preprocessingCode' must be a string.",
+    "import.error.general.ledpin": "Failed to import enviornment, 'ledPin' must be a positive integer",
+    "import.error.general.ledamount": "Failed to import enviornment, 'ledAmount' must be an integer >= 1",
+    "import.error.general.selectedpreview": "Failed to import enviornment, 'selectedPreview' must be an the index of a preview"
 
     // #endregion
 }
