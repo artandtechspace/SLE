@@ -134,8 +134,14 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 				// Gets the first problem
 				var prob = oobMods[0];
 				// Writes the warning
-				// TODO: Add language lookup
-				errsys.show(new BlockWarning(`Your settings (${prob.ledIndex+1} leds) for a block are overflowing your led-stripe's (${getEnvironment().ledAmount} leds) length.`,prob.block));
+				errsys.show(new BlockWarning(
+					prob.block,
+					"ui.warnings.led-overflow",
+					{
+						"user_leds": prob.ledIndex+1,
+						"stripe_leds": getEnvironment().ledAmount
+					}
+				));
 			}else
 				// Removes and previous error-messages
 				errsys.clearScreen();			

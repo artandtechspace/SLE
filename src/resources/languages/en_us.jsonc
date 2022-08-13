@@ -11,7 +11,7 @@
         "ui.blockly.workspace.desynced.noroot": "No root-block found. Did something go wrong while loading?",
         "ui.blockly.workspace.desynced.multipleblocks": "Found multiple non-disabled blocks on the workspace. Did something go wrong while loading?",
 
-    // #endregion Blockly-Category
+    // #endregion
     
     // #region UI-Tabs
 
@@ -62,7 +62,13 @@
         "ui.parameter.errors.name.duplicated": "The parameter-name '$var$' is duplicated.",
         "ui.parameter.errors.name.startchar": "A parametername can't start with '$var$'.",
         "ui.parameter.errors.name.invalidchar": "The char '$var$' is not allowed inside a parameter's name.",
-        "ui.parameter.errors.value.invalid": "The parameter '$var$' must contain a number."
+        "ui.parameter.errors.value.invalid": "The parameter '$var$' must contain a number.",
+
+    // #endregion
+
+    // #region Other-Errors and Warnings
+
+        "ui.warnings.led-overflow": "Your settings ($user_leds$ leds) for a block are overflowing your led-stripe's ($stripe_leds$ leds) length."
 
     // #endregion
 }
