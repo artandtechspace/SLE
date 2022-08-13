@@ -23,8 +23,11 @@ export class LoadingError extends Error{
 }
 
 export class DesyncedWorkspaceError extends Error{
-    public constructor(message: string){
-        super(message);
+    /**
+     * @param langKey the reference inside the language-file 
+     */
+    public constructor(langKey: string){
+        super(Language.get(langKey));
     }
 }
 

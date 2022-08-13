@@ -25,8 +25,6 @@ export type LVarSet = LVarTypeArray | LVarType;
 // Holds the loaded language after one get's loaded
 var loadedLanguage: {[key: string]: string};
 
-
-
 /**
  * Tries to load a given language file.
  * 

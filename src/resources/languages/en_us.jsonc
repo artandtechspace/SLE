@@ -1,10 +1,15 @@
 {
     // #region Blockly-Category
 
+        // Toolbox-categories
         "ui.blockly.toolbox.categorys.color": "Color",
         "ui.blockly.toolbox.categorys.control": "Control",
         "ui.blockly.toolbox.categorys.values": "Values",
         "ui.blockly.toolbox.categorys.animations": "Animations",
+
+        // Root-block-errors
+        "ui.blockly.workspace.desynced.noroot": "No root-block found. Did something go wrong while loading?",
+        "ui.blockly.workspace.desynced.multipleblocks": "Found multiple non-disabled blocks on the workspace. Did something go wrong while loading?",
 
     // #endregion Blockly-Category
     

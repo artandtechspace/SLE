@@ -51,15 +51,13 @@ function getRootBlock(){
 
 	// Checks the length
 	if(blocks.length <= 0)
-		// TODO: Add language lookup
-		throw new DesyncedWorkspaceError("No root-block found. Did something go wrong while loading?");
+		throw new DesyncedWorkspaceError("ui.blockly.workspace.desynced.noroot");
 
 	// Checks the length
 	if(blocks.length > 1)
 		// Checks if there is one block beeing dragged
 		if(!getWorkspace().isDragging())
-			// TODO: Add language lookup
-			throw new DesyncedWorkspaceError("Found multiple non-disabled blocks on the workspace. Did something go wrong while loading?");
+			throw new DesyncedWorkspaceError("ui.blockly.workspace.desynced.multipleblocks");
 	
 	
 	// Gets the block
@@ -67,8 +65,7 @@ function getRootBlock(){
 
 	// Ensures that the block is the root
 	if(blg.type !== "sle_root")
-		// TODO: Add language lookup
-		throw new DesyncedWorkspaceError("Found a single non-root block on the workspace but nothing else. Did something go wrong while loading?");
+		throw new DesyncedWorkspaceError("ui.blockly.workspace.desynced.noroot");
 
 	return blg;
 }
