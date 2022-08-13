@@ -101,7 +101,7 @@ function checkElement(elm: any){
  * @param langFileName the file-name of the language-file without extension. Must comply to the defined name-schema.
  * @throws {LoadingError} if something goes wrong (In that case the application is unable to operate)
  */
-export async function setupLanguageManager(langFileName: string){
+async function setupLanguageManager(langFileName: string){
     // Tries to load the language file
     await loadLanguage(langFileName);
 
@@ -116,7 +116,11 @@ export async function setupLanguageManager(langFileName: string){
  * 
  * !Node! this can and should only be called after the inital setup of the language-manager
  */
-export function getFromLanguage(key: string, variables?: {[key:string]: (number|string|boolean)}) : string{
+function getFromLanguage(key: string, variables?: {[key:string]: (number|string|boolean)}) : string{
+    // Checks if there is no language file loaded
+    if(loadedLanguage === undefined)
+        return handleProgrammingError(`Get a call to Language.get('${key}') before the language is actually loaded`);
+    
     // Gets the value
     var val = loadedLanguage[key];
 
@@ -132,4 +136,9 @@ export function getFromLanguage(key: string, variables?: {[key:string]: (number|
     return val.replace(/\$\w+\$/gi,mtch=>{
         return variables[mtch.substring(1,mtch.length-1)].toString();
     });
+}
+
+export const Language = {
+    get: getFromLanguage,
+    setup: setupLanguageManager
 }

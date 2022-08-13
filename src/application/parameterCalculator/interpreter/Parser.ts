@@ -28,6 +28,7 @@ export class Parser{
 
         // Ensures the end of file has been reached
         if(this.currentToken.type !== TokenTypes.EOF)
+            // TODO: Add language lookup
             throw new CalculationError("Syntax-Error. Expected +, -, * or /");
         
         return result;
@@ -75,10 +76,10 @@ export class Parser{
                 this.advance();
                 return exp;
             }
-
+            // TODO: Add language lookup
             throw new CalculationError("Expected ')'");
         }
-
+        // TODO: Add language lookup
         throw new CalculationError("Expected number couldn't be found");
 
     }

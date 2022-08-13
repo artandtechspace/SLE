@@ -35,6 +35,7 @@ export class SettingsUIBuilder{
         return this;
     }
 
+    // Adds a small i-icon that shaws the given info-text when hovering over it
     addInfoIcon(infoText: string){
         this.currentLine.push(new InfoIconElement(infoText));
         return this;

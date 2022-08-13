@@ -6,7 +6,6 @@ import { getEnvironment } from "../SharedObjects.js";
 
 /**
  * Returns the estimated runtime of the given configuration
- * @param env the environment
  * @param mods the modules
  */
 export function getFullRuntime(mods: ModBlockExport<any>[]) : number{

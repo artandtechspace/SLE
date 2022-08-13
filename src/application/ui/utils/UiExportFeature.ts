@@ -21,6 +21,7 @@ function onExportFileButtonClicked(){
     // Creates an element to download the element
     var a = document.createElement("a");
     var url = a.href = URL.createObjectURL(file);
+    // TODO: Edit to something else than just "Export.json"
     a.download = "Export.json";
     document.body.appendChild(a);
     a.click();

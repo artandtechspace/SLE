@@ -1,5 +1,4 @@
 import { Environment } from "../../Environment.js";
-import { getFromLanguage } from "../../language/LanguageManager.js";
 import { PopupSystem } from "../popupSystem/PopupSystem.js";
 import { ArduinoSimulation } from "../../simulation/ArduinoSimulation.js";
 import { Min, PositiveNumber } from "../../types/Types.js";
@@ -7,6 +6,7 @@ import { create as C } from "../../utils/HTMLBuilder.js";
 import { loadSVG } from "../../utils/SVGUtil.js";
 import { S } from "./UiUtils.js";
 import { getEnvironment } from "../../SharedObjects.js";
+import { Language } from "../../language/LanguageManager.js";
 
 
 /**
@@ -165,7 +165,7 @@ function bindEnvironment(sim: ArduinoSimulation, popsys: PopupSystem, onEnvChang
         
         // Creates the option
         envIntCol.previewSelect.appendChild(C("option",{
-            text: getFromLanguage("ui.settings.preview-image.values."+file.toLowerCase()),
+            text: Language.get("ui.settings.preview-image.values."+file.toLowerCase()),
             attr: {
                 value: file
             }
@@ -184,7 +184,7 @@ function bindEnvironment(sim: ArduinoSimulation, popsys: PopupSystem, onEnvChang
             // Gets the new filename
             var filename = envIntCol.previewSelect.selectedOptions[0].getAttribute("value") as string;
             
-            // Prevents changing the index
+            // Prevents changing the index (To not change the index before actually loading the image. This is usedful in case of an error while loading the image)
             envIntCol.previewSelect.selectedIndex = selectedIndex;            
 
             // Gets the new animation and tries to load it

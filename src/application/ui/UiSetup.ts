@@ -1,7 +1,6 @@
 import { Environment } from "../Environment.js";
 import { Error } from "../errorSystem/Errors.js";
 import { InAppErrorSystem } from "../errorSystem/InAppErrorSystem.js";
-import { setupLanguageManager } from "../language/LanguageManager.js";
 import { PopupSystem } from "./popupSystem/PopupSystem.js";
 import { PRESET_SOURCECODE } from "../Preset.js";
 import { ArduinoSimulation } from "../simulation/ArduinoSimulation.js";
@@ -16,6 +15,7 @@ import { Manager as SettingsUiManager } from "../blockly/settingsui/SettingsUI.j
 import { registerBlockly } from "../blockly/BlocklyRegister.js";
 import { setupExportFeature } from "./utils/UiExportFeature.js";
 import { onRenderTab, startParameterSystem } from "../parameterCalculator/system/ParameterSystem.js";
+import { Language } from "../language/LanguageManager.js";
 
 // Executes to setup the ui
 // Returns an object with all important elements
@@ -33,7 +33,7 @@ export async function setupUi(doRecompile: ()=>void){
 
     try{
         // Setups the language-system
-        await setupLanguageManager("en_us");
+        await Language.setup("en_us");
 
         // Initalizes all blockly-stuff and init's the blockly-area
         var workspace = registerBlockly(S("#blocklyDiv") as HTMLDivElement);
@@ -205,7 +205,7 @@ function registerControlsTabs(){
     const BUTTONS: [HTMLElement,number][] = [
         [S("#btnTabEnv",controls),TAB_CONTROLS_ENVS],
         [S("#tabEnv",controls),TAB_CONTROLS_ENVS],
-        [ S("#btnTabParams",controls),TAB_CONTROLS_PARAMS],
+        [S("#btnTabParams",controls),TAB_CONTROLS_PARAMS],
         [S("#tabParams",controls),TAB_CONTROLS_PARAMS],
         [S("#btnTabSettings",controls),TAB_CONTROLS_SETTINGS],
         [S("#tabSettings",controls),TAB_CONTROLS_SETTINGS]

@@ -11,11 +11,11 @@ import { setupUi } from "./ui/UiSetup.js";
 import { TabHandler } from "./ui/utils/TabHandler.js";
 import { BlockWarning } from "./errorSystem/Warnings.js";
 import { didWorkspaceChange, setWorkspaceInvalid } from "./blockly/util/WorkspaceChangeDetector.js";
-import { getFromLanguage } from "./language/LanguageManager.js";
 import { Manager as SettingsUiManager } from "./blockly/settingsui/SettingsUI.js";
 import { getEnvironment, getWorkspace, initSharedObjects } from "./SharedObjects.js";
 import { writeEnvironmentToPage } from "./ui/utils/UiEnvironmentIntegration.js";
 import { checkParametersForErrors } from "./parameterCalculator/system/ParameterSystem.js";
+import { Language } from "./language/LanguageManager.js";
 
 // Arduino-simulation
 var simulation: ArduinoSimulation;
@@ -51,12 +51,14 @@ function getRootBlock(){
 
 	// Checks the length
 	if(blocks.length <= 0)
+		// TODO: Add language lookup
 		throw new DesyncedWorkspaceError("No root-block found. Did something go wrong while loading?");
 
 	// Checks the length
 	if(blocks.length > 1)
 		// Checks if there is one block beeing dragged
 		if(!getWorkspace().isDragging())
+			// TODO: Add language lookup
 			throw new DesyncedWorkspaceError("Found multiple non-disabled blocks on the workspace. Did something go wrong while loading?");
 	
 	
@@ -65,6 +67,7 @@ function getRootBlock(){
 
 	// Ensures that the block is the root
 	if(blg.type !== "sle_root")
+		// TODO: Add language lookup
 		throw new DesyncedWorkspaceError("Found a single non-root block on the workspace but nothing else. Did something go wrong while loading?");
 
 	return blg;
@@ -118,7 +121,7 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 					break;
 				case TAB_PREVIEW_ANALYTICS:
 					// Generates the runtime-analytics
-					runtimeDisplay.textContent = getFromLanguage("ui.tabs.preview.analytics.runtime",{
+					runtimeDisplay.textContent = Language.get("ui.tabs.preview.analytics.runtime",{
 						"length": getFullRuntime(modExports)/1000
 					});
 					break;
@@ -133,6 +136,7 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 				// Gets the first problem
 				var prob = oobMods[0];
 				// Writes the warning
+				// TODO: Add language lookup
 				errsys.show(new BlockWarning(`Your settings (${prob.ledIndex+1} leds) for a block are overflowing your led-stripe's (${getEnvironment().ledAmount} leds) length.`,prob.block));
 			}else
 				// Removes and previous error-messages

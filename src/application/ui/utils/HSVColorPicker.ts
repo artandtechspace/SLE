@@ -115,12 +115,13 @@ export class HSVColorPicker{
         // Creates the html-body for the ui
         var body = C("div", {
             chld: [
+                // TODO: Add language lookup
                 C("p",{ text: "Color" }),
                 colorHtml,
-
+                // TODO: Add language lookup
                 C("p",{ text: "Saturation" }),
                 saturationHtml,
-
+                // TODO: Add language lookup
                 C("p",{ text: "Value" }),
                 valueHtml
             ],

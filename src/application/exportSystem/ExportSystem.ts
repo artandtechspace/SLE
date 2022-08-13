@@ -42,17 +42,20 @@ export function importFromString(data: string){
     try{
         parsedJson = JSON.parse(data);
     }catch(exc){
+        // TODO: Add language lookup
         throw new LoadingError("Failed to parse-file.");
     }
 
 
     // Checks if the workspace is given
     if(!isObjectEV(parsedJson[exportStringWs]))
+        // TODO: Add language lookup
         throw new LoadingError("Invalid workspace-object.");
 
 
     // Checks the environment and tries to parse it
     if(!isObjectEV(parsedJson[exportStringEnv]))
+        // TODO: Add language lookup
         throw new LoadingError("Invalid environment-object.");
     var env: Environment = Environment.deserialize(parsedJson[exportStringEnv]);
         
@@ -62,6 +65,7 @@ export function importFromString(data: string){
         
     // Validates the parameters-element
     if(!isArrayEV(params))
+        // TODO: Add language lookup
         throw new LoadingError("Invalid parameters-object.");
     validateParamConfig(params);
 
@@ -69,6 +73,7 @@ export function importFromString(data: string){
     try{
         Blockly.serialization.workspaces.load(parsedJson[exportStringWs], getWorkspace());
     }catch(exc){
+        // TODO: Add language lookup
         throw new LoadingError("Invalid workspace.")
     }
 

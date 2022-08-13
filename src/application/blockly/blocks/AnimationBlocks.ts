@@ -22,11 +22,14 @@ export default function registerAnimationBlocks(){
     registerGradientBlock('sle_animation_gradient');
     registerRainbowBlock('sle_animation_rainbow');
     registerFadeBlock('sle_animation_fade');
+
+    // TODO: Remove debug block
     registerDebug('sle_debug');
 }
 
 //#region BlockRegister
 
+// TODO: Remove debug block
 function registerDebug(name: string){
     Blockly.Blocks[name] = {
         init: function() {
@@ -107,7 +110,6 @@ function registerFadeBlock(name: string){
             this.setColour(TB_COLOR_ANIMATIONS);
             
             createUI()
-                
                 .addText("Fade for")
                 .addNumericField(getAnimationLength, 5000).hasMin(0).andThen()
                 .addText("ms")

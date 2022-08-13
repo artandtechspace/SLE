@@ -96,6 +96,7 @@ export function generateCode(mods: ModBlockExport<any>[]) : string {
     var varSys = new VariableSystem(unqSup);
 
     // Will hold all codes (Loop, Setup and function-definitions)
+    // TODO: Add language lookup
     var definitionCode = C("Start of definition-code");
     var setupCode = C("Start of setup-code");
     var loopCode = C("Start of loop-code");

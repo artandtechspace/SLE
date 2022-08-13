@@ -42,7 +42,7 @@ export function isValidParameterName(fullname: string){
 
 /**
  * Takes in a parameter-name that is known is be invalid and returns the reason why it's invalid
- * TODO: Add Language-lookup
+ * TODO: Add language lookup
  */
 export function getParamInvalidNameErrorMessage(fullname: string){
 

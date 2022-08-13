@@ -15,6 +15,7 @@ export async function loadSVG(path: string): Promise<SVGElement>{
     
     // Checks for an error
     if(!res.ok)
+        // TODO: Add language lookup
         throw new LoadingError("Retreived invalid svg-status-code: "+res.status);
 
     // Creates a dummy element
@@ -25,10 +26,12 @@ export async function loadSVG(path: string): Promise<SVGElement>{
 
     // Checks if an error occurred
     if(dummy.children.length != 1)
+        // TODO: Add language lookup
         throw new LoadingError("failed to retreive svg");
 
     // Ensures that an svg got loaded
     if(dummy.children[0].tagName.toLowerCase() !== "svg")
+        // TODO: Add language lookup
         throw new LoadingError("retreived element was no svg");
 
     // Gets the element handle

@@ -62,6 +62,7 @@ export function getNumberFromCodeAsPercentage(block: any, field: string) : Perce
 
     // Ensures that the number is within the required range.
     if(!isPercentageNumber(val))
+        // TODO: Add language lookup
         throw new BlockError(`The '${field}'-value must be a percentage-number`,block);
 
     return val;
@@ -77,6 +78,7 @@ export function getNumberFromCodeAsMin<minimum extends number>(block: any, field
 
     // Ensures that the number is within the required range.
     if(val < min)
+        // TODO: Add language lookup
         throw new BlockError(`The '${field}'-value must be >= ${min}`,block);
 
     return val as Min<minimum>;
@@ -92,6 +94,7 @@ export function getNumberFromCodeAsMax<maximum extends number>(block: any, field
 
     // Ensures that the number is within the required range.
     if(val > max)
+        // TODO: Add language lookup
         throw new BlockError(`The '${field}'-value must be <= ${max}`,block);
 
     return val as Max<maximum>;
@@ -107,6 +110,7 @@ export function getNumberFromCode(block: any,field: string) {
 
     // Ensures that the number is valid
     if(isNaN(val))
+        // TODO: Add language lookup
         throw new BlockError(`The '${field}'-value is not given.`,block);
 
     return val;
@@ -135,6 +139,6 @@ export function getParametricNumberMin<minimum extends number>(block: any, field
 
     if(isMin(x, min))
         return x;
-    
+    // TODO: Add language lookup
     throw new BlockError(`The '${field}'-value must be >= ${min}. Is '${x}'`, block);
 }

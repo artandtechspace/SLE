@@ -162,7 +162,7 @@ export class ParameterSystemModel {
             return usrprm.value;
 
         // Parameter couldn't be found
-        // TODO: Language lookup
+        // TODO: Add language lookup
         throw new CalculationError("Failed to find parameter '"+name+"'.");
     }
 

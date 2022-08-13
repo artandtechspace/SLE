@@ -87,6 +87,6 @@ export function validateParamConfig(params: []) {
     var validParams = params.every((prm: any)=>isObjectEV(prm) && isStringEV(prm.name) && isNumberEV(prm.value));
 
     if(!validParams)
-        // TODO: Language lookup
+        // TODO: Add language lookup
         throw new LoadingError("The given parameters have an unknown format.");
 }

@@ -48,8 +48,8 @@ export abstract class ModuleBase<Config extends OpenObject>{
     /**
      * Runs once at the begining to simulate the setup of for the module als time intensiv calculations should be done here.
      * 
-     * @param env the environment 
-     * @param singleSourceOfTruth an object that is also passed to the loop function. Use this to store internal variables or already calculated configurations and so on.
+     * @param config the configuration for the module
+     * @param singleSourceOfTruth an object that was also passed to the setup function. Use this to store internal variables and append validated configurations that are required inside the loop method.
      * @param arduino the arduino-simulatio object. Can be used to await a delay or push stuff
      */
     public async simulateLoop(config: Config, singleSourceOfTruth: OpenObject, arduino: Arduino){}

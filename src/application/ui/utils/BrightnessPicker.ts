@@ -103,6 +103,7 @@ export class BrightnessPicker{
         // Generates the outer wrapper elements
         var body = C("div", {
             chld: [
+            // TODO: Add language lookup
             C("p", { text: "Brightness" }),
             C("div", {
                 cls: "hsv-color-picker_slider",

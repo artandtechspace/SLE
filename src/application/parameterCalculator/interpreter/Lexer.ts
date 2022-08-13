@@ -58,6 +58,7 @@ export class Lexer {
             if(isValidFirstCharacter(this.currentChar)){
                 // Ensures no parameter just got directly appended to a number
                 if(this.prevWasNumber)
+                    // TODO: Add language lookup
                     throw new CalculationError("Parameter's cant start with numbers.");
 
                 // Parses the parameter, looks it up and appends it as a number
@@ -66,6 +67,7 @@ export class Lexer {
             }
 
             // Illegal character found
+            // TODO: Add language lookup
             throw new CalculationError("Illegal character error. Unknown character called '"+this.currentChar+"'");
         }
 
@@ -102,6 +104,7 @@ export class Lexer {
             if(this.currentChar === DECIMAL_SEPERATOR){
                 // Checks if there is an error (multiple decimal-seperators)
                 if(isFloat)
+                    // TODO: Add language lookup
                     throw new CalculationError("Found multiple decimal-seperators for a single number.");
                 
                 // Sets the number to be a float and appends the "programming" decimal-seperator

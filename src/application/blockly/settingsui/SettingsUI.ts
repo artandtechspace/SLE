@@ -77,6 +77,7 @@ export class SettingsUI{
 
                     // Deserializes the value
                     if(!elmnt.deserialize(val))
+                        // TODO: Add language lookup
                         throw new SerialisationError(`Failed to load field '${elmnt.key}'. Invalid value detected.`);
                 }
     }

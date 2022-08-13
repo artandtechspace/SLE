@@ -67,6 +67,7 @@ export class ArduinoSimulation{
 
         // Ensures that the leds could be loaded
         if(leds.length <= 0)
+            // TODO: Add language lookup
             throw new InvalidValueError("No leds could be found.");
 
         this.leds = leds;

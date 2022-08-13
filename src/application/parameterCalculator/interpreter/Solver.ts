@@ -38,6 +38,7 @@ export class Solver{
             case TokenTypes.DIV:
                 return left / right;
             default:
+                // TODO: Add language lookup
                 throw new CalculationError("Critical error occurred, this should not have happend.");
         }
     }

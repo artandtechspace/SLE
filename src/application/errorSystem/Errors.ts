@@ -56,9 +56,10 @@ export class ParameterError extends Error {
             case ErrorType.INVALID_NAME:
                 return new ParameterError(getParamInvalidNameErrorMessage(prm.name)!.lang);
             case ErrorType.DUPLICATED_NAME:
-                // TODO: Language lookup
+                // TODO: Add language lookup
                 return new ParameterError("The parameter-name '"+prm.name+"' is duplicated.");
             case ErrorType.INVALID_VALUE:
+                // TODO: Add language lookup
                 return new ParameterError("The paramter '"+prm.name+"' must contain a number.");
         }
     }

@@ -1,4 +1,4 @@
-import { getFromLanguage } from "../../language/LanguageManager.js";
+import { Language } from "../../language/LanguageManager.js";
 
 /**
  * Toolbox for the blockly workspace
@@ -42,7 +42,7 @@ export function buildToolBox(){
 function category(nameKey: string, color: number, content: any[] = []){
   return {
     "kind": "category",
-    "name": getFromLanguage("ui.blockly.toolbox.categorys."+nameKey),
+    "name": Language.get("ui.blockly.toolbox.categorys."+nameKey),
     "contents": content,
     "colour": color.toString()
   }
