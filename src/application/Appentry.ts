@@ -121,9 +121,10 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 					break;
 				case TAB_PREVIEW_ANALYTICS:
 					// Generates the runtime-analytics
-					runtimeDisplay.textContent = Language.get("ui.tabs.preview.analytics.runtime",{
-						"length": getFullRuntime(modExports)/1000
-					});
+					runtimeDisplay.textContent = Language.get(
+						"ui.tabs.preview.analytics.runtime",
+						getFullRuntime(modExports)/1000
+					);
 					break;
 			}
 			

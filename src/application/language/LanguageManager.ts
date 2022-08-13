@@ -3,6 +3,7 @@ import { handleProgrammingError } from "../errorSystem/ProgrammingErrorSystem.js
 import { SM } from "../ui/utils/UiUtils.js";
 import { isObjectEV, isStringEV } from "../utils/ElementValidation.js";
 
+
 // Regex to match variables inside the static html-page
 const HTML_MATCHER_REGEX = /^[ \t]*\{\{[ \t]*[\w\-\._]+[ \t]*\}\}[ \t]*$/i;
 
@@ -12,8 +13,19 @@ const LANG_KEY_MATCH_REGEX = /[\w\-\._]+/i;
 // Regex to validate the file-name of language files
 const LANGUAGE_NAME_REGEX = /^\w{2}_\w{2}$/i;
 
-// Holds the loaded language if one got loaded
+// Types that are valid to be passed as a variable for lookups to the language file
+export type LVarType = number|string|boolean;
+
+// Named array of these variables
+export type LVarTypeArray = {[key:string]: LVarType}
+
+// Either a named list with language-variables or just a language-variables to be called "var" when passed to the language file
+export type LVarSet = LVarTypeArray | LVarType;
+
+// Holds the loaded language after one get's loaded
 var loadedLanguage: {[key: string]: string};
+
+
 
 /**
  * Tries to load a given language file.
@@ -29,7 +41,13 @@ async function loadLanguage(name: string){
     try{
     
         // Await the language file
-        var langAsJson = await (await fetch("resources/languages/"+name+".json")).json();
+        var langAsText = await (await fetch("resources/languages/"+name+".jsonc")).text();
+
+        // Filters simple comments
+        langAsText = langAsText.split("\n").filter(x=>!x.trimStart().startsWith("//")).join("\n");
+
+        // Parses the json
+        var langAsJson = JSON.parse(langAsText)
 
         // Ensures the file is valid
         if(!isObjectEV(langAsJson))
@@ -116,7 +134,7 @@ async function setupLanguageManager(langFileName: string){
  * 
  * !Node! this can and should only be called after the inital setup of the language-manager
  */
-function getFromLanguage(key: string, variables?: {[key:string]: (number|string|boolean)}) : string{
+function getFromLanguage(key: string, vars?: LVarSet) : string{
     // Checks if there is no language file loaded
     if(loadedLanguage === undefined)
         return handleProgrammingError(`Get a call to Language.get('${key}') before the language is actually loaded`);
@@ -129,12 +147,20 @@ function getFromLanguage(key: string, variables?: {[key:string]: (number|string|
         return handleProgrammingError("Failed to find language key '"+key+"'.");
 
     // If no variables are given
-    if(variables === undefined)
+    if(vars === undefined)
         return val;
     
-    // Searches the string for variables
+    // Checks if a default var was given
+    if(!isObjectEV(vars))
+        // Modifies the vars variable to fit as a default-object
+        vars = { "var": vars } as LVarTypeArray
+        
+    // Searches the string for variables with schema $name$
     return val.replace(/\$\w+\$/gi,mtch=>{
-        return variables[mtch.substring(1,mtch.length-1)].toString();
+        // Name without the $ at end and start
+        var name = mtch.substring(1,mtch.length-1)
+
+        return (vars as LVarTypeArray)[name].toString();
     });
 }
 

@@ -1,3 +1,4 @@
+import { Language, LVarSet } from "../language/LanguageManager.js";
 import { getParamInvalidNameErrorMessage } from "../parameterCalculator/ParameterCheck.js";
 import { ErrorType } from "../parameterCalculator/system/internal/ParameterSystemModel.js";
 import { UParameterModel } from "../parameterCalculator/system/internal/ParameterSystemTypes.js";
@@ -54,17 +55,25 @@ export class ParameterError extends Error {
     public static of(type: ErrorType, prm: UParameterModel) : ParameterError{
         switch(type){
             case ErrorType.INVALID_NAME:
-                return new ParameterError(getParamInvalidNameErrorMessage(prm.name)!.lang);
+                return new ParameterError(...getParamInvalidNameErrorMessage(prm.name));
             case ErrorType.DUPLICATED_NAME:
-                // TODO: Add language lookup
-                return new ParameterError("The parameter-name '"+prm.name+"' is duplicated.");
+                return new ParameterError(
+                    "ui.parameter.errors.name.duplicated",
+                    prm.name
+                )
             case ErrorType.INVALID_VALUE:
-                // TODO: Add language lookup
-                return new ParameterError("The paramter '"+prm.name+"' must contain a number.");
+                return new ParameterError(
+                    "ui.parameter.errors.value.invalid",
+                    prm.name
+                );
         }
     }
 
-    private constructor(msg: string){
-        super(msg);
+    /**
+     * @param langKey key passed to the language-lookup
+     * @param langVars language-variables passed to the language-lookup
+     */
+    private constructor(langKey: string, langVars?: LVarSet){
+        super(Language.get(langKey, langVars));
     }
 }

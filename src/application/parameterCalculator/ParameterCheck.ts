@@ -1,4 +1,5 @@
 import { handleProgrammingError } from "../errorSystem/ProgrammingErrorSystem.js";
+import { LVarSet, LVarType } from "../language/LanguageManager.js";
 
  // All special-chars that are allowed within parameter names
  const SPECIAL_CHARS = "_$%".split("");
@@ -42,33 +43,33 @@ export function isValidParameterName(fullname: string){
 
 /**
  * Takes in a parameter-name that is known is be invalid and returns the reason why it's invalid
- * TODO: Add language lookup
  */
-export function getParamInvalidNameErrorMessage(fullname: string){
+export function getParamInvalidNameErrorMessage(fullname: string) : [string, LVarType] {
 
     // Checks the first char
     if(!isValidFirstCharacter(fullname[0])){
 
         if(isValidMiddleCharacter(fullname[0]))
-            return {
-                lang: "A Parametername can't start with",
-                char: fullname[0]
-            }
-        return {
-            lang: "The char is not allowed inside the parameter-name",
-            char: fullname[0]
-        }
+            return [
+                "ui.parameter.errors.name.startchar",
+                fullname[0]
+            ];
+
+        return [
+            "ui.parameter.errors.name.invalidchar",
+            fullname[0]
+        ]
     }
 
     // Checks every following character
     for(var idx = 1; idx < fullname.length; idx++){
         if(!isValidMiddleCharacter(fullname[idx]))
-            return {
-                lang: "The char is not allowed inside the parameter-name",
-                char: fullname[idx]
-            }
+            return [
+                "ui.parameter.errors.name.invalidchar",
+                fullname[idx]
+            ]
     }
 
     // This part should never be reached
-    handleProgrammingError("An invalid-parametername had no errors. >;-|");
+    return handleProgrammingError("An invalid-parametername had no errors. >;-|");
 }
