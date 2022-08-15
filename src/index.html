@@ -188,8 +188,8 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Value</th>
+                                    <th>{{ ui.params.table.name }}</th>
+                                    <th>{{ ui.params.table.value }}</th>
                                     <th><!--Action/Info column--></th>
                                 </tr>
                             </thead>
@@ -205,17 +205,17 @@
                     <div id="settingsTab">
                         <div id="import-export" class="infoInput">
                             <div class="wrapper">
-                                <p>Export/Export from file</p>
+                                <p>{{ ui.import.title }}</p>
                                 <i class="infoIcon fa fa-info" aria-hidden="true">
                                     <div class="popup">
-                                        <p>Export-Info</p>
+                                        <p>{{ ui.import.description }}</p>
                                     </div>
                                 </i>
                             </div>
                             <div id="buttons">
-                                <input type="button" value="Import File" id="import"/>
+                                <input type="button" value="{{ ui.import.button.import }}" id="import"/>
                                 <input type="file" style="display: none" id="import_helper"/>
-                                <input type="button" value="Export File" id="export"/>
+                                <input type="button" value="{{ ui.import.button.export }}" id="export"/>
                             </div>
                         </div>
 

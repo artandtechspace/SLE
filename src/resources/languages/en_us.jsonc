@@ -81,7 +81,10 @@
 
     // #endregion
 
-    // #region Parameter-Errors
+    // #region Parameters
+
+        "ui.params.table.name": "Name",
+        "ui.params.table.value": "Value",
 
         // Parameter names
         "ui.parameter.description.ledAmount": "Led-Amount contains the amount of leds that the user configures.",
@@ -110,6 +113,11 @@
     // #endregion
 
     // #region Import/Export
+
+        "ui.import.title": "Export/Export from file",
+        "ui.import.description": "TODO: Make better export/import description",
+        "ui.import.button.import": "Import File",
+        "ui.import.button.export": "Export File",
 
         "import.error.general.withcomments": "Failed to import enviornment, 'withComments' must be a boolean",
         "import.error.general.preproccode": "Failed to import enviornment, 'preprocessingCode' must be a string.",
