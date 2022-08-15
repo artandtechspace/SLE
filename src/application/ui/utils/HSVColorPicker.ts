@@ -1,3 +1,4 @@
+import { Language } from "../../language/LanguageManager.js";
 import { HSV, PercentageNumber, Range } from "../../types/Types.js";
 import { HSV2HEX } from "../../utils/ColorUtils.js";
 import { create as C } from "../../utils/HTMLBuilder.js";
@@ -111,18 +112,14 @@ export class HSVColorPicker{
         var {binding: saturationBind, html: saturationHtml} = this.createSlider("colorS", s, evt=>evtMapper(evt,"s"));
         var {binding: valueBind, html: valueHtml} = this.createSlider("colorV", v, evt=>evtMapper(evt,"v"));
 
-        // TODO: Add language lookup
         // Creates the html-body for the ui
         var body = C("div", {
             chld: [
-                // TODO: Add language lookup
-                C("p",{ text: "Color" }),
+                C("p",{ text: Language.get("ui.utils.colorpicker.color") }),
                 colorHtml,
-                // TODO: Add language lookup
-                C("p",{ text: "Saturation" }),
+                C("p",{ text: Language.get("ui.utils.colorpicker.saturation") }),
                 saturationHtml,
-                // TODO: Add language lookup
-                C("p",{ text: "Value" }),
+                C("p",{ text: Language.get("ui.utils.colorpicker.value") }),
                 valueHtml
             ],
             cls:"hsv-color-picker_popup"

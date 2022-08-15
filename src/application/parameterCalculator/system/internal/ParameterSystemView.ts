@@ -177,8 +177,7 @@ export class ParameterSystemView {
                                         cls: "popup",
                                         chld: [
                                             C("p", {
-                                                // TODO: Add language lookup
-                                                text: "language.something.param.name.or.so"
+                                                text: "ui.parameter.description."+param!.name
                                             })
                                         ]
                                     })

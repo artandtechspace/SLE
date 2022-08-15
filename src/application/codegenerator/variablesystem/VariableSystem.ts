@@ -19,7 +19,7 @@ export class VariableSystem {
      * Generates the global variable code and returns that as a single string which must be printed at the top of the document.
      */
     public generateGlobalCode() : string{
-        // TODO: Add language lookup
+        // TODO: Maybe add language lookup
         return `${C("Global variable-declarations")}\n${this.globalVars.map(va=>va.declair()).join("\n")}`;
     }
 

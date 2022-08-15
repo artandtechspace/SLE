@@ -4,6 +4,7 @@ import { InvalidValueError } from "../errorSystem/Errors.js";
 import { getFullRuntime } from "../modules/ModuleUtils.js";
 import { ModBlockExport } from "../ConfigBuilder.js";
 import { Min } from "../types/Types.js";
+import { handleProgrammingError } from "../errorSystem/ProgrammingErrorSystem.js";
 
 export class ArduinoSimulation{
 
@@ -67,8 +68,7 @@ export class ArduinoSimulation{
 
         // Ensures that the leds could be loaded
         if(leds.length <= 0)
-            // TODO: Add language lookup
-            throw new InvalidValueError("No leds could be found.");
+            return handleProgrammingError("No leds could be found.");
 
         this.leds = leds;
 

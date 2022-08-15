@@ -1,3 +1,4 @@
+import { Language } from "../../language/LanguageManager.js";
 import { HSV, PercentageNumber, Range } from "../../types/Types.js";
 import { HSV2HEX } from "../../utils/ColorUtils.js";
 import { create as C } from "../../utils/HTMLBuilder.js";
@@ -88,10 +89,10 @@ export class BrightnessPicker{
         // Creates the slider
         var slider = C("input", {
             attr: {
-            "type": "range",
-            "min": 0,
-            "max": 1000,
-            "value": this.brightness * 1000
+                "type": "range",
+                "min": 0,
+                "max": 1000,
+                "value": this.brightness * 1000
             },
             evts: { "input": (evt: any) => this.onSliderValueInput(evt.target.value) }
         }) as HTMLInputElement;
@@ -103,8 +104,7 @@ export class BrightnessPicker{
         // Generates the outer wrapper elements
         var body = C("div", {
             chld: [
-            // TODO: Add language lookup
-            C("p", { text: "Brightness" }),
+            C("p", { text: Language.get("ui.utils.brightnessslider") }),
             C("div", {
                 cls: "hsv-color-picker_slider",
                 chld: [

@@ -47,7 +47,12 @@
     // #region UI-Utils
 
         "ui.utils.svg.error.status": "Failed to load SVG-Image, invalid status code '$var$'.",
+        "ui.utils.brightnessslider": "Brightness",
+        "ui.utils.colorpicker.color": "Color",
+        "ui.utils.colorpicker.saturation": "Saturation",
+        "ui.utils.colorpicker.value": "Value",
 
+        
     // #endregion
 
     // #region Envionment-Settings
@@ -78,6 +83,9 @@
 
     // #region Parameter-Errors
 
+        // Parameter names
+        "ui.parameter.description.ledAmount": "Led-Amount contains the amount of leds that the user configures.",
+
         "ui.parameter.errors.name.duplicated": "The parameter-name '$var$' is duplicated.",
         "ui.parameter.errors.name.startchar": "A parametername can't start with '$var$'.",
         "ui.parameter.errors.name.invalidchar": "The char '$var$' is not allowed inside a parameter's name.",
@@ -92,7 +100,6 @@
         "calc.param.error.parser.numbernotfound": "Expected number couldn't be found",
 
         "calc.param.error.solver.paramnotfound": "Parameter '$var$' not found.",
-
 
     // #endregion
 
@@ -120,4 +127,5 @@
         "import.error.json.parameters.format": "Failed to parse file because some parameters are in an unknown/invalid format."
 
     // #endregion
+
 }
