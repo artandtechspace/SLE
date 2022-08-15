@@ -35,28 +35,25 @@ export function exportToString(){
  * Tries to import the given string @param data as a project
  * @throws {LoadingError|SerialisationError} if the data is invalid
  */
-// TODO: Add language lookups
 export function importFromString(data: string){
     // Tries to parse
     var parsedJson: OpenObject;
     try{
         parsedJson = JSON.parse(data);
     }catch(exc){
-        // TODO: Add language lookup
-        throw new LoadingError("Failed to parse-file.");
+        throw new LoadingError("import.error.jsonparse");
     }
 
 
     // Checks if the workspace is given
     if(!isObjectEV(parsedJson[exportStringWs]))
-        // TODO: Add language lookup
-        throw new LoadingError("Invalid workspace-object.");
+        throw new LoadingError("import.error.json.workspace");
 
 
     // Checks the environment and tries to parse it
     if(!isObjectEV(parsedJson[exportStringEnv]))
-        // TODO: Add language lookup
-        throw new LoadingError("Invalid environment-object.");
+        throw new LoadingError("import.error.json.environment");
+
     var env: Environment = Environment.deserialize(parsedJson[exportStringEnv]);
         
         
@@ -65,16 +62,16 @@ export function importFromString(data: string){
         
     // Validates the parameters-element
     if(!isArrayEV(params))
-        // TODO: Add language lookup
-        throw new LoadingError("Invalid parameters-object.");
+        throw new LoadingError("import.error.json.parameters");
+    
+    // Validates the config and throws an error if the config is invalid
     validateParamConfig(params);
 
     // Tries to load the workspace
     try{
         Blockly.serialization.workspaces.load(parsedJson[exportStringWs], getWorkspace());
     }catch(exc){
-        // TODO: Add language lookup
-        throw new LoadingError("Invalid workspace.")
+        throw new LoadingError("import.error.json.workspace")
     }
 
     // Loads the env

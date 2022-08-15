@@ -1,4 +1,5 @@
 import { LoadingError } from "../errorSystem/Errors.js";
+import { handleProgrammingError } from "../errorSystem/ProgrammingErrorSystem.js";
 
 /**
  * Loads an svg from the given path.
@@ -15,8 +16,7 @@ export async function loadSVG(path: string): Promise<SVGElement>{
     
     // Checks for an error
     if(!res.ok)
-        // TODO: Add language lookup
-        throw new LoadingError("Retreived invalid svg-status-code: "+res.status);
+        throw new LoadingError("ui.utils.svg.error.status", res.status);
 
     // Creates a dummy element
     var dummy = document.createElement("div");
@@ -26,13 +26,11 @@ export async function loadSVG(path: string): Promise<SVGElement>{
 
     // Checks if an error occurred
     if(dummy.children.length != 1)
-        // TODO: Add language lookup
-        throw new LoadingError("failed to retreive svg");
+        return handleProgrammingError("Failed to retreive svg, dummy had no children.");
 
     // Ensures that an svg got loaded
     if(dummy.children[0].tagName.toLowerCase() !== "svg")
-        // TODO: Add language lookup
-        throw new LoadingError("retreived element was no svg");
+        return handleProgrammingError("Failed to retreive svg, dummy children aren't of type svg.");
 
     // Gets the element handle
     var handle: SVGElement = dummy.children[0] as SVGElement;

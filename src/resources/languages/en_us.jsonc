@@ -31,6 +31,12 @@
 
     // #endregion
 
+    // #region UI-Utils
+
+        "ui.utils.svg.error.status": "Failed to load SVG-Image, invalid status code '$var$'.",
+
+    // #endregion
+
     // #region Envionment-Settings
     
         "ui.settings.edit-button": "View/Edit Precompile-Code",
@@ -74,11 +80,20 @@
 
     // #region Import/Export
 
-    "import.error.general.withcomments": "Failed to import enviornment, 'withComments' must be a boolean",
-    "import.error.general.preproccode": "Failed to import enviornment, 'preprocessingCode' must be a string.",
-    "import.error.general.ledpin": "Failed to import enviornment, 'ledPin' must be a positive integer",
-    "import.error.general.ledamount": "Failed to import enviornment, 'ledAmount' must be an integer >= 1",
-    "import.error.general.selectedpreview": "Failed to import enviornment, 'selectedPreview' must be an the index of a preview"
+        "import.error.general.withcomments": "Failed to import enviornment, 'withComments' must be a boolean",
+        "import.error.general.preproccode": "Failed to import enviornment, 'preprocessingCode' must be a string.",
+        "import.error.general.ledpin": "Failed to import enviornment, 'ledPin' must be a positive integer",
+        "import.error.general.ledamount": "Failed to import enviornment, 'ledAmount' must be an integer >= 1",
+        "import.error.general.selectedpreview": "Failed to import enviornment, 'selectedPreview' must be an the index of a preview",
+        
+        // Settings-ui
+        "import.error.deserialize.settingsui.field": "Failed to load field '$var$'. Invalid value detected.",
+
+        "import.error.jsonparse": "Failed to parse file.",
+        "import.error.json.workspace": "Failed to parse file because the workspace-object is invalid.",
+        "import.error.json.environment": "Failed to parse file because the environment-object is invalid.",
+        "import.error.json.parameters": "Failed to parse file because the parameter-object is invalid.",
+        "import.error.json.parameters.format": "Failed to parse file because some parameters are in an unknown/invalid format."
 
     // #endregion
 }

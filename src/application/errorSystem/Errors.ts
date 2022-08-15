@@ -17,8 +17,8 @@ export class BlockError extends Error{
 }
 
 export class LoadingError extends Error{
-    public constructor(message: string){
-        super(message);
+    public constructor(langKey: string, langVars?: LVarSet){
+        super(Language.get(langKey, langVars));
     }
 }
 
@@ -50,6 +50,12 @@ export class CalculationError extends Error{
     public constructor(message: string, details?: any){
         super(message);
         this.details = details;
+    }
+}
+
+export class LanguageLoadingError extends Error {
+    public constructor(message: string){
+        super(message);
     }
 }
 

@@ -1,4 +1,4 @@
-import { LoadingError } from "../errorSystem/Errors.js";
+import { LanguageLoadingError, LoadingError } from "../errorSystem/Errors.js";
 import { handleProgrammingError } from "../errorSystem/ProgrammingErrorSystem.js";
 import { SM } from "../ui/utils/UiUtils.js";
 import { isObjectEV, isStringEV } from "../utils/ElementValidation.js";
@@ -33,8 +33,9 @@ var loadedLanguage: {[key: string]: string};
  */
 async function loadLanguage(name: string){
     // Ensures the loading-name is compliant with the loading schema
+    // Important: Do not remove this test to prevent path-triversal attacks
     if(!LANGUAGE_NAME_REGEX.test(name))
-        throw new LoadingError("Failed to load language, requested language file name '"+name+"' does not comply with the file-nameing schema.");
+        throw new LanguageLoadingError("Failed to load language, requested language file name '"+name+"' does not comply with the file-nameing schema.");
 
     try{
     
@@ -58,7 +59,7 @@ async function loadLanguage(name: string){
         // Stores the loaded language
         loadedLanguage = langAsJson;
     }catch(e){
-        throw new LoadingError("Failed to catch language-file '"+name+"': "+e);
+        throw new LanguageLoadingError("Failed to catch language-file '"+name+"': "+e);
     }
 }
 
