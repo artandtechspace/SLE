@@ -1,4 +1,3 @@
-import { CalculationError } from "../../../errorSystem/Errors.js";
 import { getEnvironment } from "../../../SharedObjects.js";
 import { isValidParameterName } from "../../ParameterCheck.js";
 import { SysParameterModel, UParameterModel } from "./ParameterSystemTypes.js";
@@ -145,7 +144,7 @@ export class ParameterSystemModel {
      * Ensure that no parameter has any errors, otherwise the method could return unexpected values.
      * (Basically refresh the error-check and make sure there are no errors)
      * 
-     * @throws {CalculationError} if the given parameter couldn't be found
+     * @throws {LanguageRef} the error message if the given parameter couldn't be found
      */
     public getParamValueByName(name: string) : number {
 
@@ -162,8 +161,7 @@ export class ParameterSystemModel {
             return usrprm.value;
 
         // Parameter couldn't be found
-        // TODO: Add language lookup
-        throw new CalculationError("Failed to find parameter '"+name+"'.");
+        throw {key: "calc.param.error.solver.paramnotfound", vars: name};
     }
 
     // Deletes all user-parameters (Wont update the view automatically)

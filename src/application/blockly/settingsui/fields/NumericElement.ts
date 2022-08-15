@@ -1,4 +1,3 @@
-import { CalculationError } from "../../../errorSystem/Errors.js";
 import { performCalculation } from "../../../parameterCalculator/Calculator.js";
 import { createSizeableTF } from "../../../ui/utils/SizeableTF.js";
 import { isStringEV } from "../../../utils/ElementValidation.js";
@@ -34,33 +33,34 @@ export class NumericFieldElement extends SupplierElement<string, number>{
         }) as HTMLInputElement);
     }
 
-    validateParseAndGetValue(): string|number {
+    validateParseAndGetValue(): number {
+        var value: number;
 
-        try{
-
-            // Performs the calculation
-            var value = performCalculation(this.getValue());
+        // Performs the calculation and if an error occurred, forwards it
+        value = performCalculation(this.getValue());
     
-            // Performs all kinds of checks for the value
-    
-            // Numeric check (Should normally always be okay)
-            if(isNaN(value))
-                return "nan";
-            // Min check
-            if(this.settings.min !== undefined && value < this.settings.min)
-                return "min";
-            // Max check
-            if(this.settings.max !== undefined && value < this.settings.max)
-                return "max";
-            // Float/Int check
-            if(this.settings.parseMode===ParseMode.INT && !Number.isInteger(value))
-                return "val";
+        // Performs all kinds of checks for the value
 
-            return value;
-        }catch(err){
-            return (err as CalculationError).message;
-        }
+        // Numeric check (Should normally always be okay)
+        if(isNaN(value))
+            throw { key: "blocks.errors.fields.numeric.nan", vars: this.key };
+        // Min check
+        if(this.settings.min !== undefined && value < this.settings.min)
+            throw { key: "blocks.errors.fields.numeric.min", vars: {
+                "field": this.key,
+                "min": this.settings.min
+            }};
+        // Max check
+        if(this.settings.max !== undefined && value < this.settings.max)
+            throw { key: "blocks.errors.fields.numeric.max", vars: {
+                "field": this.key,
+                "max": this.settings.max
+            }};
+        // Float/Int check
+        if(this.settings.parseMode===ParseMode.INT && !Number.isInteger(value))
+            throw { key: "blocks.errors.fields.numeric.int", vars: this.key };
 
+        return value;
     }
 
     serialize(): any {

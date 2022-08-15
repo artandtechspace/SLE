@@ -10,8 +10,8 @@ export class BlockError extends Error{
     // Block that the error originated from
     public readonly block: any;
 
-    constructor(message: string, block: any){
-        super(message);
+    constructor(block: any, langKey: string, vars?: LVarSet){
+        super(Language.get(langKey, vars));
         this.block = block;
     }
 }
@@ -41,15 +41,6 @@ export class EnvDeserialisationError extends Error{
 export class InvalidValueError extends Error{
     public constructor(message: string){
         super(message);
-    }
-}
-
-export class CalculationError extends Error{
-    public readonly details?: any;
-
-    public constructor(message: string, details?: any){
-        super(message);
-        this.details = details;
     }
 }
 
@@ -83,7 +74,7 @@ export class ParameterError extends Error {
      * @param langKey key passed to the language-lookup
      * @param langVars language-variables passed to the language-lookup
      */
-    private constructor(langKey: string, langVars?: LVarSet){
+    public constructor(langKey: string, langVars?: LVarSet){
         super(Language.get(langKey, langVars));
     }
 }

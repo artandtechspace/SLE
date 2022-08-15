@@ -33,10 +33,10 @@ export abstract class SupplierElement<Storage, Giveback> extends Element{
     /**
      * Takes the set value, parses the giveback-value and validates it.
      * 
-     * @returns either a string, which is the errormessage because the element didn't get set propertly,
-     * or the actual parsed value
+     * @throws {LanguageRef} optional error if the parsing results in an error
+     * @returns the parsed value
      */
-    abstract validateParseAndGetValue(): string|Giveback;
+    abstract validateParseAndGetValue(): Giveback;
 
     // Returns the current value of the ui-element
     protected getValue() : Storage {

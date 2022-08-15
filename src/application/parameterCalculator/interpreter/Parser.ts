@@ -1,4 +1,3 @@
-import { CalculationError } from "../../errorSystem/Errors.js";
 import { Node, NodeTypes } from "../Nodes.js";
 import { NumberToken, Token, TokenTypes } from "../Token.js";
 
@@ -14,7 +13,7 @@ export class Parser{
     /**
      * Takes in @param tokens from the Lexer and parses them into an abstract syntax tree which will be returned
      * 
-     * @throws {CalculationError} if anything went wrong
+     * @throws {LanguageRef} the error message if anything went wrong
      */
     public parse(tokens: Token[]) : Node {
         // Preloads everything
@@ -28,8 +27,7 @@ export class Parser{
 
         // Ensures the end of file has been reached
         if(this.currentToken.type !== TokenTypes.EOF)
-            // TODO: Add language lookup
-            throw new CalculationError("Syntax-Error. Expected +, -, * or /");
+            throw {key: "calc.param.error.parser.syntaxerror"}
         
         return result;
     }
@@ -76,11 +74,9 @@ export class Parser{
                 this.advance();
                 return exp;
             }
-            // TODO: Add language lookup
-            throw new CalculationError("Expected ')'");
+            throw {key: "calc.param.error.parser.noclosingparen"}
         }
-        // TODO: Add language lookup
-        throw new CalculationError("Expected number couldn't be found");
+        throw {key: "calc.param.error.parser.numbernotfound"};
 
     }
 

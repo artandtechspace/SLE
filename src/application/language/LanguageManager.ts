@@ -22,6 +22,12 @@ export type LVarTypeArray = {[key:string]: LVarType}
 // Either a named list with language-variables or just a language-variables to be called "var" when passed to the language file
 export type LVarSet = LVarTypeArray | LVarType;
 
+// Collection of a language-key and optionally variables
+export type LanguageRef = {
+    key: string,
+    vars?: LVarSet
+}
+
 // Holds the loaded language after one get's loaded
 var loadedLanguage: {[key: string]: string};
 

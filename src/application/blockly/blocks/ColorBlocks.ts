@@ -51,7 +51,7 @@ function registerStripe(name: string){
         
         // Checks if an invalid length got specified
         if(pos1 === pos2)
-            throw new BlockError("The start- and end-values are equal.", block);
+            throw new BlockError(block, "blocks.errors.color.startend");
         
         // Gets the start
         var start = Math.min(pos1,pos2) as PositiveNumber;

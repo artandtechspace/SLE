@@ -11,7 +11,7 @@ const lexer = new Lexer();
  * @param text the text to parse (Calculate)
  * @returns the calculated number
  * 
- * @throws {CalculationError} if anything is invalid within the text
+ * @throws {LanguageRef} if anything is invalid within the text, throws the error-message
  */
 export function performCalculation(text: string) : number {
     var tokens = lexer.makeTokens(text);

@@ -58,7 +58,7 @@ export class ColorPickerElement extends SupplierElement<HSV, HSV>{
         return this.renderRect;
     }
 
-    validateParseAndGetValue(): string|HSV {
+    validateParseAndGetValue(): HSV {
         return this.getValue();
     }
 

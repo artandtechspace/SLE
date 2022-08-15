@@ -1,4 +1,3 @@
-import { CalculationError } from "../../errorSystem/Errors.js";
 import { isValidFirstCharacter, isValidMiddleCharacter, isValidParameterName } from "../ParameterCheck.js";
 import { PSModel } from "../system/internal/ParameterSystemController.js";
 import { NumberToken, Token, TokenTypes } from "../Token.js";
@@ -20,7 +19,7 @@ export class Lexer {
      * 
      * @returns an array of parsed Tokens from the text
      * 
-     * @throws {CalculationError} if anything went wrong while lexing
+     * @throws {LanguageRef} the error-message if anything went wrong while lexing
      */
      public makeTokens(text: string){
         this.text = text;
@@ -58,8 +57,7 @@ export class Lexer {
             if(isValidFirstCharacter(this.currentChar)){
                 // Ensures no parameter just got directly appended to a number
                 if(this.prevWasNumber)
-                    // TODO: Add language lookup
-                    throw new CalculationError("Parameter's cant start with numbers.");
+                    throw {key: "calc.param.error.lexer.nonumbers"};
 
                 // Parses the parameter, looks it up and appends it as a number
                 tokens.push(this.makeParameter());
@@ -67,8 +65,7 @@ export class Lexer {
             }
 
             // Illegal character found
-            // TODO: Add language lookup
-            throw new CalculationError("Illegal character error. Unknown character called '"+this.currentChar+"'");
+            throw {key: "calc.param.error.lexer.illegalcharacter", vars: this.currentChar};
         }
 
         // Appends final end-of-file token
@@ -90,7 +87,7 @@ export class Lexer {
      * 
      * @returns the number-token that got parsed
      * 
-     * @throws {CalculationError} if multiple decimal-seperators got found for the single number
+     * @throws {LanguageRef} the error message if multiple decimal-seperators got found for the single number
      */
     private makeNumber() : NumberToken{
         // The parsed number as a string
@@ -104,8 +101,7 @@ export class Lexer {
             if(this.currentChar === DECIMAL_SEPERATOR){
                 // Checks if there is an error (multiple decimal-seperators)
                 if(isFloat)
-                    // TODO: Add language lookup
-                    throw new CalculationError("Found multiple decimal-seperators for a single number.");
+                    throw {key: "calc.param.error.lexer.multipledecimalpoints"};
                 
                 // Sets the number to be a float and appends the "programming" decimal-seperator
                 isFloat = true;
@@ -161,7 +157,7 @@ export class Lexer {
      * 
      * @returns the number-token that got parsed
      * 
-     * @throws {CalculationError} if the parameter does not exist
+     * @throws {LanguageRef} the error message if the parameter does not exist
      */
     private makeParameter() : NumberToken{
         // Parameter-name

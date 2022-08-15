@@ -1,4 +1,17 @@
 {
+    // #region Block-specific-errors
+
+        "blocks.errors.color.startend": "The start- and end-values are equal.",
+
+        "blocks.errors.fields.numeric.nan": "The '$var$'-field's numeric value is not a number.",
+        "blocks.errors.fields.numeric.min": "The '$field$'-field's numeric value must <= to $min$.",
+        "blocks.errors.fields.numeric.max": "The '$field$'-field's numeric value must >= to $max$.",
+        "blocks.errors.fields.numeric.int": "The '$var$'-field's numeric value must be an integer.",
+
+        "blocks.errors.fields.numeric.percentage": "The '$field$'-value must be a percentage-number (0.00-1.00).",
+
+    // #endregion
+
     // #region Blockly-Category
 
         // Toolbox-categories
@@ -69,6 +82,17 @@
         "ui.parameter.errors.name.startchar": "A parametername can't start with '$var$'.",
         "ui.parameter.errors.name.invalidchar": "The char '$var$' is not allowed inside a parameter's name.",
         "ui.parameter.errors.value.invalid": "The parameter '$var$' must contain a number.",
+
+        "calc.param.error.lexer.nonumbers": "Parameters cant start with numbers",
+        "calc.param.error.lexer.illegalcharacter": "Illegal character error. Unknown character called '$var$'",
+        "calc.param.error.lexer.multipledecimalpoints": "Found multiple decimal-seperators for a single number",
+
+        "calc.param.error.parser.syntaxerror": "Syntax-Error. Expected +, -, * or /",
+        "calc.param.error.parser.noclosingparen": "Expected ')'",
+        "calc.param.error.parser.numbernotfound": "Expected number couldn't be found",
+
+        "calc.param.error.solver.paramnotfound": "Parameter '$var$' not found.",
+
 
     // #endregion
 

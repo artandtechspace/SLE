@@ -59,7 +59,7 @@ export class BrightnessPickerElement extends SupplierElement<PercentageNumber, P
         return this.renderRect;
     }
 
-    validateParseAndGetValue(): string|PercentageNumber {
+    validateParseAndGetValue(): PercentageNumber {
         return this.getValue();
     }
 

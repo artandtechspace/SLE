@@ -1,5 +1,6 @@
 import { LoadingError, EnvDeserialisationError } from "../../errorSystem/Errors.js";
 import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem.js";
+import { Language, LanguageRef, LVarSet } from "../../language/LanguageManager.js";
 import { OpenObject } from "../../types/Types.js";
 import { create } from "../../utils/HTMLBuilder.js";
 import { SettingsUIBuilder } from "./Builder.js";
@@ -30,14 +31,15 @@ export class SettingsUI{
 
     /**
      * Returns the field value from the field with the name of @param name
+     * @throws {LanguageRef} as the error-message if an error occurred
      */
-    public validateAndGetValueByName<T>(name: string) : T|string{
+    public validateAndGetValueByName<T>(name: string) : T{
         // Searches for the element with that name
         for(var line of this.lines)
             for(var elmnt of line)
                 if(elmnt instanceof SupplierElement && name===elmnt.key)
-                    // Checks if the value is valid and if not returns the error
-                    return elmnt.validateParseAndGetValue()as T;
+                    // Checks if the value is valid and if so returns it
+                    return elmnt.validateParseAndGetValue() as T;
 
         return handleProgrammingError("Failed to find ui-element with name '"+name+"'");
     }

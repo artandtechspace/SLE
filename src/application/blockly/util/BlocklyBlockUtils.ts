@@ -1,11 +1,11 @@
-import { BlockError, CalculationError, InvalidValueError } from "../../errorSystem/Errors.js";
+import { BlockError } from "../../errorSystem/Errors.js";
 import { ConfigBuilder } from "../../ConfigBuilder.js";
-import { HexColor, isMax, isMin, isPercentageNumber, isRange, Max, Min, PercentageNumber, RGB } from "../../types/Types.js";
+import { HexColor, isMin, isPercentageNumber, Max, Min, PercentageNumber, RGB } from "../../types/Types.js";
 import { HSV2HEX, HSV2RGB } from "../../utils/ColorUtils.js";
 import { SettingsUI } from "../settingsui/SettingsUI.js";
 import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem.js";
 import { performCalculation } from "../../parameterCalculator/Calculator.js";
-import { isStringEV } from "../../utils/ElementValidation.js";
+import { LanguageRef } from "../../language/LanguageManager.js";
 
 /**
  * @throws {BlockError} if the value on the block is currently invalid
@@ -20,11 +20,13 @@ export function getNumberFromSettingsUI(block: any, name: string) : number{
         return handleProgrammingError("There is no settings-ui defined but the element '"+name+"' is expected.");
 
     // Gets the value
-    var ret = setUi.validateAndGetValueByName<number>(name);
-
-    // Checks for an error
-    if(isStringEV(ret))
-        throw new BlockError(ret, block);
+    var ret: number;
+    try{
+        ret = setUi.validateAndGetValueByName<number>(name);
+    }catch(e){
+        const ref = e as LanguageRef; 
+        throw new BlockError(block, ref.key, ref.vars)
+    }
 
     // Gives back the valid value
     return ret;
@@ -62,8 +64,7 @@ export function getNumberFromCodeAsPercentage(block: any, field: string) : Perce
 
     // Ensures that the number is within the required range.
     if(!isPercentageNumber(val))
-        // TODO: Add language lookup
-        throw new BlockError(`The '${field}'-value must be a percentage-number`,block);
+        throw new BlockError(block, `blocks.errors.fields.numeric.percentage`, field);
 
     return val;
 }
@@ -78,8 +79,10 @@ export function getNumberFromCodeAsMin<minimum extends number>(block: any, field
 
     // Ensures that the number is within the required range.
     if(val < min)
-        // TODO: Add language lookup
-        throw new BlockError(`The '${field}'-value must be >= ${min}`,block);
+        throw new BlockError(block, "blocks.errors.fields.numeric.min", {
+            "field": field,
+            "min": min
+        });
 
     return val as Min<minimum>;
 }
@@ -94,8 +97,10 @@ export function getNumberFromCodeAsMax<maximum extends number>(block: any, field
 
     // Ensures that the number is within the required range.
     if(val > max)
-        // TODO: Add language lookup
-        throw new BlockError(`The '${field}'-value must be <= ${max}`,block);
+        throw new BlockError(block, "blocks.errors.fields.numeric.max", {
+            "field": field,
+            "max": max
+        });
 
     return val as Max<maximum>;
 }
@@ -110,8 +115,7 @@ export function getNumberFromCode(block: any,field: string) {
 
     // Ensures that the number is valid
     if(isNaN(val))
-        // TODO: Add language lookup
-        throw new BlockError(`The '${field}'-value is not given.`,block);
+        throw new BlockError(block, "blocks.errors.fields.numeric.nan", field);
 
     return val;
 }
@@ -130,7 +134,8 @@ export function getParametricNumber(block: any, field: string, allowFloat: boole
     
         return allowFloat ? value : Math.round(value);
     }catch(e){
-        throw new BlockError((e as CalculationError).message, block);
+        const ref = e as LanguageRef;
+        throw new BlockError(block, ref.key, ref.vars);
     }
 }
 
@@ -139,6 +144,9 @@ export function getParametricNumberMin<minimum extends number>(block: any, field
 
     if(isMin(x, min))
         return x;
-    // TODO: Add language lookup
-    throw new BlockError(`The '${field}'-value must be >= ${min}. Is '${x}'`, block);
+
+    throw new BlockError(block, "blocks.errors.fields.numeric.min", {
+        "field": field,
+        "min": min
+    });
 }

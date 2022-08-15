@@ -1,4 +1,4 @@
-import { CalculationError } from "../../errorSystem/Errors.js";
+import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem.js";
 import { Node, NodeTypes } from "../Nodes.js";
 import { BaseToken, TokenTypes } from "../Token.js";
 
@@ -38,8 +38,7 @@ export class Solver{
             case TokenTypes.DIV:
                 return left / right;
             default:
-                // TODO: Add language lookup
-                throw new CalculationError("Critical error occurred, this should not have happend.");
+                return handleProgrammingError<number>("Critical Calculation-Solver-error occurred, this should not have happend.");
         }
     }
 }
