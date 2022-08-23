@@ -14,24 +14,25 @@ export function buildToolBox(){
       "contents": [
         category("color", TB_COLOR_COLOR,[
           block("sle_simple_single_color"),
-  
+
           block("sle_simple_stripe_color"),
         ]),
-        
+
         category("control", TB_COLOR_CONTROL,[
           block("sle_control_delay"),
   
           block("sle_control_loop"),
           block("sle_control_comment")
         ]),
+
         category("animations", TB_COLOR_ANIMATIONS, [
           block("sle_animation_gradient"),
           block("sle_animation_rainbow"),
           block("sle_animation_fade"),
+          block("sle_animation_rainbow_autocalc"),
           block("sle_debug")
         ])
       ]
-  
   }
 }
 

@@ -1,15 +1,13 @@
 import { ConfigBuilder } from "../../ConfigBuilder.js";
 import { GradientModule, GradientModuleConfig } from "../../defaultModules/animations/GradientModule.js";
 import { RainbowModule, RainbowModuleConfig } from "../../defaultModules/animations/RainbowModule.js";
-import { Environment } from "../../Environment.js";
 import { HSV, Min, PercentageNumber, PositiveNumber, Range } from "../../types/Types.js";
-import { getNumberFromCode, getNumberFromCodeAsMin, getNumberFromSettingsUI } from "../util/BlocklyBlockUtils.js";
+import { getNumberFromSettingsUI } from "../util/BlocklyBlockUtils.js";
 import FieldBrightness from "../fields/FieldBrightness.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
 import { TB_COLOR_ANIMATIONS } from "../util/Toolbox.js";
 import { FadeModule, FadeModuleConfig } from "../../defaultModules/animations/FadeModule.js";
 import { createUI } from "../settingsui/SettingsUI.js";
-import { ParseMode } from "../settingsui/fields/NumericElement.js";
 
 const Blockly = require("blockly");
 
@@ -21,6 +19,7 @@ const Blockly = require("blockly");
 export default function registerAnimationBlocks(){
     registerGradientBlock('sle_animation_gradient');
     registerRainbowBlock('sle_animation_rainbow');
+    registerRainbowAutocalcBlock("sle_animation_rainbow_autocalc");
     registerFadeBlock('sle_animation_fade');
 
     // TODO: Remove debug block
@@ -87,6 +86,7 @@ function registerDebug(name: string){
     });
 }
 
+// Fade-animation
 function registerFadeBlock(name: string){
     // Names for the variables
     const getAnimationLength = "amtLen";
@@ -168,6 +168,72 @@ function registerFadeBlock(name: string){
     });
 }
 
+// Rainbow-block auto-calculate offset per led
+function registerRainbowAutocalcBlock(name: string){
+    const getLedFrom = "ledFrom";
+    const getLedLength = "ledLength";
+    const getAnimationLength = "anmLength";
+    const getRepeatLength = "repLength";
+    const getBrightness = "bright";
+
+    Blockly.Blocks[name] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField("Rainbow with a brightness of")
+                .appendField(new FieldBrightness(),getBrightness);
+            this.setColour(TB_COLOR_ANIMATIONS);
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setInputsInline(true);
+            
+            createUI()
+                .addText("The Animation starts from led")
+                .addNumericField(getLedFrom,0).hasMin(0).andThen()
+                .addText("and runs for")
+                .addNumericField(getLedLength,32).hasMin(0).andThen()
+                .addText("leds,")
+                .addInfoIcon("Specify the animation's starting led and led-length.")
+                .breakLine()
+
+                .addText("for")
+                .addNumericField(getAnimationLength,5000).hasMin(100).andThen()
+                .addText("ms.")
+                .addInfoIcon("How long the Rainbow is shown before moving to the next block.")
+                .breakLine()
+
+                .addText("It takes")
+                .addNumericField(getRepeatLength, 5000).hasMin(500).andThen()
+                .addText("ms for the rainbow to conclude one cycle.")
+                .addInfoIcon("How long it takes for the rainbow to cycle around once.")
+            .buildTo(this);
+        }
+    };
+
+    ConfigBuilder.registerModuleBlock<RainbowModuleConfig>(name, function(block:any) { 
+        var ledFrom: PositiveNumber = getNumberFromSettingsUI(block, getLedFrom) as PositiveNumber;
+        var ledLength: Min<1> = getNumberFromSettingsUI(block,getLedLength) as Min<1>;
+        var playLenght: PositiveNumber = getNumberFromSettingsUI(block, getAnimationLength) as PositiveNumber;
+        var repeatLength: Min<500> = getNumberFromSettingsUI(block, getRepeatLength) as Min<500>;
+        var offsetPerLed: number = Math.round(repeatLength/ledLength);
+        
+        var brightness: number = block.getFieldValue(getBrightness);
+    
+        return {
+            module: RainbowModule,
+            config: {
+                ...RainbowModule.DEFAULT_CONFIG,
+                ledFrom: ledFrom,
+                ledLength: ledLength,
+                offsetPerLedInMs: offsetPerLed,
+                playLengthInMs: playLenght,
+                repeatLengthInMs: repeatLength,
+                value: brightness * 255 as Range<0,255>,
+            },
+            block
+        }
+    });
+}
+
 // Rainbow-block
 function registerRainbowBlock(name: string){
 
@@ -182,7 +248,8 @@ function registerRainbowBlock(name: string){
         init: function() {
         this.appendDummyInput()
             .appendField("Rainbow with a brightness of")
-            .appendField(new FieldBrightness(),getBrightness);
+            .appendField(new FieldBrightness(),getBrightness)
+            .appendField("(Led-offset)");
         this.setColour(TB_COLOR_ANIMATIONS);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
