@@ -135,11 +135,11 @@ function bindEnvironment(sim: ArduinoSimulation, popsys: PopupSystem, onEnvChang
     
     // Adds event below
     envIntCol.pin.addEventListener("change",(_: any)=>{
-        getEnvironment().ledPin=envIntCol.pin.value as PositiveNumber;
+        getEnvironment().ledPin=envIntCol.pin.valueAsNumber as PositiveNumber;
         onEnvChange();
     });
     envIntCol.amt.addEventListener("change",(_: any)=>{
-        getEnvironment().ledAmount=envIntCol.amt.value as Min<1>
+        getEnvironment().ledAmount=envIntCol.amt.valueAsNumber as Min<1>
         onEnvChange();
     });
     envIntCol.comments.addEventListener("change",(_: any)=>{

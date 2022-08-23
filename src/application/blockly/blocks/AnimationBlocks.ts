@@ -8,6 +8,7 @@ import FieldCustomColor from "../fields/FieldCustomColor.js";
 import { TB_COLOR_ANIMATIONS } from "../util/Toolbox.js";
 import { FadeModule, FadeModuleConfig } from "../../defaultModules/animations/FadeModule.js";
 import { createUI } from "../settingsui/SettingsUI.js";
+import { SystemParams } from "../../parameterCalculator/system/internal/ParameterSystemModel.js";
 
 const Blockly = require("blockly");
 
@@ -119,7 +120,7 @@ function registerFadeBlock(name: string){
                 .addText("from led")
                 .addNumericField(getLedFrom, 0).hasMin(0).andThen()
                 .addText("over")
-                .addNumericField(getLedLength,32).hasMin(1).andThen()
+                .addNumericField(getLedLength,SystemParams.LED_AMOUNT).hasMin(1).andThen()
                 .addText("leds.")
                 .addInfoIcon("Specify the animation's starting led and led-length.")
                 .breakLine()
@@ -190,7 +191,7 @@ function registerRainbowAutocalcBlock(name: string){
                 .addText("The Animation starts from led")
                 .addNumericField(getLedFrom,0).hasMin(0).andThen()
                 .addText("and runs for")
-                .addNumericField(getLedLength,32).hasMin(0).andThen()
+                .addNumericField(getLedLength,SystemParams.LED_AMOUNT).hasMin(0).andThen()
                 .addText("leds,")
                 .addInfoIcon("Specify the animation's starting led and led-length.")
                 .breakLine()
@@ -258,7 +259,7 @@ function registerRainbowBlock(name: string){
           
         createUI()
             .addText("Create a Rainbow for")
-            .addNumericField(getAnimationLength,500).hasMin(100).andThen()
+            .addNumericField(getAnimationLength,5000).hasMin(100).andThen()
             .addText("ms.")
             .addInfoIcon("How long the Rainbow is shown before moving to the next block.")
             .breakLine()
@@ -266,7 +267,7 @@ function registerRainbowBlock(name: string){
             .addText("Start from led")
             .addNumericField(getLedFrom,0).hasMin(0).andThen()
             .addText("and draw")
-            .addNumericField(getLedLength,32).hasMin(0).andThen()
+            .addNumericField(getLedLength,SystemParams.LED_AMOUNT).hasMin(0).andThen()
             .addText("leds.")
             .addInfoIcon("Specify the animation's starting led and led-length.")
             .breakLine()
@@ -344,7 +345,7 @@ function registerGradientBlock(name: string){
                 .addText("Gradient from led")
                 .addNumericField(getLedFrom,0).hasMin(0).andThen()
                 .addText("over")
-                .addNumericField(getLedLength,32).hasMin(0).andThen()
+                .addNumericField(getLedLength,SystemParams.LED_AMOUNT).hasMin(0).andThen()
                 .addText("leds.")
                 .addInfoIcon("Specify the animation's starting led and led-length.")
                 .breakLine()

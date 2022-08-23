@@ -42,8 +42,8 @@ export class SettingsUIBuilder{
     }
 
     // Adds a numeric field element to the ui
-    addNumericField(key: string, value: number){
-        var builder = new NumericFieldBuilder(this,key,value);
+    addNumericField(key: string, value: string|number){
+        var builder = new NumericFieldBuilder(this,key,value.toString());
         this.currentLine.push(builder);
         return builder;
     }

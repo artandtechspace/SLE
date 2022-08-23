@@ -71,21 +71,9 @@ export class NumericFieldElement extends SupplierElement<string, number>{
         // Checks if the value is a string
         if(!isStringEV(raw))
             return false;
-
-        // Tries to parse the number
-        var asNm : number = parseFloat(raw);
-
-        // Checks if the value failed to load
-        if(isNaN(asNm))
-            return false;
-
-        // Checks if int expected, but float found
-        if(this.settings.parseMode === ParseMode.INT && !Number.isInteger(asNm))
-            return false;
         
         // Updates value
         this.setValue(raw);
-
         return true;
     }
 }
@@ -99,9 +87,9 @@ export class NumericFieldBuilder<Base> extends ElementBuilderBase<Base>{
 
     // Required base settings
     private readonly key: string;
-    private readonly value: number;
+    private readonly value: string;
 
-    constructor(base: Base, key: string, value: number){
+    constructor(base: Base, key: string, value: string){
         super(base);
         this.key = key;
         this.value = value;
@@ -122,6 +110,6 @@ export class NumericFieldBuilder<Base> extends ElementBuilderBase<Base>{
     }
 
     public __getBuild(): Element {
-        return new NumericFieldElement(this.key, this.value.toString(), this.settings);
+        return new NumericFieldElement(this.key, this.value, this.settings);
     }
 }

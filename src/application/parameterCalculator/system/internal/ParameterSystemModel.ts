@@ -2,6 +2,11 @@ import { getEnvironment } from "../../../SharedObjects.js";
 import { isValidParameterName } from "../../ParameterCheck.js";
 import { SysParameterModel, UParameterModel } from "./ParameterSystemTypes.js";
 
+// All system-parameter names
+export const SystemParams = {
+    LED_AMOUNT: "ledAmount"
+};
+
 export enum ErrorType {
     DUPLICATED_NAME,
     INVALID_VALUE,
@@ -34,7 +39,7 @@ export class ParameterSystemModel {
      */
     public init(){
         // Creates the default system parameters
-        this.createSystemParameter("ledAmount", ()=> getEnvironment().ledAmount);
+        this.createSystemParameter(SystemParams.LED_AMOUNT, ()=> getEnvironment().ledAmount);
     }
 
     // Updates the internal error-check, which can be read using the getErrorParameters-method
