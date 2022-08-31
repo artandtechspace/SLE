@@ -1,6 +1,7 @@
 import { HSV, OpenObject, PercentageNumber, Range } from "../../types/Types.js";
 import { Element, ElementBuilderBase } from "./fields/BaseElement.js";
 import { BrightnessPickerElement } from "./fields/BrightnessPickerElement.js";
+import { DropDownElement } from "./fields/DropDownElement.js";
 import { ColorPickerElement } from "./fields/ColorPickerElement.js";
 import { InfoIconElement } from "./fields/InfoIconElement.js";
 import { LineSeperatorElement } from "./fields/LineSeperatorElement.js";
@@ -26,6 +27,12 @@ export class SettingsUIBuilder{
     // Adds a text-element to the ui
     addText(text: string) : SettingsUIBuilder{
         this.currentLine.push(new TextElement(text));
+        return this;
+    }
+
+    // Adds a small dropdown to select values from
+    addDropdown(key: string, values: string[], selectIndex: number = 0){
+        this.currentLine.push(new DropDownElement(key, values, selectIndex));
         return this;
     }
 

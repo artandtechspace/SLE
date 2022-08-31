@@ -69,6 +69,16 @@
             border-radius: 5px;
         }
 
+        // Dropdown-element
+        .bsg-dropdown{
+            padding: 0;
+            background: transparent;
+
+            option{
+                background-color: #303030;
+            }
+        }
+
         // Rect which is the preview of the color-picker
         .bsg-color-rect{
             position: relative;

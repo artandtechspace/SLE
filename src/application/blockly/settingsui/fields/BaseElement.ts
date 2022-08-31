@@ -33,6 +33,10 @@ export abstract class SupplierElement<Storage, Giveback> extends Element{
     /**
      * Takes the set value, parses the giveback-value and validates it.
      * 
+     * Difference t othe serialize-function:
+     * - This is used when getting the value from the blockly-blocks
+     * - the serialize-function is used when loading and saving to a file/json-blob
+     * 
      * @throws {LanguageRef} optional error if the parsing results in an error
      * @returns the parsed value
      */
