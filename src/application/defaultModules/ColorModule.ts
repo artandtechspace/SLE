@@ -194,7 +194,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         switch(depth){
             case ModDepth.SINGLE_LED:
                 return {
-                    loop: `leds[${cfg.start}] = CRGB(${cfg.clr_r},${cfg.clr_g},${cfg.clr_b})`,
+                    loop: `leds[${cfg.start}] = CRGB(${cfg.clr_r},${cfg.clr_g},${cfg.clr_b});`,
                     isDirty: true
                 }
             case ModDepth.LED_LINE:
