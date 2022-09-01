@@ -37,7 +37,9 @@ export type ColorModuleConfig = {
     clr_b: RGBNumber,
 
     
-    modus: StepMode
+    modus: StepMode,
+
+    reversed: boolean
 };
 
 export enum StepMode{
@@ -45,9 +47,18 @@ export enum StepMode{
     SERIES
 }
 
-// Returns the name of the mode-function
-function getModeName(mode: StepMode) : string{
-    return "ColorSteps"+(mode === StepMode.PARALLEL ? "Parallel" : "Series")
+// Returns the name of the mode-function (Returns undefined if an invalid depth is given)
+function getModeName(depth: ModDepth, mode: StepMode, reversed: boolean) : string|undefined{
+
+    switch(depth){
+        case ModDepth.FULL_STEPS:
+            return `ColorSteps${mode === StepMode.PARALLEL ? "Parallel" : "Series"}${reversed ? "Reversed" : ""}`;
+
+        case ModDepth.LED_LINE:
+            return `ColorLine${reversed ? "Reversed" : ""}`;
+    }
+
+    return undefined;
 }
 
 // Which depth the color-module has to use
@@ -75,7 +86,9 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         clr_g: 0 as RGBNumber,
         clr_b: 0 as RGBNumber,
 
-        modus: StepMode.SERIES
+        modus: StepMode.SERIES,
+
+        reversed: false
     };
 
     //#region Code-Generation
@@ -99,11 +112,38 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         return `CRGB(${prms.clr_r.value},${prms.clr_g.value},${prms.clr_b.value})`;
     }
 
+
+
+
+    /**
+     * Function that is used to generate the start value for an led or step-loop
+     * 
+     * This takes the reversed state and based on that returnes eigther 0 if not reversed or the ending value minus one.
+     * Even directly calculated if the parameter is static
+     */
+    private getLoopStartFromParameter(reversed: boolean, prm: CppFuncParam<number>){
+        if(reversed)
+            return prm.isStatic ? ((prm.value as number)-1).toString() : `${prm.value}-1`;
+        return '0';
+    }
+
+
     // Generates the code for a single line depth
-    private generateLine(varSys: VariableSystem, prms: CppFuncParams<ColorModuleConfig>) : string{
+    private generateLine(varSys: VariableSystem, prms: CppFuncParams<ColorModuleConfig>, reversed: boolean) : string{
+
+        // Led-loop conditions (Start value and loop condition eg. > or < than 0 or something else)
+        const ledLoopCondition = reversed ? "<= 0" : `> ${prms.ledsPerStep.value.toString()}`;
+
+        // Loop-updation (The thing at the end of the loop eg. i++)
+        const loopUpdation = reversed ? "--" : "++";
 
         // Requests the led variable
-        var vLed = varSys.requestLocalVariable("int", "led", "0");
+        var vLed = varSys.requestLocalVariable("int", "led", this.getLoopStartFromParameter(reversed, prms.ledsPerStep));
+        
+        // Generates the for-loop
+        var forLoopLed = `for(${vLed.declair()} ${vLed} ${ledLoopCondition}; ${vLed}${loopUpdation}) {`;
+
+
 
         // Gets the led-index-calculation
         // cfg.start + led
@@ -115,19 +155,30 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         // Gets the color
         var clr = this.getRGBCode(prms);
 
+        
+
         return `
-            for(${vLed.declair()} ${vLed} < ${prms.ledsPerStep.value}; ${vLed}++){
+            ${forLoopLed}
                 leds[${idxCalc}] = ${clr};${this.generateDelayCode(prms.delayPerLed)}
             }
         `;
     }
 
     // Generates the code for multiple steps depth
-    private generateFullSteps(varSys: VariableSystem, prms: CppFuncParams<ColorModuleConfig>, mode: StepMode) : string{
+    private generateFullSteps(varSys: VariableSystem, prms: CppFuncParams<ColorModuleConfig>, mode: StepMode, reversed: boolean) : string{
 
+        // Led-loop condition
+        const ledLoopCondition = reversed ? "<= 0" : `> ${prms.ledsPerStep.value.toString()}`;
+
+        // Step-loop condition
+        const stepLoopCondition = reversed ? "<= 0" : `> ${prms.steps.value.toString()}`;
+
+        // Loop-updation (The thing at the end of the loop eg. i++)
+        const loopUpdation = reversed ? "--" : "++";
+        
         // Gets the variables
-        var vStep = varSys.requestLocalVariable("int", "steps", "0");
-        var vLed = varSys.requestLocalVariable("int", "led", "0");
+        var vStep = varSys.requestLocalVariable("int", "steps", this.getLoopStartFromParameter(reversed, prms.steps));
+        var vLed = varSys.requestLocalVariable("int", "led", this.getLoopStartFromParameter(reversed, prms.ledsPerStep));
 
         // Gets the led-index-calculation
         // cfg.start+step * (cfg.space+cfg.ledsPerStep) + led
@@ -139,9 +190,11 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         // Gets the color
         var clr = this.getRGBCode(prms);
 
+        // Generates the for-loops
+        var forLoopStep = `for(${vStep.declair()} ${vStep} ${stepLoopCondition}; ${vStep}${loopUpdation}) {`;
+        var forLoopLed = `for(${vLed.declair()} ${vLed} ${ledLoopCondition}; ${vLed}${loopUpdation}) {`;
+
         // Generates the code-fragments
-        var forStep = `for(${vStep.declair()} ${vStep} < ${prms.steps.value}; ${vStep}++) {`;
-        var forLeds = `for(${vLed.declair()} ${vLed} < ${prms.ledsPerStep.value}; ${vLed}++) {`;
         var ledSet = `leds[${idxCalc}] = ${clr};`;
         var delPerLed = `${this.generateDelayCode(prms.delayPerLed)}`;
         var delPerStep = `${this.generateDelayCode(prms.delayAfterStep)}`;
@@ -149,8 +202,8 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         // Assembles the code based on the mode
         if(mode === StepMode.SERIES){
             return `
-            ${forStep}
-                ${forLeds}
+            ${forLoopStep}
+                ${forLoopLed}
                     ${ledSet}${delPerLed}
                 }
                 ${delPerStep}
@@ -158,8 +211,8 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
             `;
         }else{
             return `
-            ${forLeds}
-            ${forStep}
+            ${forLoopStep}
+                ${forLoopLed}
                     ${ledSet}${delPerStep}
                 }
                 ${delPerLed}
@@ -177,14 +230,19 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         // Gets the depth
         var depth = this.getConfigDepth(config);
 
-        switch(depth){
-            case ModDepth.FULL_STEPS:
-                funcGen.registerCppFunc(this,getModeName(config.modus),CppVoid,this.getCppTypeDefinition(),config,(varSys, params)=>this.generateFullSteps(varSys,params, config.modus));
-                break;
-            case ModDepth.LED_LINE:
-                funcGen.registerCppFunc(this,"ColorLine",CppVoid,this.getCppTypeDefinition(),config,this.generateLine.bind(this));
-                break;
-        }
+        // Tries to get the name for the config, thereby also checking if the config must have an function
+        var name = getModeName(depth, config.modus, config.reversed);
+
+        if(name === undefined)
+            return;
+
+        // Generates the code-generator-callback function
+        var callback = depth === ModDepth.FULL_STEPS ?
+            (varSys: VariableSystem, params: CppFuncParams<ColorModuleConfig>) => this.generateFullSteps(varSys,params, config.modus, config.reversed) :
+            (varSys: VariableSystem, params: CppFuncParams<ColorModuleConfig>) => this.generateLine(varSys, params, config.reversed);
+
+        // Registers the function
+        funcGen.registerCppFunc(this, name, CppVoid, this.getCppTypeDefinition(), config, callback);
     }
 
     public generateCode(varSys: VariableSystem, cfg: ColorModuleConfig, funcSup: FunctionSupplier, isDirty: boolean): ModuleCode {
@@ -197,15 +255,16 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
                     loop: `leds[${cfg.start}] = CRGB(${cfg.clr_r},${cfg.clr_g},${cfg.clr_b});`,
                     isDirty: true
                 }
-            case ModDepth.LED_LINE:
+            case ModDepth.LED_LINE: case ModDepth.FULL_STEPS:
                 return {
-                    loop: funcSup.getCppFuncCall(this,"ColorLine",cfg),
-                    isDirty: cfg.delayPerLed <= 0
-                };
-            case ModDepth.FULL_STEPS:
-                return {
-                    loop: funcSup.getCppFuncCall(this,getModeName(cfg.modus),cfg),
-                    isDirty: cfg.delayPerLed <= 0 && cfg.delayAfterStep <= 0
+                    loop: funcSup.getCppFuncCall(this,getModeName(depth, cfg.modus, cfg.reversed) as string,cfg),
+                    isDirty: (
+                        depth === ModDepth.LED_LINE ?
+                        // Led-line-depth calculation
+                        (cfg.delayPerLed <= 0) :
+                        // Full-steps-depth calculation
+                        (cfg.delayPerLed <= 0 && cfg.delayAfterStep <= 0)
+                    )
                 };
         }
     }
@@ -223,8 +282,10 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
     // Function to simulate an array (stripe) of leds
     private async simulateLedStripe(cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino) : Promise<void>{
         for(var led = 0; led < cfg.ledsPerStep; led++){
+            const idx = led
+
              // Updates the color
-             arduino.setLedHex(cfg.start + led, ssot.clr);
+             arduino.setLedHex(cfg.reversed ? (ssot.lastLed-idx) : (idx + cfg.start), ssot.clr);
                 
              // Inserts a delay if required and pushes the update
              if(cfg.delayPerLed > 0){
@@ -240,8 +301,10 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
             // For every led of that step
             for(var led = 0; led < cfg.ledsPerStep; led++){
 
+                const idx = step * (cfg.space+cfg.ledsPerStep) + led;
+
                 // Updates the color
-                arduino.setLedHex(cfg.start+step * (cfg.space+cfg.ledsPerStep) + led, ssot.clr);
+                arduino.setLedHex(cfg.reversed ? (ssot.lastLed-idx) : (idx + cfg.start), ssot.clr);
                 
                 // Inserts a delay if required and pushes the update
                 if(cfg.delayPerLed > 0){
@@ -265,7 +328,9 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
 
             // Updates the color
             for(var step = 0; step < cfg.steps; step++){
-                arduino.setLedHex(cfg.start+step * (cfg.space+cfg.ledsPerStep) + led, ssot.clr);
+                const idx = step * (cfg.space+cfg.ledsPerStep) + led;
+
+                arduino.setLedHex(cfg.reversed ? (ssot.lastLed-idx) : (idx + cfg.start), ssot.clr);
 
                 if(cfg.delayAfterStep > 0){
                     arduino.pushLeds()
@@ -287,6 +352,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
 
     public simulateSetup(cfg: ColorModuleConfig, ssot: OpenObject, arduino: Arduino): void {
         ssot.clr = getHexFromRGB(cfg.clr_r,cfg.clr_g,cfg.clr_b);
+        ssot.lastLed = this.calculateMaxAccessedLed(cfg);
         
         // Gets the depth
         var depth = this.getConfigDepth(cfg);
@@ -349,7 +415,8 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
             clr_r: CppByte,
             clr_g: CppByte,
             clr_b: CppByte,
-            modus: CppBool
+            modus: CppBool,
+            reversed: CppBool
         }
     }
 
