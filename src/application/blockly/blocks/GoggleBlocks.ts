@@ -1,6 +1,6 @@
 import { ConfigBuilder } from "../../ConfigBuilder.js";
 import { HSV, Min, PercentageNumber, PositiveNumber, Range, RGB } from "../../types/Types.js";
-import { getNumberFromCodeAsMin, getNumberFromSettingsUI, getParametricNumberMin, getRGBFromCode } from "../util/BlocklyBlockUtils.js";
+import { getNumberFromCodeAsMin, getNumberFromSettingsUI, getParametricNumberMin, getRGBFromCode, getValueFromSettingsUI } from "../util/BlocklyBlockUtils.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
 import { TB_COLOR_ANIMATIONS, TB_COLOR_DEBUG, TB_COLOR_GOGGLES } from "../util/Toolbox.js";
 import { FadeModule, FadeModuleConfig } from "../../defaultModules/animations/FadeModule.js";
@@ -28,10 +28,92 @@ const LenseTypeBlocklyArray = [["the right", LenseType.RIGHT], ["the left", Lens
 
 export default function registerGoogleBlocks(){
     registerColorBlock('sle_goggles_color');
+    registerColorOnlyLense('sle_goggles_color_lense');
 }
 
 //#region BlockRegister
 
+// Colors one or both lences in a given color
+function registerColorOnlyLense(name: string){
+
+    // Names for the variables
+    const getColor = "color";
+    const getLense = "lense";
+    const getTime = "time";
+    const getDirection = "direction";
+
+    Blockly.Blocks[name] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField("Color")
+                .appendField(new Blockly.FieldDropdown(LenseTypeBlocklyArray), getLense)
+                .appendField("lense(s) in")
+                .appendField(new FieldCustomColor(), getColor)
+            this.setInputsInline(true);
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(TB_COLOR_GOGGLES);
+            
+            createUI()
+                .addText("Play the animation ")
+                .addDropdown(getDirection, BBConsts.Direction_UI)
+                .addText(".")
+                .addInfoIcon("Plays the animation eigther forward or in reverse.")
+                .breakLine()
+
+                .addText("The animation takes")
+                .addNumericField(getTime, 0)
+                .hasMin(0)
+                .andThen()
+                .addText("ms to finish.")
+                .addInfoIcon("How long the animation will play out in milliseconds.")
+            .buildTo(this);
+        }
+      };
+
+      ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
+        const color: RGB = getRGBFromCode(block, getColor);
+        const lence: LenseType = block.getFieldValue(getLense);
+        const isReversed: boolean = getValueFromSettingsUI<string>(block, getDirection) == AnimationDirection.REVERSE;
+        const playTime: PositiveNumber = getValueFromSettingsUI(block, getTime)
+
+        // Current amount of leds
+        const ledAmt = getEnvironment().ledAmount;
+
+        // Half of the led amount
+        var halfledAmt = Math.floor(ledAmt/2);
+
+        // From which led the coloring starts
+        var from = lence === LenseType.LEFT ? halfledAmt : 0;
+        // How many leds will be affected
+        var length = lence === LenseType.BOTH ? ledAmt : halfledAmt;
+
+        // Calculates the delay per step/led
+        var delay = Math.round(playTime/length) as PositiveNumber;
+
+        return {
+            module: ColorModule,
+            config: {
+                delayAfterStep: 0 as PositiveNumber,
+                delayPerLed: delay as PositiveNumber,
+                ledsPerStep: length as Min<1>,
+                space: 0 as PositiveNumber,
+                start: from as PositiveNumber,
+                steps: 1 as Min<1>,
+
+                clr_r: color.r,
+                clr_g: color.g,
+                clr_b: color.b,
+
+                modus: StepMode.SERIES,
+
+                reversed: isReversed
+            },
+            block
+        }
+    });
+
+}
 
 // Color-Left-Right-Both-Google(s)
 function registerColorBlock(name: string){

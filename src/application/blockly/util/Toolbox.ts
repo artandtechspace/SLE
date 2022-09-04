@@ -39,6 +39,7 @@ export function buildToolBox(){
 
         category("goggles", TB_COLOR_GOGGLES, [
           block("sle_goggles_color"),
+          block("sle_goggles_color_lense")
         ]),
 
         // TODO: Disable debug
