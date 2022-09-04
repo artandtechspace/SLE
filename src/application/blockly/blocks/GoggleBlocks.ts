@@ -19,11 +19,13 @@ const Blockly = require("blockly");
 enum LenseType {
     RIGHT= "right",
     LEFT= "left",
-    BOTH= "both"
+    BOTH= "both",
+    BOTH_PARALLEL = "both_paral"
 };
 
 // Mappings of the enums
 const LenseTypeBlocklyArray = [["the right", LenseType.RIGHT], ["the left", LenseType.LEFT], ["both", LenseType.BOTH]];
+const LenseTypeWithParallelBlocklyArray = [...LenseTypeBlocklyArray, ["both (parallel)", LenseType.BOTH_PARALLEL]];
 
 /**
  * Registers all blockly-blocks that are used for animations
@@ -346,7 +348,7 @@ function registerColorOnlyLense(name: string){
         init: function() {
             this.appendDummyInput()
                 .appendField("Color")
-                .appendField(new Blockly.FieldDropdown(LenseTypeBlocklyArray), getLense)
+                .appendField(new Blockly.FieldDropdown(LenseTypeWithParallelBlocklyArray), getLense)
                 .appendField("lense(s) in")
                 .appendField(new FieldCustomColor(), getColor)
             this.setInputsInline(true);
@@ -377,7 +379,6 @@ function registerColorOnlyLense(name: string){
         const isReversed: boolean = getValueFromSettingsUI<string>(block, getDirection) === AnimationDirection.REVERSE;
         const playTime: PositiveNumber = getValueFromSettingsUI(block, getTime)
 
-        
         // Length and starting position
         var {from, length} = getStartAndLengthFromLense(lense);
 
@@ -392,13 +393,13 @@ function registerColorOnlyLense(name: string){
                 ledsPerStep: length as Min<1>,
                 space: 0 as PositiveNumber,
                 start: from as PositiveNumber,
-                steps: 1 as Min<1>,
+                steps: (lense === LenseType.BOTH_PARALLEL ? 2 : 1) as Min<1>,
 
                 clr_r: color.r,
                 clr_g: color.g,
                 clr_b: color.b,
 
-                modus: StepMode.SERIES,
+                modus: StepMode.PARALLEL,
 
                 reversed: isReversed
             },

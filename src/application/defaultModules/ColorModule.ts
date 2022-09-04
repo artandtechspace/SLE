@@ -434,7 +434,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
         if(cfg.ledsPerStep === 1 && cfg.steps === 1)
             return 0;
 
-        return (cfg.delayPerLed * cfg.ledsPerStep + cfg.delayAfterStep) * cfg.steps
+        return (cfg.delayPerLed * cfg.ledsPerStep + cfg.delayAfterStep) * (cfg.modus === StepMode.PARALLEL ? 1 : cfg.steps);
     }
 
     public calculateMaxAccessedLed(cfg: ColorModuleConfig): PositiveNumber|void {
