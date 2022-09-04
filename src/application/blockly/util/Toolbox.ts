@@ -7,9 +7,9 @@ import { IS_DEBUGGING } from "../../Preset.js";
 export const TB_COLOR_COLOR = 45;
 export const TB_COLOR_CONTROL = 210;
 export const TB_COLOR_ANIMATIONS = 120;
-export const TB_COLOR_GOGGLES = 45;
+export const TB_COLOR_GOGGLES = 300;
 
-export const TB_COLOR_DEBUG = 300;
+export const TB_COLOR_DEBUG = 180;
 
 // Builds the toolbox
 export function buildToolBox(){
@@ -40,13 +40,16 @@ export function buildToolBox(){
 
         category("goggles", TB_COLOR_GOGGLES, [
           block("sle_goggles_color"),
-          block("sle_goggles_color_lense")
+          block("sle_goggles_color_lense"),
+          block("sle_goggles_fade"),
         ]),
 
         // This category will only be added in debugging-mode
         categoryDebug([
-          block("sle_debug_1")
+          block("sle_debug_1"),
         ])
+
+
       ].filter(x=>x!==undefined)
   }
 }

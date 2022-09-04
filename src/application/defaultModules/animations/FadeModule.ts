@@ -27,7 +27,7 @@ export type FadeModuleConfig = {
     // How long the animation plays in general (in ms)
     playLengthInMs: PositiveNumber,
     
-    // Offset in ms per led (in ms). This can also be nagative to reverse the direction
+    // Offset in ms per led (in ms).
     offsetPerLedInMs: PositiveNumber,
 
     // How long it takes until the fade is compleated once (in ms)

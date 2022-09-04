@@ -29,11 +29,101 @@ const LenseTypeBlocklyArray = [["the right", LenseType.RIGHT], ["the left", Lens
 export default function registerGoogleBlocks(){
     registerColorBlock('sle_goggles_color');
     registerColorOnlyLense('sle_goggles_color_lense');
+
+    registerFade("sle_goggles_fade");
 }
+
+//#region Util-functions
+
+// Calculates based on the given lense and starting index on that lense the starting point and length
+function getStartAndLengthFromLense(lense: LenseType, startIdx: number = 0){
+    // Current amount of leds
+    const ledAmt = getEnvironment().ledAmount;
+
+    // Half of the led amount
+    var halfledAmt = Math.floor(ledAmt/2);
+
+    return {
+        // From which led the coloring starts
+        from: (lense === LenseType.LEFT ? halfledAmt : 0) + startIdx as PositiveNumber,
+        
+        // How many leds will be affected
+        length: (lense === LenseType.BOTH ? ledAmt : halfledAmt) - startIdx as Min<1>
+    }
+}
+
+//#endregion
 
 //#region BlockRegister
 
-// Colors one or both lences in a given color
+function registerFade(name: string){
+    // Names for the variables
+    const getColorFrom = "colorfrm";
+    const getColorTo = "colorto";
+    const getLense = "lense";
+    const getTime = "time";
+
+    Blockly.Blocks[name] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField("Fade")
+                .appendField(new Blockly.FieldDropdown(LenseTypeBlocklyArray), getLense)
+                .appendField("lense(s) from")
+                .appendField(new FieldCustomColor(), getColorFrom)
+                .appendField("to")
+                .appendField(new FieldCustomColor({ h: .4, s: 1, v: 1 }), getColorTo)
+                .appendField("for")
+                .appendField(new Blockly.FieldTextInput("1000"), getTime)
+                .appendField("ms")
+            this.setInputsInline(true);
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(TB_COLOR_GOGGLES);
+        }
+      };
+
+      ConfigBuilder.registerModuleBlock<FadeModuleConfig>(name, function(block:any) {
+        // Colors to fade between
+        var clrFrom: HSV = block.getFieldValue(getColorFrom);
+        var clrTo: HSV = block.getFieldValue(getColorTo);
+        
+        // Which lense
+        const lense: LenseType = block.getFieldValue(getLense);
+
+        // How long the animation shall play
+        const playTime: PositiveNumber = getParametricNumberMin(block,getTime, 200, false) as any as PositiveNumber;
+        
+        // Length and starting position
+        var {from, length} = getStartAndLengthFromLense(lense);
+
+        // If the lense is set to both, the delay is doubled to play the same animation on both lenses
+        var lenseMulti = lense === LenseType.BOTH ? 2 : 1;
+
+        // Calculates the delay per step/led
+        var delay = lenseMulti * Math.round(playTime/length) as PositiveNumber;
+
+        return {
+            module: FadeModule,
+            config: {
+                color_frm_h: clrFrom.h,
+                color_frm_s: clrFrom.s,
+                color_frm_v: clrFrom.v,
+                color_to_h: clrTo.h,
+                color_to_s: clrTo.s,
+                color_to_v: clrTo.v,
+                ledFrom: from,
+                ledLength: length,
+                offsetPerLedInMs: delay,
+                playLengthInMs: playTime,
+                repeatLengthInMs: playTime,
+                updateRateInMs: 50 as Min<5>
+            },
+            block
+        }
+    });
+}
+
+// Colors one or both lenses in a given color
 function registerColorOnlyLense(name: string){
 
     // Names for the variables
@@ -73,20 +163,13 @@ function registerColorOnlyLense(name: string){
 
       ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
         const color: RGB = getRGBFromCode(block, getColor);
-        const lence: LenseType = block.getFieldValue(getLense);
+        const lense: LenseType = block.getFieldValue(getLense);
         const isReversed: boolean = getValueFromSettingsUI<string>(block, getDirection) == AnimationDirection.REVERSE;
         const playTime: PositiveNumber = getValueFromSettingsUI(block, getTime)
 
-        // Current amount of leds
-        const ledAmt = getEnvironment().ledAmount;
-
-        // Half of the led amount
-        var halfledAmt = Math.floor(ledAmt/2);
-
-        // From which led the coloring starts
-        var from = lence === LenseType.LEFT ? halfledAmt : 0;
-        // How many leds will be affected
-        var length = lence === LenseType.BOTH ? ledAmt : halfledAmt;
+        
+        // Length and starting position
+        var {from, length} = getStartAndLengthFromLense(lense);
 
         // Calculates the delay per step/led
         var delay = Math.round(playTime/length) as PositiveNumber;
@@ -170,7 +253,7 @@ function registerColorBlock(name: string){
 
       ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
         const color: RGB = getRGBFromCode(block, getColor);
-        const lence: LenseType = block.getFieldValue(getLense);
+        const lense: LenseType = block.getFieldValue(getLense);
         const isReversed: boolean = block.getFieldValue(getDirection) == AnimationDirection.REVERSE;
 
         // How long the animation shall play
@@ -181,16 +264,8 @@ function registerColorBlock(name: string){
         // From where to start coloring
         const startIdx: PositiveNumber = getNumberFromSettingsUI(block, getStartIndex) as Min<0>;
 
-        // Current amount of leds
-        const ledAmt = getEnvironment().ledAmount;
-
-        // Half of the led amount
-        var halfledAmt = Math.floor(ledAmt/2);
-
-        // From which led the coloring starts
-        var from = (lence === LenseType.LEFT ? halfledAmt : 0) + startIdx;
-        // How many leds will be affected
-        var length = (lence === LenseType.BOTH ? ledAmt : halfledAmt) - startIdx;
+        // Length and starting position
+        var {from, length} = getStartAndLengthFromLense(lense, startIdx);
 
         // Calculates the amount of steps required
         var steps = Math.ceil(length/((placeEveryXLed))) as Min<1>;

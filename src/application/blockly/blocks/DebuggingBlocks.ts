@@ -8,6 +8,7 @@ import { TB_COLOR_COLOR } from "../util/Toolbox.js";
 import { getEnvironment } from "../../SharedObjects.js";
 import { createUI } from "../settingsui/SettingsUI.js";
 import { AnimationDirection, BBConsts } from "../util/BlocklyBlockConstants.js";
+import { FadeModule, FadeModuleConfig } from "../../defaultModules/animations/FadeModule.js";
 
 const Blockly = require("blockly");
 
@@ -17,6 +18,7 @@ const Blockly = require("blockly");
 
 export default function registerDebugBlocks(){
     registerDebug1("sle_debug_1");
+
 }
 
 //#region BlockRegister
