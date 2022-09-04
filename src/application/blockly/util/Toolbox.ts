@@ -1,4 +1,5 @@
 import { Language } from "../../language/LanguageManager.js";
+import { IS_DEBUGGING } from "../../Preset.js";
 
 /**
  * Toolbox for the blockly workspace
@@ -42,17 +43,22 @@ export function buildToolBox(){
           block("sle_goggles_color_lense")
         ]),
 
-        // TODO: Disable debug
-        category("debug", TB_COLOR_DEBUG, [
-          block("sle_debug"),
-          block("sle_color_debug")
+        // This category will only be added in debugging-mode
+        categoryDebug([
+          block("sle_debug_1")
         ])
-      ]
+      ].filter(x=>x!==undefined)
   }
 }
 
 
 //#region Toolbox-build methods
+
+// Builds the debug-category only if the debugging flag is set
+function categoryDebug(content: any[]){
+  if(IS_DEBUGGING)
+    return category("debug", TB_COLOR_DEBUG, content);
+}
 
 // Build a category
 function category(nameKey: string, color: number, content: any[] = []){

@@ -1,3 +1,7 @@
+// If the program is in debugging-mode
+// TODO: TURN THIS TO FALSE WHEN IN PRODUCTION MODE
+export const IS_DEBUGGING = true;
+
 // Preset source-code for new projects
 export const PRESET_SOURCECODE = `
 #include <FastLED.h>

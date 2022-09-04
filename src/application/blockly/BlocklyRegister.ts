@@ -1,7 +1,9 @@
+import { IS_DEBUGGING } from "../Preset.js";
 import { S } from "../ui/utils/UiUtils.js";
 import registerAnimationBlocks from "./blocks/AnimationBlocks.js";
 import registerColorBlocks from "./blocks/ColorBlocks.js";
 import registerControlBlocks from "./blocks/ControlBlocks.js";
+import registerDebugBlocks from "./blocks/DebuggingBlocks.js";
 import registerGoggleBlocks from "./blocks/GoggleBlocks.js";
 import registerSpecialBlocks from "./blocks/SpecialBlocks.js";
 import Theme from "./util/Theme.js";
@@ -28,12 +30,17 @@ export function registerBlockly(blocklyArea: HTMLDivElement){
 
 // Registers all blockly-blocks
 function registerBlocks(){
+	// Add special blocks like the root-block etc.
 	registerSpecialBlocks();
 	
 	registerColorBlocks();
 	registerControlBlocks();
 	registerAnimationBlocks();
 	registerGoggleBlocks();
+
+	// Only registers debug-blocks in debug-environment
+	if(IS_DEBUGGING)
+		registerDebugBlocks();
 }
 
 

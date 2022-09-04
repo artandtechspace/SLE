@@ -59,3 +59,7 @@ Said main application is written in typescript and lives under `src/application/
 Styling and resources live inside the `src/styles` and `src/resources` folders and will also later be "compiled" into the build.
 
 Using the `compileElectron` or just the `start` script with npm, a separate folder called `build` will be created that contains all those compiled files. When interested on the exact process, checkout the `scripts/` files with similar names to it's npm-script counterparts.
+
+# Note on Exporting the software
+This section will be rewritten once an export-routine has been properly setup, howevery.
+Make sure to turn the `IS_DEBUG` boolean to false inside the `src/application/Preset.tx`.

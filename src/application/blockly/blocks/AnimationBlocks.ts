@@ -22,70 +22,9 @@ export default function registerAnimationBlocks(){
     registerRainbowBlock('sle_animation_rainbow');
     registerRainbowAutocalcBlock("sle_animation_rainbow_autocalc");
     registerFadeBlock('sle_animation_fade');
-
-    // TODO: Remove debug block
-    registerDebug('sle_debug');
 }
 
 //#region BlockRegister
-
-// TODO: Remove debug block
-function registerDebug(name: string){
-    Blockly.Blocks[name] = {
-        init: function() {
-          this.appendDummyInput()
-              .appendField("Create a gradiant from")
-              .appendField(new Blockly.FieldColour("#ff0000"), "a")
-              .appendField("to")
-              .appendField(new Blockly.FieldColour("#ff0000"), "b")
-              .appendField("using mode")
-              .appendField(new Blockly.FieldDropdown([["option","OPTIONNAME"], ["option","OPTIONNAME"], ["option","OPTIONNAME"]]), "c")
-              .appendField(".");
-          this.appendDummyInput()
-              .appendField("It has a length of")
-              .appendField(new Blockly.FieldNumber(0), "d")
-              .appendField("leds and starts from led")
-              .appendField(new Blockly.FieldNumber(0), "e")
-              .appendField(".");
-          this.appendDummyInput()
-              .appendField("Wait")
-              .appendField(new Blockly.FieldNumber(0), "f")
-              .appendField("ms between turning on leds.");
-          this.setPreviousStatement(true, null);
-          this.setNextStatement(true, null);
-          this.setColour(TB_COLOR_ANIMATIONS);
-            this.setTooltip("");
-            this.setHelpUrl("");
-
-            createUI()
-            .addText("Lul").breakLine()
-                .addText("Lul").addColorField("test").addBrightnessField("Yooo").addText("Lul")
-                .breakLine().addText("Lul")
-            .buildTo(this);
-        }
-      };
-
-    ConfigBuilder.registerModuleBlock<FadeModuleConfig>(name, function(block:any) { 
-        return {
-            block,
-            module: FadeModule,
-            config: {
-                ...FadeModule.DEFAULT_CONFIG,
-                color_frm_h: 0 as PercentageNumber,
-                color_frm_s: 1 as PercentageNumber,
-                color_frm_v: 1 as PercentageNumber,
-                color_to_h: 1 as PercentageNumber,
-                color_to_s: 1 as PercentageNumber,
-                color_to_v: 1 as PercentageNumber,
-                ledFrom: 0 as PositiveNumber,
-                ledLength: 32 as Min<1>,
-                offsetPerLedInMs: 50 as PositiveNumber,
-                playLengthInMs: 5000 as PositiveNumber,
-                repeatLengthInMs: 1000 as PositiveNumber
-            }
-        }
-    });
-}
 
 // Fade-animation
 function registerFadeBlock(name: string){
