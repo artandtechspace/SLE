@@ -2,6 +2,7 @@ import { S } from "../ui/utils/UiUtils.js";
 import registerAnimationBlocks from "./blocks/AnimationBlocks.js";
 import registerColorBlocks from "./blocks/ColorBlocks.js";
 import registerControlBlocks from "./blocks/ControlBlocks.js";
+import registerGoggleBlocks from "./blocks/GoggleBlocks.js";
 import registerSpecialBlocks from "./blocks/SpecialBlocks.js";
 import Theme from "./util/Theme.js";
 import { buildToolBox } from "./util/Toolbox.js";
@@ -32,6 +33,7 @@ function registerBlocks(){
 	registerColorBlocks();
 	registerControlBlocks();
 	registerAnimationBlocks();
+	registerGoggleBlocks();
 }
 
 

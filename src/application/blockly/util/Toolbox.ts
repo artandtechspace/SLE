@@ -6,6 +6,9 @@ import { Language } from "../../language/LanguageManager.js";
 export const TB_COLOR_COLOR = 45;
 export const TB_COLOR_CONTROL = 210;
 export const TB_COLOR_ANIMATIONS = 120;
+export const TB_COLOR_GOGGLES = 45;
+
+export const TB_COLOR_DEBUG = 300;
 
 // Builds the toolbox
 export function buildToolBox(){
@@ -29,8 +32,17 @@ export function buildToolBox(){
           block("sle_animation_gradient"),
           block("sle_animation_rainbow"),
           block("sle_animation_fade"),
-          block("sle_animation_rainbow_autocalc"),
-          block("sle_debug")
+          block("sle_animation_rainbow_autocalc")
+        ]),
+
+        category("goggles", TB_COLOR_GOGGLES, [
+          block("sle_goggles_color"),
+        ]),
+
+        // TODO: Disable debug
+        category("debug", TB_COLOR_DEBUG, [
+          block("sle_debug"),
+          block("sle_color_debug")
         ])
       ]
   }

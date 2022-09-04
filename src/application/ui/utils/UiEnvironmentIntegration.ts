@@ -19,7 +19,7 @@ export const PREVIEWS_FILE_PATH = "resources/arduinoPreviews/";
 
 // Holds the file-names for every known preview (Without the .svg extensions)
 export const PREVIEWS: string[] = [
-    "Googles",
+    "Goggles",
     "WS2812B-8x1",
     "WS2812B-8x2",
     "WS2812B-8x3",

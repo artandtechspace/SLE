@@ -19,6 +19,8 @@
         "ui.blockly.toolbox.categorys.control": "Control",
         "ui.blockly.toolbox.categorys.values": "Values",
         "ui.blockly.toolbox.categorys.animations": "Animations",
+        "ui.blockly.toolbox.categorys.goggles": "Goggles",
+        "ui.blockly.toolbox.categorys.debug": "Debug",
 
         // Root-block-errors
         "ui.blockly.workspace.desynced.noroot": "No root-block found. Did something go wrong while loading?",
@@ -66,7 +68,7 @@
         "ui.settings.preview-image.info": "Which preview-image shall be used for the arduino-simulation",
         "ui.settings.comments": "Integrate comments?",
         "ui.settings.comments.info": "If comments should be added to the final source-code",
-        "ui.settings.preview-image.values.googles": "Googles",
+        "ui.settings.preview-image.values.goggles": "Goggles",
         "ui.settings.preview-image.values.ws2812b-8x1": "WS2812B (8x1)",
         "ui.settings.preview-image.values.ws2812b-8x2": "WS2812B (8x2)",
         "ui.settings.preview-image.values.ws2812b-8x3": "WS2812B (8x3)",

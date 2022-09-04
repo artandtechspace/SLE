@@ -1,5 +1,6 @@
 // Handles errors that are not runtime-based by because of some programmer-error
 export function handleProgrammingError<X>(err: string){
+    console.log(err);
     alert("We have detected a programming-error. Please report the following to the developer: "+err);
     
     // Throws the error
