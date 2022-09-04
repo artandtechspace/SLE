@@ -1,10 +1,11 @@
 import { ColorModule, ColorModuleConfig, StepMode } from "../../defaultModules/ColorModule.js";
 import { BlockError } from "../../errorSystem/Errors.js";
 import { ConfigBuilder } from "../../ConfigBuilder.js";
-import { Min, PositiveNumber, RGB } from "../../types/Types.js";
+import { Min, PositiveNumber, RGB, RGBNumber } from "../../types/Types.js";
 import { getParametricNumber, getParametricNumberMin, getRGBFromCode } from "../util/BlocklyBlockUtils.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
 import { TB_COLOR_COLOR } from "../util/Toolbox.js";
+import { getEnvironment } from "../../SharedObjects.js";
 
 const Blockly = require("blockly");
 
@@ -16,6 +17,7 @@ const Blockly = require("blockly");
 export default function registerColorBlocks(){
     registerSingleLed('sle_simple_single_color');
     registerStripe('sle_simple_stripe_color');
+    registerTurnoff("sle_simple_turnoff_color");
     // TODO: Remove debug-block
     registerDebug("sle_color_debug");
 }
@@ -76,6 +78,36 @@ function registerDebug(name: string){
     });
 }
 
+// Turn off all leds-block
+function registerTurnoff(name: string){
+    Blockly.Blocks[name] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField("Turn off all leds");
+
+            this.setColour(TB_COLOR_COLOR);
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setInputsInline(true);
+        }
+    };
+
+
+    ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {                
+        return {
+            module: ColorModule,
+            config: {
+                ...ColorModule.DEFAULT_CONFIG,
+                start: 0 as PositiveNumber,
+                ledsPerStep: getEnvironment().ledAmount as Min<1>,
+                clr_r: 0 as RGBNumber,
+                clr_g: 0 as RGBNumber,
+                clr_b: 0 as RGBNumber
+            },
+            block
+        }
+    });
+}
 
 // Colors multiple leds in a row
 function registerStripe(name: string){

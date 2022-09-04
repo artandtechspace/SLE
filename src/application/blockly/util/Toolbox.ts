@@ -19,6 +19,8 @@ export function buildToolBox(){
           block("sle_simple_single_color"),
 
           block("sle_simple_stripe_color"),
+
+          block("sle_simple_turnoff_color")
         ]),
 
         category("control", TB_COLOR_CONTROL,[
