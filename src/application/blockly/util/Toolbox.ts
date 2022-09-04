@@ -43,7 +43,8 @@ export function buildToolBox(){
           block("sle_goggles_color"),
           block("sle_goggles_color_lense"),
           block("sle_goggles_fade"),
-          block("sle_goggles_gradient")
+          block("sle_goggles_gradient"),
+          block("sle_goggles_rainbow")
         ]),
 
         // This category will only be added in debugging-mode

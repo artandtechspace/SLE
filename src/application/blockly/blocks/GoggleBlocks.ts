@@ -10,6 +10,8 @@ import { getEnvironment } from "../../SharedObjects.js";
 import { ColorModule, ColorModuleConfig, StepMode } from "../../defaultModules/ColorModule.js";
 import { AnimationDirection, BBConsts } from "../util/BlocklyBlockConstants.js";
 import { GradientModule, GradientModuleConfig } from "../../defaultModules/animations/GradientModule.js";
+import { RainbowModule, RainbowModuleConfig } from "../../defaultModules/animations/RainbowModule.js";
+import FieldBrightness from "../fields/FieldBrightness.js";
 
 const Blockly = require("blockly");
 
@@ -33,6 +35,7 @@ export default function registerGoogleBlocks(){
     registerColorOnlyLense('sle_goggles_color_lense');
     registerFade("sle_goggles_fade");
     registerGradient("sle_goggles_gradient");
+    registerRainbow("sle_goggles_rainbow");
 }
 
 //#region Util-functions
@@ -100,7 +103,77 @@ function registerTurnOff(name: string){
 }
 
 
-// Fade-Block
+// Rainbow-Block
+function registerRainbow(name: string){
+    // Names for the variables
+    const getLense = "lense";
+    const getTime = "time";
+    const getDirection = "direction";
+    const getBrightness = "brightness";
+
+    Blockly.Blocks[name] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField("Rainbow over")
+                .appendField(new Blockly.FieldDropdown(LenseTypeBlocklyArray), getLense)
+                .appendField("lense(s) with a brightness of")
+                .appendField(new FieldBrightness(),getBrightness)
+                .appendField("in")
+                .appendField(new Blockly.FieldTextInput("1000"), getTime)
+                .appendField("ms")
+            this.setInputsInline(true);
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(TB_COLOR_GOGGLES);
+
+            createUI()
+                .addText("The direction is ")
+                .addDropdown(getDirection, BBConsts.Direction_UI)
+                .addText(".")
+                .addInfoIcon("Plays the animation eigther forward or in reverse.")
+            .buildTo(this);
+        }
+      };
+
+      ConfigBuilder.registerModuleBlock<RainbowModuleConfig>(name, function(block:any) {
+        var brightness: number = block.getFieldValue(getBrightness);
+        
+        // Which lense
+        const lense: LenseType = block.getFieldValue(getLense);
+
+        // How long the animation shall play
+        const playTime = getParametricNumberMin(block,getTime, 500, false);
+        
+        // Is the animation reversed
+        const isReversed: boolean = getValueFromSettingsUI<string>(block, getDirection) === AnimationDirection.REVERSE;
+
+
+        // Length and starting position
+        var {from, length} = getStartAndLengthFromLense(lense);
+
+        // If the lense is set to both, the delay is doubled to play the same animation on both lenses
+        var lenseMulti = lense === LenseType.BOTH ? 2 : 1;
+
+        // Calculates the delay per step/led
+        var delay = (isReversed ? -1 : 1) * lenseMulti * Math.round(playTime/length) as PositiveNumber;
+
+        return {
+            module: RainbowModule,
+            config: {
+                ...RainbowModule.DEFAULT_CONFIG,
+                ledFrom: from,
+                ledLength: length,
+                offsetPerLedInMs: delay,
+                playLengthInMs: playTime as any as PositiveNumber,
+                repeatLengthInMs: playTime,
+                value: brightness * 255 as Range<0,255>
+            },
+            block
+        }
+    });
+}
+
+// Gradient-block
 function registerGradient(name: string){
     // Names for the variables
     const getColorFrom = "colorfrm";
