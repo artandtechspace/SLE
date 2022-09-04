@@ -1,7 +1,7 @@
 import { Environment } from "../../Environment.js";
 import { VariableSystem } from "../../codegenerator/variablesystem/VariableSystem.js";
 import { Arduino } from "../../simulation/Arduino.js";
-import { OpenObject, PercentageNumber, PositiveNumber as PositiveNumber } from "../../types/Types.js";
+import { Min, OpenObject, PercentageNumber, PositiveNumber as PositiveNumber } from "../../types/Types.js";
 import { printIf, printIfElse } from "../../utils/WorkUtils.js";
 import { ModuleAsFuncBase } from "../../modules/ModuleAsFuncBase.js";
 import { CppTypeDefintion, CppFuncParams } from "../../codegenerator/variablesystem/CppFuncDefs.js";
@@ -24,7 +24,7 @@ export type GradientModuleConfig = {
     // Here the gradient starts
     ledFrom: PositiveNumber,
     // How long the gradient is
-    ledLength: PositiveNumber,
+    ledLength: Min<1>,
 
     // If the gradient is reversed in direction
     directionReversed: boolean,
@@ -48,7 +48,7 @@ class GradientModule_ extends ModuleAsFuncBase<GradientModuleConfig> {
         color_to_v: 1 as PercentageNumber,
 
         ledFrom: 0 as PositiveNumber,
-        ledLength: 5 as PositiveNumber,
+        ledLength: 5 as Min<1>,
         delayPerLed: 0 as PositiveNumber,
         directionReversed: false,
         colorReversed: false

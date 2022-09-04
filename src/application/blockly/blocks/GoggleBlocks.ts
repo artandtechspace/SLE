@@ -1,5 +1,5 @@
 import { ConfigBuilder } from "../../ConfigBuilder.js";
-import { HSV, Min, PercentageNumber, PositiveNumber, Range, RGB } from "../../types/Types.js";
+import { HSV, Min, PercentageNumber, PositiveNumber, Range, RGB, RGBNumber } from "../../types/Types.js";
 import { getNumberFromCodeAsMin, getNumberFromSettingsUI, getParametricNumberMin, getRGBFromCode, getValueFromSettingsUI } from "../util/BlocklyBlockUtils.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
 import { TB_COLOR_ANIMATIONS, TB_COLOR_DEBUG, TB_COLOR_GOGGLES } from "../util/Toolbox.js";
@@ -9,6 +9,7 @@ import { SystemParams } from "../../parameterCalculator/system/internal/Paramete
 import { getEnvironment } from "../../SharedObjects.js";
 import { ColorModule, ColorModuleConfig, StepMode } from "../../defaultModules/ColorModule.js";
 import { AnimationDirection, BBConsts } from "../util/BlocklyBlockConstants.js";
+import { GradientModule, GradientModuleConfig } from "../../defaultModules/animations/GradientModule.js";
 
 const Blockly = require("blockly");
 
@@ -27,10 +28,11 @@ const LenseTypeBlocklyArray = [["the right", LenseType.RIGHT], ["the left", Lens
  */
 
 export default function registerGoogleBlocks(){
+    registerTurnOff("sle_goggles_turnoff");
     registerColorBlock('sle_goggles_color');
     registerColorOnlyLense('sle_goggles_color_lense');
-
     registerFade("sle_goggles_fade");
+    registerGradient("sle_goggles_gradient");
 }
 
 //#region Util-functions
@@ -56,6 +58,141 @@ function getStartAndLengthFromLense(lense: LenseType, startIdx: number = 0){
 
 //#region BlockRegister
 
+// Turns off a specified lense
+function registerTurnOff(name: string){
+    // Names for the variables
+    const getLense = "lense";
+
+    Blockly.Blocks[name] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField("Turn off")
+                .appendField(new Blockly.FieldDropdown(LenseTypeBlocklyArray), getLense)
+                .appendField("lense(s)")
+            this.setInputsInline(true);
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(TB_COLOR_GOGGLES);
+        }
+      };
+
+      ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {        
+        // Which lense
+        const lense: LenseType = block.getFieldValue(getLense);
+
+        // Length and starting position
+        var {from, length} = getStartAndLengthFromLense(lense);
+
+        return {
+            module: ColorModule,
+            config: {
+                ...ColorModule.DEFAULT_CONFIG,
+                clr_r: 0 as RGBNumber,
+                clr_g: 0 as RGBNumber,
+                clr_b: 0 as RGBNumber,
+
+                start: from as PositiveNumber,
+                ledsPerStep: length as Min<1>
+            },
+            block
+        }
+    });
+}
+
+
+// Fade-Block
+function registerGradient(name: string){
+    // Names for the variables
+    const getColorFrom = "colorfrm";
+    const getColorTo = "colorto";
+    const getLense = "lense";
+    const getTime = "time";
+    const getDirection = "direction";
+    const getClrDir = "clrdir";
+
+    Blockly.Blocks[name] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField("Gradient over")
+                .appendField(new Blockly.FieldDropdown(LenseTypeBlocklyArray), getLense)
+                .appendField("lense(s) from")
+                .appendField(new FieldCustomColor(), getColorFrom)
+                .appendField("to")
+                .appendField(new FieldCustomColor({ h: .4, s: 1, v: 1 }), getColorTo)
+                .appendField("in")
+                .appendField(new Blockly.FieldTextInput("1000"), getTime)
+                .appendField("ms")
+            this.setInputsInline(true);
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(TB_COLOR_GOGGLES);
+
+            createUI()
+                .addText("The direction is ")
+                .addDropdown(getDirection, BBConsts.Direction_UI)
+                .addText(".")
+                .addInfoIcon("Plays the animation eigther forward or in reverse.")
+                .breakLine()
+
+                .addText("The color is ")
+                .addDropdown(getClrDir, BBConsts.Direction_UI)
+                .addText(".")
+                .addInfoIcon("Displays the color in reverse.")
+                .breakLine()
+
+            .buildTo(this);
+        }
+      };
+
+      ConfigBuilder.registerModuleBlock<GradientModuleConfig>(name, function(block:any) {
+        // Colors to fade between
+        var clrFrom: HSV = block.getFieldValue(getColorFrom);
+        var clrTo: HSV = block.getFieldValue(getColorTo);
+        
+        // Which lense
+        const lense: LenseType = block.getFieldValue(getLense);
+
+        // How long the animation shall play
+        const playTime: PositiveNumber = getParametricNumberMin(block,getTime, 200, false) as any as PositiveNumber;
+        
+        // Is the animation reversed
+        const isReversed: boolean = getValueFromSettingsUI<string>(block, getDirection) === AnimationDirection.REVERSE;
+
+        // Is the color reversed
+        const isColorReversed: boolean = getValueFromSettingsUI<string>(block, getClrDir) === AnimationDirection.REVERSE;
+
+
+        // Length and starting position
+        var {from, length} = getStartAndLengthFromLense(lense);
+
+        // If the lense is set to both, the delay is doubled to play the same animation on both lenses
+        var lenseMulti = lense === LenseType.BOTH ? 2 : 1;
+
+        // Calculates the delay per step/led
+        var delay = lenseMulti * Math.round(playTime/length) as PositiveNumber;
+
+        return {
+            module: GradientModule,
+            config: {
+                ...GradientModule.DEFAULT_CONFIG,
+                color_frm_h: clrFrom.h,
+                color_frm_s: clrFrom.s,
+                color_frm_v: clrFrom.v,
+                color_to_h: clrTo.h,
+                color_to_s: clrTo.s,
+                color_to_v: clrTo.v,
+                delayPerLed: delay,
+                ledFrom: from,
+                ledLength: length,
+                directionReversed: isReversed,
+                colorReversed: isColorReversed
+            },
+            block
+        }
+    });
+}
+
+// Fade-Block
 function registerFade(name: string){
     // Names for the variables
     const getColorFrom = "colorfrm";
@@ -164,7 +301,7 @@ function registerColorOnlyLense(name: string){
       ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
         const color: RGB = getRGBFromCode(block, getColor);
         const lense: LenseType = block.getFieldValue(getLense);
-        const isReversed: boolean = getValueFromSettingsUI<string>(block, getDirection) == AnimationDirection.REVERSE;
+        const isReversed: boolean = getValueFromSettingsUI<string>(block, getDirection) === AnimationDirection.REVERSE;
         const playTime: PositiveNumber = getValueFromSettingsUI(block, getTime)
 
         
@@ -254,7 +391,7 @@ function registerColorBlock(name: string){
       ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
         const color: RGB = getRGBFromCode(block, getColor);
         const lense: LenseType = block.getFieldValue(getLense);
-        const isReversed: boolean = block.getFieldValue(getDirection) == AnimationDirection.REVERSE;
+        const isReversed: boolean = getValueFromSettingsUI<string>(block, getDirection) === AnimationDirection.REVERSE;
 
         // How long the animation shall play
         const playTime: PositiveNumber = getParametricNumberMin(block,getTime, 0, false);

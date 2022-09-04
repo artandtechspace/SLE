@@ -84,6 +84,7 @@ export default class FieldCustomColor extends Blockly.Field{
 
   // Event: When the editor get's opened
   private showEditor_(){
+    this.colorPicker.color = {...this.getValue()};
     // Opens the color-picker
     this.colorPicker.openGuiAt(Blockly.DropDownDiv.getContentDiv());
     

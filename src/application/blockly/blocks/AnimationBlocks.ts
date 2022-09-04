@@ -284,7 +284,7 @@ function registerGradientBlock(name: string){
                 .addText("Gradient from led")
                 .addNumericField(getLedFrom,0).hasMin(0).andThen()
                 .addText("over")
-                .addNumericField(getLedLength,SystemParams.LED_AMOUNT).hasMin(0).andThen()
+                .addNumericField(getLedLength,SystemParams.LED_AMOUNT).hasMin(1).andThen()
                 .addText("leds.")
                 .addInfoIcon("Specify the animation's starting led and led-length.")
                 .breakLine()
@@ -300,7 +300,7 @@ function registerGradientBlock(name: string){
 
     ConfigBuilder.registerModuleBlock<GradientModuleConfig>(name, function(block:any) { 
         var start: PositiveNumber = getNumberFromSettingsUI(block,getLedFrom) as PositiveNumber;
-        var length: PositiveNumber = getNumberFromSettingsUI(block,getLedLength) as PositiveNumber;
+        var length: Min<1> = getNumberFromSettingsUI(block,getLedLength) as Min<1>;
         var colorFrom: HSV = block.getFieldValue(getColorFrom);
         var colorTo: HSV = block.getFieldValue(getColorTo);
         var delay: PositiveNumber = getNumberFromSettingsUI(block,getLedDelay) as PositiveNumber;

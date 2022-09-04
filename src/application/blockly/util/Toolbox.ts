@@ -39,9 +39,11 @@ export function buildToolBox(){
         ]),
 
         category("goggles", TB_COLOR_GOGGLES, [
+          block("sle_goggles_turnoff"),
           block("sle_goggles_color"),
           block("sle_goggles_color_lense"),
           block("sle_goggles_fade"),
+          block("sle_goggles_gradient")
         ]),
 
         // This category will only be added in debugging-mode

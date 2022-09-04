@@ -8,6 +8,7 @@ import { TB_COLOR_COLOR } from "../util/Toolbox.js";
 import { getEnvironment } from "../../SharedObjects.js";
 import { createUI } from "../settingsui/SettingsUI.js";
 import { AnimationDirection, BBConsts } from "../util/BlocklyBlockConstants.js";
+import { SystemParams } from "../../parameterCalculator/system/internal/ParameterSystemModel.js";
 
 const Blockly = require("blockly");
 
@@ -70,7 +71,7 @@ function registerStripe(name: string){
                 .appendField("Color leds")
                 .appendField(new Blockly.FieldTextInput("0"), getLedStart)
                 .appendField("to")
-                .appendField(new Blockly.FieldTextInput("ledAmount"), getLedEnd)
+                .appendField(new Blockly.FieldTextInput(SystemParams.LED_AMOUNT), getLedEnd)
                 .appendField("in")
                 .appendField(new FieldCustomColor(), getColor)
 
