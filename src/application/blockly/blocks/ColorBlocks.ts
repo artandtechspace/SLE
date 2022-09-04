@@ -2,10 +2,12 @@ import { ColorModule, ColorModuleConfig, StepMode } from "../../defaultModules/C
 import { BlockError } from "../../errorSystem/Errors.js";
 import { ConfigBuilder } from "../../ConfigBuilder.js";
 import { Min, PositiveNumber, RGB, RGBNumber } from "../../types/Types.js";
-import { getParametricNumber, getParametricNumberMin, getRGBFromCode } from "../util/BlocklyBlockUtils.js";
+import { getNumberFromSettingsUI, getParametricNumber, getParametricNumberMin, getRGBFromCode, getValueFromSettingsUI } from "../util/BlocklyBlockUtils.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
 import { TB_COLOR_COLOR } from "../util/Toolbox.js";
 import { getEnvironment } from "../../SharedObjects.js";
+import { createUI } from "../settingsui/SettingsUI.js";
+import { AnimationDirection, BBConsts } from "../util/BlocklyBlockConstants.js";
 
 const Blockly = require("blockly");
 
@@ -115,14 +117,16 @@ function registerStripe(name: string){
     const getLedStart = "ledstart";
     const getLedEnd = "ledend";
     const getColor = "color";
+    const getDirection = "direction";
+    const getTime = "time";
 
     Blockly.Blocks[name] = {
         init: function() {
             this.appendDummyInput()
                 .appendField("Color leds")
-                .appendField(new Blockly.FieldNumber(0, 0), getLedStart)
+                .appendField(new Blockly.FieldTextInput("0"), getLedStart)
                 .appendField("to")
-                .appendField(new Blockly.FieldNumber(32, 1), getLedEnd)
+                .appendField(new Blockly.FieldTextInput("ledAmount"), getLedEnd)
                 .appendField("in")
                 .appendField(new FieldCustomColor(), getColor)
 
@@ -130,14 +134,31 @@ function registerStripe(name: string){
             this.setPreviousStatement(true, null);
             this.setNextStatement(true, null);
             this.setInputsInline(true);
+
+            createUI()
+                .addText("Play the animation ")
+                .addDropdown(getDirection, BBConsts.Direction_UI)
+                .addText(".")
+                .addInfoIcon("Plays the animation eigther forward or in reverse.")
+                .breakLine()
+                
+                .addText("The animation takes")
+                .addNumericField(getTime, 0)
+                .hasMin(0)
+                .andThen()
+                .addText("ms to finish.")
+                .addInfoIcon("How long the animation will play out in milliseconds.")
+            .buildTo(this);
         }
     };
 
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
-        var pos1: PositiveNumber = block.getFieldValue(getLedStart);
-        var pos2: PositiveNumber = block.getFieldValue(getLedEnd);
-        var color: RGB = getRGBFromCode(block,getColor);
-        
+        const pos1: PositiveNumber = getParametricNumberMin(block, getLedStart, 0, false);
+        const pos2: PositiveNumber = getParametricNumberMin(block, getLedEnd, 0, false);
+        const color: RGB = getRGBFromCode(block,getColor);
+        const timeToFinish = getNumberFromSettingsUI(block, getTime) as PositiveNumber;
+        const isReversed = getValueFromSettingsUI<string>(block, getDirection);
+
         // Checks if an invalid length got specified
         if(pos1 === pos2)
             throw new BlockError(block, "blocks.errors.color.startend");
@@ -148,6 +169,9 @@ function registerStripe(name: string){
         // How many leds are used
         var amt: Min<1> = Math.max(pos1,pos2)-start as Min<1>;
         
+        // How long one led takes to lighten up
+        var delayPerLed: PositiveNumber = timeToFinish/amt as PositiveNumber;
+
         return {
             module: ColorModule,
             config: {
@@ -156,7 +180,9 @@ function registerStripe(name: string){
                 ledsPerStep: amt,
                 clr_r: color.r,
                 clr_g: color.g,
-                clr_b: color.b
+                clr_b: color.b,
+                reversed: isReversed === AnimationDirection.REVERSE,
+                delayPerLed: delayPerLed
             },
             block
         }
@@ -173,7 +199,7 @@ function registerSingleLed(name: string){
         init: function() {
             this.appendDummyInput()
                 .appendField("Color led")
-                .appendField(new Blockly.FieldTextInput("default"), getLed)
+                .appendField(new Blockly.FieldTextInput("0"), getLed)
                 .appendField("in")
                 .appendField(new FieldCustomColor(), getColor);
             this.setColour(TB_COLOR_COLOR);

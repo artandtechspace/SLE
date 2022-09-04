@@ -8,6 +8,7 @@ import { createUI } from "../settingsui/SettingsUI.js";
 import { SystemParams } from "../../parameterCalculator/system/internal/ParameterSystemModel.js";
 import { getEnvironment } from "../../SharedObjects.js";
 import { ColorModule, ColorModuleConfig, StepMode } from "../../defaultModules/ColorModule.js";
+import { AnimationDirection, BBConsts } from "../util/BlocklyBlockConstants.js";
 
 const Blockly = require("blockly");
 
@@ -18,15 +19,8 @@ enum LenseType {
     BOTH= "both"
 };
 
-// For normal or reverse animations
-enum Direction {
-    NORMAL = "normal",
-    REVERSE = "in reverse"
-};
-
 // Mappings of the enums
 const LenseTypeBlocklyArray = [["the right", LenseType.RIGHT], ["the left", LenseType.LEFT], ["both", LenseType.BOTH]];
-const DirectionUiArray = [Direction.NORMAL, Direction.REVERSE];
 
 /**
  * Registers all blockly-blocks that are used for animations
@@ -79,7 +73,7 @@ function registerColorBlock(name: string){
             
             createUI()
                 .addText("Play the animation ")
-                .addDropdown(getDirection, DirectionUiArray)
+                .addDropdown(getDirection, BBConsts.Direction_UI)
                 .addText(".")
                 .addInfoIcon("Plays the animation eigther forward or in reverse.")
                 .breakLine()
@@ -95,7 +89,7 @@ function registerColorBlock(name: string){
       ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
         const color: RGB = getRGBFromCode(block, getColor);
         const lence: LenseType = block.getFieldValue(getLense);
-        const isReversed: boolean = block.getFieldValue(getDirection) == Direction.REVERSE;
+        const isReversed: boolean = block.getFieldValue(getDirection) == AnimationDirection.REVERSE;
 
         // How long the animation shall play
         const playTime: PositiveNumber = getParametricNumberMin(block,getTime, 0, false);

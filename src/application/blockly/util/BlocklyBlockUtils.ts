@@ -8,10 +8,12 @@ import { performCalculation } from "../../parameterCalculator/Calculator.js";
 import { LanguageRef } from "../../language/LanguageManager.js";
 
 /**
+ * Checks if the block has a settings ui and get's the value from the field in question.
+ * Also this assumes that the field in question actually returnes the correct data-type
  * @throws {BlockError} if the value on the block is currently invalid
  * @returns the searched number from the settings-ui-field (Reference by the @param name)
  */
-export function getNumberFromSettingsUI(block: any, name: string) : number{
+export function getValueFromSettingsUI<Expect>(block: any, name: string) : Expect {
     // Gets the settingsui
     var setUi: SettingsUI = (block.settingsui as SettingsUI);
 
@@ -19,17 +21,21 @@ export function getNumberFromSettingsUI(block: any, name: string) : number{
     if(setUi === undefined)
         return handleProgrammingError("There is no settings-ui defined but the element '"+name+"' is expected.");
 
-    // Gets the value
-    var ret: number;
     try{
-        ret = setUi.validateAndGetValueByName<number>(name);
+        return setUi.validateAndGetValueByName<Expect>(name);
     }catch(e){
         const ref = e as LanguageRef; 
         throw new BlockError(block, ref.key, ref.vars)
     }
+}
 
-    // Gives back the valid value
-    return ret;
+/**
+ * @throws {BlockError} if the value on the block is currently invalid
+ * @returns the searched number from the settings-ui-field (Reference by the @param name)
+ */
+// TODO: Deprecated. Remove this and replace all occurances with getValueFromSettingsUI
+export function getNumberFromSettingsUI(block: any, name: string) : number{
+    return getValueFromSettingsUI<number>(block,name);
 }
 
 /** 
