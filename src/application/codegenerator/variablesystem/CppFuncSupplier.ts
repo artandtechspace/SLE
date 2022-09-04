@@ -2,7 +2,7 @@ import { Environment } from "../../Environment.js";
 import { ModuleBase } from "../../modules/ModuleBase.js";
 import { CppFuncSupply } from "./CppFuncDefs.js";
 import { VariableSystem } from "./VariableSystem.js";
-import { turnCppTypeToParameterCode } from "./CppTypes.js";
+import { CppDontPass, turnCppTypeToParameterCode } from "./CppTypes.js";
 
 export class FunctionSupplier{
 
@@ -49,8 +49,11 @@ export class FunctionSupplier{
         // Gets the function
         var func = this.functions[key];
 
-        // Generates the string with all parameters to call the function
-        var callParams = func.callParameters.map(key=>turnCppTypeToParameterCode(func.typeDef[key], cfg[key as keyof typeof cfg])).join(",");
+        // Generates the string with all parameters to call the function (Filter out all the dont-pass parameters)
+        var callParams = func.callParameters
+            .filter(key=>func.typeDef[key] !== CppDontPass)
+            .map(key=>turnCppTypeToParameterCode(func.typeDef[key], cfg[key as keyof typeof cfg]))
+            .join(",");
         
         return `${func.callName}(${callParams});`;
     }

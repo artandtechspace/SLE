@@ -1,6 +1,7 @@
 import { ModuleBase } from "../../modules/ModuleBase.js";
-import { CppFuncRegister, CppReturnType, CppTypeDefintion, CppFuncGeneratorFunction, CppFuncSupply, CppFuncParams } from "./CppFuncDefs.js";
+import { CppFuncRegister, CppReturnType, CppTypeDefintion, CppFuncGeneratorFunction, CppFuncSupply, CppFuncParams, CppType } from "./CppFuncDefs.js";
 import { FunctionSupplier } from "./CppFuncSupplier.js";
+import { CppDontPass } from "./CppTypes.js";
 import { UniqueNameSupplier } from "./UniqueNameSupplier.js";
 import { VariableSystem } from "./VariableSystem.js";
 
@@ -96,7 +97,11 @@ export class FunctionGenerator{
 
             for(var field of cfgFields){
                 // Gets the type (float, int, bool, etc.)
-                var type = req.typeDef[field.name];
+                var type: CppType = req.typeDef[field.name];
+
+                // Checks if the variable can be skipped
+                if(type === CppDontPass)
+                    continue;
 
                 // If it's not static, append to the header
                 if(!field.isStatic){

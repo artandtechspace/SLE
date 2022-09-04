@@ -5,7 +5,7 @@ import { Min, OpenObject, PositiveNumber as PositiveNumber, RGBNumber } from "..
 import { FunctionGenerator } from "../codegenerator/variablesystem/CppFuncGenerator.js";
 import { ModuleCode } from "../codegenerator/CodeGenerator.js";
 import { FunctionSupplier } from "../codegenerator/variablesystem/CppFuncSupplier.js";
-import { CppBool, CppByte, CppInt, CppVoid } from "../codegenerator/variablesystem/CppTypes.js";
+import { CppBool, CppByte, CppDontPass, CppInt, CppVoid } from "../codegenerator/variablesystem/CppTypes.js";
 import { CppFuncParam, CppFuncParams, CppTypeDefintion } from "../codegenerator/variablesystem/CppFuncDefs.js";
 import { printEquation } from "../utils/EquationUtils.js";
 import { Variable } from "../codegenerator/variablesystem/Variable.js";
@@ -415,7 +415,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
             clr_r: CppByte,
             clr_g: CppByte,
             clr_b: CppByte,
-            modus: CppBool,
+            modus: CppDontPass,
             reversed: CppBool
         }
     }

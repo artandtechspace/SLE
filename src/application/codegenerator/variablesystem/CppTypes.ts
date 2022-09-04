@@ -8,6 +8,9 @@ export const CppInt: CppType = "int" as CppType;
 export const CppBool: CppType = "bool" as CppType;
 export const CppVoid: CppReturnType = "void" as CppReturnType;
 export const CppByte: CppType = "byte" as CppType;
+// Special case: this doesn't pass the argument to the cpp-function and will
+// therefor at least just like this be ignored
+export const CppDontPass: CppType = "dont_pass" as CppType;
 
 /**
  * Takes in a @param param cpp-type as the parameter type for a function and the @param value that shall be converted.
