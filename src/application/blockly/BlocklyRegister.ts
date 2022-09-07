@@ -98,8 +98,15 @@ function addRootToPage(workspace: any){
 
 	// Creates the root element
 	Blockly.serialization.blocks.append({
-		'type': 'sle_root',
+		'type': 'sle_setup',
 		"x": 100,
+		"y": 100,
+	}, workspace);
+
+	// Creates the root element
+	Blockly.serialization.blocks.append({
+		'type': 'sle_root',
+		"x": 450,
 		"y": 100,
 	}, workspace);
 }

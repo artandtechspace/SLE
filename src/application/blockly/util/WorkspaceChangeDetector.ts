@@ -30,13 +30,14 @@ export function setWorkspaceInvalid(){
  * Takes in the exported workspace objects and returns if the changed
  */
 // TODO: Might want to move the dragging-detection here
-export function didWorkspaceChange(exports: ModBlockExport<any>[]){
+export function didWorkspaceChange(setupExpots: ModBlockExport<any>[], loopExports: ModBlockExport<any>[]){
 
     // Gets the raw configs (Without any blocks etc.)
-    var rawCfg = exports.map(getConfig);
+    var rawSetupCfg = setupExpots.map(getConfig);
+    var rawLoopCfg = loopExports.map(getConfig);
 
     // Generates the checksum only from the config-files
-    var csum: number = hash53b(JSON.stringify(rawCfg));
+    var csum: number = hash53b(JSON.stringify({rawLoopCfg, rawSetupCfg}));
 
     // Checks if the workspace did change
 	if(csum !== blocklyChecksum){

@@ -23,8 +23,8 @@
         "ui.blockly.toolbox.categorys.debug": "Debug",
 
         // Root-block-errors
-        "ui.blockly.workspace.desynced.noroot": "No root-block found. Did something go wrong while loading?",
-        "ui.blockly.workspace.desynced.multipleblocks": "Found multiple non-disabled blocks on the workspace. Did something go wrong while loading?",
+        "ui.blockly.workspace.desynced.noroot": "No setup- or loop-block found. Did something go wrong while loading?",
+        "ui.blockly.workspace.desynced.multipleblocks": "Found more than 2 non-disabled blocks on the workspace. Did something go wrong while loading?",
 
     // #endregion
     
@@ -37,7 +37,8 @@
         "ui.tabs.preview.animation": "Animation",
 
         "ui.tabs.preview.analytics": "Analytics",
-        "ui.tabs.preview.analytics.runtime": "The Code/Animation will run for $var$ seconds.",
+        "ui.tabs.preview.analytics.runtime.setup": "The Setup-Animation will run for $var$ seconds.",
+        "ui.tabs.preview.analytics.runtime.loop": "The Loop-Animation will run for $var$ seconds before repeating.",
 
 
         "ui.tabs.controls.env": "Environment",

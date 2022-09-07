@@ -16,6 +16,7 @@ import { getEnvironment, getWorkspace, initSharedObjects } from "./SharedObjects
 import { writeEnvironmentToPage } from "./ui/utils/UiEnvironmentIntegration.js";
 import { checkParametersForErrors } from "./parameterCalculator/system/ParameterSystem.js";
 import { Language } from "./language/LanguageManager.js";
+import { getRootBlocks } from "./blockly/workspace/WorkspaceHandler.js";
 
 // Arduino-simulation
 var simulation: ArduinoSimulation;
@@ -36,39 +37,8 @@ var compileTimeout: NodeJS.Timeout | undefined;
 
 // Some specific html-references
 var codeArea: HTMLTextAreaElement; // Holds the generated source-code
-var runtimeDisplay: HTMLSpanElement; // Holds how long the given configuration will run
+var analyticsDisplay: {loop: HTMLParagraphElement, setup: HTMLParagraphElement }; // Holds how long the given configuration will run
 
-
-
-/**
- * Gets the root block from the workspace.
- * 
- * @throws {DesyncedWorkspaceError} If there are multiple non-disabled blocks or non-disabled and non-root blocks
- */
-function getRootBlock(){
-	// Gets all blocks that
-	var blocks = getWorkspace().getTopBlocks().filter((block:any)=>!block.disabled);
-
-	// Checks the length
-	if(blocks.length <= 0)
-		throw new DesyncedWorkspaceError("ui.blockly.workspace.desynced.noroot");
-
-	// Checks the length
-	if(blocks.length > 1)
-		// Checks if there is one block beeing dragged
-		if(!getWorkspace().isDragging())
-			throw new DesyncedWorkspaceError("ui.blockly.workspace.desynced.multipleblocks");
-	
-	
-	// Gets the block
-	var blg = blocks[0];
-
-	// Ensures that the block is the root
-	if(blg.type !== "sle_root")
-		throw new DesyncedWorkspaceError("ui.blockly.workspace.desynced.noroot");
-
-	return blg;
-}
 
 /**
  * Requests a compilation of the blockly-workspace and to restart the animation.
@@ -96,38 +66,48 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 			// Ensures that there are no errors with any parameters
 			checkParametersForErrors();
 
-			// Ensures that only the root element exists on the workspace
-			var rootBlock = getRootBlock().getNextBlock();
-
-			// Gets the raw string config
-			var modExports: ModBlockExport<any>[] = ConfigBuilder.generateModuleExports(rootBlock);
+			// Ensures the workspace has only the setup and loop blocks enabled
+			var blocks = getRootBlocks()
 			
+			var loop = blocks.loop.getNextBlock();
+			var setup = blocks.setup.getNextBlock();
+
+			// Gets the raw string config's
+			var setupModExports: ModBlockExport<any>[] = ConfigBuilder.generateModuleExports(setup);
+			var loopModExports: ModBlockExport<any>[] = ConfigBuilder.generateModuleExports(loop);
+
 			// Checks if the checksum has changed
-			if(!didWorkspaceChange(modExports) && !ignoreNoChanges)
+			if(!didWorkspaceChange(setupModExports, loopModExports) && !ignoreNoChanges)
 				return;
 
 			// Checks what to do
 			switch(previewTabHandler.getSelectedTab()){
 				case TAB_PREVIEW_ANIMATION:
 					// Starts the simulation
-					simulation.startSimulation(modExports);
+					simulation.startSimulation(setupModExports, loopModExports);
 					break;
 				case TAB_PREVIEW_CODE:
 					// Generates the code and appends it to the code-area
-					codeArea.value = generateCode(modExports);
+					codeArea.value = generateCode(setupModExports, loopModExports);
 					break;
 				case TAB_PREVIEW_ANALYTICS:
 					// Generates the runtime-analytics
-					runtimeDisplay.textContent = Language.get(
-						"ui.tabs.preview.analytics.runtime",
-						getFullRuntime(modExports)/1000
+
+					analyticsDisplay.setup.textContent = Language.get(
+						"ui.tabs.preview.analytics.runtime.setup",
+						getFullRuntime(setupModExports)/1000
+					);
+
+					analyticsDisplay.loop.textContent = Language.get(
+						"ui.tabs.preview.analytics.runtime.loop",
+						getFullRuntime(loopModExports)/1000
 					);
 					break;
 			}
 			
 
 			// Checks if any module would shoot over the specified led-amount
-			var oobMods = getOutOfBoundsModExports(modExports);
+			var oobMods = getOutOfBoundsModExports(loopModExports);
 
 			// Checks if there are any out of bounds mods
 			if(oobMods.length > 0){
@@ -149,7 +129,7 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 			// Stops the simulation and removes and elements
 			simulation.stopSimulation();
 			codeArea.value="";
-			runtimeDisplay.textContent = "[x]";
+			analyticsDisplay.loop.textContent = analyticsDisplay.setup.textContent = "";
 
 			// Sets the block-checksum to invalid
 			setWorkspaceInvalid();
@@ -191,7 +171,7 @@ function onTabChange(tabId: number){
 	simulation.stopSimulation();
 	// Resets some elements
 	codeArea.value="";
-	runtimeDisplay.textContent="";
+	analyticsDisplay.loop.textContent = analyticsDisplay.setup.textContent = "";
 
 	// Requests a recompilation to update the tab
 	requestBlocklyWsCompilation(true);
@@ -229,7 +209,7 @@ export default async function onAppInitalize(){
 	simulation = cfg.simulation;
 	errsys = cfg.errorsystem;
 	codeArea = cfg.codeArea;
-	runtimeDisplay = cfg.runtimeDisplay;
+	analyticsDisplay = cfg.analytics;
 
 	// Appends the tab-change event
 	previewTabHandler.setTabChangeHandler(onTabChange);

@@ -43,7 +43,7 @@ export async function setupUi(doRecompile: ()=>void){
         
         // Gets specific elements
         var codeArea = setupCodeArea();
-        var runtimeDisplay = S("#runtime",S("#analyticsTab")) as HTMLSpanElement;
+        var analytics = getAnalyticsDisplay();
 
         var popupsystem = setupPopupsystem();
         var simulation = await setupArduinoSimulation();
@@ -82,7 +82,7 @@ export async function setupUi(doRecompile: ()=>void){
             environment: env,
             errorsystem,
             codeArea,
-            runtimeDisplay,
+            analytics,
             blocklyWorkspace: workspace,
             paramSys
         };
@@ -95,6 +95,16 @@ export async function setupUi(doRecompile: ()=>void){
 
 
 //#region Setup-functions
+
+function getAnalyticsDisplay(){
+    // Gets the shell of the displays
+    var shell = S("#analyticsTab");
+
+    return {
+        setup: S("#runtime-setup",shell) as HTMLParagraphElement,
+        loop: S("#runtime-loop",shell) as HTMLParagraphElement,
+    }
+}
 
 // Setups the parameter-system
 function setupParameterSystem(onParameterChange: ()=>void){

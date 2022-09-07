@@ -5,20 +5,35 @@ const Blockly = require("blockly");
  */
 
 export default function registerSpecialBlocks(){
-    registerRoot("sle_root");
+    registerSetup("sle_setup");
+    registerLoop("sle_root");
 }
 
 
-// Root-block (All others shall be disabled)
-function registerRoot(name: string){
+// Setup-root-block (All others shall be disabled)
+function registerSetup(name: string){
     Blockly.Blocks[name] = {
         init: function() {
           this.appendDummyInput()
-              .appendField("Program-Plan");
+              .appendField("Run once");
           this.setNextStatement(true, null);
           this.setDeletable(false);
           this.setEditable(false);
-          this.setMovable(false);
+          this.setMovable(true);
+        }
+    };
+}
+
+// Loop-root-block (All others shall be disabled)
+function registerLoop(name: string){
+    Blockly.Blocks[name] = {
+        init: function() {
+          this.appendDummyInput()
+              .appendField("Run continuesly");
+          this.setNextStatement(true, null);
+          this.setDeletable(false);
+          this.setEditable(false);
+          this.setMovable(true);
         }
     };
 }

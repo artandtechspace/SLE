@@ -73,12 +73,13 @@ export function generateModuleCode(variablesystem: VariableSystem, mods: ModBloc
 /**
  * Takes in all configurations and generates the code from them.
  * 
- * @param mods all modules specified with their settings.
+ * @param setupMods all setup-modules specified with their settings.
+ * @param loopMods all loop-modules specified with their settings.
  * @throws {Error} if an error occurred
  * 
  * @returns the generated code
  */
-export function generateCode(mods: ModBlockExport<any>[]) : string {
+export function generateCode(setupMods: ModBlockExport<any>[], loopMods: ModBlockExport<any>[]) : string {
 
     // Creates the supplier for unique names
     var unqSup = new UniqueNameSupplier();
@@ -87,7 +88,8 @@ export function generateCode(mods: ModBlockExport<any>[]) : string {
     var funcGen = new FunctionGenerator();
 
     // Registers all functions
-    mods.forEach(mod=>mod.module.registerFunction(mod.config,funcGen));
+    setupMods.forEach(mod=>mod.module.registerFunction(mod.config,funcGen));
+    loopMods.forEach(mod=>mod.module.registerFunction(mod.config,funcGen));
 
     // Gets the current env
     var env = getEnvironment();
@@ -131,17 +133,27 @@ export function generateCode(mods: ModBlockExport<any>[]) : string {
     // Generates the function definitions
     definitionCode += funcSup.generateCppFuncDefinitions(varSys);
 
-    // Gets the generated codes (The execution may end here do to an error beeing thrown)
-    var generatedCode: ModuleCode = generateModuleCode(varSys,mods, funcSup);
+    // Gets the generated setup- and loop-codes (The execution may end here do to an error beeing thrown)
+    var genSetupCode: ModuleCode = generateModuleCode(varSys,setupMods, funcSup);
+    var genLoopCode: ModuleCode = generateModuleCode(varSys,loopMods, funcSup);
 
-    // Appends the codes
-    if(generatedCode.loop)
-        loopCode+=generatedCode.loop;
-    if(generatedCode.setup)
-        setupCode+=generatedCode.setup;
+    // Appends the setup-codes
+    if(genSetupCode.setup)
+        setupCode += genSetupCode.setup;
+
+    if(genLoopCode.setup)
+        setupCode += genLoopCode.setup;
+
+    // Appends the loop-codes
+    if(genSetupCode.loop)
+        setupCode += genSetupCode.loop;
+
+    if(genLoopCode.loop)
+        loopCode += genLoopCode.loop;
     
     // Checks if the generated code is still dirty and if so appends a push-operation
-    loopCode+=printIf("\nFastLED.show();",generatedCode.isDirty as boolean);
+    loopCode+=printIf("\nFastLED.show();",genLoopCode.isDirty as boolean);
+    setupCode+=printIf("\nFastLED.show();",genSetupCode.isDirty as boolean);
 
     // Generates the final code
     return env.preprocessingCode.replace(CODE_REGEX,replaceCodes)+"\n";
