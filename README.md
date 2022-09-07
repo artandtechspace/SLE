@@ -62,4 +62,4 @@ Using the `compileElectron` or just the `start` script with npm, a separate fold
 
 # Note on Exporting the software
 This section will be rewritten once an export-routine has been properly setup, howevery.
-Make sure to turn the `IS_DEBUG` boolean to false inside the `src/application/Preset.tx`.
+Make sure to turn the `IS_DEBUG` boolean to false inside the `src/application/Preset.ts`.
