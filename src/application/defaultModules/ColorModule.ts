@@ -132,7 +132,7 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
     private generateLine(varSys: VariableSystem, prms: CppFuncParams<ColorModuleConfig>, reversed: boolean) : string{
 
         // Led-loop conditions (Start value and loop condition eg. > or < than 0 or something else)
-        const ledLoopCondition = reversed ? "<= 0" : `> ${prms.ledsPerStep.value.toString()}`;
+        const ledLoopCondition = reversed ? ">= 0" : `< ${prms.ledsPerStep.value.toString()}`;
 
         // Loop-updation (The thing at the end of the loop eg. i++)
         const loopUpdation = reversed ? "--" : "++";
@@ -168,10 +168,10 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
     private generateFullSteps(varSys: VariableSystem, prms: CppFuncParams<ColorModuleConfig>, mode: StepMode, reversed: boolean) : string{
 
         // Led-loop condition
-        const ledLoopCondition = reversed ? "<= 0" : `> ${prms.ledsPerStep.value.toString()}`;
+        const ledLoopCondition = reversed ? ">= 0" : `< ${prms.ledsPerStep.value.toString()}`;
 
         // Step-loop condition
-        const stepLoopCondition = reversed ? "<= 0" : `> ${prms.steps.value.toString()}`;
+        const stepLoopCondition = reversed ? ">= 0" : `< ${prms.steps.value.toString()}`;
 
         // Loop-updation (The thing at the end of the loop eg. i++)
         const loopUpdation = reversed ? "--" : "++";
