@@ -25,10 +25,10 @@ export type ColorModuleConfig = {
     // Amount of steps
     steps: Min<1>,
 
-    // Delay that will be waited per led
+    // Delay that will be waited per led (Float)
     delayPerLed: PositiveNumber,
 
-    // Delay that will be waited between steps
+    // Delay that will be waited between steps (Float)
     delayAfterStep: PositiveNumber,
     
     // Color

@@ -244,7 +244,7 @@ function registerGradient(name: string){
         var lenseMulti = lense === LenseType.BOTH ? 2 : 1;
 
         // Calculates the delay per step/led
-        var delay = lenseMulti * Math.round(playTime/length) as PositiveNumber;
+        var delay = lenseMulti * playTime/length as PositiveNumber;
 
         return {
             module: GradientModule,
@@ -383,7 +383,7 @@ function registerColorOnlyLense(name: string){
         var {from, length} = getStartAndLengthFromLense(lense);
 
         // Calculates the delay per step/led
-        var delay = Math.round(playTime/length) as PositiveNumber;
+        var delay = playTime/length as PositiveNumber;
 
         return {
             module: ColorModule,
@@ -482,7 +482,7 @@ function registerColorBlock(name: string){
         var steps = Math.ceil(length/((placeEveryXLed))) as Min<1>;
 
         // Calculates the delay per step/led
-        var delay = Math.round(playTime/steps) as PositiveNumber;
+        var delay = playTime/steps as PositiveNumber;
 
         return {
             module: ColorModule,

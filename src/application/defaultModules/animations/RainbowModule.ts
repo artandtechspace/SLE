@@ -19,13 +19,13 @@ export type RainbowModuleConfig = {
     // If the Rainbow is spread out over the x axis (in ms). This can also be a negative number to reverse the direction
     offsetPerLedInMs: number,
 
-    // How many ms it takes until the rainbow is finished (in ms)
+    // How many ms it takes until the rainbow is finished (in ms) (int)
     repeatLengthInMs: Min<500>,
 
-    // How long the animation should play (in ms)
+    // How long the animation should play (in ms) (int)
     playLengthInMs: PositiveNumber,
 
-    // How many ms delay are between updates.
+    // How many ms delay are between updates. (int)
     updateRateInMs: PositiveNumber
 };
 

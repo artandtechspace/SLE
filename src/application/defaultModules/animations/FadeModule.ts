@@ -27,10 +27,10 @@ export type FadeModuleConfig = {
     // How long the animation plays in general (in ms)
     playLengthInMs: PositiveNumber,
     
-    // Offset in ms per led (in ms).
+    // Offset in ms per led (in ms) (int)
     offsetPerLedInMs: PositiveNumber,
 
-    // How long it takes until the fade is compleated once (in ms)
+    // How long it takes until the fade is compleated once (in ms) (int)
     repeatLengthInMs: PositiveNumber,
 
     // How many ms delay are between updates.

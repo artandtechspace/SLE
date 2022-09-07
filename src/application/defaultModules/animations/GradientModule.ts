@@ -31,7 +31,7 @@ export type GradientModuleConfig = {
     // If the colors are reversed
     colorReversed: boolean
 
-    // Delay per led on the stripe
+    // Delay per led on the stripe (float)
     delayPerLed: PositiveNumber
 };
 
