@@ -211,8 +211,8 @@ class ColorModule_ extends ModuleBase<ColorModuleConfig>{
             `;
         }else{
             return `
-            ${forLoopStep}
-                ${forLoopLed}
+            ${forLoopLed}
+                ${forLoopStep}
                     ${ledSet}${delPerStep}
                 }
                 ${delPerLed}
