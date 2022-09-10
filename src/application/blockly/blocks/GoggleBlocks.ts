@@ -1,11 +1,10 @@
 import { ConfigBuilder } from "../../ConfigBuilder.js";
-import { HSV, Min, PercentageNumber, PositiveNumber, Range, RGB, RGBNumber } from "../../types/Types.js";
-import { getNumberFromCodeAsMin, getNumberFromSettingsUI, getParametricNumberMin, getRGBFromCode, getValueFromSettingsUI } from "../util/BlocklyBlockUtils.js";
+import { HSV, Min, PositiveNumber, Range, RGB, RGBNumber } from "../../types/Types.js";
+import { getNumberFromSettingsUI, getParametricNumberMin, getRGBFromCode, getValueFromSettingsUI } from "../util/BlocklyBlockUtils.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
-import { TB_COLOR_ANIMATIONS, TB_COLOR_DEBUG, TB_COLOR_GOGGLES } from "../util/Toolbox.js";
+import { TB_COLOR_GOGGLES } from "../util/Toolbox.js";
 import { FadeModule, FadeModuleConfig } from "../../defaultModules/animations/FadeModule.js";
 import { createUI } from "../settingsui/SettingsUI.js";
-import { SystemParams } from "../../parameterCalculator/system/internal/ParameterSystemModel.js";
 import { getEnvironment } from "../../SharedObjects.js";
 import { ColorModule, ColorModuleConfig, StepMode } from "../../defaultModules/ColorModule.js";
 import { AnimationDirection, BBConsts } from "../util/BlocklyBlockConstants.js";
@@ -383,7 +382,7 @@ function registerColorOnlyLense(name: string){
         var {from, length} = getStartAndLengthFromLense(lense);
 
         // Calculates the delay per step/led
-        var delay = playTime/length as PositiveNumber;
+        var delay = Math.round(playTime/length) as PositiveNumber;
 
         return {
             module: ColorModule,
@@ -482,7 +481,7 @@ function registerColorBlock(name: string){
         var steps = Math.ceil(length/((placeEveryXLed))) as Min<1>;
 
         // Calculates the delay per step/led
-        var delay = playTime/steps as PositiveNumber;
+        var delay = Math.round(playTime/steps) as PositiveNumber;
 
         return {
             module: ColorModule,

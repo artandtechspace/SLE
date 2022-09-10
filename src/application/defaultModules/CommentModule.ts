@@ -1,5 +1,4 @@
 import { ModuleCode } from "../codegenerator/CodeGenerator.js";
-import { Environment } from "../Environment.js";
 import { ModuleBase } from "../modules/ModuleBase.js";
 import { FunctionSupplier } from "../codegenerator/variablesystem/CppFuncSupplier.js";
 import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem.js";

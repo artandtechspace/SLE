@@ -2,7 +2,6 @@
  * Contains all definitions that are required for the function-system to work
  */
 
-import { Environment } from "../../Environment.js";
 import { ModuleBase } from "../../modules/ModuleBase.js";
 import { Variable } from "./Variable.js";
 import { VariableSystem } from "./VariableSystem.js";

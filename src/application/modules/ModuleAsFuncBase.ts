@@ -1,5 +1,4 @@
 import { ModuleCode } from "../codegenerator/CodeGenerator.js";
-import { Environment } from "../Environment.js";
 import { OpenObject } from "../types/Types.js";
 import { CppFuncParams, CppTypeDefintion } from "../codegenerator/variablesystem/CppFuncDefs.js";
 import { FunctionGenerator } from "../codegenerator/variablesystem/CppFuncGenerator.js";

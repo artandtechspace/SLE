@@ -1,8 +1,6 @@
-import { HSV, isPercentageNumber, PercentageNumber } from "../../../types/Types.js";
+import { isPercentageNumber, PercentageNumber } from "../../../types/Types.js";
 import { BrightnessPicker } from "../../../ui/utils/BrightnessPicker.js";
-import { HSVColorPicker } from "../../../ui/utils/HSVColorPicker.js";
-import { HSV2HEX, isValidHSV } from "../../../utils/ColorUtils.js";
-import { isNumberEV, isObjectEV } from "../../../utils/ElementValidation.js";
+import { isNumberEV } from "../../../utils/ElementValidation.js";
 import { create } from "../../../utils/HTMLBuilder.js";
 import { SupplierElement } from "./BaseElement.js";
 

@@ -1,4 +1,3 @@
-import { Environment } from "../Environment.js";
 import { getEnvironment } from "../SharedObjects.js";
 
 /**

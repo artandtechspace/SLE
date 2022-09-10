@@ -1,4 +1,4 @@
-import { HexColor, HSV, OpenObject, PercentageNumber, RGB, RGBNumber } from "../types/Types.js";
+import { HSV, OpenObject, PercentageNumber, RGB, RGBNumber } from "../types/Types.js";
 import { isNumberEV } from "./ElementValidation.js";
 
 /**

@@ -1,5 +1,5 @@
 import { Language } from "../../language/LanguageManager.js";
-import { HSV, PercentageNumber, Range } from "../../types/Types.js";
+import { PercentageNumber, Range } from "../../types/Types.js";
 import { HSV2HEX } from "../../utils/ColorUtils.js";
 import { create as C } from "../../utils/HTMLBuilder.js";
 

@@ -1,4 +1,3 @@
-import { Range } from "../../../types/Types.js";
 import { create } from "../../../utils/HTMLBuilder.js";
 import { Element } from "./BaseElement.js";
 

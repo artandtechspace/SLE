@@ -1,4 +1,3 @@
-import { Environment } from "../Environment.js";
 import { ModBlockExport } from "../ConfigBuilder.js";
 import { OpenObject, PositiveNumber } from "../types/Types.js";
 import { ModuleBase } from "./ModuleBase.js";

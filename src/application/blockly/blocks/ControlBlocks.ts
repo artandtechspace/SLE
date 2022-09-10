@@ -1,9 +1,7 @@
 import { DelayModule, DelayModuleConfig } from "../../defaultModules/DelayModule.js";
 import { LoopModule, LoopModuleConfig } from "../../defaultModules/LoopModule.js";
-import { Environment } from "../../Environment.js";
 import { ModBlockExport, ConfigBuilder } from "../../ConfigBuilder.js";
 import { Min, PositiveNumber } from "../../types/Types.js";
-import { getNumberFromCodeAsMin } from "../util/BlocklyBlockUtils.js";
 import { CommentModule, CommentModuleConfig } from "../../defaultModules/CommentModule.js";
 import { TB_COLOR_CONTROL } from "../util/Toolbox.js";
 

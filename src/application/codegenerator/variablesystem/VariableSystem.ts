@@ -1,4 +1,3 @@
-import { Environment } from "../../Environment.js";
 import { C } from "../../utils/WorkUtils.js";
 import { UniqueNameSupplier } from "./UniqueNameSupplier.js";
 import { Variable } from "./Variable.js";

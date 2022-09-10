@@ -1,5 +1,4 @@
 import { IS_DEBUGGING } from "../Preset.js";
-import { S } from "../ui/utils/UiUtils.js";
 import registerAnimationBlocks from "./blocks/AnimationBlocks.js";
 import registerColorBlocks from "./blocks/ColorBlocks.js";
 import registerControlBlocks from "./blocks/ControlBlocks.js";

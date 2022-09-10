@@ -1,4 +1,3 @@
-import { Environment } from "../../Environment.js";
 import { VariableSystem } from "../../codegenerator/variablesystem/VariableSystem.js";
 import { Arduino } from "../../simulation/Arduino.js";
 import { Min, OpenObject, PositiveNumber as PositiveNumber, RGBNumber } from "../../types/Types.js";

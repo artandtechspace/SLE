@@ -1,4 +1,3 @@
-import { Environment } from "../Environment.js";
 import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem.js";
 import { ModuleBase } from "../modules/ModuleBase.js";
 import { printIf as pif } from "../utils/WorkUtils.js";

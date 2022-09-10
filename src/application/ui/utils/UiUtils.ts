@@ -1,5 +1,3 @@
-
-
 import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem.js";
 
 // Short name for the queryselector-function

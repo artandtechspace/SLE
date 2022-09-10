@@ -1,6 +1,5 @@
 import { StopableCallchain } from "../utils/StopableCallchain.js";
 import { Arduino } from "./Arduino.js";
-import { InvalidValueError } from "../errorSystem/Errors.js";
 import { getFullRuntime } from "../modules/ModuleUtils.js";
 import { ModBlockExport } from "../ConfigBuilder.js";
 import { Min } from "../types/Types.js";

@@ -1,4 +1,3 @@
-import { Environment } from "../../Environment.js";
 import { ModuleBase } from "../../modules/ModuleBase.js";
 import { CppFuncSupply } from "./CppFuncDefs.js";
 import { VariableSystem } from "./VariableSystem.js";

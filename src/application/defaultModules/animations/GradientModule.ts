@@ -1,4 +1,3 @@
-import { Environment } from "../../Environment.js";
 import { VariableSystem } from "../../codegenerator/variablesystem/VariableSystem.js";
 import { Arduino } from "../../simulation/Arduino.js";
 import { Min, OpenObject, PercentageNumber, PositiveNumber as PositiveNumber } from "../../types/Types.js";
@@ -31,7 +30,7 @@ export type GradientModuleConfig = {
     // If the colors are reversed
     colorReversed: boolean
 
-    // Delay per led on the stripe (float)
+    // Delay per led on the stripe (int)
     delayPerLed: PositiveNumber
 };
 

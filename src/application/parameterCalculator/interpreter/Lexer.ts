@@ -1,4 +1,4 @@
-import { isValidFirstCharacter, isValidMiddleCharacter, isValidParameterName } from "../ParameterCheck.js";
+import { isValidFirstCharacter, isValidMiddleCharacter } from "../ParameterCheck.js";
 import { PSModel } from "../system/internal/ParameterSystemController.js";
 import { NumberToken, Token, TokenTypes } from "../Token.js";
 

@@ -1,14 +1,9 @@
-import { ColorModule, ColorModuleConfig, StepMode } from "../../defaultModules/ColorModule.js";
-import { BlockError } from "../../errorSystem/Errors.js";
+import { ColorModule, ColorModuleConfig } from "../../defaultModules/ColorModule.js";
 import { ConfigBuilder } from "../../ConfigBuilder.js";
-import { Min, PositiveNumber, RGB, RGBNumber } from "../../types/Types.js";
-import { getNumberFromSettingsUI, getParametricNumber, getParametricNumberMin, getRGBFromCode, getValueFromSettingsUI } from "../util/BlocklyBlockUtils.js";
+import { Min, PositiveNumber, RGB } from "../../types/Types.js";
+import { getRGBFromCode } from "../util/BlocklyBlockUtils.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
 import { TB_COLOR_COLOR } from "../util/Toolbox.js";
-import { getEnvironment } from "../../SharedObjects.js";
-import { createUI } from "../settingsui/SettingsUI.js";
-import { AnimationDirection, BBConsts } from "../util/BlocklyBlockConstants.js";
-import { FadeModule, FadeModuleConfig } from "../../defaultModules/animations/FadeModule.js";
 
 const Blockly = require("blockly");
 

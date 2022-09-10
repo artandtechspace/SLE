@@ -1,8 +1,8 @@
-import { ColorModule, ColorModuleConfig, StepMode } from "../../defaultModules/ColorModule.js";
+import { ColorModule, ColorModuleConfig } from "../../defaultModules/ColorModule.js";
 import { BlockError } from "../../errorSystem/Errors.js";
 import { ConfigBuilder } from "../../ConfigBuilder.js";
 import { Min, PositiveNumber, RGB, RGBNumber } from "../../types/Types.js";
-import { getNumberFromSettingsUI, getParametricNumber, getParametricNumberMin, getRGBFromCode, getValueFromSettingsUI } from "../util/BlocklyBlockUtils.js";
+import { getNumberFromSettingsUI, getParametricNumberMin, getRGBFromCode, getValueFromSettingsUI } from "../util/BlocklyBlockUtils.js";
 import FieldCustomColor from "../fields/FieldCustomColor.js";
 import { TB_COLOR_COLOR } from "../util/Toolbox.js";
 import { getEnvironment } from "../../SharedObjects.js";
@@ -115,7 +115,7 @@ function registerStripe(name: string){
         var amt: Min<1> = Math.max(pos1,pos2)-start as Min<1>;
         
         // How long one led takes to lighten up
-        var delayPerLed: PositiveNumber = timeToFinish/amt as PositiveNumber;
+        var delayPerLed: PositiveNumber = Math.round(timeToFinish/amt) as PositiveNumber;
 
         return {
             module: ColorModule,

@@ -1,4 +1,4 @@
-import { HSV, PercentageNumber } from "../../types/Types.js";
+import { HSV } from "../../types/Types.js";
 import { HSVColorPicker } from "../../ui/utils/HSVColorPicker.js";
 import { HSV2HEX, isValidHSV } from "../../utils/ColorUtils.js";
 import { isObjectEV } from "../../utils/ElementValidation.js";

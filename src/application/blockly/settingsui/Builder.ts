@@ -1,4 +1,4 @@
-import { HSV, OpenObject, PercentageNumber, Range } from "../../types/Types.js";
+import { HSV, OpenObject, PercentageNumber } from "../../types/Types.js";
 import { Element, ElementBuilderBase } from "./fields/BaseElement.js";
 import { BrightnessPickerElement } from "./fields/BrightnessPickerElement.js";
 import { DropDownElement } from "./fields/DropDownElement.js";

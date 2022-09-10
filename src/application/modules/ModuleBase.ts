@@ -1,5 +1,4 @@
 import { ModuleCode } from "../codegenerator/CodeGenerator.js";
-import { Environment } from "../Environment.js";
 import { Arduino } from "../simulation/Arduino.js";
 import { OpenObject, PositiveNumber } from "../types/Types.js";
 import { FunctionGenerator } from "../codegenerator/variablesystem/CppFuncGenerator.js";

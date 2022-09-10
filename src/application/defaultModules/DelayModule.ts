@@ -1,4 +1,3 @@
-import { Environment } from "../Environment.js";
 import { Arduino } from "../simulation/Arduino.js";
 import { PositiveNumber } from "../types/Types.js";
 import { printIf as pIf } from "../utils/WorkUtils.js";

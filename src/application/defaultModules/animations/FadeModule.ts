@@ -1,4 +1,3 @@
-import { Environment } from "../../Environment.js";
 import { VariableSystem } from "../../codegenerator/variablesystem/VariableSystem.js";
 import { Arduino } from "../../simulation/Arduino.js";
 import { Min, OpenObject, PercentageNumber, PositiveNumber as PositiveNumber } from "../../types/Types.js";
@@ -24,7 +23,7 @@ export type FadeModuleConfig = {
     // How long the fade is
     ledLength: Min<1>,
 
-    // How long the animation plays in general (in ms)
+    // How long the animation plays in general (in ms) (int)
     playLengthInMs: PositiveNumber,
     
     // Offset in ms per led (in ms) (int)

@@ -1,4 +1,4 @@
-import { LanguageLoadingError, LoadingError } from "../errorSystem/Errors.js";
+import { LanguageLoadingError } from "../errorSystem/Errors.js";
 import { handleProgrammingError } from "../errorSystem/ProgrammingErrorSystem.js";
 import { SM } from "../ui/utils/UiUtils.js";
 import { isObjectEV, isStringEV } from "../utils/ElementValidation.js";

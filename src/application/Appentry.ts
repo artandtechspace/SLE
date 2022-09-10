@@ -1,6 +1,6 @@
 import registerCustomFields from "./blockly/fields/FieldRegistry.js";
 import { generateCode } from "./codegenerator/CodeGenerator.js";
-import { DesyncedWorkspaceError, Error } from "./errorSystem/Errors.js";
+import { Error } from "./errorSystem/Errors.js";
 import { InAppErrorSystem } from "./errorSystem/InAppErrorSystem.js";
 import { getFullRuntime, getOutOfBoundsModExports } from "./modules/ModuleUtils.js";
 import { PopupSystem } from "./ui/popupSystem/PopupSystem.js";
