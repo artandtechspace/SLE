@@ -244,7 +244,7 @@ function registerGradient(name: string){
         var lenseMulti = lense === LenseType.BOTH ? 2 : 1;
 
         // Calculates the delay per step/led
-        var delay = lenseMulti * playTime/length as PositiveNumber;
+        var delay = Math.round(lenseMulti * playTime/length) as PositiveNumber;
 
         return {
             module: GradientModule,

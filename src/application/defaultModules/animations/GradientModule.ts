@@ -65,9 +65,9 @@ class GradientModule_ extends ModuleAsFuncBase<GradientModuleConfig> {
 
         // Gets the equation for the percentage-variable
         var vPercEquation = tenaryBoolsEqual(prms.directionReversed, prms.colorReversed,
-            ()=> "$led/(float)($length -1)",
-            ()=> "($length -1 -$led)/(float)($length -1)"
-        );
+            ()=> "$led",
+            ()=> "($length -1 -$led)"
+        )+"/(float)($length -1)";
         
         // Requests the percentual-led state variable
         var vPerc = varSys.requestLocalVariable("float", "perc", printEquation(vPercEquation,{
@@ -80,10 +80,10 @@ class GradientModule_ extends ModuleAsFuncBase<GradientModuleConfig> {
 
         // Gets the index of the next led
         // cfg.ledFrom + (cfg.directionReversed ? (cfg.ledLength-led-1) : led)
-        var idxCalc = printEquation("$from + "+tenaryBoolsEqual(prms.directionReversed,{ isStatic: true, value: true },
+        var idxCalc = printEquation("$from + ("+tenaryBoolsEqual(prms.directionReversed,{ isStatic: true, value: true },
             ()=>"$length - $led -1",
             ()=>"$led"
-        ),{
+        )+")",{
             "from": prms.ledFrom.value,
             "length": prms.ledLength.value,
             "led": vLed
