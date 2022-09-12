@@ -5,6 +5,9 @@ import { SM } from "../ui/utils/UiUtils.js";
 import { isObjectEV, isStringEV } from "../utils/ElementValidation.js";
 
 
+// Debugging keyword (Must be at the end of a lookup)
+const DEBUG_LOOKUP = ".DBG";
+
 // Regex to match variables inside the static html-page
 const HTML_MATCHER_REGEX = /^[ \t]*\{\{[ \t]*[\w\-\._]+[ \t]*\}\}[ \t]*$/i;
 
@@ -143,8 +146,8 @@ function getRawKey(key: string) : string{
     var val = loadedLanguage[key];
 
     // Checks for debugging-language key
-    if(IS_DEBUGGING && key.startsWith("debug."))
-        val = key.substring("debug.".length);
+    if(IS_DEBUGGING && key.endsWith(DEBUG_LOOKUP))
+        val = key.substring(0, key.length-DEBUG_LOOKUP.length);
 
     // Checks if the key exists
     if(val === undefined)
@@ -154,13 +157,14 @@ function getRawKey(key: string) : string{
 }
 
 // Takes in a key to get from the languge file and splits the result into the required amount of segments
-// by using $$ as a segment-seperator
-function getSegmentedTextFromLanguage(key: string, segmentAmount: number){
+// by using $$ as a segment-seperator.
+// If the key is undefined it is assumed that an empty segmented response is required
+function getSegmentedTextFromLanguage(key: string|undefined, segmentAmount: number){
     // Lookups the raw element
-    var val = getRawKey(key);
+    var val = key === undefined ? "" : getRawKey(key);
 
     // Splits it into segments
-    var splitted = val.split("$$");
+    var splitted = val.split("$$").map(x=>x.trim());
 
     // Checks length
     if(splitted.length > segmentAmount)

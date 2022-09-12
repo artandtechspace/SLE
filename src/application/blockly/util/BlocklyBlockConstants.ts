@@ -1,6 +1,6 @@
 export enum AnimationDirection {
     NORMAL = "normal",
-    REVERSE = "in reverse"
+    REVERSE = "reverse"
 };
 
 export const BBConsts = {

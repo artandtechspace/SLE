@@ -32,6 +32,7 @@ function registerBlocks(){
 	// Add special blocks like the root-block etc.
 	registerSpecialBlocks();
 	
+	// Normal block registry
 	registerColorBlocks();
 	registerControlBlocks();
 	registerAnimationBlocks();

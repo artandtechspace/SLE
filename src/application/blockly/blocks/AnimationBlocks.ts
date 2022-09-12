@@ -7,6 +7,7 @@ import { TB_COLOR_ANIMATIONS } from "../util/Toolbox.js";
 import { FadeModule, FadeModuleConfig } from "../../defaultModules/animations/FadeModule.js";
 import { SystemParams } from "../../parameterCalculator/system/internal/ParameterSystemModel.js";
 import { createBlocklyStyle } from "../util/BlocklyStyleBuilder.js";
+import { Language } from "../../language/LanguageManager.js";
 
 const Blockly = require("blockly");
 
@@ -15,7 +16,7 @@ const Blockly = require("blockly");
  * Registers all blockly-blocks that are used for animations
  */
 
-const LANGUAGE_BASE = "ui.blockly.block.animation.";
+const LANGUAGE_BASE = "ui.blockly.block.animation";
 
 export default function registerAnimationBlocks(){
     registerGradientBlock('sle_animation_gradient');
@@ -38,36 +39,32 @@ function registerFadeBlock(name: string){
     const getColorTo = "clrTo";
 
     // Fade between $$ and $$
-    createBlocklyStyle(TB_COLOR_ANIMATIONS)
+    createBlocklyStyle(TB_COLOR_ANIMATIONS, `${LANGUAGE_BASE}.fade`)
         .withFieldCustomColor(getColorFrom, .3, .8, 1)
         .withFieldCustomColor(getColorTo, .75, .8, 1)
         .withCustomUi()
-            .addText("Fade for")
+            // Fade for $$ ms
             .addNumericField(getAnimationLength, 5000).hasMin(0).andThen()
-            .addText("ms")
-            .addInfoIcon("How long the animation will play before moving on to the next block.")
-            .breakLine()
+            .addInfoIcon(".ui.length.info")
+            .breakLine(".ui.length")
 
-            .addText("from led")
+            // from led $$ over $$ leds.
             .addNumericField(getLedFrom, 0).hasMin(0).andThen()
-            .addText("over")
             .addNumericField(getLedLength,SystemParams.LED_AMOUNT).hasMin(1).andThen()
-            .addText("leds.")
-            .addInfoIcon("Specify the animation's starting led and led-length.")
-            .breakLine()
+            .addInfoIcon(".ui.over.info")
+            .breakLine(".ui.over")
 
-            .addText("It takes")
+            // It takes $$ ms, until one fade-cycle is finished.
             .addNumericField(getFadeLength, 5000).hasMin(100).andThen()
-            .addText("ms, until one fade-cycle is finished.")
-            .addInfoIcon("How long one fade-cycle takes.")
-            .breakLine()
+            .addInfoIcon(".ui.cycle.info")
+            .breakLine(".ui.cycle")
 
-            .addText("Every led has an offset of")
+            // Every led has an offset of $$ ms from the previous led.
             .addNumericField(getLedOffset, 50).hasMin(0).andThen()
-            .addText("ms from the previous led.")
-            .addInfoIcon("Use this to create flow through the stripe.")
+            .addInfoIcon(".ui.offset.info")
+            .breakLine(".ui.offset.info")
         .endCustomUi()
-    .register(name, LANGUAGE_BASE+"fade");
+    .register(name);
 
     ConfigBuilder.registerModuleBlock<FadeModuleConfig>(name, function(block:any) { 
         var from: HSV = block.getFieldValue(getColorFrom);
@@ -109,29 +106,26 @@ function registerRainbowAutocalcBlock(name: string){
     const getBrightness = "bright";
 
     // Rainbow with a brightness of $$
-    createBlocklyStyle(TB_COLOR_ANIMATIONS)
+    createBlocklyStyle(TB_COLOR_ANIMATIONS, `${LANGUAGE_BASE}.rainbow_calc`)
         .withFieldBrightness(getBrightness)
         .withCustomUi()
-            .addText("The Animation starts from led")
+            // The Animation starts from led $$ and runs for $$ leds,
             .addNumericField(getLedFrom,0).hasMin(0).andThen()
-            .addText("and runs for")
             .addNumericField(getLedLength,SystemParams.LED_AMOUNT).hasMin(0).andThen()
-            .addText("leds,")
-            .addInfoIcon("Specify the animation's starting led and led-length.")
-            .breakLine()
+            .addInfoIcon(".ui.start.info")
+            .breakLine(".ui.start")
 
-            .addText("for")
+            // for $$ ms
             .addNumericField(getAnimationLength,5000).hasMin(100).andThen()
-            .addText("ms.")
-            .addInfoIcon("How long the Rainbow is shown before moving to the next block.")
-            .breakLine()
+            .addInfoIcon(".ui.length.info")
+            .breakLine(".ui.length")
 
-            .addText("It takes")
+            // It takes $$ ms for the rainbow to conclude one cycle.
             .addNumericField(getRepeatLength, 5000).hasMin(500).andThen()
-            .addText("ms for the rainbow to conclude one cycle.")
-            .addInfoIcon("How long it takes for the rainbow to cycle around once.")
+            .addInfoIcon(".ui.repeat.info")
+            .breakLine(".ui.repeat")
         .endCustomUi()
-    .register(name, LANGUAGE_BASE+"rainbow_calc");
+    .register(name);
 
     ConfigBuilder.registerModuleBlock<RainbowModuleConfig>(name, function(block:any) { 
         var ledFrom: PositiveNumber = getNumberFromSettingsUI(block, getLedFrom) as PositiveNumber;
@@ -169,35 +163,31 @@ function registerRainbowBlock(name: string){
     const getBrightness = "bright";
 
     // Rainbow with a brightness of $$ (Led-offset)
-    createBlocklyStyle(TB_COLOR_ANIMATIONS)
+    createBlocklyStyle(TB_COLOR_ANIMATIONS, `${LANGUAGE_BASE}.rainbow`)
         .withFieldBrightness(getBrightness)
         .withCustomUi()
-            .addText("Create a Rainbow for")
+            // Create a Rainbow for $$ ms.
             .addNumericField(getAnimationLength,5000).hasMin(100).andThen()
-            .addText("ms.")
-            .addInfoIcon("How long the Rainbow is shown before moving to the next block.")
-            .breakLine()
+            .addInfoIcon(".ui.length.info")
+            .breakLine(".ui.length")
 
-            .addText("Start from led")
+            // Start from led $$ and draw $$ leds.
             .addNumericField(getLedFrom,0).hasMin(0).andThen()
-            .addText("and draw")
             .addNumericField(getLedLength,SystemParams.LED_AMOUNT).hasMin(0).andThen()
-            .addText("leds.")
-            .addInfoIcon("Specify the animation's starting led and led-length.")
-            .breakLine()
+            .addInfoIcon(".ui.where.info")
+            .breakLine(".ui.where")
 
-            .addText("Every led is offset by")
+            // Every led is offset by $$ ms from the previous one.
             .addNumericField(getLedOffset,-500).andThen()
-            .addText("ms from the previous led.")
-            .addInfoIcon("Use this to create flow through the stripe.")
-            .breakLine()
+            .addInfoIcon(".ui.offset.info")
+            .breakLine(".ui.offset")
 
-            .addText("It takes")
+            // It takes $$ ms for the rainbow to conclude one cycle.
             .addNumericField(getRepeatLength, 5000).hasMin(500).andThen()
-            .addText("ms for the rainbow to conclude one cycle.")
-            .addInfoIcon("How long it takes for the rainbow to cycle around once.")
+            .addInfoIcon(".ui.repeat.info")
+            .breakLine(".ui.repeat")
         .endCustomUi()
-    .register(name, LANGUAGE_BASE+"rainbow");
+    .register(name);
 
     ConfigBuilder.registerModuleBlock<RainbowModuleConfig>(name, function(block:any) { 
         var ledFrom: PositiveNumber = getNumberFromSettingsUI(block, getLedFrom) as PositiveNumber;
@@ -241,30 +231,28 @@ function registerGradientBlock(name: string){
     const getColorTo = "colorto";
 
     // Gradient from $$ to $$ with mode $$
-    createBlocklyStyle(TB_COLOR_ANIMATIONS)
+    createBlocklyStyle(TB_COLOR_ANIMATIONS, `${LANGUAGE_BASE}.gradient`)
         .withFieldCustomColor(getColorFrom)
         .withFieldCustomColor(getColorTo, 0.1, 1, 1)
         .withFieldDropdown(getMode, {
-            [MODUS_NORMAL]:             LANGUAGE_BASE+"gradient.mode.normal",
-            [MODUS_REVERSE_COLOR]:      LANGUAGE_BASE+"gradient.mode.reverse_color",
-            [MODUS_REVERSE_DIRECTION]:  LANGUAGE_BASE+"gradient.mode.reverse_direction",
-            [MODUS_BOTH]:               LANGUAGE_BASE+"gradient.mode.reverse_both",
+            [MODUS_NORMAL]:             ".mode.normal",
+            [MODUS_REVERSE_COLOR]:      ".mode.reverse_color",
+            [MODUS_REVERSE_DIRECTION]:  ".mode.reverse_direction",
+            [MODUS_BOTH]:               ".mode.reverse_both",
         })
         .withCustomUi()
-            .addText("Gradient from led")
+            // Gradient from led $$ over $$ leds.
             .addNumericField(getLedFrom,0).hasMin(0).andThen()
-            .addText("over")
             .addNumericField(getLedLength,SystemParams.LED_AMOUNT).hasMin(1).andThen()
-            .addText("leds.")
-            .addInfoIcon("Specify the animation's starting led and led-length.")
-            .breakLine()
+            .addInfoIcon(".ui.where.info")
+            .breakLine(".ui.where")
 
-            .addText("Wait")
+            // Wait $$ ms between turning on leds.
             .addNumericField(getLedDelay,100).hasMin(0).andThen()
-            .addText("ms between turning on leds.")
-            .addInfoIcon("This waits a given amount of time before turning the next led on.")
+            .addInfoIcon(".ui.wait.info")
+            .breakLine(".ui.wait")
         .endCustomUi()
-    .register(name, LANGUAGE_BASE+"gradient");
+    .register(name);
 
     ConfigBuilder.registerModuleBlock<GradientModuleConfig>(name, function(block:any) { 
         var start: PositiveNumber = getNumberFromSettingsUI(block,getLedFrom) as PositiveNumber;

@@ -28,8 +28,8 @@ export default function registerColorBlocks(){
 // Turn off all leds-block
 function registerTurnoff(name: string){
     // Turn off all leds
-    createBlocklyStyle(TB_COLOR_COLOR)
-    .register(name, LANGUAGE_BASE+"turnoff");
+    createBlocklyStyle(TB_COLOR_COLOR, LANGUAGE_BASE+"turnoff")
+    .register(name);
 
 
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {                
@@ -58,25 +58,22 @@ function registerStripe(name: string){
     const getTime = "time";
 
     // Color leds $$ to $$ in $$
-    createBlocklyStyle(TB_COLOR_COLOR)
+    createBlocklyStyle(TB_COLOR_COLOR, LANGUAGE_BASE+"stripe")
         .withTextfield(getLedStart, "0")
         .withTextfield(getLedEnd, SystemParams.LED_AMOUNT)
         .withFieldCustomColor(getColor)
         .withCustomUi()
-            .addText("Play the animation ")
-            .addDropdown(getDirection, BBConsts.Direction_UI)
-            .addText(".")
-            .addInfoIcon("Plays the animation eigther forward or in reverse.")
-            .breakLine()
+            // Play the animation $$.
+            .addDropdown(getDirection, ".ui.direction", BBConsts.Direction_UI)
+            .addInfoIcon(".ui.direction.info")
+            .breakLine(".ui.direction")
             
-            .addText("The animation takes")
-            .addNumericField(getTime, 0)
-            .hasMin(0)
-            .andThen()
-            .addText("ms to finish.")
-            .addInfoIcon("How long the animation will play out in milliseconds.")
+            // The animation takes $$ ms to finish.
+            .addNumericField(getTime, 0).hasMin(0).andThen()
+            .addInfoIcon(".ui.length.info")
+            .breakLine(".ui.length")
         .endCustomUi()
-    .register(name, LANGUAGE_BASE+"stripe");
+    .register(name);
 
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
         const pos1: PositiveNumber = getParametricNumberMin(block, getLedStart, 0, false);
@@ -122,10 +119,10 @@ function registerSingleLed(name: string){
     const getColor = "color";
 
     // Color led $$ in $$
-    createBlocklyStyle(TB_COLOR_COLOR)
+    createBlocklyStyle(TB_COLOR_COLOR, LANGUAGE_BASE+"single")
         .withTextfield(getLed, "0")
         .withFieldCustomColor(getColor)
-    .register(name, LANGUAGE_BASE+"single");
+    .register(name);
 
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
         // Start

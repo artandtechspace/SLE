@@ -8,7 +8,7 @@ const Blockly = require("blockly");
 
 
 // Creates a blockly-style builder instance with the given hue-rotation
-export const createBlocklyStyle = (hueRotation: number)=>new BlocklyStyleBuilder(hueRotation);
+export const createBlocklyStyle = (hueRotation: number, languageNameSpace: string)=>new BlocklyStyleBuilder(hueRotation, languageNameSpace);
 
 class BlocklyStyleBuilder{
 
@@ -20,8 +20,13 @@ class BlocklyStyleBuilder{
     // Hue-rotation color of the block
     private hueRotation: number;
 
-    constructor(hueRotation: number){
+    // Namespace to put before every language lookup
+    private languageNameSpace: string;
+
+    constructor(hueRotation: number, languageNameSpace: string){
         this.hueRotation = hueRotation;
+
+        this.languageNameSpace = languageNameSpace;
     }
 
     // Event: Gets used when the callback ends on the custom-ui
@@ -63,7 +68,7 @@ class BlocklyStyleBuilder{
 
     withFieldDropdown(key: string, input: {[key: string]: string}){
         // Brings the drop-down values into the correct format and also directly resolves the language lookups
-        var dropvalues = Object.keys(input).map(key=>[Language.get(input[key]),key]);
+        var dropvalues = Object.keys(input).map(key=>[Language.get(this.languageNameSpace+input[key]),key]);
 
         this.fieldInstructions.push((fld:any)=>fld.appendField(new Blockly.FieldDropdown(dropvalues),key));
         
@@ -71,10 +76,10 @@ class BlocklyStyleBuilder{
     }
 
     withCustomUi(){
-        return new SettingsUIBuilder(this.onUiCompleted.bind(this));
+        return new SettingsUIBuilder(this.onUiCompleted.bind(this), this.languageNameSpace);
     }
 
-    register(name: string, languageKey: string){
+    register(name: string){
         const handler = this;
         Blockly.Blocks[name] = {
             init: function(){
@@ -82,7 +87,7 @@ class BlocklyStyleBuilder{
                 var dummy = this.appendDummyInput();
 
                 // Performs the language-lookup and segmentation (One segment more than fields to have one before and after every field)
-                var segment = Language.getSegmented(languageKey, handler.fieldInstructions.length+1);
+                var segment = Language.getSegmented(handler.languageNameSpace, handler.fieldInstructions.length+1);
 
                 // Iterates over every segment
                 for(var i = 0; i < segment.length; i++){

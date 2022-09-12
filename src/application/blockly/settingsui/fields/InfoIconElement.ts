@@ -1,12 +1,13 @@
+import { Language } from "../../../language/LanguageManager.js";
 import { create } from "../../../utils/HTMLBuilder.js";
 import { Element } from "./BaseElement.js";
 
 export class InfoIconElement extends Element{
     public readonly text: string;
 
-    constructor(text: string) {
+    constructor(langKey: string) {
         super();
-        this.text=text;
+        this.text=Language.get(langKey);
     }
 
     render(): HTMLElement {

@@ -15,41 +15,75 @@
     // #region Blockly-blocks
 
     "ui.blockly.block.color.single": "Color led $$ in $$",
+
     "ui.blockly.block.color.stripe": "Color leds $$ to $$ in $$",
+    "ui.blockly.block.color.stripe.ui.direction": "Play the animation $$.",
+    "ui.blockly.block.color.stripe.ui.direction.info": "Plays the animation eigther forward or in reverse.",
+    "ui.blockly.block.color.stripe.ui.direction.normal": "normal",
+    "ui.blockly.block.color.stripe.ui.direction.reverse": "reversed",
+    "ui.blockly.block.color.stripe.ui.length": "The animation takes $$ ms to finish.",
+    "ui.blockly.block.color.stripe.ui.length.info": "How long the animation will play out in milliseconds.",
+    
     "ui.blockly.block.color.turnoff": "Turn off all leds",
 
+
+
+    
+    
+    
+    
     "ui.blockly.block.control.comment": "//",
     "ui.blockly.block.control.comment.text": "Im a comment",
     "ui.blockly.block.control.repeat": "Repeat $$ times",
     "ui.blockly.block.control.delay": "Wait $$ ms",
-
-
+    
+    
     "ui.blockly.block.goggles.turnoff": "Turn off $$ lense(s)",
     "ui.blockly.block.goggles.turnoff.right": "the right",
     "ui.blockly.block.goggles.turnoff.left": "the left",
     "ui.blockly.block.goggles.turnoff.both": "both",
-
+    
     "ui.blockly.block.goggles.rainbow": "Rainbow over $$ lense(s) with a brightness of $$ in $$ ms",
     "ui.blockly.block.goggles.rainbow.right": "the right",
     "ui.blockly.block.goggles.rainbow.left": "the left",
     "ui.blockly.block.goggles.rainbow.both": "both",
-
+    "ui.blockly.block.goggles.rainbow.ui.direction": "The direction is $$.",
+    "ui.blockly.block.goggles.rainbow.ui.direction.info": "Plays the animation eigther forward or in reverse.",
+    "ui.blockly.block.goggles.rainbow.ui.direction.normal": "normal",
+    "ui.blockly.block.goggles.rainbow.ui.direction.reverse": "reversed",
+    
     "ui.blockly.block.goggles.gradient": "Gradient over $$ lense(s) from $$ to $$ in $$ ms",
     "ui.blockly.block.goggles.gradient.right": "the right",
     "ui.blockly.block.goggles.gradient.left": "the left",
     "ui.blockly.block.goggles.gradient.both": "both",
+    "ui.blockly.block.goggles.gradient.ui.color": "The color is $$.",
+    "ui.blockly.block.goggles.gradient.ui.color.info": "Displays the color in reverse.",
+    "ui.blockly.block.goggles.gradient.ui.color.normal": "normal",
+    "ui.blockly.block.goggles.gradient.ui.color.reverse": "reversed",
+    "ui.blockly.block.goggles.gradient.ui.direction": "The direction is $$.",
+    "ui.blockly.block.goggles.gradient.ui.direction.info": "Plays the animation eigther forward or in reverse.",
+    "ui.blockly.block.goggles.gradient.ui.direction.normal": "normal",
+    "ui.blockly.block.goggles.gradient.ui.direction.reverse": "reversed",
 
-    "ui.blockly.block.goggles.fade": "Fade $$ from $$ to $$ in $$ ms",
+    
+    "ui.blockly.block.goggles.fade": "Fade $$ lense(s) from $$ to $$ in $$ ms",
     "ui.blockly.block.goggles.fade.right": "the right",
     "ui.blockly.block.goggles.fade.left": "the left",
     "ui.blockly.block.goggles.fade.both": "both",
-
+    
     "ui.blockly.block.goggles.onlylense": "Color $$ lense(s) in $$",
     "ui.blockly.block.goggles.onlylense.right": "the right",
     "ui.blockly.block.goggles.onlylense.left": "the left",
     "ui.blockly.block.goggles.onlylense.both": "both",
     "ui.blockly.block.goggles.onlylense.both_parallel": "both (Parallel)",
-
+    "ui.blockly.block.goggles.onlylense.ui.direction": "Play the animation $$.",
+    "ui.blockly.block.goggles.onlylense.ui.direction.info": "Plays the animation eigther forward or in reverse.",
+    "ui.blockly.block.goggles.onlylense.ui.direction.normal": "normal",
+    "ui.blockly.block.goggles.onlylense.ui.direction.reverse": "reversed",
+    "ui.blockly.block.goggles.onlylense.ui.time": "The animation takes $$ ms to finish.",
+    "ui.blockly.block.goggles.onlylense.ui.time.info": "How long the animation will play out in milliseconds.",
+    
+    
     "ui.blockly.block.goggles.color": "Color every $$ led of $$ lense(s) with $$ in $$ ms",
     "ui.blockly.block.goggles.color.right": "the right",
     "ui.blockly.block.goggles.color.left": "the left",
@@ -61,13 +95,47 @@
     "ui.blockly.block.goggles.color.count.6": "6th",
     "ui.blockly.block.goggles.color.count.7": "7th",
     "ui.blockly.block.goggles.color.count.8": "8th",
+    "ui.blockly.block.goggles.color.ui.direction": "Play the animation $$.",
+    "ui.blockly.block.goggles.color.ui.direction.info": "Plays the animation eigther forward or in reverse.",
+    "ui.blockly.block.goggles.color.ui.direction.normal": "normal",
+    "ui.blockly.block.goggles.color.ui.direction.reverse": "reversed",
+    "ui.blockly.block.goggles.color.ui.start": "Start from led $$",
 
-
+    
 
     "ui.blockly.block.animation.fade": "Fade between $$ and $$",
-
+    "ui.blockly.block.animation.fade.ui.length": "Fade for $$ ms",
+    "ui.blockly.block.animation.fade.ui.length.info": "How long the animation will play before moving on to the next block.",
+    "ui.blockly.block.animation.fade.ui.over": "from led $$ over $$ leds.",
+    "ui.blockly.block.animation.fade.ui.over.info": "Specify the animation's starting led and led-length.",
+    "ui.blockly.block.animation.fade.ui.cycle": "It takes $$ ms, until one fade-cycle is finished.",
+    "ui.blockly.block.animation.fade.ui.cycle.info": "How long one fade-cycle takes.",
+    "ui.blockly.block.animation.fade.ui.offset": "Every led has an offset of $$ ms from the previous led.",
+    "ui.blockly.block.animation.fade.ui.offset.info": "Use this to create flow through the stripe.",
+    
     "ui.blockly.block.animation.rainbow_calc": "Rainbow with a brightness of $$",
+    "ui.blockly.block.animation.rainbow_calc.ui.start": "The Animation starts from led $$ and runs for $$ leds,",
+    "ui.blockly.block.animation.rainbow_calc.ui.start.info": "Specify the animation's starting led and led-length.",
+    "ui.blockly.block.animation.rainbow_calc.ui.length": "for $$ ms",
+    "ui.blockly.block.animation.rainbow_calc.ui.length.info": "How long the Rainbow is shown before moving to the next block.",
+    "ui.blockly.block.animation.rainbow_calc.ui.repeat": "It takes $$ ms for the rainbow to conclude one cycle.",
+    "ui.blockly.block.animation.rainbow_calc.ui.repeat.info": "How long it takes for the rainbow to cycle around once.",
+
     "ui.blockly.block.animation.rainbow": "Rainbow with a brightness of $$ (Led-offset)",
+    "ui.blockly.block.animation.rainbow.ui.length": "Create a Rainbow for $$ ms.",
+    "ui.blockly.block.animation.rainbow.ui.length.info": "How long the Rainbow is shown before moving to the next block.",
+    "ui.blockly.block.animation.rainbow.ui.where": "Start from led $$ and draw $$ leds.",
+    "ui.blockly.block.animation.rainbow.ui.where.info": "Specify the animation's starting led and led-length.",
+    "ui.blockly.block.animation.rainbow.ui.offset": "Every led is offset by $$ ms from the previous one.",
+    "ui.blockly.block.animation.rainbow.ui.offset.info": "Use this to create flow through the stripe.",
+    "ui.blockly.block.animation.rainbow.ui.repeat": "It takes $$ ms for the rainbow to conclude one cycle.",
+    "ui.blockly.block.animation.rainbow.ui.repeat.info": "How long it takes for the rainbow to cycle around once.",
+
+    "ui.blockly.block.animation.gradient.ui.where": "Gradient from led $$ over $$ leds.",
+    "ui.blockly.block.animation.gradient.ui.where.info": "Specify the animation's starting led and led-length.",
+    "ui.blockly.block.animation.gradient.ui.wait": "Wait $$ ms between turning on leds.",
+    "ui.blockly.block.animation.gradient.ui.wait.info": "This waits a given amount of time before turning the next led on.",
+
 
     "ui.blockly.block.animation.gradient": "Gradient from $$ to $$ with mode $$",
     "ui.blockly.block.animation.gradient.mode.normal": "normal",
@@ -90,7 +158,6 @@
         "ui.blockly.toolbox.categorys.values": "Values",
         "ui.blockly.toolbox.categorys.animations": "Animations",
         "ui.blockly.toolbox.categorys.goggles": "Goggles",
-        "ui.blockly.toolbox.categorys.debug": "Debug",
 
         // Root-block-errors
         "ui.blockly.workspace.desynced.noroot": "No setup- or loop-block found. Did something go wrong while loading?",

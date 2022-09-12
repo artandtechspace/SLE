@@ -63,7 +63,12 @@ export function buildToolBox(){
 // Builds the debug-category only if the debugging flag is set
 function categoryDebug(content: any[]){
   if(IS_DEBUGGING)
-    return category("debug", TB_COLOR_DEBUG, content);
+    return {
+      "kind": "category",
+      "name": "Debug",
+      "contents": content,
+      "colour": TB_COLOR_DEBUG.toString()
+    }
 }
 
 // Build a category

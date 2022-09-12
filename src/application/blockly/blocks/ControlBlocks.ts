@@ -28,9 +28,9 @@ function registerComment(name: string){
     const getText = "text";
 
     // // Im am comment
-    createBlocklyStyle(TB_COLOR_CONTROL)
+    createBlocklyStyle(TB_COLOR_CONTROL, LANGUAGE_BASE+"comment")
         .withTextfield(getText, Language.get("ui.blockly.block.control.comment.text"))
-    .register(name, LANGUAGE_BASE+"comment");
+    .register(name);
 
     ConfigBuilder.registerModuleBlock<CommentModuleConfig>(name, function(block:any) {
         return {
@@ -93,9 +93,9 @@ function registerDelay(name: string){
     const getTime = "time";
 
     // Wait $$ ms
-    createBlocklyStyle(TB_COLOR_CONTROL)
+    createBlocklyStyle(TB_COLOR_CONTROL, LANGUAGE_BASE+"delay")
         .withTextfield(getTime, "500")
-    .register(name,LANGUAGE_BASE+"delay");
+    .register(name);
 
     ConfigBuilder.registerModuleBlock<DelayModuleConfig>(name, function(block:any) {
         const waitTime = getParametricNumberMin(block,getTime, 10, false);

@@ -57,6 +57,6 @@ function onImportFile(evt: any){
         importFromString(cont);
     }catch(exc){
         // TODO: Implement using popup-system
-        alert(exc);
+        alert((exc as Error).message);
     }
 }

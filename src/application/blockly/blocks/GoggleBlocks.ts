@@ -36,18 +36,15 @@ export default function registerGoogleBlocks(){
 
 //#region Util-functions
 
-// Generates a lense-dropdown option with a module-language lookup name
-function generateLenseOptions(moduleLanguageKey: string, includeBothParallel: boolean = false){
-    const options: {[key: string]: string} = {
-        [LenseType.RIGHT]: LANGUAGE_BASE+moduleLanguageKey+".right",
-        [LenseType.LEFT]: LANGUAGE_BASE+moduleLanguageKey+".left",
-        [LenseType.BOTH]: LANGUAGE_BASE+moduleLanguageKey+".both"
-    };
+const LenseDropdown = {
+    [LenseType.RIGHT]: ".right",
+    [LenseType.LEFT]: ".left",
+    [LenseType.BOTH]: ".both"
+};
 
-    if(includeBothParallel)
-        options[LenseType.BOTH_PARALLEL] = LANGUAGE_BASE+moduleLanguageKey+".both_parallel";
-
-    return options;
+const LenseDropdownWithParallel = {
+    ...LenseDropdown,
+    [LenseType.BOTH_PARALLEL]: ".both_parallel"
 }
 
 // Calculates based on the given lense and starting index on that lense the starting point and length
@@ -77,9 +74,9 @@ function registerTurnOff(name: string){
     const getLense = "lense";
 
     // Turn off $$ lense(s)
-    createBlocklyStyle(TB_COLOR_GOGGLES)
-        .withFieldDropdown(getLense, generateLenseOptions("turnoff"))
-    .register(name, LANGUAGE_BASE+"turnoff");
+    createBlocklyStyle(TB_COLOR_GOGGLES, LANGUAGE_BASE+"turnoff")
+        .withFieldDropdown(getLense, LenseDropdown)
+    .register(name);
 
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {        
         // Which lense
@@ -114,17 +111,17 @@ function registerRainbow(name: string){
     const getBrightness = "brightness";
 
     // Rainbow over $$ lense(s) with a brightness of $$ in $$ ms
-    createBlocklyStyle(TB_COLOR_GOGGLES)
-        .withFieldDropdown(getLense,  generateLenseOptions("rainbow"))
+    createBlocklyStyle(TB_COLOR_GOGGLES, LANGUAGE_BASE+"rainbow")
+        .withFieldDropdown(getLense, LenseDropdown)
         .withFieldBrightness(getBrightness)
         .withTextfield(getTime, "1000")
         .withCustomUi()
-            .addText("The direction is ")
-            .addDropdown(getDirection, BBConsts.Direction_UI)
-            .addText(".")
-            .addInfoIcon("Plays the animation eigther forward or in reverse.")
+            // The direction is $$.
+            .addDropdown(getDirection, ".ui.direction.", BBConsts.Direction_UI)
+            .addInfoIcon(".ui.direction.info")
+            .breakLine(".ui.direction")
         .endCustomUi()
-    .register(name, LANGUAGE_BASE+"rainbow");
+    .register(name);
 
    
     ConfigBuilder.registerModuleBlock<RainbowModuleConfig>(name, function(block:any) {
@@ -177,24 +174,25 @@ function registerGradient(name: string){
 
 
     // Gradient over $$ lense(s) from $$ to $$ in $$ ms
-    createBlocklyStyle(TB_COLOR_GOGGLES)
-        .withFieldDropdown(getLense,  generateLenseOptions("gradient"))
+    createBlocklyStyle(TB_COLOR_GOGGLES, LANGUAGE_BASE+"gradient")
+        .withFieldDropdown(getLense, LenseDropdown)
         .withFieldCustomColor(getColorFrom)
         .withFieldCustomColor(getColorTo, .4, 1, 1)
         .withTextfield(getTime, "1000")
         .withCustomUi()
-            .addText("The direction is ")
-            .addDropdown(getDirection, BBConsts.Direction_UI)
-            .addText(".")
-            .addInfoIcon("Plays the animation eigther forward or in reverse.")
-            .breakLine()
+            // The direction is $$.
+            .addDropdown(getDirection, ".ui.direction", BBConsts.Direction_UI)
+            .addInfoIcon(".ui.direction.info")
+            .breakLine(".ui.direction")
 
-            .addText("The color is ")
-            .addDropdown(getClrDir, BBConsts.Direction_UI)
+            // The color is $$.
+            .addText("")
+            .addDropdown(getClrDir, ".ui.color", BBConsts.Direction_UI)
             .addText(".")
-            .addInfoIcon("Displays the color in reverse.")
+            .addInfoIcon(".ui.color.info")
+            .breakLine(".ui.color")
         .endCustomUi()
-    .register(name,LANGUAGE_BASE+"gradient");
+    .register(name);
 
     ConfigBuilder.registerModuleBlock<GradientModuleConfig>(name, function(block:any) {
         // Colors to fade between
@@ -253,12 +251,12 @@ function registerFade(name: string){
     const getTime = "time";
 
     // Fade $$ from $$ to $$ in $$ ms
-    createBlocklyStyle(TB_COLOR_GOGGLES)
-        .withFieldDropdown(getLense, generateLenseOptions("fade"))
+    createBlocklyStyle(TB_COLOR_GOGGLES, LANGUAGE_BASE+"fade")
+        .withFieldDropdown(getLense, LenseDropdown)
         .withFieldCustomColor(getColorFrom)
         .withFieldCustomColor(getColorTo)
         .withTextfield(getTime, "1000")
-    .register(name,LANGUAGE_BASE+"fade");
+    .register(name,);
 
     ConfigBuilder.registerModuleBlock<FadeModuleConfig>(name, function(block:any) {
         // Colors to fade between
@@ -311,24 +309,21 @@ function registerColorOnlyLense(name: string){
     const getDirection = "direction";
 
     // Color $$ lense(s) in $$
-    createBlocklyStyle(TB_COLOR_GOGGLES)
-        .withFieldDropdown(getLense, generateLenseOptions("onlylense", true))
+    createBlocklyStyle(TB_COLOR_GOGGLES, LANGUAGE_BASE+"onlylense")
+        .withFieldDropdown(getLense, LenseDropdownWithParallel)
         .withFieldCustomColor(getColor)
         .withCustomUi()
-            .addText("Play the animation ")
-            .addDropdown(getDirection, BBConsts.Direction_UI)
-            .addText(".")
-            .addInfoIcon("Plays the animation eigther forward or in reverse.")
-            .breakLine()
+            // Play the animation $$.
+            .addDropdown(getDirection, ".ui.direction", BBConsts.Direction_UI)
+            .addInfoIcon(".ui.direction.info")
+            .breakLine(".ui.direction")
 
-            .addText("The animation takes")
-            .addNumericField(getTime, 0)
-            .hasMin(0)
-            .andThen()
-            .addText("ms to finish.")
-            .addInfoIcon("How long the animation will play out in milliseconds.")
+            // The animation takes $$ ms to finish.
+            .addNumericField(getTime, 0).hasMin(0).andThen()
+            .addInfoIcon(".ui.time.info")
+            .breakLine(".ui.time")
         .endCustomUi()
-    .register(name, LANGUAGE_BASE+"onlylense");
+    .register(name);
 
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
         const color: RGB = getRGBFromCode(block, getColor);
@@ -379,27 +374,25 @@ function registerColorBlock(name: string){
     // Generates the dropdown-options
     const nthOptions: OpenObject = {};
     for(var x = 2; x <= 8; x++)
-        nthOptions[x] = LANGUAGE_BASE+"color.count."+x;
+        nthOptions[x] = ".count."+x;
 
     // Color every $$ led of $$ lense(s) with $$ in $$ ms
-    createBlocklyStyle(TB_COLOR_GOGGLES)
+    createBlocklyStyle(TB_COLOR_GOGGLES, LANGUAGE_BASE+"color")
         .withFieldDropdown(getDropdownDesc, nthOptions)
-        .withFieldDropdown(getLense, generateLenseOptions("color"))
+        .withFieldDropdown(getLense, LenseDropdown)
         .withFieldCustomColor(getColor)
         .withTextfield(getTime, "1000")
         .withCustomUi()
-            .addText("Play the animation ")
-            .addDropdown(getDirection, BBConsts.Direction_UI)
-            .addText(".")
-            .addInfoIcon("Plays the animation eigther forward or in reverse.")
-            .breakLine()
+            // Play the animation $$.
+            .addDropdown(getDirection, ".ui.direction", BBConsts.Direction_UI)
+            .addInfoIcon(".ui.direction.info")
+            .breakLine(".ui.direction")
 
-            .addText("Start from led ")
-            .addNumericField(getStartIndex, 0)
-            .hasMin(0)
-            .andThen()
+            // Start from led $$
+            .addNumericField(getStartIndex, 0).hasMin(0).andThen()
+            .breakLine(".ui.start")
         .endCustomUi()
-    .register(name, LANGUAGE_BASE+"color")
+    .register(name)
 
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
         const color: RGB = getRGBFromCode(block, getColor);
