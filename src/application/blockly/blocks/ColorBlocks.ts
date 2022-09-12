@@ -10,11 +10,11 @@ import { AnimationDirection, BBConsts } from "../util/BlocklyBlockConstants.js";
 import { SystemParams } from "../../parameterCalculator/system/internal/ParameterSystemModel.js";
 import { createBlocklyStyle } from "../util/BlocklyStyleBuilder.js";
 
-const Blockly = require("blockly");
-
 /**
  * Registers all blocks that are using the color-module
  */
+
+const LANGUAGE_BASE = "ui.blockly.block.color.";
 
 
 export default function registerColorBlocks(){
@@ -27,9 +27,9 @@ export default function registerColorBlocks(){
 
 // Turn off all leds-block
 function registerTurnoff(name: string){
+    // Turn off all leds
     createBlocklyStyle(TB_COLOR_COLOR)
-        .withText("debug.Turn off all leds")
-    .register(name);
+    .register(name, LANGUAGE_BASE+"turnoff");
 
 
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {                
@@ -57,12 +57,10 @@ function registerStripe(name: string){
     const getDirection = "direction";
     const getTime = "time";
 
+    // Color leds $$ to $$ in $$
     createBlocklyStyle(TB_COLOR_COLOR)
-        .withText("debug.Color leds")
         .withTextfield(getLedStart, "0")
-        .withText("debug.to")
         .withTextfield(getLedEnd, SystemParams.LED_AMOUNT)
-        .withText("debug.in")
         .withFieldCustomColor(getColor)
         .withCustomUi()
             .addText("Play the animation ")
@@ -78,7 +76,7 @@ function registerStripe(name: string){
             .addText("ms to finish.")
             .addInfoIcon("How long the animation will play out in milliseconds.")
         .endCustomUi()
-    .register(name);
+    .register(name, LANGUAGE_BASE+"stripe");
 
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
         const pos1: PositiveNumber = getParametricNumberMin(block, getLedStart, 0, false);
@@ -123,12 +121,11 @@ function registerSingleLed(name: string){
     const getLed = "led";
     const getColor = "color";
 
+    // Color led $$ in $$
     createBlocklyStyle(TB_COLOR_COLOR)
-        .withText("debug.Color led")
         .withTextfield(getLed, "0")
-        .withText("debug.in")
         .withFieldCustomColor(getColor)
-    .register(name);
+    .register(name, LANGUAGE_BASE+"single");
 
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
         // Start

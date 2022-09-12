@@ -1,7 +1,6 @@
 import { ConfigBuilder } from "../../ConfigBuilder.js";
-import { HSV, Min, PositiveNumber, Range, RGB, RGBNumber } from "../../types/Types.js";
+import { HSV, Min, OpenObject, PositiveNumber, Range, RGB, RGBNumber } from "../../types/Types.js";
 import { getNumberFromSettingsUI, getParametricNumberMin, getRGBFromCode, getValueFromSettingsUI } from "../util/BlocklyBlockUtils.js";
-import FieldCustomColor from "../fields/FieldCustomColor.js";
 import { TB_COLOR_GOGGLES } from "../util/Toolbox.js";
 import { FadeModule, FadeModuleConfig } from "../../defaultModules/animations/FadeModule.js";
 import { getEnvironment } from "../../SharedObjects.js";
@@ -9,10 +8,7 @@ import { ColorModule, ColorModuleConfig, StepMode } from "../../defaultModules/C
 import { AnimationDirection, BBConsts } from "../util/BlocklyBlockConstants.js";
 import { GradientModule, GradientModuleConfig } from "../../defaultModules/animations/GradientModule.js";
 import { RainbowModule, RainbowModuleConfig } from "../../defaultModules/animations/RainbowModule.js";
-import FieldBrightness from "../fields/FieldBrightness.js";
 import { createBlocklyStyle } from "../util/BlocklyStyleBuilder.js";
-
-const Blockly = require("blockly");
 
 // For dropdown-select's using lenses
 enum LenseType {
@@ -22,13 +18,11 @@ enum LenseType {
     BOTH_PARALLEL = "both_paral"
 };
 
-// Mappings of the enums
-const LenseTypeBlocklyArray = [["the right", LenseType.RIGHT], ["the left", LenseType.LEFT], ["both", LenseType.BOTH]];
-const LenseTypeWithParallelBlocklyArray = [...LenseTypeBlocklyArray, ["both (parallel)", LenseType.BOTH_PARALLEL]];
-
 /**
  * Registers all blockly-blocks that are used for animations
  */
+
+const LANGUAGE_BASE = "ui.blockly.block.goggles.";
 
 export default function registerGoogleBlocks(){
     registerTurnOff("sle_goggles_turnoff");
@@ -39,7 +33,22 @@ export default function registerGoogleBlocks(){
     registerRainbow("sle_goggles_rainbow");
 }
 
+
 //#region Util-functions
+
+// Generates a lense-dropdown option with a module-language lookup name
+function generateLenseOptions(moduleLanguageKey: string, includeBothParallel: boolean = false){
+    const options: {[key: string]: string} = {
+        [LenseType.RIGHT]: LANGUAGE_BASE+moduleLanguageKey+".right",
+        [LenseType.LEFT]: LANGUAGE_BASE+moduleLanguageKey+".left",
+        [LenseType.BOTH]: LANGUAGE_BASE+moduleLanguageKey+".both"
+    };
+
+    if(includeBothParallel)
+        options[LenseType.BOTH_PARALLEL] = LANGUAGE_BASE+moduleLanguageKey+".both_parallel";
+
+    return options;
+}
 
 // Calculates based on the given lense and starting index on that lense the starting point and length
 function getStartAndLengthFromLense(lense: LenseType, startIdx: number = 0){
@@ -67,15 +76,10 @@ function registerTurnOff(name: string){
     // Names for the variables
     const getLense = "lense";
 
+    // Turn off $$ lense(s)
     createBlocklyStyle(TB_COLOR_GOGGLES)
-        .withText("debug.Turn off")
-        .withFieldDropdown(getLense, {
-            [LenseType.RIGHT]: "debug.the right",
-            [LenseType.LEFT]: "debug.the left",
-            [LenseType.BOTH]: "debug.both"
-        })
-        .withText("debug.lense(s)")
-    .register(name);
+        .withFieldDropdown(getLense, generateLenseOptions("turnoff"))
+    .register(name, LANGUAGE_BASE+"turnoff");
 
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {        
         // Which lense
@@ -109,26 +113,18 @@ function registerRainbow(name: string){
     const getDirection = "direction";
     const getBrightness = "brightness";
 
-
+    // Rainbow over $$ lense(s) with a brightness of $$ in $$ ms
     createBlocklyStyle(TB_COLOR_GOGGLES)
-        .withText("debug.Rainbow over")
-        .withFieldDropdown(getLense, {
-            [LenseType.RIGHT]: "debug.the right",
-            [LenseType.LEFT]: "debug.the left",
-            [LenseType.BOTH]: "debug.both"
-        })
-        .withText("debug.lense(s) with a brightness of")
+        .withFieldDropdown(getLense,  generateLenseOptions("rainbow"))
         .withFieldBrightness(getBrightness)
-        .withText("debug.in")
         .withTextfield(getTime, "1000")
-        .withText("ms")
         .withCustomUi()
             .addText("The direction is ")
             .addDropdown(getDirection, BBConsts.Direction_UI)
             .addText(".")
             .addInfoIcon("Plays the animation eigther forward or in reverse.")
         .endCustomUi()
-    .register(name);
+    .register(name, LANGUAGE_BASE+"rainbow");
 
    
     ConfigBuilder.registerModuleBlock<RainbowModuleConfig>(name, function(block:any) {
@@ -180,19 +176,12 @@ function registerGradient(name: string){
     const getClrDir = "clrdir";
 
 
+    // Gradient over $$ lense(s) from $$ to $$ in $$ ms
     createBlocklyStyle(TB_COLOR_GOGGLES)
-        .withText("debug.Gradient over")
-        .withFieldDropdown(getLense, {
-            [LenseType.RIGHT]: "debug.the right",
-            [LenseType.LEFT]: "debug.the left",
-            [LenseType.BOTH]: "debug.both"
-        })
+        .withFieldDropdown(getLense,  generateLenseOptions("gradient"))
         .withFieldCustomColor(getColorFrom)
-        .withText("debug.to")
         .withFieldCustomColor(getColorTo, .4, 1, 1)
-        .withText("debug.in")
         .withTextfield(getTime, "1000")
-        .withText("debug.ms")
         .withCustomUi()
             .addText("The direction is ")
             .addDropdown(getDirection, BBConsts.Direction_UI)
@@ -205,7 +194,7 @@ function registerGradient(name: string){
             .addText(".")
             .addInfoIcon("Displays the color in reverse.")
         .endCustomUi()
-    .register(name);
+    .register(name,LANGUAGE_BASE+"gradient");
 
     ConfigBuilder.registerModuleBlock<GradientModuleConfig>(name, function(block:any) {
         // Colors to fade between
@@ -263,22 +252,13 @@ function registerFade(name: string){
     const getLense = "lense";
     const getTime = "time";
 
-
+    // Fade $$ from $$ to $$ in $$ ms
     createBlocklyStyle(TB_COLOR_GOGGLES)
-        .withText("debug.Fade")
-        .withFieldDropdown(getLense, {
-            [LenseType.RIGHT]: "debug.the right",
-            [LenseType.LEFT]: "debug.the left",
-            [LenseType.BOTH]: "debug.both"
-        })
-        .withText("debug.lense(s) from")
+        .withFieldDropdown(getLense, generateLenseOptions("fade"))
         .withFieldCustomColor(getColorFrom)
-        .withText("debug.to")
         .withFieldCustomColor(getColorTo)
-        .withText("debug.for")
         .withTextfield(getTime, "1000")
-        .withText("debug.ms")
-    .register(name);
+    .register(name,LANGUAGE_BASE+"fade");
 
     ConfigBuilder.registerModuleBlock<FadeModuleConfig>(name, function(block:any) {
         // Colors to fade between
@@ -330,15 +310,9 @@ function registerColorOnlyLense(name: string){
     const getTime = "time";
     const getDirection = "direction";
 
-
+    // Color $$ lense(s) in $$
     createBlocklyStyle(TB_COLOR_GOGGLES)
-        .withText("debug.Play the animation")
-        .withFieldDropdown(getLense, {
-            [LenseType.RIGHT]: "debug.the right",
-            [LenseType.LEFT]: "debug.the left",
-            [LenseType.BOTH]: "debug.both"
-        })
-        .withText("debug.lense(s) in")
+        .withFieldDropdown(getLense, generateLenseOptions("onlylense", true))
         .withFieldCustomColor(getColor)
         .withCustomUi()
             .addText("Play the animation ")
@@ -354,7 +328,7 @@ function registerColorOnlyLense(name: string){
             .addText("ms to finish.")
             .addInfoIcon("How long the animation will play out in milliseconds.")
         .endCustomUi()
-    .register(name);
+    .register(name, LANGUAGE_BASE+"onlylense");
 
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
         const color: RGB = getRGBFromCode(block, getColor);
@@ -402,40 +376,17 @@ function registerColorBlock(name: string){
     const getDirection = "direction";
     const getStartIndex = "start";
 
-    // List with the dropdown-selection elements
-    const DropdownDecisions = [
-        ["2nd", "2"],
-        ["3rd", "3"],
-        ["4th", "4"],
-        ["5th", "5"],
-        ["6th", "6"],
-        ["7th", "7"],
-        ["8th", "8"],
-    ]
+    // Generates the dropdown-options
+    const nthOptions: OpenObject = {};
+    for(var x = 2; x <= 8; x++)
+        nthOptions[x] = LANGUAGE_BASE+"color.count."+x;
 
-
+    // Color every $$ led of $$ lense(s) with $$ in $$ ms
     createBlocklyStyle(TB_COLOR_GOGGLES)
-        .withText("debug.Color every")
-        .withFieldDropdown(getDropdownDesc, {
-            "2": "2nd",
-            "3": "3rd",
-            "4": "4th",
-            "5": "5th",
-            "6": "6th",
-            "7": "7th",
-            "8": "8th",
-        })
-        .withText("debug.led of")
-        .withFieldDropdown(getLense, {
-            [LenseType.RIGHT]: "debug.the right",
-            [LenseType.LEFT]: "debug.the left",
-            [LenseType.BOTH]: "debug.both"
-        })
-        .withText("debug.lense(s) with")
+        .withFieldDropdown(getDropdownDesc, nthOptions)
+        .withFieldDropdown(getLense, generateLenseOptions("color"))
         .withFieldCustomColor(getColor)
-        .withText("debug.in")
         .withTextfield(getTime, "1000")
-        .withText("debug.ms")
         .withCustomUi()
             .addText("Play the animation ")
             .addDropdown(getDirection, BBConsts.Direction_UI)
@@ -448,7 +399,7 @@ function registerColorBlock(name: string){
             .hasMin(0)
             .andThen()
         .endCustomUi()
-    .register(name)
+    .register(name, LANGUAGE_BASE+"color")
 
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
         const color: RGB = getRGBFromCode(block, getColor);

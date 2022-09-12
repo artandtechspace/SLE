@@ -133,6 +133,45 @@ async function setupLanguageManager(langFileName: string){
     cleanHTMLPage();
 }
 
+// Simply takes in a key and looks it up inside the languge file
+function getRawKey(key: string) : string{
+    // Checks if there is no language file loaded
+    if(loadedLanguage === undefined)
+        return handleProgrammingError(`got a language lookup call before the language is actually loaded: (${key})`);
+
+    // Gets the value
+    var val = loadedLanguage[key];
+
+    // Checks for debugging-language key
+    if(IS_DEBUGGING && key.startsWith("debug."))
+        val = key.substring("debug.".length);
+
+    // Checks if the key exists
+    if(val === undefined)
+        return handleProgrammingError("Failed to find language key '"+key+"'.");
+
+    return val;
+}
+
+// Takes in a key to get from the languge file and splits the result into the required amount of segments
+// by using $$ as a segment-seperator
+function getSegmentedTextFromLanguage(key: string, segmentAmount: number){
+    // Lookups the raw element
+    var val = getRawKey(key);
+
+    // Splits it into segments
+    var splitted = val.split("$$");
+
+    // Checks length
+    if(splitted.length > segmentAmount)
+        splitted.length = segmentAmount;
+
+    while(splitted.length < segmentAmount)
+        splitted.push("");
+
+    return splitted;
+}
+
 /**
  * Returns the language-value of the current language that is corresponding to the current key and optionally replaces variable-values with the given variables if they are given.
  * 
@@ -141,20 +180,8 @@ async function setupLanguageManager(langFileName: string){
  * !Node! this can and should only be called after the inital setup of the language-manager
  */
 function getFromLanguage(key: string, vars?: LVarSet) : string{
-    // Checks if there is no language file loaded
-    if(loadedLanguage === undefined)
-        return handleProgrammingError(`Get a call to Language.get('${key}') before the language is actually loaded`);
-    
-        // Gets the value
-    var val = loadedLanguage[key];
-    
-    // Checks for debugging-language key
-    if(IS_DEBUGGING && key.startsWith("debug."))
-        val = key.substring("debug.".length);
-
-    // Checks if the key exists
-    if(val === undefined)
-        return handleProgrammingError("Failed to find language key '"+key+"'.");
+    // Lookups the raw element
+    var val = getRawKey(key);
 
     // If no variables are given
     if(vars === undefined)
@@ -176,5 +203,6 @@ function getFromLanguage(key: string, vars?: LVarSet) : string{
 
 export const Language = {
     get: getFromLanguage,
+    getSegmented: getSegmentedTextFromLanguage,
     setup: setupLanguageManager
 }

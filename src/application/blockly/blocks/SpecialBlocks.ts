@@ -1,3 +1,5 @@
+import { Language } from "../../language/LanguageManager.js";
+
 const Blockly = require("blockly");
 
 /**
@@ -15,7 +17,7 @@ function registerSetup(name: string){
     Blockly.Blocks[name] = {
         init: function() {
           this.appendDummyInput()
-              .appendField("Run once");
+              .appendField(Language.get("ui.blockly.block.special.setup"));
           this.setNextStatement(true, null);
           this.setDeletable(false);
           this.setEditable(false);
@@ -29,7 +31,7 @@ function registerLoop(name: string){
     Blockly.Blocks[name] = {
         init: function() {
           this.appendDummyInput()
-              .appendField("Run continuesly");
+              .appendField(Language.get("ui.blockly.block.special.loop"));
           this.setNextStatement(true, null);
           this.setDeletable(false);
           this.setEditable(false);

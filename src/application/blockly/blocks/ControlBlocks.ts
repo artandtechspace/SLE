@@ -14,6 +14,7 @@ const Blockly = require("blockly");
  * Registers all blocks that are used for general logic like delay or repeat functions
  */
 
+ const LANGUAGE_BASE = "ui.blockly.block.control.";
 
 export default function registerControlBlocks(){
     registerLoop("sle_control_loop");
@@ -26,10 +27,10 @@ export default function registerControlBlocks(){
 function registerComment(name: string){
     const getText = "text";
 
+    // // Im am comment
     createBlocklyStyle(TB_COLOR_CONTROL)
-        .withText("debug.//")
-        .withTextfield(getText, Language.get("debug.Im am comment!"))
-    .register(name);
+        .withTextfield(getText, Language.get("ui.blockly.block.control.comment.text"))
+    .register(name, LANGUAGE_BASE+"comment");
 
     ConfigBuilder.registerModuleBlock<CommentModuleConfig>(name, function(block:any) {
         return {
@@ -48,12 +49,16 @@ function registerLoop(name: string){
     const getRepeats = "led";
     const getSubcode = "subcode";
 
+    // Gets the lang
+    var [lrepeats, ltimes] = Language.getSegmented(LANGUAGE_BASE+"repeat", 2);
+
+    // Repeat x times
     Blockly.Blocks[name] = {
         init: function() {
             this.appendDummyInput()
-                .appendField("Repeat")
-                .appendField(new Blockly.FieldNumber(2, 2), getRepeats)
-                .appendField("times");
+                .appendField(lrepeats)
+                .appendField(new Blockly.FieldTextInput("2"), getRepeats)
+                .appendField(ltimes);
             this.appendStatementInput(getSubcode)
                 .setCheck(null);
             this.setInputsInline(false);
@@ -69,12 +74,12 @@ function registerLoop(name: string){
         var submodules: ModBlockExport<any>[] = ConfigBuilder.generateModuleExports(block.getInputTargetBlock(getSubcode));
 
         // Gets the amount of loops
-        var loopAmt: Min<2> = block.getFieldValue(getRepeats);
+        const repeatAmt: Min<2> = getParametricNumberMin(block,getRepeats, 2, false);
 
         return {
             module: LoopModule,
             config: {
-                repeats: loopAmt,
+                repeats: repeatAmt,
                 submodules
             },
             block
@@ -87,11 +92,10 @@ function registerDelay(name: string){
 
     const getTime = "time";
 
+    // Wait $$ ms
     createBlocklyStyle(TB_COLOR_CONTROL)
-        .withText("debug.Wait")
         .withTextfield(getTime, "500")
-        .withText("debug.ms")
-    .register(name);
+    .register(name,LANGUAGE_BASE+"delay");
 
     ConfigBuilder.registerModuleBlock<DelayModuleConfig>(name, function(block:any) {
         const waitTime = getParametricNumberMin(block,getTime, 10, false);

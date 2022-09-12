@@ -1,10 +1,8 @@
 import { ConfigBuilder } from "../../ConfigBuilder.js";
 import { GradientModule, GradientModuleConfig } from "../../defaultModules/animations/GradientModule.js";
 import { RainbowModule, RainbowModuleConfig } from "../../defaultModules/animations/RainbowModule.js";
-import { HSV, Min, PercentageNumber, PositiveNumber, Range } from "../../types/Types.js";
+import { HSV, Min, PositiveNumber, Range } from "../../types/Types.js";
 import { getNumberFromSettingsUI } from "../util/BlocklyBlockUtils.js";
-import FieldBrightness from "../fields/FieldBrightness.js";
-import FieldCustomColor from "../fields/FieldCustomColor.js";
 import { TB_COLOR_ANIMATIONS } from "../util/Toolbox.js";
 import { FadeModule, FadeModuleConfig } from "../../defaultModules/animations/FadeModule.js";
 import { SystemParams } from "../../parameterCalculator/system/internal/ParameterSystemModel.js";
@@ -16,6 +14,8 @@ const Blockly = require("blockly");
 /**
  * Registers all blockly-blocks that are used for animations
  */
+
+const LANGUAGE_BASE = "ui.blockly.block.animation.";
 
 export default function registerAnimationBlocks(){
     registerGradientBlock('sle_animation_gradient');
@@ -37,12 +37,10 @@ function registerFadeBlock(name: string){
     const getColorFrom = "clrFrom";
     const getColorTo = "clrTo";
 
+    // Fade between $$ and $$
     createBlocklyStyle(TB_COLOR_ANIMATIONS)
-        .withText("Fade between")
         .withFieldCustomColor(getColorFrom, .3, .8, 1)
-        .withText("and")
         .withFieldCustomColor(getColorTo, .75, .8, 1)
-        .withText("")
         .withCustomUi()
             .addText("Fade for")
             .addNumericField(getAnimationLength, 5000).hasMin(0).andThen()
@@ -69,7 +67,7 @@ function registerFadeBlock(name: string){
             .addText("ms from the previous led.")
             .addInfoIcon("Use this to create flow through the stripe.")
         .endCustomUi()
-    .register(name);
+    .register(name, LANGUAGE_BASE+"fade");
 
     ConfigBuilder.registerModuleBlock<FadeModuleConfig>(name, function(block:any) { 
         var from: HSV = block.getFieldValue(getColorFrom);
@@ -110,8 +108,8 @@ function registerRainbowAutocalcBlock(name: string){
     const getRepeatLength = "repLength";
     const getBrightness = "bright";
 
+    // Rainbow with a brightness of $$
     createBlocklyStyle(TB_COLOR_ANIMATIONS)
-        .withText("debug.Rainbow with a brightness of")
         .withFieldBrightness(getBrightness)
         .withCustomUi()
             .addText("The Animation starts from led")
@@ -133,7 +131,7 @@ function registerRainbowAutocalcBlock(name: string){
             .addText("ms for the rainbow to conclude one cycle.")
             .addInfoIcon("How long it takes for the rainbow to cycle around once.")
         .endCustomUi()
-    .register(name);
+    .register(name, LANGUAGE_BASE+"rainbow_calc");
 
     ConfigBuilder.registerModuleBlock<RainbowModuleConfig>(name, function(block:any) { 
         var ledFrom: PositiveNumber = getNumberFromSettingsUI(block, getLedFrom) as PositiveNumber;
@@ -170,10 +168,9 @@ function registerRainbowBlock(name: string){
     const getRepeatLength = "repLength";
     const getBrightness = "bright";
 
+    // Rainbow with a brightness of $$ (Led-offset)
     createBlocklyStyle(TB_COLOR_ANIMATIONS)
-        .withText("debug.Rainbow with a brightness of")
         .withFieldBrightness(getBrightness)
-        .withText("debug.(Led-offset)")
         .withCustomUi()
             .addText("Create a Rainbow for")
             .addNumericField(getAnimationLength,5000).hasMin(100).andThen()
@@ -200,7 +197,7 @@ function registerRainbowBlock(name: string){
             .addText("ms for the rainbow to conclude one cycle.")
             .addInfoIcon("How long it takes for the rainbow to cycle around once.")
         .endCustomUi()
-    .register(name);
+    .register(name, LANGUAGE_BASE+"rainbow");
 
     ConfigBuilder.registerModuleBlock<RainbowModuleConfig>(name, function(block:any) { 
         var ledFrom: PositiveNumber = getNumberFromSettingsUI(block, getLedFrom) as PositiveNumber;
@@ -243,14 +240,16 @@ function registerGradientBlock(name: string){
     const getColorFrom = "colorfrom";
     const getColorTo = "colorto";
 
+    // Gradient from $$ to $$ with mode $$
     createBlocklyStyle(TB_COLOR_ANIMATIONS)
-        .withText("debug.Gradient from")
         .withFieldCustomColor(getColorFrom)
-        .withText("debug.to")
         .withFieldCustomColor(getColorTo, 0.1, 1, 1)
-        .withText("debug.with mode")
-        // TODO
-        .withField(getMode, new Blockly.FieldDropdown([["normal",MODUS_NORMAL], ["Reverse-Color",MODUS_REVERSE_COLOR], ["Reverse-Direction",MODUS_REVERSE_DIRECTION], ["Reverse (Color and Direction)",MODUS_BOTH]]))
+        .withFieldDropdown(getMode, {
+            [MODUS_NORMAL]:             LANGUAGE_BASE+"gradient.mode.normal",
+            [MODUS_REVERSE_COLOR]:      LANGUAGE_BASE+"gradient.mode.reverse_color",
+            [MODUS_REVERSE_DIRECTION]:  LANGUAGE_BASE+"gradient.mode.reverse_direction",
+            [MODUS_BOTH]:               LANGUAGE_BASE+"gradient.mode.reverse_both",
+        })
         .withCustomUi()
             .addText("Gradient from led")
             .addNumericField(getLedFrom,0).hasMin(0).andThen()
@@ -265,7 +264,7 @@ function registerGradientBlock(name: string){
             .addText("ms between turning on leds.")
             .addInfoIcon("This waits a given amount of time before turning the next led on.")
         .endCustomUi()
-    .register(name);
+    .register(name, LANGUAGE_BASE+"gradient");
 
     ConfigBuilder.registerModuleBlock<GradientModuleConfig>(name, function(block:any) { 
         var start: PositiveNumber = getNumberFromSettingsUI(block,getLedFrom) as PositiveNumber;
