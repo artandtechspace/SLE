@@ -4,6 +4,9 @@ import { ModBlockExport, ConfigBuilder } from "../../ConfigBuilder.js";
 import { Min, PositiveNumber } from "../../types/Types.js";
 import { CommentModule, CommentModuleConfig } from "../../defaultModules/CommentModule.js";
 import { TB_COLOR_CONTROL } from "../util/Toolbox.js";
+import { createBlocklyStyle } from "../util/BlocklyStyleBuilder.js";
+import { Language } from "../../language/LanguageManager.js";
+import { getParametricNumberMin } from "../util/BlocklyBlockUtils.js";
 
 const Blockly = require("blockly");
 
@@ -21,24 +24,18 @@ export default function registerControlBlocks(){
 //#region BlockRegister
 
 function registerComment(name: string){
-    Blockly.Blocks[name] = {
-        init: function() {
-          this.appendDummyInput()
-              .appendField("//")
-              .appendField(new Blockly.FieldTextInput("Im a comment in the code."), "text");
-            this.setInputsInline(false);
-            this.setPreviousStatement(true, null);
-            this.setNextStatement(true, null);
-            this.setColour(90);
-            this.setInputsInline(true);
-        }
-    };
+    const getText = "text";
+
+    createBlocklyStyle(TB_COLOR_CONTROL)
+        .withText("debug.//")
+        .withTextfield(getText, Language.get("debug.Im am comment!"))
+    .register(name);
 
     ConfigBuilder.registerModuleBlock<CommentModuleConfig>(name, function(block:any) {
         return {
             module: CommentModule,
             config: {
-                text: block.getFieldValue("text")
+                text: block.getFieldValue(getText)
             },
             block
         }
@@ -90,28 +87,20 @@ function registerDelay(name: string){
 
     const getTime = "time";
 
-    Blockly.Blocks[name] = {
-        init: function() {
-            this.appendDummyInput()
-                .appendField("Wait")
-                .appendField(new Blockly.FieldNumber(500, 5), getTime)
-                .appendField("ms");
-            this.setInputsInline(false);
-            this.setPreviousStatement(true, null);
-            this.setNextStatement(true, null);
-            this.setColour(TB_COLOR_CONTROL);
-            this.setInputsInline(true);
-        }
-    };
+    createBlocklyStyle(TB_COLOR_CONTROL)
+        .withText("debug.Wait")
+        .withTextfield(getTime, "500")
+        .withText("debug.ms")
+    .register(name);
 
     ConfigBuilder.registerModuleBlock<DelayModuleConfig>(name, function(block:any) {
-        var waitTime = block.getFieldValue(getTime);
+        const waitTime = getParametricNumberMin(block,getTime, 10, false);
 
         // Assembles the config
         return {
             module: DelayModule,
             config: {
-                delay: waitTime as PositiveNumber
+                delay: waitTime as any as PositiveNumber
             },
             block
         }

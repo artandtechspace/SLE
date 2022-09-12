@@ -1,5 +1,6 @@
 import { LanguageLoadingError } from "../errorSystem/Errors.js";
 import { handleProgrammingError } from "../errorSystem/ProgrammingErrorSystem.js";
+import { IS_DEBUGGING } from "../Preset.js";
 import { SM } from "../ui/utils/UiUtils.js";
 import { isObjectEV, isStringEV } from "../utils/ElementValidation.js";
 
@@ -144,8 +145,12 @@ function getFromLanguage(key: string, vars?: LVarSet) : string{
     if(loadedLanguage === undefined)
         return handleProgrammingError(`Get a call to Language.get('${key}') before the language is actually loaded`);
     
-    // Gets the value
+        // Gets the value
     var val = loadedLanguage[key];
+    
+    // Checks for debugging-language key
+    if(IS_DEBUGGING && key.startsWith("debug."))
+        val = key.substring("debug.".length);
 
     // Checks if the key exists
     if(val === undefined)

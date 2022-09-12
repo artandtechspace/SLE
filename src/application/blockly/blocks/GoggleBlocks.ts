@@ -4,13 +4,13 @@ import { getNumberFromSettingsUI, getParametricNumberMin, getRGBFromCode, getVal
 import FieldCustomColor from "../fields/FieldCustomColor.js";
 import { TB_COLOR_GOGGLES } from "../util/Toolbox.js";
 import { FadeModule, FadeModuleConfig } from "../../defaultModules/animations/FadeModule.js";
-import { createUI } from "../settingsui/SettingsUI.js";
 import { getEnvironment } from "../../SharedObjects.js";
 import { ColorModule, ColorModuleConfig, StepMode } from "../../defaultModules/ColorModule.js";
 import { AnimationDirection, BBConsts } from "../util/BlocklyBlockConstants.js";
 import { GradientModule, GradientModuleConfig } from "../../defaultModules/animations/GradientModule.js";
 import { RainbowModule, RainbowModuleConfig } from "../../defaultModules/animations/RainbowModule.js";
 import FieldBrightness from "../fields/FieldBrightness.js";
+import { createBlocklyStyle } from "../util/BlocklyStyleBuilder.js";
 
 const Blockly = require("blockly");
 
@@ -67,20 +67,17 @@ function registerTurnOff(name: string){
     // Names for the variables
     const getLense = "lense";
 
-    Blockly.Blocks[name] = {
-        init: function() {
-            this.appendDummyInput()
-                .appendField("Turn off")
-                .appendField(new Blockly.FieldDropdown(LenseTypeBlocklyArray), getLense)
-                .appendField("lense(s)")
-            this.setInputsInline(true);
-            this.setPreviousStatement(true, null);
-            this.setNextStatement(true, null);
-            this.setColour(TB_COLOR_GOGGLES);
-        }
-      };
+    createBlocklyStyle(TB_COLOR_GOGGLES)
+        .withText("debug.Turn off")
+        .withFieldDropdown(getLense, {
+            [LenseType.RIGHT]: "debug.the right",
+            [LenseType.LEFT]: "debug.the left",
+            [LenseType.BOTH]: "debug.both"
+        })
+        .withText("debug.lense(s)")
+    .register(name);
 
-      ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {        
+    ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {        
         // Which lense
         const lense: LenseType = block.getFieldValue(getLense);
 
@@ -112,31 +109,29 @@ function registerRainbow(name: string){
     const getDirection = "direction";
     const getBrightness = "brightness";
 
-    Blockly.Blocks[name] = {
-        init: function() {
-            this.appendDummyInput()
-                .appendField("Rainbow over")
-                .appendField(new Blockly.FieldDropdown(LenseTypeBlocklyArray), getLense)
-                .appendField("lense(s) with a brightness of")
-                .appendField(new FieldBrightness(),getBrightness)
-                .appendField("in")
-                .appendField(new Blockly.FieldTextInput("1000"), getTime)
-                .appendField("ms")
-            this.setInputsInline(true);
-            this.setPreviousStatement(true, null);
-            this.setNextStatement(true, null);
-            this.setColour(TB_COLOR_GOGGLES);
 
-            createUI()
-                .addText("The direction is ")
-                .addDropdown(getDirection, BBConsts.Direction_UI)
-                .addText(".")
-                .addInfoIcon("Plays the animation eigther forward or in reverse.")
-            .buildTo(this);
-        }
-      };
+    createBlocklyStyle(TB_COLOR_GOGGLES)
+        .withText("debug.Rainbow over")
+        .withFieldDropdown(getLense, {
+            [LenseType.RIGHT]: "debug.the right",
+            [LenseType.LEFT]: "debug.the left",
+            [LenseType.BOTH]: "debug.both"
+        })
+        .withText("debug.lense(s) with a brightness of")
+        .withFieldBrightness(getBrightness)
+        .withText("debug.in")
+        .withTextfield(getTime, "1000")
+        .withText("ms")
+        .withCustomUi()
+            .addText("The direction is ")
+            .addDropdown(getDirection, BBConsts.Direction_UI)
+            .addText(".")
+            .addInfoIcon("Plays the animation eigther forward or in reverse.")
+        .endCustomUi()
+    .register(name);
 
-      ConfigBuilder.registerModuleBlock<RainbowModuleConfig>(name, function(block:any) {
+   
+    ConfigBuilder.registerModuleBlock<RainbowModuleConfig>(name, function(block:any) {
         var brightness: number = block.getFieldValue(getBrightness);
         
         // Which lense
@@ -184,41 +179,35 @@ function registerGradient(name: string){
     const getDirection = "direction";
     const getClrDir = "clrdir";
 
-    Blockly.Blocks[name] = {
-        init: function() {
-            this.appendDummyInput()
-                .appendField("Gradient over")
-                .appendField(new Blockly.FieldDropdown(LenseTypeBlocklyArray), getLense)
-                .appendField("lense(s) from")
-                .appendField(new FieldCustomColor(), getColorFrom)
-                .appendField("to")
-                .appendField(new FieldCustomColor({ h: .4, s: 1, v: 1 }), getColorTo)
-                .appendField("in")
-                .appendField(new Blockly.FieldTextInput("1000"), getTime)
-                .appendField("ms")
-            this.setInputsInline(true);
-            this.setPreviousStatement(true, null);
-            this.setNextStatement(true, null);
-            this.setColour(TB_COLOR_GOGGLES);
 
-            createUI()
-                .addText("The direction is ")
-                .addDropdown(getDirection, BBConsts.Direction_UI)
-                .addText(".")
-                .addInfoIcon("Plays the animation eigther forward or in reverse.")
-                .breakLine()
+    createBlocklyStyle(TB_COLOR_GOGGLES)
+        .withText("debug.Gradient over")
+        .withFieldDropdown(getLense, {
+            [LenseType.RIGHT]: "debug.the right",
+            [LenseType.LEFT]: "debug.the left",
+            [LenseType.BOTH]: "debug.both"
+        })
+        .withFieldCustomColor(getColorFrom)
+        .withText("debug.to")
+        .withFieldCustomColor(getColorTo, .4, 1, 1)
+        .withText("debug.in")
+        .withTextfield(getTime, "1000")
+        .withText("debug.ms")
+        .withCustomUi()
+            .addText("The direction is ")
+            .addDropdown(getDirection, BBConsts.Direction_UI)
+            .addText(".")
+            .addInfoIcon("Plays the animation eigther forward or in reverse.")
+            .breakLine()
 
-                .addText("The color is ")
-                .addDropdown(getClrDir, BBConsts.Direction_UI)
-                .addText(".")
-                .addInfoIcon("Displays the color in reverse.")
-                .breakLine()
+            .addText("The color is ")
+            .addDropdown(getClrDir, BBConsts.Direction_UI)
+            .addText(".")
+            .addInfoIcon("Displays the color in reverse.")
+        .endCustomUi()
+    .register(name);
 
-            .buildTo(this);
-        }
-      };
-
-      ConfigBuilder.registerModuleBlock<GradientModuleConfig>(name, function(block:any) {
+    ConfigBuilder.registerModuleBlock<GradientModuleConfig>(name, function(block:any) {
         // Colors to fade between
         var clrFrom: HSV = block.getFieldValue(getColorFrom);
         var clrTo: HSV = block.getFieldValue(getColorTo);
@@ -274,26 +263,24 @@ function registerFade(name: string){
     const getLense = "lense";
     const getTime = "time";
 
-    Blockly.Blocks[name] = {
-        init: function() {
-            this.appendDummyInput()
-                .appendField("Fade")
-                .appendField(new Blockly.FieldDropdown(LenseTypeBlocklyArray), getLense)
-                .appendField("lense(s) from")
-                .appendField(new FieldCustomColor(), getColorFrom)
-                .appendField("to")
-                .appendField(new FieldCustomColor({ h: .4, s: 1, v: 1 }), getColorTo)
-                .appendField("for")
-                .appendField(new Blockly.FieldTextInput("1000"), getTime)
-                .appendField("ms")
-            this.setInputsInline(true);
-            this.setPreviousStatement(true, null);
-            this.setNextStatement(true, null);
-            this.setColour(TB_COLOR_GOGGLES);
-        }
-      };
 
-      ConfigBuilder.registerModuleBlock<FadeModuleConfig>(name, function(block:any) {
+    createBlocklyStyle(TB_COLOR_GOGGLES)
+        .withText("debug.Fade")
+        .withFieldDropdown(getLense, {
+            [LenseType.RIGHT]: "debug.the right",
+            [LenseType.LEFT]: "debug.the left",
+            [LenseType.BOTH]: "debug.both"
+        })
+        .withText("debug.lense(s) from")
+        .withFieldCustomColor(getColorFrom)
+        .withText("debug.to")
+        .withFieldCustomColor(getColorTo)
+        .withText("debug.for")
+        .withTextfield(getTime, "1000")
+        .withText("debug.ms")
+    .register(name);
+
+    ConfigBuilder.registerModuleBlock<FadeModuleConfig>(name, function(block:any) {
         // Colors to fade between
         var clrFrom: HSV = block.getFieldValue(getColorFrom);
         var clrTo: HSV = block.getFieldValue(getColorTo);
@@ -343,36 +330,33 @@ function registerColorOnlyLense(name: string){
     const getTime = "time";
     const getDirection = "direction";
 
-    Blockly.Blocks[name] = {
-        init: function() {
-            this.appendDummyInput()
-                .appendField("Color")
-                .appendField(new Blockly.FieldDropdown(LenseTypeWithParallelBlocklyArray), getLense)
-                .appendField("lense(s) in")
-                .appendField(new FieldCustomColor(), getColor)
-            this.setInputsInline(true);
-            this.setPreviousStatement(true, null);
-            this.setNextStatement(true, null);
-            this.setColour(TB_COLOR_GOGGLES);
-            
-            createUI()
-                .addText("Play the animation ")
-                .addDropdown(getDirection, BBConsts.Direction_UI)
-                .addText(".")
-                .addInfoIcon("Plays the animation eigther forward or in reverse.")
-                .breakLine()
 
-                .addText("The animation takes")
-                .addNumericField(getTime, 0)
-                .hasMin(0)
-                .andThen()
-                .addText("ms to finish.")
-                .addInfoIcon("How long the animation will play out in milliseconds.")
-            .buildTo(this);
-        }
-      };
+    createBlocklyStyle(TB_COLOR_GOGGLES)
+        .withText("debug.Play the animation")
+        .withFieldDropdown(getLense, {
+            [LenseType.RIGHT]: "debug.the right",
+            [LenseType.LEFT]: "debug.the left",
+            [LenseType.BOTH]: "debug.both"
+        })
+        .withText("debug.lense(s) in")
+        .withFieldCustomColor(getColor)
+        .withCustomUi()
+            .addText("Play the animation ")
+            .addDropdown(getDirection, BBConsts.Direction_UI)
+            .addText(".")
+            .addInfoIcon("Plays the animation eigther forward or in reverse.")
+            .breakLine()
 
-      ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
+            .addText("The animation takes")
+            .addNumericField(getTime, 0)
+            .hasMin(0)
+            .andThen()
+            .addText("ms to finish.")
+            .addInfoIcon("How long the animation will play out in milliseconds.")
+        .endCustomUi()
+    .register(name);
+
+    ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
         const color: RGB = getRGBFromCode(block, getColor);
         const lense: LenseType = block.getFieldValue(getLense);
         const isReversed: boolean = getValueFromSettingsUI<string>(block, getDirection) === AnimationDirection.REVERSE;
@@ -429,39 +413,44 @@ function registerColorBlock(name: string){
         ["8th", "8"],
     ]
 
-    Blockly.Blocks[name] = {
-        init: function() {
-            this.appendDummyInput()
-                .appendField("Color every")
-                .appendField(new Blockly.FieldDropdown(DropdownDecisions), getDropdownDesc)
-                .appendField("led of")
-                .appendField(new Blockly.FieldDropdown(LenseTypeBlocklyArray), getLense)
-                .appendField("lense(s) with")
-                .appendField(new FieldCustomColor(), getColor)
-                .appendField("in")
-                .appendField(new Blockly.FieldTextInput("1000"), getTime)
-                .appendField("ms");
-            this.setInputsInline(true);
-            this.setPreviousStatement(true, null);
-            this.setNextStatement(true, null);
-            this.setColour(TB_COLOR_GOGGLES);
-            
-            createUI()
-                .addText("Play the animation ")
-                .addDropdown(getDirection, BBConsts.Direction_UI)
-                .addText(".")
-                .addInfoIcon("Plays the animation eigther forward or in reverse.")
-                .breakLine()
 
-                .addText("Start from led ")
-                .addNumericField(getStartIndex, 0)
-                .hasMin(0)
-                .andThen()
-            .buildTo(this);
-        }
-      };
+    createBlocklyStyle(TB_COLOR_GOGGLES)
+        .withText("debug.Color every")
+        .withFieldDropdown(getDropdownDesc, {
+            "2": "2nd",
+            "3": "3rd",
+            "4": "4th",
+            "5": "5th",
+            "6": "6th",
+            "7": "7th",
+            "8": "8th",
+        })
+        .withText("debug.led of")
+        .withFieldDropdown(getLense, {
+            [LenseType.RIGHT]: "debug.the right",
+            [LenseType.LEFT]: "debug.the left",
+            [LenseType.BOTH]: "debug.both"
+        })
+        .withText("debug.lense(s) with")
+        .withFieldCustomColor(getColor)
+        .withText("debug.in")
+        .withTextfield(getTime, "1000")
+        .withText("debug.ms")
+        .withCustomUi()
+            .addText("Play the animation ")
+            .addDropdown(getDirection, BBConsts.Direction_UI)
+            .addText(".")
+            .addInfoIcon("Plays the animation eigther forward or in reverse.")
+            .breakLine()
 
-      ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
+            .addText("Start from led ")
+            .addNumericField(getStartIndex, 0)
+            .hasMin(0)
+            .andThen()
+        .endCustomUi()
+    .register(name)
+
+    ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
         const color: RGB = getRGBFromCode(block, getColor);
         const lense: LenseType = block.getFieldValue(getLense);
         const isReversed: boolean = getValueFromSettingsUI<string>(block, getDirection) === AnimationDirection.REVERSE;

@@ -82,8 +82,5 @@ export class SettingsUI{
                 }
     }
 }
-
-// Function to create a settings-ui-builder on an block
-export const createUI = ()=>new SettingsUIBuilder(Manager.getChangeCallback());
 // SettingsUi-Manager
 export const Manager = new SettingsUIManager();

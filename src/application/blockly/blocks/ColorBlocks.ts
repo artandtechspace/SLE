@@ -6,9 +6,9 @@ import { getNumberFromSettingsUI, getParametricNumberMin, getRGBFromCode, getVal
 import FieldCustomColor from "../fields/FieldCustomColor.js";
 import { TB_COLOR_COLOR } from "../util/Toolbox.js";
 import { getEnvironment } from "../../SharedObjects.js";
-import { createUI } from "../settingsui/SettingsUI.js";
 import { AnimationDirection, BBConsts } from "../util/BlocklyBlockConstants.js";
 import { SystemParams } from "../../parameterCalculator/system/internal/ParameterSystemModel.js";
+import { createBlocklyStyle } from "../util/BlocklyStyleBuilder.js";
 
 const Blockly = require("blockly");
 
@@ -27,17 +27,9 @@ export default function registerColorBlocks(){
 
 // Turn off all leds-block
 function registerTurnoff(name: string){
-    Blockly.Blocks[name] = {
-        init: function() {
-            this.appendDummyInput()
-                .appendField("Turn off all leds");
-
-            this.setColour(TB_COLOR_COLOR);
-            this.setPreviousStatement(true, null);
-            this.setNextStatement(true, null);
-            this.setInputsInline(true);
-        }
-    };
+    createBlocklyStyle(TB_COLOR_COLOR)
+        .withText("debug.Turn off all leds")
+    .register(name);
 
 
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {                
@@ -65,37 +57,28 @@ function registerStripe(name: string){
     const getDirection = "direction";
     const getTime = "time";
 
-    Blockly.Blocks[name] = {
-        init: function() {
-            this.appendDummyInput()
-                .appendField("Color leds")
-                .appendField(new Blockly.FieldTextInput("0"), getLedStart)
-                .appendField("to")
-                .appendField(new Blockly.FieldTextInput(SystemParams.LED_AMOUNT), getLedEnd)
-                .appendField("in")
-                .appendField(new FieldCustomColor(), getColor)
-
-            this.setColour(TB_COLOR_COLOR);
-            this.setPreviousStatement(true, null);
-            this.setNextStatement(true, null);
-            this.setInputsInline(true);
-
-            createUI()
-                .addText("Play the animation ")
-                .addDropdown(getDirection, BBConsts.Direction_UI)
-                .addText(".")
-                .addInfoIcon("Plays the animation eigther forward or in reverse.")
-                .breakLine()
-                
-                .addText("The animation takes")
-                .addNumericField(getTime, 0)
-                .hasMin(0)
-                .andThen()
-                .addText("ms to finish.")
-                .addInfoIcon("How long the animation will play out in milliseconds.")
-            .buildTo(this);
-        }
-    };
+    createBlocklyStyle(TB_COLOR_COLOR)
+        .withText("debug.Color leds")
+        .withTextfield(getLedStart, "0")
+        .withText("debug.to")
+        .withTextfield(getLedEnd, SystemParams.LED_AMOUNT)
+        .withText("debug.in")
+        .withFieldCustomColor(getColor)
+        .withCustomUi()
+            .addText("Play the animation ")
+            .addDropdown(getDirection, BBConsts.Direction_UI)
+            .addText(".")
+            .addInfoIcon("Plays the animation eigther forward or in reverse.")
+            .breakLine()
+            
+            .addText("The animation takes")
+            .addNumericField(getTime, 0)
+            .hasMin(0)
+            .andThen()
+            .addText("ms to finish.")
+            .addInfoIcon("How long the animation will play out in milliseconds.")
+        .endCustomUi()
+    .register(name);
 
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
         const pos1: PositiveNumber = getParametricNumberMin(block, getLedStart, 0, false);
@@ -140,19 +123,12 @@ function registerSingleLed(name: string){
     const getLed = "led";
     const getColor = "color";
 
-    Blockly.Blocks[name] = {
-        init: function() {
-            this.appendDummyInput()
-                .appendField("Color led")
-                .appendField(new Blockly.FieldTextInput("0"), getLed)
-                .appendField("in")
-                .appendField(new FieldCustomColor(), getColor);
-            this.setColour(TB_COLOR_COLOR);
-            this.setPreviousStatement(true, null);
-            this.setNextStatement(true, null);
-            this.setInputsInline(true);
-        }
-    };
+    createBlocklyStyle(TB_COLOR_COLOR)
+        .withText("debug.Color led")
+        .withTextfield(getLed, "0")
+        .withText("debug.in")
+        .withFieldCustomColor(getColor)
+    .register(name);
 
     ConfigBuilder.registerModuleBlock<ColorModuleConfig>(name, function(block:any) {
         // Start

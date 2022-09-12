@@ -7,25 +7,25 @@ import { InfoIconElement } from "./fields/InfoIconElement.js";
 import { LineSeperatorElement } from "./fields/LineSeperatorElement.js";
 import { NumericFieldBuilder } from "./fields/NumericElement.js";
 import { TextElement } from "./fields/TextElement.js";
-import { SettingsUI } from "./SettingsUI.js";
+import { Manager, SettingsUI } from "./SettingsUI.js";
 
 // Line-type
 type Line = (Element|ElementBuilderBase<any>)[];
 
-export class SettingsUIBuilder{
+export class SettingsUIBuilder<PreviousElement>{
     // List with all element that got added already
     private lines: Line[] = [];
     private currentLine: Line = [];
 
-    // Change-callback handler
-    private changeCb: ()=>void;
+    // TODO
+    private buildBackTo: (x: (block: any)=>void) => PreviousElement;
 
-    constructor(changeCb: ()=>void){
-        this.changeCb=changeCb;
+    constructor(buildBackTo: (x: (block: any)=>void) => PreviousElement){
+        this.buildBackTo = buildBackTo;
     }
 
     // Adds a text-element to the ui
-    addText(text: string) : SettingsUIBuilder{
+    addText(text: string){
         this.currentLine.push(new TextElement(text));
         return this;
     }
@@ -75,9 +75,8 @@ export class SettingsUIBuilder{
         return this;
     }
 
-    // Generates and builds the finished-ui, then appends it to the supplied block.
-    buildTo(block: any){
-
+    // Event: When the gui shall be generated
+    private onGenerate(block: any, changeEvtHandler: ()=>void){
         // Ensures all elements have a line
         if(this.currentLine.length > 0)
             this.breakLine();
@@ -88,7 +87,7 @@ export class SettingsUIBuilder{
         })
 
         // Appends the change-cb to every element and executes the init-event
-        resolvedLines.forEach(line=>line.forEach(elm=>elm.init(this.changeCb.bind(this))));
+        resolvedLines.forEach(line=>line.forEach(elm=>elm.init(changeEvtHandler.bind(this))));
         // Creates the ui and appends it to the block
         var setui = block.settingsui = new SettingsUI(resolvedLines);
 
@@ -97,5 +96,14 @@ export class SettingsUIBuilder{
         // If the setui.deserialize-function throws an error, it will be catched by the general
         // deserialize-logic inside the ErrorSystem.importFromString with the blockly-serializsation logic
         block.loadExtraState = (obj: OpenObject)=>setui.deserialize(obj);
+    }
+
+    // Generates and builds the finished-ui, then appends it to the supplied block.
+    endCustomUi(){
+        // Gets the generator-callback
+        const handler = this.onGenerate.bind(this);
+
+        // Redirects the callchain back to the original element and also passes on the function to generate the sub-ui on the block
+        return this.buildBackTo((block: any)=>handler(block, Manager.getChangeCallback()));
     }
 }
