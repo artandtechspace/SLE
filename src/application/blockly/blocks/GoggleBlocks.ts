@@ -117,7 +117,7 @@ function registerRainbow(name: string){
         .withTextfield(getTime, "1000")
         .withCustomUi()
             // The direction is $$.
-            .addDropdown(getDirection, ".ui.direction.", BBConsts.Direction_UI)
+            .addDropdown(getDirection, ".ui.direction", BBConsts.Direction_UI)
             .addInfoIcon(".ui.direction.info")
             .breakLine(".ui.direction")
         .endCustomUi()
