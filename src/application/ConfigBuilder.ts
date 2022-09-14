@@ -1,11 +1,12 @@
 import { ModuleBase } from "./modules/ModuleBase";
+import { OpenObject } from "./types/Types";
 
 /**
  * This system is used in place of an ordenary programming-language-generator from blockly that can only return strings as code. 
  */
 
 // Is returned by a mod-block when called from the Config-builder
-export interface ModBlockExport<T>{
+export interface ModBlockExport<T extends OpenObject>{
     // Module that is used
     module: ModuleBase<T>,
     // Module-configuration
@@ -15,7 +16,7 @@ export interface ModBlockExport<T>{
 }
 
 // Function for blockly-blocks that supplie mod-block-exports
-export type ModBlockFunc<T> = (block: any)=>ModBlockExport<T>;
+export type ModBlockFunc<T extends OpenObject> = (block: any)=>ModBlockExport<T>;
 // Function for blockly-blocks that supplie values
 export type SupplierFunc = (block: any)=>any;
 
@@ -32,7 +33,7 @@ class ConfigBuilder_{
      * @param name the name of the blockly-block that also got registered for blockly
      * @param onGenerate the generator that generates the mod-block-export
      */
-    registerModuleBlock<T>(name: string, onGenerate: ModBlockFunc<T>) {
+    registerModuleBlock<T extends OpenObject>(name: string, onGenerate: ModBlockFunc<T>) {
         this.modblockGenerators[name] = onGenerate;
     }
 

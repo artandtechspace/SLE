@@ -3,7 +3,7 @@ const Blockly = require("blockly");
 /**
  * Dark theme.
  */
- export default Blockly.Theme.defineTheme('dark', {
+ export default Blockly.Theme.defineTheme('sle_dark', {
     'base': Blockly.Themes.Classic,
     'componentStyles': {
       'workspaceBackgroundColour': '#1e1e1e',

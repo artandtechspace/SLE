@@ -96,19 +96,17 @@ function addRootToPage(workspace: any){
 	// Disables any element that are not the root generator element or it's children
 	workspace.addChangeListener(Blockly.Events.disableOrphans);
 
-	// Creates the root element
-	Blockly.serialization.blocks.append({
-		'type': 'sle_setup',
-		"x": 100,
-		"y": 100,
-	}, workspace);
+	// Creates the setup element
+	var setup = workspace.newBlock("sle_setup");
+	setup.moveBy(100,100);
+	setup.initSvg();
+	setup.render();	
 
 	// Creates the root element
-	Blockly.serialization.blocks.append({
-		'type': 'sle_root',
-		"x": 450,
-		"y": 100,
-	}, workspace);
+	var root = workspace.newBlock("sle_root");
+	root.moveBy(450,100);
+	root.initSvg();
+	root.render();
 }
 
 
