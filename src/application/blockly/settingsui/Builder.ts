@@ -19,24 +19,16 @@ export class SettingsUIBuilder<PreviousElement>{
     private currentLine: Line = [];
 
     // Link to get the callchain back to the original builder
-    private buildBackTo: (x: (block: any)=>void) => PreviousElement;
+    private buildBackTo: (x: SettingsUI) => PreviousElement;
 
     // Namespace to put before every language lookup
     private languageNameSpace: string
 
-    constructor(buildBackTo: (x: (block: any)=>void) => PreviousElement, languageNameSpace: string){
+    constructor(buildBackTo: (x: SettingsUI) => PreviousElement, languageNameSpace: string){
         this.buildBackTo = buildBackTo;
         this.languageNameSpace = languageNameSpace;
     }
 
-    // Adds a text-element to the ui
-    addText(text: string){
-        // TODO
-    //    this.currentLine.push(new TextElement(text));
-        return this;
-    }
-
-    // TODO: Lang
     /**
      * Adds a small dropdown to select values from
      * 
@@ -113,31 +105,15 @@ export class SettingsUIBuilder<PreviousElement>{
         return this;
     }
 
-    // Event: When the gui shall be generated
-    private onGenerate(block: any, changeEvtHandler: ()=>void){
+    // Generates and builds the finished-ui, then appends it to the supplied block.
+    endCustomUi(){
+
         // Resolves all left over builders
         var resolvedLines = this.lines.map(line=>{
             return line.map(elmnt=>(elmnt instanceof ElementBuilderBase) ? elmnt.__getBuild() : elmnt)
-        })
+        });
 
-        // Appends the change-cb to every element and executes the init-event
-        resolvedLines.forEach(line=>line.forEach(elm=>elm.init(changeEvtHandler.bind(this))));
-        // Creates the ui and appends it to the block
-        var setui = block.settingsui = new SettingsUI(resolvedLines);
-
-        // Appends the setting-ui to be serialized by the blockly-serializsation
-        block.saveExtraState = ()=>setui.serialize();
-        // If the setui.deserialize-function throws an error, it will be catched by the general
-        // deserialize-logic inside the ErrorSystem.importFromString with the blockly-serializsation logic
-        block.loadExtraState = (obj: OpenObject)=>setui.deserialize(obj);
-    }
-
-    // Generates and builds the finished-ui, then appends it to the supplied block.
-    endCustomUi(){
-        // Gets the generator-callback
-        const handler = this.onGenerate.bind(this);
-
-        // Redirects the callchain back to the original element and also passes on the function to generate the sub-ui on the block
-        return this.buildBackTo((block: any)=>handler(block, Manager.getChangeCallback()));
+        // Creates the ui
+        return this.buildBackTo(new SettingsUI(resolvedLines));
     }
 }

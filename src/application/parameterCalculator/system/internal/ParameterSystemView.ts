@@ -1,3 +1,4 @@
+import { Language } from "../../../language/LanguageManager.js";
 import { S, setClass } from "../../../ui/utils/UiUtils.js";
 import { create as C, createIfElse } from "../../../utils/HTMLBuilder.js";
 import { printIf } from "../../../utils/WorkUtils.js";
@@ -177,7 +178,7 @@ export class ParameterSystemView {
                                         cls: "popup",
                                         chld: [
                                             C("p", {
-                                                text: "ui.parameter.description."+param!.name
+                                                text: Language.get("ui.parameter.description."+param!.name)
                                             })
                                         ]
                                     })

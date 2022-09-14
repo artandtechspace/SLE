@@ -2,8 +2,7 @@ import { ColorModule, ColorModuleConfig } from "../../defaultModules/ColorModule
 import { BlockError } from "../../errorSystem/Errors.js";
 import { ConfigBuilder } from "../../ConfigBuilder.js";
 import { Min, PositiveNumber, RGB, RGBNumber } from "../../types/Types.js";
-import { getNumberFromSettingsUI, getParametricNumberMin, getRGBFromCode, getValueFromSettingsUI } from "../util/BlocklyBlockUtils.js";
-import FieldCustomColor from "../fields/FieldCustomColor.js";
+import { getParametricNumberMin, getRGBFromCode, getValueFromSettingsUI } from "../util/BlocklyBlockUtils.js";
 import { TB_COLOR_COLOR } from "../util/Toolbox.js";
 import { getEnvironment } from "../../SharedObjects.js";
 import { AnimationDirection, BBConsts } from "../util/BlocklyBlockConstants.js";
@@ -79,7 +78,7 @@ function registerStripe(name: string){
         const pos1: PositiveNumber = getParametricNumberMin(block, getLedStart, 0, false);
         const pos2: PositiveNumber = getParametricNumberMin(block, getLedEnd, 0, false);
         const color: RGB = getRGBFromCode(block,getColor);
-        const timeToFinish = getNumberFromSettingsUI(block, getTime) as PositiveNumber;
+        const timeToFinish = getValueFromSettingsUI(block, getTime) as PositiveNumber;
         const isReversed = getValueFromSettingsUI<string>(block, getDirection);
 
         // Checks if an invalid length got specified

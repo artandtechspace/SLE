@@ -1,6 +1,6 @@
 import { ConfigBuilder } from "../../ConfigBuilder.js";
 import { HSV, Min, OpenObject, PositiveNumber, Range, RGB, RGBNumber } from "../../types/Types.js";
-import { getNumberFromSettingsUI, getParametricNumberMin, getRGBFromCode, getValueFromSettingsUI } from "../util/BlocklyBlockUtils.js";
+import { getParametricNumberMin, getRGBFromCode, getValueFromSettingsUI } from "../util/BlocklyBlockUtils.js";
 import { TB_COLOR_GOGGLES } from "../util/Toolbox.js";
 import { FadeModule, FadeModuleConfig } from "../../defaultModules/animations/FadeModule.js";
 import { getEnvironment } from "../../SharedObjects.js";
@@ -186,9 +186,7 @@ function registerGradient(name: string){
             .breakLine(".ui.direction")
 
             // The color is $$.
-            .addText("")
             .addDropdown(getClrDir, ".ui.color", BBConsts.Direction_UI)
-            .addText(".")
             .addInfoIcon(".ui.color.info")
             .breakLine(".ui.color")
         .endCustomUi()
@@ -405,7 +403,7 @@ function registerColorBlock(name: string){
         // Color every nth led, this is n
         const placeEveryXLed: number = parseInt(block.getFieldValue(getDropdownDesc));
         // From where to start coloring
-        const startIdx: PositiveNumber = getNumberFromSettingsUI(block, getStartIndex) as Min<0>;
+        const startIdx: PositiveNumber = getValueFromSettingsUI(block, getStartIndex) as Min<0>;
 
         // Length and starting position
         var {from, length} = getStartAndLengthFromLense(lense, startIdx);

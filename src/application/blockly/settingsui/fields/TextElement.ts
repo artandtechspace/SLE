@@ -9,7 +9,7 @@ export class TextElement extends Element{
         this.text=text;
     }
 
-    render(): HTMLElement {
+    render(block: any): HTMLElement {
         return create("p",{
             text: this.text,
             cls: "bsg-text"

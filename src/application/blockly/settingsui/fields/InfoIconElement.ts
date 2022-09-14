@@ -10,7 +10,7 @@ export class InfoIconElement extends Element{
         this.text=Language.get(langKey);
     }
 
-    render(): HTMLElement {
+    render(block: any): HTMLElement {
         return create("i",{
             cls: "infoIcon fa fa-info",
             attr: {"aria-hidden": "true"},

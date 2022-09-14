@@ -15,7 +15,6 @@ export class BrightnessPickerElement extends SupplierElement<PercentageNumber, P
         super(key, popup.brightness);
 
         this.popup=popup;
-        this.popup.setChangeListener(this.onValueChange.bind(this));
         
         this.generateRenderRect()
     }
@@ -26,8 +25,8 @@ export class BrightnessPickerElement extends SupplierElement<PercentageNumber, P
     }
 
     // Event: When the value of the brightness-picker changes
-    private onValueChange(value: PercentageNumber){
-        this.setValue(value);
+    private onValueChange(block: any, value: PercentageNumber){
+        this.setValue(block, value);
         this.updateRectBackground()
     }
 
@@ -53,26 +52,29 @@ export class BrightnessPickerElement extends SupplierElement<PercentageNumber, P
         this.popup.openGuiAt(this.renderRect);
     }
 
-    render(): HTMLElement {
+    render(block: any): HTMLElement {
+        this.popup.brightness = this.getValue(block);
+        this.popup.setChangeListener((value: PercentageNumber)=>this.onValueChange(block,value));
+        this.updateRectBackground();
         return this.renderRect;
     }
 
-    validateParseAndGetValue(): PercentageNumber {
-        return this.getValue();
+    validateParseAndGetValue(block: any): PercentageNumber {
+        return this.getValue(block);
     }
 
-    serialize(): any {
-        return this.getValue();
+    serialize(block: any): any {
+        return this.getValue(block);
     }
 
-    deserialize(raw: any): boolean {
+    deserialize(block: any, raw: any): boolean {
         
         // Checks if the element is valid
         if(!isNumberEV(raw) || !isPercentageNumber(raw))
             return false;
         
         // Updates value
-        this.setValue(raw);
+        this.setValue(block, raw);
 
         // Updates the popup and rerenders it
         this.popup.brightness = raw;

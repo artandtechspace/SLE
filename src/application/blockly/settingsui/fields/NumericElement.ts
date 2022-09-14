@@ -22,22 +22,22 @@ export class NumericFieldElement extends SupplierElement<string, number>{
         this.settings=settings;
     }
 
-    public render(): HTMLElement {
+    public render(block: any): HTMLElement {
         return createSizeableTF(create("input",{
             attr: {
-                "value": this.getValue()
+                "value": this.getValue(block)
             },
             evts: {
-                "input": (evt: any)=>this.setValue(evt.target.value)
+                "input": (evt: any)=>this.setValue(block, evt.target.value)
             }
         }) as HTMLInputElement);
     }
 
-    validateParseAndGetValue(): number {
+    validateParseAndGetValue(block: any): number {
         var value: number;
 
         // Performs the calculation and if an error occurred, forwards it
-        value = performCalculation(this.getValue());
+        value = performCalculation(this.getValue(block));
     
         // Performs all kinds of checks for the value
 
@@ -63,17 +63,17 @@ export class NumericFieldElement extends SupplierElement<string, number>{
         return value;
     }
 
-    serialize(): any {
-        return this.getValue();
+    serialize(block: any): any {
+        return this.getValue(block);
     }
 
-    deserialize(raw: any): boolean {
+    deserialize(block: any, raw: any): boolean {
         // Checks if the value is a string
         if(!isStringEV(raw))
             return false;
         
         // Updates value
-        this.setValue(raw);
+        this.setValue(block, raw);
         return true;
     }
 }

@@ -10,7 +10,7 @@ export class LineSeperatorElement extends Element{
         this.percentageLength = percentageLength;
     }
 
-    render(): HTMLElement {
+    render(block: any): HTMLElement {
         return create("div",{
             cls: "bsg-line-seperator",
             attr: {"style": `width: ${this.percentageLength}%`}

@@ -16,7 +16,6 @@ export class ColorPickerElement extends SupplierElement<HSV, HSV>{
         super(key, popup.color);
 
         this.popup=popup;
-        this.popup.setChangeListener(this.onValueChange.bind(this));
         
         this.generateRenderRect()
     }
@@ -27,14 +26,16 @@ export class ColorPickerElement extends SupplierElement<HSV, HSV>{
     }
 
     // Event: When the value of the color-picker changes
-    private onValueChange(value: HSV){
-        this.setValue(value);
+    private onValueChange(block: any, value: HSV){
+        this.setValue(block, Object.assign({}, value));
         this.updateRectBackground()
     }
 
     // Updates the render-rect color
     private updateRectBackground(){
-        this.renderRect.style.background = HSV2HEX(this.popup.color.h,this.popup.color.s,this.popup.color.v)
+        var {h, s, v} = this.popup.color;
+
+        this.renderRect.style.background = HSV2HEX(h,s,v);
     }
 
     // Generates the html-content for the render-rect once
@@ -54,26 +55,29 @@ export class ColorPickerElement extends SupplierElement<HSV, HSV>{
         this.popup.openGuiAt(this.renderRect);
     }
 
-    render(): HTMLElement {
+    render(block: any): HTMLElement {
+        this.popup.color = this.getValue(block);
+        this.popup.setChangeListener((value: HSV)=>this.onValueChange(block, value));
+        this.updateRectBackground();
         return this.renderRect;
     }
 
-    validateParseAndGetValue(): HSV {
-        return this.getValue();
+    validateParseAndGetValue(block: any): HSV {
+        return this.getValue(block);
     }
 
-    serialize(): any {
-        return this.getValue();
+    serialize(block: any): any {
+        return this.getValue(block);
     }
 
-    deserialize(raw: any): boolean {
+    deserialize(block: any, raw: any): boolean {
         
         // Checks if the element is valid
         if(!isObjectEV(raw) || !isValidHSV(raw))
             return false;
         
         // Updates value
-        this.setValue(raw);
+        this.setValue(block, raw);
 
         // Updates the popup and rerenders it
         this.popup.color = raw;

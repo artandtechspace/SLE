@@ -2,7 +2,7 @@ import { ConfigBuilder } from "../../ConfigBuilder.js";
 import { GradientModule, GradientModuleConfig } from "../../defaultModules/animations/GradientModule.js";
 import { RainbowModule, RainbowModuleConfig } from "../../defaultModules/animations/RainbowModule.js";
 import { HSV, Min, PositiveNumber, Range } from "../../types/Types.js";
-import { getNumberFromSettingsUI } from "../util/BlocklyBlockUtils.js";
+import { getValueFromSettingsUI } from "../util/BlocklyBlockUtils.js";
 import { TB_COLOR_ANIMATIONS } from "../util/Toolbox.js";
 import { FadeModule, FadeModuleConfig } from "../../defaultModules/animations/FadeModule.js";
 import { SystemParams } from "../../parameterCalculator/system/internal/ParameterSystemModel.js";
@@ -69,11 +69,11 @@ function registerFadeBlock(name: string){
     ConfigBuilder.registerModuleBlock<FadeModuleConfig>(name, function(block:any) { 
         var from: HSV = block.getFieldValue(getColorFrom);
         var to: HSV = block.getFieldValue(getColorTo);
-        var ledfrom: PositiveNumber = getNumberFromSettingsUI(block,getLedFrom) as PositiveNumber;
-        var ledlength: Min<1> = getNumberFromSettingsUI(block,getLedLength) as Min<1>;
-        var ledoffset: PositiveNumber = getNumberFromSettingsUI(block,getLedOffset) as PositiveNumber;
-        var animLen: PositiveNumber = getNumberFromSettingsUI(block,getAnimationLength) as PositiveNumber;
-        var playlen: PositiveNumber = getNumberFromSettingsUI(block,getFadeLength) as PositiveNumber;
+        var ledfrom: PositiveNumber = getValueFromSettingsUI(block,getLedFrom) as PositiveNumber;
+        var ledlength: Min<1> = getValueFromSettingsUI(block,getLedLength) as Min<1>;
+        var ledoffset: PositiveNumber = getValueFromSettingsUI(block,getLedOffset) as PositiveNumber;
+        var animLen: PositiveNumber = getValueFromSettingsUI(block,getAnimationLength) as PositiveNumber;
+        var playlen: PositiveNumber = getValueFromSettingsUI(block,getFadeLength) as PositiveNumber;
 
         return {
             module: FadeModule,
@@ -128,10 +128,10 @@ function registerRainbowAutocalcBlock(name: string){
     .register(name);
 
     ConfigBuilder.registerModuleBlock<RainbowModuleConfig>(name, function(block:any) { 
-        var ledFrom: PositiveNumber = getNumberFromSettingsUI(block, getLedFrom) as PositiveNumber;
-        var ledLength: Min<1> = getNumberFromSettingsUI(block,getLedLength) as Min<1>;
-        var playLenght: PositiveNumber = getNumberFromSettingsUI(block, getAnimationLength) as PositiveNumber;
-        var repeatLength: Min<500> = getNumberFromSettingsUI(block, getRepeatLength) as Min<500>;
+        var ledFrom: PositiveNumber = getValueFromSettingsUI(block, getLedFrom) as PositiveNumber;
+        var ledLength: Min<1> = getValueFromSettingsUI(block,getLedLength) as Min<1>;
+        var playLenght: PositiveNumber = getValueFromSettingsUI(block, getAnimationLength) as PositiveNumber;
+        var repeatLength: Min<500> = getValueFromSettingsUI(block, getRepeatLength) as Min<500>;
         var offsetPerLed: number = Math.round(repeatLength/ledLength);
         
         var brightness: number = block.getFieldValue(getBrightness);
@@ -190,11 +190,11 @@ function registerRainbowBlock(name: string){
     .register(name);
 
     ConfigBuilder.registerModuleBlock<RainbowModuleConfig>(name, function(block:any) { 
-        var ledFrom: PositiveNumber = getNumberFromSettingsUI(block, getLedFrom) as PositiveNumber;
-        var ledLength: Min<1> = getNumberFromSettingsUI(block,getLedLength) as Min<1>;
-        var offsetPerLed: number = getNumberFromSettingsUI(block, getLedOffset);
-        var playLenght: PositiveNumber = getNumberFromSettingsUI(block, getAnimationLength) as PositiveNumber;
-        var repeatLength: Min<500> = getNumberFromSettingsUI(block, getRepeatLength) as Min<500>;
+        var ledFrom: PositiveNumber = getValueFromSettingsUI(block, getLedFrom) as PositiveNumber;
+        var ledLength: Min<1> = getValueFromSettingsUI(block,getLedLength) as Min<1>;
+        var offsetPerLed: number = getValueFromSettingsUI(block, getLedOffset);
+        var playLenght: PositiveNumber = getValueFromSettingsUI(block, getAnimationLength) as PositiveNumber;
+        var repeatLength: Min<500> = getValueFromSettingsUI(block, getRepeatLength) as Min<500>;
         
         var brightness: number = block.getFieldValue(getBrightness);
     
@@ -255,11 +255,11 @@ function registerGradientBlock(name: string){
     .register(name);
 
     ConfigBuilder.registerModuleBlock<GradientModuleConfig>(name, function(block:any) { 
-        var start: PositiveNumber = getNumberFromSettingsUI(block,getLedFrom) as PositiveNumber;
-        var length: Min<1> = getNumberFromSettingsUI(block,getLedLength) as Min<1>;
+        var start: PositiveNumber = getValueFromSettingsUI(block,getLedFrom) as PositiveNumber;
+        var length: Min<1> = getValueFromSettingsUI(block,getLedLength) as Min<1>;
         var colorFrom: HSV = block.getFieldValue(getColorFrom);
         var colorTo: HSV = block.getFieldValue(getColorTo);
-        var delay: PositiveNumber = getNumberFromSettingsUI(block,getLedDelay) as PositiveNumber;
+        var delay: PositiveNumber = getValueFromSettingsUI(block,getLedDelay) as PositiveNumber;
     
         // Selected modus
         var modus:string = block.getFieldValue(getMode);

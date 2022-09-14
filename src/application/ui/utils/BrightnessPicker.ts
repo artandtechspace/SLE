@@ -14,7 +14,7 @@ export class BrightnessPicker{
     private static readonly DEFAULT_BRIGHTNESS : PercentageNumber = 1 as PercentageNumber;
 
     // Current color
-    public brightness : PercentageNumber;
+    private _brightness : PercentageNumber;
 
     // Form-bindings that are only present if the slider has currently an open gui
     private fromBindings?: InternalFormBindings;
@@ -23,7 +23,7 @@ export class BrightnessPicker{
     private valueChangeListener?: (value: PercentageNumber)=>void;
 
     constructor(startBrightness? : PercentageNumber, ){
-        this.brightness = startBrightness === undefined ? BrightnessPicker.DEFAULT_BRIGHTNESS : startBrightness;
+        this._brightness = startBrightness === undefined ? BrightnessPicker.DEFAULT_BRIGHTNESS : startBrightness;
     }
     
     public setChangeListener(onValueChange?: (value: PercentageNumber)=>void){
@@ -34,11 +34,22 @@ export class BrightnessPicker{
     private onSliderValueInput(value: Range<0,1000>){
 
         // Updates the color
-        this.brightness = value/1000 as PercentageNumber;
+        this._brightness = value/1000 as PercentageNumber;
 
         // Executes the listener
         if(this.valueChangeListener !== undefined)
-            this.valueChangeListener(this.brightness);
+            this.valueChangeListener(this._brightness);
+    }
+
+    // Updates the slider-positions
+    public updateSliderPositions(){
+        
+        // Ensures that the form is open
+        if(this.fromBindings === undefined)
+            return;
+
+        // Updates the slider
+        this.fromBindings.slider.valueAsNumber = this._brightness * 1000;
     }
 
     // Renders/Rerenders every canvas-slider
@@ -92,7 +103,7 @@ export class BrightnessPicker{
                 "type": "range",
                 "min": 0,
                 "max": 1000,
-                "value": this.brightness * 1000
+                "value": this._brightness * 1000
             },
             evts: { "input": (evt: any) => this.onSliderValueInput(evt.target.value) }
         }) as HTMLInputElement;
@@ -122,6 +133,19 @@ export class BrightnessPicker{
                 canvas,
                 slider
             } as InternalFormBindings
+        }
+    }
+
+    public get brightness(){
+        return this._brightness;
+    }
+
+    public set brightness(value: PercentageNumber){
+        this._brightness = value;
+
+        if(this.fromBindings !== undefined){
+            this.reRender();
+            this.updateSliderPositions();
         }
     }
 }

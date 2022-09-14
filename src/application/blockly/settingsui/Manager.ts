@@ -35,8 +35,8 @@ export class SettingsUIManager{
         // Removes the hidden class
         this.blocklySubmenu.classList.remove("hidden");
         // Appends the submenu-settings
-        this.blocklySubmenu.append(...(block.settingsui as SettingsUI).render());        
-    }
+        this.blocklySubmenu.append(...(block.settingsui as SettingsUI).render(block));
+}
 
     // Hides the ui from screen
     public hideUi(){

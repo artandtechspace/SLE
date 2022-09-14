@@ -20,7 +20,7 @@ export default class FieldCustomColor extends Blockly.Field{
     // Creates the color-picker
     var colorPicker = new HSVColorPicker(opt_value);
 
-    super({...colorPicker.color});
+    super(colorPicker.color);
     
     // Initalizes the color-picker
     this.colorPicker = colorPicker;
@@ -84,7 +84,7 @@ export default class FieldCustomColor extends Blockly.Field{
 
   // Event: When the editor get's opened
   private showEditor_(){
-    this.colorPicker.color = {...this.getValue()};
+    this.colorPicker.color = this.getValue();
     // Opens the color-picker
     this.colorPicker.openGuiAt(Blockly.DropDownDiv.getContentDiv());
     

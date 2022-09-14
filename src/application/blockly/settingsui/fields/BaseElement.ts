@@ -1,15 +1,12 @@
 export abstract class Element{
     // Generates a single html-element to represent the submenu-element
-    abstract render() : HTMLElement;
+    abstract render(block: any) : HTMLElement;
 
     // Event that executes when the outer menu actually gets finished
-    init(changeCB: ()=>void) {}
+    init(block: any, changeCB: ()=>void) {};
 }
 
 export abstract class SupplierElement<Storage, Giveback> extends Element{
-    // Current value of the supplier-element
-    private currentValue: Storage;
-
     // Inital value of the element
     public readonly initValue: Storage;
 
@@ -22,11 +19,12 @@ export abstract class SupplierElement<Storage, Giveback> extends Element{
 
     constructor(key: string, initValue: Storage){
         super();
-        this.initValue = this.currentValue = initValue;
+        this.initValue = initValue;
         this.key = key;
     }
 
-    init(changeCB: ()=>void): void {
+    init(block: any, changeCB: ()=>void): void {
+        block.uidata[this.key] = this.initValue;
         this.changeCB = changeCB;
     }
     
@@ -40,16 +38,16 @@ export abstract class SupplierElement<Storage, Giveback> extends Element{
      * @throws {LanguageRef} optional error if the parsing results in an error
      * @returns the parsed value
      */
-    abstract validateParseAndGetValue(): Giveback;
+    abstract validateParseAndGetValue(block: any): Giveback;
 
     // Returns the current value of the ui-element
-    protected getValue() : Storage {
-        return this.currentValue;
+    protected getValue(block: any) : Storage {
+        return block.uidata[this.key];
     }
 
     // Sets the value of the ui-element
-    protected setValue(value: Storage){
-        this.currentValue = value;
+    protected setValue(block: any, value: Storage){
+        block.uidata[this.key] = value;
         this.changeCB();
     }
 
@@ -58,10 +56,10 @@ export abstract class SupplierElement<Storage, Giveback> extends Element{
      * @param raw the raw value to load
      * @returns {boolean} if the load was successful
      */
-    abstract deserialize(raw: any) : boolean;
+    abstract deserialize(block: any, raw: any) : boolean;
 
     // Serializes the current value to something that can be reloaded by the deserialize function
-    abstract serialize() : any;
+    abstract serialize(block: any) : any;
 }
 
 export abstract class ElementBuilderBase<Base>{

@@ -15,19 +15,21 @@ export class DropDownElement extends SupplierElement<number, string>{
         super(key, selectIdx);
 
         this.languageNamespace = languageNamespace;
-        this.valueList = valueList;
+
+        // Only stores a list with all language-texts as the index is used to get which element is selected
+        this.valueList = valueList.map(val=>Language.get(this.languageNamespace+val));
     }
 
     // Event: When the selection on the dropdown-html-element changes.
     //        Eg. when the user selects a different element
-    private onDropDownChange(evt: Event){
-        this.setValue((evt.target as HTMLSelectElement).selectedIndex);
+    private onDropDownChange(block: any, evt: Event){
+        this.setValue(block, (evt.target as HTMLSelectElement).selectedIndex);
     }
 
-    render(): HTMLElement {
+    render(block: any): HTMLElement {
         // Renders the children
         var children = this.valueList.map(cld=>create("option",{
-            text: Language.get(this.languageNamespace+cld)
+            text: cld
         }));
         
         // Creates the base element
@@ -35,25 +37,25 @@ export class DropDownElement extends SupplierElement<number, string>{
             cls: "bsg-dropdown",
             chld: children,
             evts: {
-                "change": this.onDropDownChange.bind(this)
+                "change": (evt: Event) => this.onDropDownChange(block, evt)
             }
         }) as HTMLSelectElement;
 
         // Sets the selected index
-        select.selectedIndex = this.getValue();
+        select.selectedIndex = this.getValue(block);
 
         return select;
     }
 
-    validateParseAndGetValue(): string {
-        return this.valueList[this.getValue()];
+    validateParseAndGetValue(block: any): string {
+        return this.valueList[this.getValue(block)];
     }
 
-    serialize(): any {
-        return this.valueList[this.getValue()];
+    serialize(block: any): any {
+        return this.valueList[this.getValue(block)];
     }
 
-    deserialize(raw: any): boolean {
+    deserialize(block: any, raw: any): boolean {
 
         // Ensures the value is a string
         if(!isStringEV(raw))
@@ -66,7 +68,7 @@ export class DropDownElement extends SupplierElement<number, string>{
             return false;
         
         // Updates value
-        this.setValue(idx);
+        this.setValue(block, idx);
 
         return true;
     }

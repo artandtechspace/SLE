@@ -22,20 +22,11 @@ export function getValueFromSettingsUI<Expect>(block: any, name: string) : Expec
         return handleProgrammingError("There is no settings-ui defined but the element '"+name+"' is expected.");
 
     try{
-        return setUi.validateAndGetValueByName<Expect>(name);
+        return setUi.validateAndGetValueByName<Expect>(block, name);
     }catch(e){
         const ref = e as LanguageRef; 
         throw new BlockError(block, ref.key, ref.vars)
     }
-}
-
-/**
- * @throws {BlockError} if the value on the block is currently invalid
- * @returns the searched number from the settings-ui-field (Reference by the @param name)
- */
-// TODO: Deprecated. Remove this and replace all occurances with getValueFromSettingsUI
-export function getNumberFromSettingsUI(block: any, name: string) : number{
-    return getValueFromSettingsUI<number>(block,name);
 }
 
 /** 
