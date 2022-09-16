@@ -1,9 +1,9 @@
-import { ModuleBase } from "../../modules/ModuleBase.js";
-import { CppFuncRegister, CppReturnType, CppTypeDefintion, CppFuncGeneratorFunction, CppFuncSupply, CppFuncParams, CppType } from "./CppFuncDefs.js";
-import { FunctionSupplier } from "./CppFuncSupplier.js";
-import { CppDontPass } from "./CppTypes.js";
-import { UniqueNameSupplier } from "./UniqueNameSupplier.js";
-import { VariableSystem } from "./VariableSystem.js";
+import { ModuleBase } from "../../modules/ModuleBase";
+import { CppFuncRegister, CppReturnType, CppTypeDefintion, CppFuncGeneratorFunction, CppFuncSupply, CppFuncParams, CppType } from "./CppFuncDefs";
+import { FunctionSupplier } from "./CppFuncSupplier";
+import { CppDontPass } from "./CppTypes";
+import { UniqueNameSupplier } from "./UniqueNameSupplier";
+import { VariableSystem } from "./VariableSystem";
 
 export class FunctionGenerator{
 

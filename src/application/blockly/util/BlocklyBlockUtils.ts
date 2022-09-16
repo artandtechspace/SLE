@@ -1,11 +1,11 @@
-import { BlockError } from "../../errorSystem/Errors.js";
-import { ConfigBuilder } from "../../ConfigBuilder.js";
-import { HexColor, isMin, isPercentageNumber, Max, Min, PercentageNumber, RGB } from "../../types/Types.js";
-import { HSV2HEX, HSV2RGB } from "../../utils/ColorUtils.js";
-import { SettingsUI } from "../settingsui/SettingsUI.js";
-import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem.js";
-import { performCalculation } from "../../parameterCalculator/Calculator.js";
-import { LanguageRef } from "../../language/LanguageManager.js";
+import { BlockError } from "../../errorSystem/Errors";
+import { ConfigBuilder } from "../../ConfigBuilder";
+import { HexColor, isMin, isPercentageNumber, Max, Min, PercentageNumber, RGB } from "../../types/Types";
+import { HSV2HEX, HSV2RGB } from "../../utils/ColorUtils";
+import { SettingsUI } from "../settingsui/SettingsUI";
+import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem";
+import { performCalculation } from "../../parameterCalculator/Calculator";
+import { LanguageRef } from "../../language/LanguageManager";
 
 /**
  * Checks if the block has a settings ui and get's the value from the field in question.

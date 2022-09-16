@@ -1,13 +1,13 @@
-import { ConfigBuilder } from "../../ConfigBuilder.js";
-import { GradientModule, GradientModuleConfig } from "../../defaultModules/animations/GradientModule.js";
-import { RainbowModule, RainbowModuleConfig } from "../../defaultModules/animations/RainbowModule.js";
-import { HSV, Min, PositiveNumber, Range } from "../../types/Types.js";
-import { getValueFromSettingsUI } from "../util/BlocklyBlockUtils.js";
-import { TB_COLOR_ANIMATIONS } from "../util/Toolbox.js";
-import { FadeModule, FadeModuleConfig } from "../../defaultModules/animations/FadeModule.js";
-import { SystemParams } from "../../parameterCalculator/system/internal/ParameterSystemModel.js";
-import { createBlocklyStyle } from "../util/BlocklyStyleBuilder.js";
-import { Language } from "../../language/LanguageManager.js";
+import { ConfigBuilder } from "../../ConfigBuilder";
+import { GradientModule, GradientModuleConfig } from "../../defaultModules/animations/GradientModule";
+import { RainbowModule, RainbowModuleConfig } from "../../defaultModules/animations/RainbowModule";
+import { HSV, Min, PositiveNumber, Range } from "../../types/Types";
+import { getValueFromSettingsUI } from "../util/BlocklyBlockUtils";
+import { TB_COLOR_ANIMATIONS } from "../util/Toolbox";
+import { FadeModule, FadeModuleConfig } from "../../defaultModules/animations/FadeModule";
+import { SystemParams } from "../../parameterCalculator/system/internal/ParameterSystemModel";
+import { createBlocklyStyle } from "../util/BlocklyStyleBuilder";
+import { Language } from "../../language/LanguageManager";
 
 const Blockly = require("blockly");
 

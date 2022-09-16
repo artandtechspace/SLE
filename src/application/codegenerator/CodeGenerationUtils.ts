@@ -1,5 +1,5 @@
-import { CppFuncParam } from "./variablesystem/CppFuncDefs.js";
-import { printIf } from "../utils/WorkUtils.js";
+import { CppFuncParam } from "./variablesystem/CppFuncDefs";
+import { printIf } from "../utils/WorkUtils";
 
 /**
  * All tenary-function below take in two parameter values and returns a string (CppCode) that is the tenary-result of the operation.

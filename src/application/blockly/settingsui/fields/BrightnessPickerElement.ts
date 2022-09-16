@@ -1,8 +1,8 @@
-import { isPercentageNumber, PercentageNumber } from "../../../types/Types.js";
-import { BrightnessPicker } from "../../../ui/utils/BrightnessPicker.js";
-import { isNumberEV } from "../../../utils/ElementValidation.js";
-import { create } from "../../../utils/HTMLBuilder.js";
-import { SupplierElement } from "./BaseElement.js";
+import { isPercentageNumber, PercentageNumber } from "../../../types/Types";
+import { BrightnessPicker } from "../../../ui/utils/BrightnessPicker";
+import { isNumberEV } from "../../../utils/ElementValidation";
+import { create } from "../../../utils/HTMLBuilder";
+import { SupplierElement } from "./BaseElement";
 
 export class BrightnessPickerElement extends SupplierElement<PercentageNumber, PercentageNumber>{
     private popup: BrightnessPicker;

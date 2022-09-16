@@ -1,6 +1,6 @@
-import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem.js";
-import { isNumberEV } from "../../utils/ElementValidation.js";
-import { S } from "./UiUtils.js";
+import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem";
+import { isNumberEV } from "../../utils/ElementValidation";
+import { S } from "./UiUtils";
 
 /**
  * The TabHandler removes/adds element to the page depending on the current tab.

@@ -1,7 +1,7 @@
-import { ModuleBase } from "../../modules/ModuleBase.js";
-import { CppFuncSupply } from "./CppFuncDefs.js";
-import { VariableSystem } from "./VariableSystem.js";
-import { CppDontPass, turnCppTypeToParameterCode } from "./CppTypes.js";
+import { ModuleBase } from "../../modules/ModuleBase";
+import { CppFuncSupply } from "./CppFuncDefs";
+import { VariableSystem } from "./VariableSystem";
+import { CppDontPass, turnCppTypeToParameterCode } from "./CppTypes";
 
 export class FunctionSupplier{
 

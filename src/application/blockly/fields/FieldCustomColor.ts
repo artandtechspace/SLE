@@ -1,7 +1,7 @@
-import { HSV } from "../../types/Types.js";
-import { HSVColorPicker } from "../../ui/utils/HSVColorPicker.js";
-import { HSV2HEX, isValidHSV } from "../../utils/ColorUtils.js";
-import { isObjectEV } from "../../utils/ElementValidation.js";
+import { HSV } from "../../types/Types";
+import { HSVColorPicker } from "../../ui/utils/HSVColorPicker";
+import { HSV2HEX, isValidHSV } from "../../utils/ColorUtils";
+import { isObjectEV } from "../../utils/ElementValidation";
 const Blockly = require("blockly");
 
 

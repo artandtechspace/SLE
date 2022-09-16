@@ -5,17 +5,24 @@
   "main": "index.js",
   "devDependencies": {
     "electron": "^20.1.3",
+    "fs-extra": "^10.1.0",
     "node-sass": "^7.0.1",
-    "typescript": "^4.8.3"
+    "sass": "^1.54.9",
+    "ts-loader": "^9.3.1",
+    "typescript": "^4.8.3",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
   },
   "scripts": {
-    "start": "npm run compileElectron && npm run runElectron",
-    "runElectron": "./scripts/RunElectron.sh",
-    "compileElectron": "./scripts/CompileElectron.sh"
+    "start": "npm run builddev && npm run runDevelopment",
+    "build": "webpack --env production",
+    "builddev": "webpack --env development",
+    "runProduction": "electron build/build-prod/setup/",
+    "runDevelopment": "electron build/build-dev/setup/"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "blockly": "^5.20210325.0"
+    "blockly": "^8.0.5"
   }
 }

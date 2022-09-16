@@ -1,10 +1,10 @@
-import { VariableSystem } from "../../codegenerator/variablesystem/VariableSystem.js";
-import { Arduino } from "../../simulation/Arduino.js";
-import { Min, OpenObject, PositiveNumber as PositiveNumber, RGBNumber } from "../../types/Types.js";
-import { ModuleAsFuncBase } from "../../modules/ModuleAsFuncBase.js";
-import { CppTypeDefintion, CppFuncParams } from "../../codegenerator/variablesystem/CppFuncDefs.js";
-import { CppFloat, CppInt } from "../../codegenerator/variablesystem/CppTypes.js";
-import { printEquation } from "../../utils/EquationUtils.js";
+import { VariableSystem } from "../../codegenerator/variablesystem/VariableSystem";
+import { Arduino } from "../../simulation/Arduino";
+import { Min, OpenObject, PositiveNumber as PositiveNumber, RGBNumber } from "../../types/Types";
+import { ModuleAsFuncBase } from "../../modules/ModuleAsFuncBase";
+import { CppTypeDefintion, CppFuncParams } from "../../codegenerator/variablesystem/CppFuncDefs";
+import { CppFloat, CppInt } from "../../codegenerator/variablesystem/CppTypes";
+import { printEquation } from "../../utils/EquationUtils";
 
 export type RainbowModuleConfig = {
     // HSV-value part for the whole rainbow

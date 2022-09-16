@@ -1,5 +1,5 @@
-import { DesyncedWorkspaceError } from "../../errorSystem/Errors.js";
-import { getWorkspace } from "../../SharedObjects.js";
+import { DesyncedWorkspaceError } from "../../errorSystem/Errors";
+import { getWorkspace } from "../../SharedObjects";
 
 /**
  * Gets the root blocks from the workspace.

@@ -1,9 +1,9 @@
-import { ModuleCode } from "../codegenerator/CodeGenerator.js";
-import { ModuleBase } from "../modules/ModuleBase.js";
-import { FunctionSupplier } from "../codegenerator/variablesystem/CppFuncSupplier.js";
-import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem.js";
-import { getEnvironment } from "../SharedObjects.js";
-import { rot13 } from "../utils/CryptoUtil.js";
+import { ModuleCode } from "../codegenerator/CodeGenerator";
+import { ModuleBase } from "../modules/ModuleBase";
+import { FunctionSupplier } from "../codegenerator/variablesystem/CppFuncSupplier";
+import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem";
+import { getEnvironment } from "../SharedObjects";
+import { rot13 } from "../utils/CryptoUtil";
 
 const ignoreMe = [rot13("Grpuaboynqr"), rot13("Grpuab"), rot13("Nyrk"), rot13("Nyrknaqre")];
 const ignoreMeToo = rot13("Grpuaboynqr arire qvrf");

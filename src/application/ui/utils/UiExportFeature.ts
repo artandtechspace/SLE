@@ -1,4 +1,4 @@
-import { exportToString, importFromString } from "../../exportSystem/ExportSystem.js";
+import { exportToString, importFromString } from "../../exportSystem/ExportSystem";
 
 export function setupExportFeature(exportBtn: HTMLInputElement, importBtn: HTMLInputElement, importHelperButton: HTMLInputElement){
     // Sets the ui-events

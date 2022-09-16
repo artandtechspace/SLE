@@ -1,7 +1,7 @@
-import { Language } from "../../language/LanguageManager.js";
-import { HSV, PercentageNumber, Range } from "../../types/Types.js";
-import { HSV2HEX } from "../../utils/ColorUtils.js";
-import { create as C } from "../../utils/HTMLBuilder.js";
+import { Language } from "../../language/LanguageManager";
+import { HSV, PercentageNumber, Range } from "../../types/Types";
+import { HSV2HEX } from "../../utils/ColorUtils";
+import { create as C } from "../../utils/HTMLBuilder";
 
 // Form-bindings that holds the form-elements (Slider, Canvas and canvas-2d-context)
 // for every slider (h, s, v) 

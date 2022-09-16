@@ -1,10 +1,10 @@
-import { LoadingError } from "../../errorSystem/Errors.js";
-import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem.js";
-import { OpenObject } from "../../types/Types.js";
-import { create } from "../../utils/HTMLBuilder.js";
-import { SettingsUIBuilder } from "./Builder.js";
-import { Element, SupplierElement } from "./fields/BaseElement.js";
-import { SettingsUIManager } from "./Manager.js";
+import { LoadingError } from "../../errorSystem/Errors";
+import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem";
+import { OpenObject } from "../../types/Types";
+import { create } from "../../utils/HTMLBuilder";
+import { SettingsUIBuilder } from "./Builder";
+import { Element, SupplierElement } from "./fields/BaseElement";
+import { SettingsUIManager } from "./Manager";
 
 // Line of elements for the settings-ui
 export type SettingsUiLine = Element[];

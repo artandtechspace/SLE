@@ -1,8 +1,8 @@
-import { LanguageLoadingError } from "../errorSystem/Errors.js";
-import { handleProgrammingError } from "../errorSystem/ProgrammingErrorSystem.js";
-import { IS_DEBUGGING } from "../Preset.js";
-import { SM } from "../ui/utils/UiUtils.js";
-import { isObjectEV, isStringEV } from "../utils/ElementValidation.js";
+import { LanguageLoadingError } from "../errorSystem/Errors";
+import { handleProgrammingError } from "../errorSystem/ProgrammingErrorSystem";
+import { IS_DEBUGGING } from "../Preset";
+import { SM } from "../ui/utils/UiUtils";
+import { isObjectEV, isStringEV } from "../utils/ElementValidation";
 
 
 // Debugging keyword (Must be at the end of a lookup)

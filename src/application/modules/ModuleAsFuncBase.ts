@@ -1,11 +1,11 @@
-import { ModuleCode } from "../codegenerator/CodeGenerator.js";
-import { OpenObject } from "../types/Types.js";
-import { CppFuncParams, CppTypeDefintion } from "../codegenerator/variablesystem/CppFuncDefs.js";
-import { FunctionGenerator } from "../codegenerator/variablesystem/CppFuncGenerator.js";
-import { FunctionSupplier } from "../codegenerator/variablesystem/CppFuncSupplier.js";
-import { CppVoid } from "../codegenerator/variablesystem/CppTypes.js";
-import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem.js";
-import { ModuleBase } from "./ModuleBase.js";
+import { ModuleCode } from "../codegenerator/CodeGenerator";
+import { OpenObject } from "../types/Types";
+import { CppFuncParams, CppTypeDefintion } from "../codegenerator/variablesystem/CppFuncDefs";
+import { FunctionGenerator } from "../codegenerator/variablesystem/CppFuncGenerator";
+import { FunctionSupplier } from "../codegenerator/variablesystem/CppFuncSupplier";
+import { CppVoid } from "../codegenerator/variablesystem/CppTypes";
+import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem";
+import { ModuleBase } from "./ModuleBase";
 
 /**
  * This module registers it's code by default as a function call

@@ -1,13 +1,13 @@
-import { ColorModule, ColorModuleConfig } from "../../defaultModules/ColorModule.js";
-import { BlockError } from "../../errorSystem/Errors.js";
-import { ConfigBuilder } from "../../ConfigBuilder.js";
-import { Min, PositiveNumber, RGB, RGBNumber } from "../../types/Types.js";
-import { getParametricNumberMin, getRGBFromCode, getValueFromSettingsUI } from "../util/BlocklyBlockUtils.js";
-import { TB_COLOR_COLOR } from "../util/Toolbox.js";
-import { getEnvironment } from "../../SharedObjects.js";
-import { AnimationDirection, BBConsts } from "../util/BlocklyBlockConstants.js";
-import { SystemParams } from "../../parameterCalculator/system/internal/ParameterSystemModel.js";
-import { createBlocklyStyle } from "../util/BlocklyStyleBuilder.js";
+import { ColorModule, ColorModuleConfig } from "../../defaultModules/ColorModule";
+import { BlockError } from "../../errorSystem/Errors";
+import { ConfigBuilder } from "../../ConfigBuilder";
+import { Min, PositiveNumber, RGB, RGBNumber } from "../../types/Types";
+import { getParametricNumberMin, getRGBFromCode, getValueFromSettingsUI } from "../util/BlocklyBlockUtils";
+import { TB_COLOR_COLOR } from "../util/Toolbox";
+import { getEnvironment } from "../../SharedObjects";
+import { AnimationDirection, BBConsts } from "../util/BlocklyBlockConstants";
+import { SystemParams } from "../../parameterCalculator/system/internal/ParameterSystemModel";
+import { createBlocklyStyle } from "../util/BlocklyStyleBuilder";
 
 /**
  * Registers all blocks that are using the color-module

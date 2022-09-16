@@ -1,5 +1,5 @@
-import { create } from "../../../utils/HTMLBuilder.js";
-import { Element } from "./BaseElement.js";
+import { create } from "../../../utils/HTMLBuilder";
+import { Element } from "./BaseElement";
 
 export class TextElement extends Element{
     public readonly text: string;

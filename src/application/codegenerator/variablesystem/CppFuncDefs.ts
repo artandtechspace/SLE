@@ -2,9 +2,9 @@
  * Contains all definitions that are required for the function-system to work
  */
 
-import { ModuleBase } from "../../modules/ModuleBase.js";
-import { Variable } from "./Variable.js";
-import { VariableSystem } from "./VariableSystem.js";
+import { ModuleBase } from "../../modules/ModuleBase";
+import { Variable } from "./Variable";
+import { VariableSystem } from "./VariableSystem";
 
 
 // Strings that are cpp-datatypes (float, int, string, etc.)

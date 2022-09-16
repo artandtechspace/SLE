@@ -1,4 +1,4 @@
-import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem.js";
+import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem";
 
 // Short name for the queryselector-function
 export function S(name: string, base: HTMLElement = document.body): HTMLElement{

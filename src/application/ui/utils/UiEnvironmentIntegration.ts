@@ -1,12 +1,12 @@
-import { Environment } from "../../Environment.js";
-import { PopupSystem } from "../popupSystem/PopupSystem.js";
-import { ArduinoSimulation } from "../../simulation/ArduinoSimulation.js";
-import { Min, PositiveNumber } from "../../types/Types.js";
-import { create as C } from "../../utils/HTMLBuilder.js";
-import { loadSVG } from "../../utils/SVGUtil.js";
-import { S } from "./UiUtils.js";
-import { getEnvironment } from "../../SharedObjects.js";
-import { Language } from "../../language/LanguageManager.js";
+import { Environment } from "../../Environment";
+import { PopupSystem } from "../popupSystem/PopupSystem";
+import { ArduinoSimulation } from "../../simulation/ArduinoSimulation";
+import { Min, PositiveNumber } from "../../types/Types";
+import { create as C } from "../../utils/HTMLBuilder";
+import { loadSVG } from "../../utils/SVGUtil";
+import { S } from "./UiUtils";
+import { getEnvironment } from "../../SharedObjects";
+import { Language } from "../../language/LanguageManager";
 
 
 /**

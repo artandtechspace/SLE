@@ -1,9 +1,9 @@
-import { ColorModule, ColorModuleConfig } from "../../defaultModules/ColorModule.js";
-import { ConfigBuilder } from "../../ConfigBuilder.js";
-import { Min, PositiveNumber, RGB } from "../../types/Types.js";
-import { getRGBFromCode } from "../util/BlocklyBlockUtils.js";
-import FieldCustomColor from "../fields/FieldCustomColor.js";
-import { TB_COLOR_COLOR } from "../util/Toolbox.js";
+import { ColorModule, ColorModuleConfig } from "../../defaultModules/ColorModule";
+import { ConfigBuilder } from "../../ConfigBuilder";
+import { Min, PositiveNumber, RGB } from "../../types/Types";
+import { getRGBFromCode } from "../util/BlocklyBlockUtils";
+import FieldCustomColor from "../fields/FieldCustomColor";
+import { TB_COLOR_COLOR } from "../util/Toolbox";
 
 const Blockly = require("blockly");
 

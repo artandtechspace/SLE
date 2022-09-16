@@ -1,5 +1,5 @@
-import { ParameterSystemModel } from "./ParameterSystemModel.js";
-import { ParameterSystemView } from "./ParameterSystemView.js";
+import { ParameterSystemModel } from "./ParameterSystemModel";
+import { ParameterSystemView } from "./ParameterSystemView";
 
 // The model contains the truth state of all parameters.
 // It is used as the backend to grab and store data to and

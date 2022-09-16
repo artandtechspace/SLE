@@ -1,14 +1,14 @@
-import { ConfigBuilder } from "../../ConfigBuilder.js";
-import { HSV, Min, OpenObject, PositiveNumber, Range, RGB, RGBNumber } from "../../types/Types.js";
-import { getParametricNumberMin, getRGBFromCode, getValueFromSettingsUI } from "../util/BlocklyBlockUtils.js";
-import { TB_COLOR_GOGGLES } from "../util/Toolbox.js";
-import { FadeModule, FadeModuleConfig } from "../../defaultModules/animations/FadeModule.js";
-import { getEnvironment } from "../../SharedObjects.js";
-import { ColorModule, ColorModuleConfig, StepMode } from "../../defaultModules/ColorModule.js";
-import { AnimationDirection, BBConsts } from "../util/BlocklyBlockConstants.js";
-import { GradientModule, GradientModuleConfig } from "../../defaultModules/animations/GradientModule.js";
-import { RainbowModule, RainbowModuleConfig } from "../../defaultModules/animations/RainbowModule.js";
-import { createBlocklyStyle } from "../util/BlocklyStyleBuilder.js";
+import { ConfigBuilder } from "../../ConfigBuilder";
+import { HSV, Min, OpenObject, PositiveNumber, Range, RGB, RGBNumber } from "../../types/Types";
+import { getParametricNumberMin, getRGBFromCode, getValueFromSettingsUI } from "../util/BlocklyBlockUtils";
+import { TB_COLOR_GOGGLES } from "../util/Toolbox";
+import { FadeModule, FadeModuleConfig } from "../../defaultModules/animations/FadeModule";
+import { getEnvironment } from "../../SharedObjects";
+import { ColorModule, ColorModuleConfig, StepMode } from "../../defaultModules/ColorModule";
+import { AnimationDirection, BBConsts } from "../util/BlocklyBlockConstants";
+import { GradientModule, GradientModuleConfig } from "../../defaultModules/animations/GradientModule";
+import { RainbowModule, RainbowModuleConfig } from "../../defaultModules/animations/RainbowModule";
+import { createBlocklyStyle } from "../util/BlocklyStyleBuilder";
 
 // For dropdown-select's using lenses
 enum LenseType {

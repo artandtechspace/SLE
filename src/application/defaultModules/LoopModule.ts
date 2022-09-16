@@ -1,13 +1,13 @@
-import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem.js";
-import { ModuleBase } from "../modules/ModuleBase.js";
-import { printIf as pif } from "../utils/WorkUtils.js";
-import { generateModuleCode, ModuleCode } from "../codegenerator/CodeGenerator.js";
-import { Arduino } from "../simulation/Arduino.js";
-import { getFullRuntime } from "../modules/ModuleUtils.js";
-import { ModBlockExport } from "../ConfigBuilder.js";
-import { Min, OpenObject } from "../types/Types.js";
-import { FunctionGenerator } from "../codegenerator/variablesystem/CppFuncGenerator.js";
-import { FunctionSupplier } from "../codegenerator/variablesystem/CppFuncSupplier.js";
+import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem";
+import { ModuleBase } from "../modules/ModuleBase";
+import { printIf as pif } from "../utils/WorkUtils";
+import { generateModuleCode, ModuleCode } from "../codegenerator/CodeGenerator";
+import { Arduino } from "../simulation/Arduino";
+import { getFullRuntime } from "../modules/ModuleUtils";
+import { ModBlockExport } from "../ConfigBuilder";
+import { Min, OpenObject } from "../types/Types";
+import { FunctionGenerator } from "../codegenerator/variablesystem/CppFuncGenerator";
+import { FunctionSupplier } from "../codegenerator/variablesystem/CppFuncSupplier";
 
 export type LoopModuleConfig = {
     submodules: ModBlockExport<any>[],

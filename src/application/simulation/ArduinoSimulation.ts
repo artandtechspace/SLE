@@ -1,9 +1,9 @@
-import { StopableCallchain } from "../utils/StopableCallchain.js";
-import { Arduino } from "./Arduino.js";
-import { getFullRuntime } from "../modules/ModuleUtils.js";
-import { ModBlockExport } from "../ConfigBuilder.js";
-import { Min } from "../types/Types.js";
-import { handleProgrammingError } from "../errorSystem/ProgrammingErrorSystem.js";
+import { StopableCallchain } from "../utils/StopableCallchain";
+import { Arduino } from "./Arduino";
+import { getFullRuntime } from "../modules/ModuleUtils";
+import { ModBlockExport } from "../ConfigBuilder";
+import { Min } from "../types/Types";
+import { handleProgrammingError } from "../errorSystem/ProgrammingErrorSystem";
 
 export class ArduinoSimulation{
 

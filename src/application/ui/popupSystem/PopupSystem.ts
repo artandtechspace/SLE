@@ -1,4 +1,4 @@
-import { S } from "../utils/UiUtils.js";
+import { S } from "../utils/UiUtils";
 
 export class PopupSystem{
  

@@ -1,5 +1,5 @@
-import { Language } from "../../language/LanguageManager.js";
-import { IS_DEBUGGING } from "../../Preset.js";
+import { Language } from "../../language/LanguageManager";
+import { IS_DEBUGGING } from "../../Preset";
 
 /**
  * Toolbox for the blockly workspace

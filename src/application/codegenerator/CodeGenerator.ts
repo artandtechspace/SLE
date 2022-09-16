@@ -1,10 +1,10 @@
-import { ModBlockExport } from "../ConfigBuilder.js";
-import { C, printIf } from "../utils/WorkUtils.js";
-import { VariableSystem } from "./variablesystem/VariableSystem.js";
-import { FunctionSupplier } from "./variablesystem/CppFuncSupplier.js";
-import { FunctionGenerator } from "./variablesystem/CppFuncGenerator.js";
-import { UniqueNameSupplier } from "./variablesystem/UniqueNameSupplier.js";
-import { getEnvironment } from "../SharedObjects.js";
+import { ModBlockExport } from "../ConfigBuilder";
+import { C, printIf } from "../utils/WorkUtils";
+import { VariableSystem } from "./variablesystem/VariableSystem";
+import { FunctionSupplier } from "./variablesystem/CppFuncSupplier";
+import { FunctionGenerator } from "./variablesystem/CppFuncGenerator";
+import { UniqueNameSupplier } from "./variablesystem/UniqueNameSupplier";
+import { getEnvironment } from "../SharedObjects";
 
 // Regexes to match env-variables and code-insert-points
 const CODE_REGEX = /\$\w+\$/gi;

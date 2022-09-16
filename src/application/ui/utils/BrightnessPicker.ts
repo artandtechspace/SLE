@@ -1,7 +1,7 @@
-import { Language } from "../../language/LanguageManager.js";
-import { PercentageNumber, Range } from "../../types/Types.js";
-import { HSV2HEX } from "../../utils/ColorUtils.js";
-import { create as C } from "../../utils/HTMLBuilder.js";
+import { Language } from "../../language/LanguageManager";
+import { PercentageNumber, Range } from "../../types/Types";
+import { HSV2HEX } from "../../utils/ColorUtils";
+import { create as C } from "../../utils/HTMLBuilder";
 
 type InternalFormBindings = {
     slider: HTMLInputElement,

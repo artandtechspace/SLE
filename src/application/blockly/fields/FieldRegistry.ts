@@ -1,5 +1,5 @@
-import FieldBrightness from "./FieldBrightness.js";
-import FieldCustomColor from "./FieldCustomColor.js";
+import FieldBrightness from "./FieldBrightness";
+import FieldCustomColor from "./FieldCustomColor";
 
 const Blockly = require("blockly");
 

@@ -1,8 +1,8 @@
-import { PercentageNumber } from "../types/Types.js";
-import { printEquation } from "../utils/EquationUtils.js";
-import { tenaryLargerThan } from "./CodeGenerationUtils.js";
-import { CppFuncParam } from "./variablesystem/CppFuncDefs.js";
-import { Variable } from "./variablesystem/Variable.js";
+import { PercentageNumber } from "../types/Types";
+import { printEquation } from "../utils/EquationUtils";
+import { tenaryLargerThan } from "./CodeGenerationUtils";
+import { CppFuncParam } from "./variablesystem/CppFuncDefs";
+import { Variable } from "./variablesystem/Variable";
 
 /**
  * Generates a hue equation that scales linear from start to end if the starting value is before the end value,

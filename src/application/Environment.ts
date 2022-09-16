@@ -1,7 +1,7 @@
-import { EnvDeserialisationError } from "./errorSystem/Errors.js";
-import { isMin, Min, OpenObject, PositiveNumber } from "./types/Types.js";
-import { PREVIEWS } from "./ui/utils/UiEnvironmentIntegration.js";
-import { isBooleanEV, isIntegerEV, isStringEV } from "./utils/ElementValidation.js";
+import { EnvDeserialisationError } from "./errorSystem/Errors";
+import { isMin, Min, OpenObject, PositiveNumber } from "./types/Types";
+import { PREVIEWS } from "./ui/utils/UiEnvironmentIntegration";
+import { isBooleanEV, isIntegerEV, isStringEV } from "./utils/ElementValidation";
 
 export class Environment{
 

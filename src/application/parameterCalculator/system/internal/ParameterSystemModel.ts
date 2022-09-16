@@ -1,6 +1,6 @@
-import { getEnvironment } from "../../../SharedObjects.js";
-import { isValidParameterName } from "../../ParameterCheck.js";
-import { SysParameterModel, UParameterModel } from "./ParameterSystemTypes.js";
+import { getEnvironment } from "../../../SharedObjects";
+import { isValidParameterName } from "../../ParameterCheck";
+import { SysParameterModel, UParameterModel } from "./ParameterSystemTypes";
 
 // All system-parameter names
 export const SystemParams = {

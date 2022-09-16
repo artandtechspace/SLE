@@ -1,14 +1,14 @@
-import { HSV, OpenObject, PercentageNumber } from "../../types/Types.js";
-import { Element, ElementBuilderBase } from "./fields/BaseElement.js";
-import { BrightnessPickerElement } from "./fields/BrightnessPickerElement.js";
-import { DropDownElement } from "./fields/DropDownElement.js";
-import { ColorPickerElement } from "./fields/ColorPickerElement.js";
-import { InfoIconElement } from "./fields/InfoIconElement.js";
-import { LineSeperatorElement } from "./fields/LineSeperatorElement.js";
-import { NumericFieldBuilder } from "./fields/NumericElement.js";
-import { TextElement } from "./fields/TextElement.js";
-import { Manager, SettingsUI } from "./SettingsUI.js";
-import { Language } from "../../language/LanguageManager.js";
+import { HSV, OpenObject, PercentageNumber } from "../../types/Types";
+import { Element, ElementBuilderBase } from "./fields/BaseElement";
+import { BrightnessPickerElement } from "./fields/BrightnessPickerElement";
+import { DropDownElement } from "./fields/DropDownElement";
+import { ColorPickerElement } from "./fields/ColorPickerElement";
+import { InfoIconElement } from "./fields/InfoIconElement";
+import { LineSeperatorElement } from "./fields/LineSeperatorElement";
+import { NumericFieldBuilder } from "./fields/NumericElement";
+import { TextElement } from "./fields/TextElement";
+import { Manager, SettingsUI } from "./SettingsUI";
+import { Language } from "../../language/LanguageManager";
 
 // Line-type
 type Line = (Element|ElementBuilderBase<any>)[];

@@ -1,5 +1,5 @@
-import { LoadingError } from "../errorSystem/Errors.js";
-import { handleProgrammingError } from "../errorSystem/ProgrammingErrorSystem.js";
+import { LoadingError } from "../errorSystem/Errors";
+import { handleProgrammingError } from "../errorSystem/ProgrammingErrorSystem";
 
 /**
  * Loads an svg from the given path.

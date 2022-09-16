@@ -1,12 +1,12 @@
-import { DelayModule, DelayModuleConfig } from "../../defaultModules/DelayModule.js";
-import { LoopModule, LoopModuleConfig } from "../../defaultModules/LoopModule.js";
-import { ModBlockExport, ConfigBuilder } from "../../ConfigBuilder.js";
-import { Min, PositiveNumber } from "../../types/Types.js";
-import { CommentModule, CommentModuleConfig } from "../../defaultModules/CommentModule.js";
-import { TB_COLOR_CONTROL } from "../util/Toolbox.js";
-import { createBlocklyStyle } from "../util/BlocklyStyleBuilder.js";
-import { Language } from "../../language/LanguageManager.js";
-import { getParametricNumberMin } from "../util/BlocklyBlockUtils.js";
+import { DelayModule, DelayModuleConfig } from "../../defaultModules/DelayModule";
+import { LoopModule, LoopModuleConfig } from "../../defaultModules/LoopModule";
+import { ModBlockExport, ConfigBuilder } from "../../ConfigBuilder";
+import { Min, PositiveNumber } from "../../types/Types";
+import { CommentModule, CommentModuleConfig } from "../../defaultModules/CommentModule";
+import { TB_COLOR_CONTROL } from "../util/Toolbox";
+import { createBlocklyStyle } from "../util/BlocklyStyleBuilder";
+import { Language } from "../../language/LanguageManager";
+import { getParametricNumberMin } from "../util/BlocklyBlockUtils";
 
 const Blockly = require("blockly");
 

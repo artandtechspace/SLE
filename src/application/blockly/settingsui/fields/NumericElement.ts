@@ -1,8 +1,8 @@
-import { performCalculation } from "../../../parameterCalculator/Calculator.js";
-import { createSizeableTF } from "../../../ui/utils/SizeableTF.js";
-import { isStringEV } from "../../../utils/ElementValidation.js";
-import { create } from "../../../utils/HTMLBuilder.js";
-import { Element, ElementBuilderBase, SupplierElement } from "./BaseElement.js";
+import { performCalculation } from "../../../parameterCalculator/Calculator";
+import { createSizeableTF } from "../../../ui/utils/SizeableTF";
+import { isStringEV } from "../../../utils/ElementValidation";
+import { create } from "../../../utils/HTMLBuilder";
+import { Element, ElementBuilderBase, SupplierElement } from "./BaseElement";
 
 export enum ParseMode{
     FLOAT, INT

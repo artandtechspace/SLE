@@ -1,16 +1,16 @@
-import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem.js";
-import { ModuleBase } from "../modules/ModuleBase.js";
-import { printIfElse } from "../utils/WorkUtils.js";
-import { Min, OpenObject, PositiveNumber as PositiveNumber, RGBNumber } from "../types/Types.js";
-import { FunctionGenerator } from "../codegenerator/variablesystem/CppFuncGenerator.js";
-import { ModuleCode } from "../codegenerator/CodeGenerator.js";
-import { FunctionSupplier } from "../codegenerator/variablesystem/CppFuncSupplier.js";
-import { CppBool, CppByte, CppDontPass, CppInt, CppVoid } from "../codegenerator/variablesystem/CppTypes.js";
-import { CppFuncParam, CppFuncParams, CppTypeDefintion } from "../codegenerator/variablesystem/CppFuncDefs.js";
-import { printEquation } from "../utils/EquationUtils.js";
-import { Variable } from "../codegenerator/variablesystem/Variable.js";
-import { Arduino } from "../simulation/Arduino.js";
-import { getHexFromRGB } from "../utils/ColorUtils.js";
+import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem";
+import { ModuleBase } from "../modules/ModuleBase";
+import { printIfElse } from "../utils/WorkUtils";
+import { Min, OpenObject, PositiveNumber as PositiveNumber, RGBNumber } from "../types/Types";
+import { FunctionGenerator } from "../codegenerator/variablesystem/CppFuncGenerator";
+import { ModuleCode } from "../codegenerator/CodeGenerator";
+import { FunctionSupplier } from "../codegenerator/variablesystem/CppFuncSupplier";
+import { CppBool, CppByte, CppDontPass, CppInt, CppVoid } from "../codegenerator/variablesystem/CppTypes";
+import { CppFuncParam, CppFuncParams, CppTypeDefintion } from "../codegenerator/variablesystem/CppFuncDefs";
+import { printEquation } from "../utils/EquationUtils";
+import { Variable } from "../codegenerator/variablesystem/Variable";
+import { Arduino } from "../simulation/Arduino";
+import { getHexFromRGB } from "../utils/ColorUtils";
 
 export type ColorModuleConfig = {
     // Amount of leds per step

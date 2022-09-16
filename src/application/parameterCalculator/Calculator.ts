@@ -1,6 +1,6 @@
-import { Lexer } from "./interpreter/Lexer.js";
-import { Parser } from "./interpreter/Parser.js";
-import { Solver } from "./interpreter/Solver.js";
+import { Lexer } from "./interpreter/Lexer";
+import { Parser } from "./interpreter/Parser";
+import { Solver } from "./interpreter/Solver";
 
 const solver = new Solver();
 const parser = new Parser();

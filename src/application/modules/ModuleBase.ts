@@ -1,9 +1,9 @@
-import { ModuleCode } from "../codegenerator/CodeGenerator.js";
-import { Arduino } from "../simulation/Arduino.js";
-import { OpenObject, PositiveNumber } from "../types/Types.js";
-import { FunctionGenerator } from "../codegenerator/variablesystem/CppFuncGenerator.js";
-import { FunctionSupplier } from "../codegenerator/variablesystem/CppFuncSupplier.js";
-import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem.js";
+import { ModuleCode } from "../codegenerator/CodeGenerator";
+import { Arduino } from "../simulation/Arduino";
+import { OpenObject, PositiveNumber } from "../types/Types";
+import { FunctionGenerator } from "../codegenerator/variablesystem/CppFuncGenerator";
+import { FunctionSupplier } from "../codegenerator/variablesystem/CppFuncSupplier";
+import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem";
 
 /**
  * The module-base is the element that takes in a configuration file and generate the code based on the provided information and environment.

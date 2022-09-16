@@ -1,4 +1,4 @@
-import { Language } from "../../language/LanguageManager.js";
+import { Language } from "../../language/LanguageManager";
 
 const Blockly = require("blockly");
 

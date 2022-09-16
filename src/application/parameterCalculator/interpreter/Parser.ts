@@ -1,5 +1,5 @@
-import { Node, NodeTypes } from "../Nodes.js";
-import { NumberToken, Token, TokenTypes } from "../Token.js";
+import { Node, NodeTypes } from "../Nodes";
+import { NumberToken, Token, TokenTypes } from "../Token";
 
 export class Parser{
     // Index where the curser currently is at

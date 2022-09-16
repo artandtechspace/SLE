@@ -1,12 +1,12 @@
-import { IS_DEBUGGING } from "../Preset.js";
-import registerAnimationBlocks from "./blocks/AnimationBlocks.js";
-import registerColorBlocks from "./blocks/ColorBlocks.js";
-import registerControlBlocks from "./blocks/ControlBlocks.js";
-import registerDebugBlocks from "./blocks/DebuggingBlocks.js";
-import registerGoggleBlocks from "./blocks/GoggleBlocks.js";
-import registerSpecialBlocks from "./blocks/SpecialBlocks.js";
-import Theme from "./util/Theme.js";
-import { buildToolBox } from "./util/Toolbox.js";
+import { IS_DEBUGGING } from "../Preset";
+import registerAnimationBlocks from "./blocks/AnimationBlocks";
+import registerColorBlocks from "./blocks/ColorBlocks";
+import registerControlBlocks from "./blocks/ControlBlocks";
+import registerDebugBlocks from "./blocks/DebuggingBlocks";
+import registerGoggleBlocks from "./blocks/GoggleBlocks";
+import registerSpecialBlocks from "./blocks/SpecialBlocks";
+import Theme from "./util/Theme";
+import { buildToolBox } from "./util/Toolbox";
 const Blockly = require("blockly");
 
 

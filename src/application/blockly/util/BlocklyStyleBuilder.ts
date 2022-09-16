@@ -1,10 +1,10 @@
-import { Language, LanguageRef } from "../../language/LanguageManager.js";
-import { OpenObject, PercentageNumber } from "../../types/Types.js";
-import FieldBrightness from "../fields/FieldBrightness.js";
-import FieldCustomColor from "../fields/FieldCustomColor.js";
-import { SettingsUIBuilder } from "../settingsui/Builder.js";
-import { SettingsUIManager } from "../settingsui/Manager.js";
-import { Manager, SettingsUI } from "../settingsui/SettingsUI.js";
+import { Language, LanguageRef } from "../../language/LanguageManager";
+import { OpenObject, PercentageNumber } from "../../types/Types";
+import FieldBrightness from "../fields/FieldBrightness";
+import FieldCustomColor from "../fields/FieldCustomColor";
+import { SettingsUIBuilder } from "../settingsui/Builder";
+import { SettingsUIManager } from "../settingsui/Manager";
+import { Manager, SettingsUI } from "../settingsui/SettingsUI";
 
 const Blockly = require("blockly");
 

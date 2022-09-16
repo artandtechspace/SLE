@@ -1,7 +1,7 @@
-import { Language } from "../../../language/LanguageManager.js";
-import { isStringEV } from "../../../utils/ElementValidation.js";
-import { create } from "../../../utils/HTMLBuilder.js";
-import { SupplierElement } from "./BaseElement.js";
+import { Language } from "../../../language/LanguageManager";
+import { isStringEV } from "../../../utils/ElementValidation";
+import { create } from "../../../utils/HTMLBuilder";
+import { SupplierElement } from "./BaseElement";
 
 export class DropDownElement extends SupplierElement<number, string>{
 

@@ -1,6 +1,6 @@
-import { isPercentageNumber, PercentageNumber } from "../../types/Types.js";
-import { BrightnessPicker } from "../../ui/utils/BrightnessPicker.js";
-import { isNumberEV } from "../../utils/ElementValidation.js";
+import { isPercentageNumber, PercentageNumber } from "../../types/Types";
+import { BrightnessPicker } from "../../ui/utils/BrightnessPicker";
+import { isNumberEV } from "../../utils/ElementValidation";
 const Blockly = require("blockly");
 
 export default class FieldBrightness extends Blockly.Field{

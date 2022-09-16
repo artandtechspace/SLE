@@ -1,5 +1,5 @@
-import { handleProgrammingError } from "../errorSystem/ProgrammingErrorSystem.js";
-import { LVarType } from "../language/LanguageManager.js";
+import { handleProgrammingError } from "../errorSystem/ProgrammingErrorSystem";
+import { LVarType } from "../language/LanguageManager";
 
  // All special-chars that are allowed within parameter names
  const SPECIAL_CHARS = "_$%".split("");

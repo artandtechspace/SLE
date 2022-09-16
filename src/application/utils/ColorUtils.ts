@@ -1,5 +1,5 @@
-import { HSV, OpenObject, PercentageNumber, RGB, RGBNumber } from "../types/Types.js";
-import { isNumberEV } from "./ElementValidation.js";
+import { HSV, OpenObject, PercentageNumber, RGB, RGBNumber } from "../types/Types";
+import { isNumberEV } from "./ElementValidation";
 
 /**
  * Generates the hex-rgb string from the three colors

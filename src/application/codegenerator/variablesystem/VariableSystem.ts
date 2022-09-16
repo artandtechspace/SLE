@@ -1,6 +1,6 @@
-import { C } from "../../utils/WorkUtils.js";
-import { UniqueNameSupplier } from "./UniqueNameSupplier.js";
-import { Variable } from "./Variable.js";
+import { C } from "../../utils/WorkUtils";
+import { UniqueNameSupplier } from "./UniqueNameSupplier";
+import { Variable } from "./Variable";
 
 export class VariableSystem {
 

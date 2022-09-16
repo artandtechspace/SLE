@@ -1,6 +1,6 @@
-import { isValidFirstCharacter, isValidMiddleCharacter } from "../ParameterCheck.js";
-import { PSModel } from "../system/internal/ParameterSystemController.js";
-import { NumberToken, Token, TokenTypes } from "../Token.js";
+import { isValidFirstCharacter, isValidMiddleCharacter } from "../ParameterCheck";
+import { PSModel } from "../system/internal/ParameterSystemController";
+import { NumberToken, Token, TokenTypes } from "../Token";
 
 // Chars the can be ignored
 const IGNORE_CHARS = [" ", "\t", "\n"];

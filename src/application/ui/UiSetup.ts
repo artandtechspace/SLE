@@ -1,21 +1,21 @@
-import { Environment } from "../Environment.js";
-import { Error } from "../errorSystem/Errors.js";
-import { InAppErrorSystem } from "../errorSystem/InAppErrorSystem.js";
-import { PopupSystem } from "./popupSystem/PopupSystem.js";
-import { PRESET_SOURCECODE } from "../Preset.js";
-import { ArduinoSimulation } from "../simulation/ArduinoSimulation.js";
-import { Min, PositiveNumber } from "../types/Types.js";
-import { loadSVG } from "../utils/SVGUtil.js";
-import { TAB_PREVIEW_ANIMATION, TAB_PREVIEW_CODE, TAB_PREVIEW_ANALYTICS, TAB_CONTROLS_ENVS, TAB_CONTROLS_PARAMS, TAB_CONTROLS_SETTINGS } from "./Tabs.js";
-import { SliderBar, SliderBarDirection } from "./utils/SliderBar.js";
-import { TabHandler } from "./utils/TabHandler.js";
-import { PREVIEWS_FILE_PATH, DEFAULT_PREVIEW_NAME, setupEnvironment } from "./utils/UiEnvironmentIntegration.js";
-import { S } from "./utils/UiUtils.js";
-import { Manager as SettingsUiManager } from "../blockly/settingsui/SettingsUI.js";
-import { registerBlockly } from "../blockly/BlocklyRegister.js";
-import { setupExportFeature } from "./utils/UiExportFeature.js";
-import { onRenderTab, startParameterSystem } from "../parameterCalculator/system/ParameterSystem.js";
-import { Language } from "../language/LanguageManager.js";
+import { Environment } from "../Environment";
+import { Error } from "../errorSystem/Errors";
+import { InAppErrorSystem } from "../errorSystem/InAppErrorSystem";
+import { PopupSystem } from "./popupSystem/PopupSystem";
+import { PRESET_SOURCECODE } from "../Preset";
+import { ArduinoSimulation } from "../simulation/ArduinoSimulation";
+import { Min, PositiveNumber } from "../types/Types";
+import { loadSVG } from "../utils/SVGUtil";
+import { TAB_PREVIEW_ANIMATION, TAB_PREVIEW_CODE, TAB_PREVIEW_ANALYTICS, TAB_CONTROLS_ENVS, TAB_CONTROLS_PARAMS, TAB_CONTROLS_SETTINGS } from "./Tabs";
+import { SliderBar, SliderBarDirection } from "./utils/SliderBar";
+import { TabHandler } from "./utils/TabHandler";
+import { PREVIEWS_FILE_PATH, DEFAULT_PREVIEW_NAME, setupEnvironment } from "./utils/UiEnvironmentIntegration";
+import { S } from "./utils/UiUtils";
+import { Manager as SettingsUiManager } from "../blockly/settingsui/SettingsUI";
+import { registerBlockly } from "../blockly/BlocklyRegister";
+import { setupExportFeature } from "./utils/UiExportFeature";
+import { onRenderTab, startParameterSystem } from "../parameterCalculator/system/ParameterSystem";
+import { Language } from "../language/LanguageManager";
 
 // Executes to setup the ui
 // Returns an object with all important elements

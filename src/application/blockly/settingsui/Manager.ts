@@ -1,4 +1,4 @@
-import { SettingsUI } from "./SettingsUI.js";
+import { SettingsUI } from "./SettingsUI";
 
 export class SettingsUIManager{
 

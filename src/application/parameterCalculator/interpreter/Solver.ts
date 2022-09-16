@@ -1,6 +1,6 @@
-import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem.js";
-import { Node, NodeTypes } from "../Nodes.js";
-import { BaseToken, TokenTypes } from "../Token.js";
+import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem";
+import { Node, NodeTypes } from "../Nodes";
+import { BaseToken, TokenTypes } from "../Token";
 
 export class Solver{
 

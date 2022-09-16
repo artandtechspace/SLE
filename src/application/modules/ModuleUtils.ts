@@ -1,7 +1,7 @@
-import { ModBlockExport } from "../ConfigBuilder.js";
-import { OpenObject, PositiveNumber } from "../types/Types.js";
-import { ModuleBase } from "./ModuleBase.js";
-import { getEnvironment } from "../SharedObjects.js";
+import { ModBlockExport } from "../ConfigBuilder";
+import { OpenObject, PositiveNumber } from "../types/Types";
+import { ModuleBase } from "./ModuleBase";
+import { getEnvironment } from "../SharedObjects";
 
 /**
  * Returns the estimated runtime of the given configuration

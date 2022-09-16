@@ -1,6 +1,6 @@
-import { Language } from "../../../language/LanguageManager.js";
-import { create } from "../../../utils/HTMLBuilder.js";
-import { Element } from "./BaseElement.js";
+import { Language } from "../../../language/LanguageManager";
+import { create } from "../../../utils/HTMLBuilder";
+import { Element } from "./BaseElement";
 
 export class InfoIconElement extends Element{
     public readonly text: string;

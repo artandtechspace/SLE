@@ -1,14 +1,14 @@
-import { VariableSystem } from "../../codegenerator/variablesystem/VariableSystem.js";
-import { Arduino } from "../../simulation/Arduino.js";
-import { Min, OpenObject, PercentageNumber, PositiveNumber as PositiveNumber } from "../../types/Types.js";
-import { printIf, printIfElse } from "../../utils/WorkUtils.js";
-import { ModuleAsFuncBase } from "../../modules/ModuleAsFuncBase.js";
-import { CppTypeDefintion, CppFuncParams } from "../../codegenerator/variablesystem/CppFuncDefs.js";
-import { CppBool, CppFloat, CppInt } from "../../codegenerator/variablesystem/CppTypes.js";
-import { tenaryBoolsEqual } from "../../codegenerator/CodeGenerationUtils.js";
-import { printEquation } from "../../utils/EquationUtils.js";
-import { getHUECalulationFunction } from "../../utils/ColorUtils.js";
-import { generateHUECalculation, generateLinearScalingEquation as genLinScaleEQ } from "../../codegenerator/CommonCppCode.js";
+import { VariableSystem } from "../../codegenerator/variablesystem/VariableSystem";
+import { Arduino } from "../../simulation/Arduino";
+import { Min, OpenObject, PercentageNumber, PositiveNumber as PositiveNumber } from "../../types/Types";
+import { printIf, printIfElse } from "../../utils/WorkUtils";
+import { ModuleAsFuncBase } from "../../modules/ModuleAsFuncBase";
+import { CppTypeDefintion, CppFuncParams } from "../../codegenerator/variablesystem/CppFuncDefs";
+import { CppBool, CppFloat, CppInt } from "../../codegenerator/variablesystem/CppTypes";
+import { tenaryBoolsEqual } from "../../codegenerator/CodeGenerationUtils";
+import { printEquation } from "../../utils/EquationUtils";
+import { getHUECalulationFunction } from "../../utils/ColorUtils";
+import { generateHUECalculation, generateLinearScalingEquation as genLinScaleEQ } from "../../codegenerator/CommonCppCode";
 
 export type GradientModuleConfig = {    
     // The colors to fade between

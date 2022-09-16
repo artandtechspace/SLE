@@ -1,7 +1,7 @@
-import { LoadingError, ParameterError } from "../../errorSystem/Errors.js";
-import { TAB_CONTROLS_PARAMS } from "../../ui/Tabs.js";
-import { isNumberEV, isObjectEV, isStringEV } from "../../utils/ElementValidation.js";
-import { PSModel, PSView } from "./internal/ParameterSystemController.js";
+import { LoadingError, ParameterError } from "../../errorSystem/Errors";
+import { TAB_CONTROLS_PARAMS } from "../../ui/Tabs";
+import { isNumberEV, isObjectEV, isStringEV } from "../../utils/ElementValidation";
+import { PSModel, PSView } from "./internal/ParameterSystemController";
 
 
 // Inits the parameter system and it's ui (Shall be called during the ui-setup)

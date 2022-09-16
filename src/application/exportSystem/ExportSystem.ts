@@ -1,9 +1,9 @@
-import { getEnvironment, getWorkspace, loadNewEnvironment } from "../SharedObjects.js";
-import {Environment} from "../Environment.js";
-import { LoadingError } from "../errorSystem/Errors.js";
-import { OpenObject } from "../types/Types.js";
-import { isArrayEV, isObjectEV } from "../utils/ElementValidation.js";
-import { exportParameters, importParameters, validateParamConfig } from "../parameterCalculator/system/ParameterSystem.js";
+import { getEnvironment, getWorkspace, loadNewEnvironment } from "../SharedObjects";
+import {Environment} from "../Environment";
+import { LoadingError } from "../errorSystem/Errors";
+import { OpenObject } from "../types/Types";
+import { isArrayEV, isObjectEV } from "../utils/ElementValidation";
+import { exportParameters, importParameters, validateParamConfig } from "../parameterCalculator/system/ParameterSystem";
 
 const Blockly = require("blockly");
 

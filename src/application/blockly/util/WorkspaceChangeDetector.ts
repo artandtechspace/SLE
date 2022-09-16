@@ -1,6 +1,6 @@
-import { ModBlockExport } from "../../ConfigBuilder.js";
-import { LoopModule, LoopModuleConfig } from "../../defaultModules/LoopModule.js";
-import { hash53b } from "../../utils/CryptoUtil.js";
+import { ModBlockExport } from "../../ConfigBuilder";
+import { LoopModule, LoopModuleConfig } from "../../defaultModules/LoopModule";
+import { hash53b } from "../../utils/CryptoUtil";
 
 // Checksum of the previous blockly-configuration
 var blocklyChecksum: number = 0;

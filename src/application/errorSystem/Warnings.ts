@@ -1,5 +1,5 @@
-import { Language, LVarSet } from "../language/LanguageManager.js";
-import { ExceptionBase } from "./ExceptionBase.js";
+import { Language, LVarSet } from "../language/LanguageManager";
+import { ExceptionBase } from "./ExceptionBase";
 
 export abstract class Warning extends ExceptionBase{}
 

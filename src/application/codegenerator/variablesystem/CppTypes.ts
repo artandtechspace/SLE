@@ -1,6 +1,6 @@
-import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem.js";
-import { isBooleanEV, isNumberEV, isStringEV } from "../../utils/ElementValidation.js";
-import { CppReturnType, CppType } from "./CppFuncDefs.js";
+import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem";
+import { isBooleanEV, isNumberEV, isStringEV } from "../../utils/ElementValidation";
+import { CppReturnType, CppType } from "./CppFuncDefs";
 
 // Defined cpp-types and cpp-return-types that are already implemented to be handled
 export const CppFloat: CppType = "float" as CppType;

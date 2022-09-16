@@ -1,9 +1,9 @@
-import { Language } from "../../../language/LanguageManager.js";
-import { S, setClass } from "../../../ui/utils/UiUtils.js";
-import { create as C, createIfElse } from "../../../utils/HTMLBuilder.js";
-import { printIf } from "../../../utils/WorkUtils.js";
-import { PSModel } from "./ParameterSystemController.js";
-import { isSystemParameter, ParameterModel, SysParameterView, UParameterModel, UParameterView } from "./ParameterSystemTypes.js";
+import { Language } from "../../../language/LanguageManager";
+import { S, setClass } from "../../../ui/utils/UiUtils";
+import { create as C, createIfElse } from "../../../utils/HTMLBuilder";
+import { printIf } from "../../../utils/WorkUtils";
+import { PSModel } from "./ParameterSystemController";
+import { isSystemParameter, ParameterModel, SysParameterView, UParameterModel, UParameterView } from "./ParameterSystemTypes";
 
 // Handles all ui stuff for the parameter system
 export class ParameterSystemView {

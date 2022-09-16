@@ -1,8 +1,8 @@
-import { Language, LVarSet } from "../language/LanguageManager.js";
-import { getParamInvalidNameErrorMessage } from "../parameterCalculator/ParameterCheck.js";
-import { ErrorType } from "../parameterCalculator/system/internal/ParameterSystemModel.js";
-import { UParameterModel } from "../parameterCalculator/system/internal/ParameterSystemTypes.js";
-import { ExceptionBase } from "./ExceptionBase.js";
+import { Language, LVarSet } from "../language/LanguageManager";
+import { getParamInvalidNameErrorMessage } from "../parameterCalculator/ParameterCheck";
+import { ErrorType } from "../parameterCalculator/system/internal/ParameterSystemModel";
+import { UParameterModel } from "../parameterCalculator/system/internal/ParameterSystemTypes";
+import { ExceptionBase } from "./ExceptionBase";
 
 export abstract class Error extends ExceptionBase{}
 

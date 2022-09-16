@@ -1,7 +1,7 @@
-import { S } from "../ui/utils/UiUtils.js";
-import { BlockError, Error } from "./Errors.js";
-import { BlockWarning, Warning } from "./Warnings.js";
-import { ExceptionBase } from "./ExceptionBase.js";
+import { S } from "../ui/utils/UiUtils";
+import { BlockError, Error } from "./Errors";
+import { BlockWarning, Warning } from "./Warnings";
+import { ExceptionBase } from "./ExceptionBase";
 
 /*
  * Minor-error-handling system for inapp errors (After inital initalisation/setup)

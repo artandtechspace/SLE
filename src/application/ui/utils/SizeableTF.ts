@@ -1,4 +1,4 @@
-import { create } from "../../utils/HTMLBuilder.js";
+import { create } from "../../utils/HTMLBuilder";
 
 // Event-handler for the input-event on the sizeable-textfield
 function onWrite(evt: any){

@@ -1,10 +1,10 @@
-import { Arduino } from "../simulation/Arduino.js";
-import { PositiveNumber } from "../types/Types.js";
-import { printIf as pIf } from "../utils/WorkUtils.js";
-import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem.js";
-import { ModuleBase } from "../modules/ModuleBase.js";
-import { ModuleCode } from "../codegenerator/CodeGenerator.js";
-import { FunctionSupplier } from "../codegenerator/variablesystem/CppFuncSupplier.js";
+import { Arduino } from "../simulation/Arduino";
+import { PositiveNumber } from "../types/Types";
+import { printIf as pIf } from "../utils/WorkUtils";
+import { VariableSystem } from "../codegenerator/variablesystem/VariableSystem";
+import { ModuleBase } from "../modules/ModuleBase";
+import { ModuleCode } from "../codegenerator/CodeGenerator";
+import { FunctionSupplier } from "../codegenerator/variablesystem/CppFuncSupplier";
 
 export type DelayModuleConfig = {
     delay: PositiveNumber

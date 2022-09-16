@@ -1,4 +1,4 @@
-import { getEnvironment } from "../SharedObjects.js";
+import { getEnvironment } from "../SharedObjects";
 
 /**
  * Takes in a comment and the current environment. Based on these settings the command will be printed or not.

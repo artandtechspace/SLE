@@ -1,9 +1,9 @@
-import { HSV } from "../../../types/Types.js";
-import { HSVColorPicker } from "../../../ui/utils/HSVColorPicker.js";
-import { HSV2HEX, isValidHSV } from "../../../utils/ColorUtils.js";
-import { isObjectEV } from "../../../utils/ElementValidation.js";
-import { create } from "../../../utils/HTMLBuilder.js";
-import { SupplierElement } from "./BaseElement.js";
+import { HSV } from "../../../types/Types";
+import { HSVColorPicker } from "../../../ui/utils/HSVColorPicker";
+import { HSV2HEX, isValidHSV } from "../../../utils/ColorUtils";
+import { isObjectEV } from "../../../utils/ElementValidation";
+import { create } from "../../../utils/HTMLBuilder";
+import { SupplierElement } from "./BaseElement";
 
 export class ColorPickerElement extends SupplierElement<HSV, HSV>{
     private popup: HSVColorPicker;

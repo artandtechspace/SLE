@@ -1,22 +1,22 @@
-import registerCustomFields from "./blockly/fields/FieldRegistry.js";
-import { generateCode } from "./codegenerator/CodeGenerator.js";
-import { Error } from "./errorSystem/Errors.js";
-import { InAppErrorSystem } from "./errorSystem/InAppErrorSystem.js";
-import { getFullRuntime, getOutOfBoundsModExports } from "./modules/ModuleUtils.js";
-import { PopupSystem } from "./ui/popupSystem/PopupSystem.js";
-import { ArduinoSimulation } from "./simulation/ArduinoSimulation.js";
-import { ConfigBuilder, ModBlockExport } from "./ConfigBuilder.js";
-import { TAB_PREVIEW_ANALYTICS, TAB_PREVIEW_ANIMATION, TAB_PREVIEW_CODE } from "./ui/Tabs.js";
-import { setupUi } from "./ui/UiSetup.js";
-import { TabHandler } from "./ui/utils/TabHandler.js";
-import { BlockWarning } from "./errorSystem/Warnings.js";
-import { didWorkspaceChange, setWorkspaceInvalid } from "./blockly/util/WorkspaceChangeDetector.js";
-import { Manager as SettingsUiManager } from "./blockly/settingsui/SettingsUI.js";
-import { getEnvironment, getWorkspace, initSharedObjects } from "./SharedObjects.js";
-import { writeEnvironmentToPage } from "./ui/utils/UiEnvironmentIntegration.js";
-import { checkParametersForErrors } from "./parameterCalculator/system/ParameterSystem.js";
-import { Language } from "./language/LanguageManager.js";
-import { getRootBlocks } from "./blockly/workspace/WorkspaceHandler.js";
+import registerCustomFields from "./blockly/fields/FieldRegistry";
+import { generateCode } from "./codegenerator/CodeGenerator";
+import { Error } from "./errorSystem/Errors";
+import { InAppErrorSystem } from "./errorSystem/InAppErrorSystem";
+import { getFullRuntime, getOutOfBoundsModExports } from "./modules/ModuleUtils";
+import { PopupSystem } from "./ui/popupSystem/PopupSystem";
+import { ArduinoSimulation } from "./simulation/ArduinoSimulation";
+import { ConfigBuilder, ModBlockExport } from "./ConfigBuilder";
+import { TAB_PREVIEW_ANALYTICS, TAB_PREVIEW_ANIMATION, TAB_PREVIEW_CODE } from "./ui/Tabs";
+import { setupUi } from "./ui/UiSetup";
+import { TabHandler } from "./ui/utils/TabHandler";
+import { BlockWarning } from "./errorSystem/Warnings";
+import { didWorkspaceChange, setWorkspaceInvalid } from "./blockly/util/WorkspaceChangeDetector";
+import { Manager as SettingsUiManager } from "./blockly/settingsui/SettingsUI";
+import { getEnvironment, getWorkspace, initSharedObjects } from "./SharedObjects";
+import { writeEnvironmentToPage } from "./ui/utils/UiEnvironmentIntegration";
+import { checkParametersForErrors } from "./parameterCalculator/system/ParameterSystem";
+import { Language } from "./language/LanguageManager";
+import { getRootBlocks } from "./blockly/workspace/WorkspaceHandler";
 
 // Arduino-simulation
 var simulation: ArduinoSimulation;
@@ -220,3 +220,6 @@ export default async function onAppInitalize(){
 	// Inits the shared objects
 	initSharedObjects(cfg.blocklyWorkspace, cfg.environment, onNewEnvLoaded);
 }
+
+// Adds the app start as the onload function
+(window as any).onload = onAppInitalize;
