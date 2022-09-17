@@ -1,5 +1,5 @@
 # Very much unfinished
-This project is in it's very early development phase and not recommended to use on a wide scale level currently. But if you want, you can still check our it's code or just give it a compile and run.
+This project is in it's very early development phase and not recommended to be used on a wide scale level currently. But if you want, you can still check our it's code or just give it a compile and run.
 
 # What is this project?
 This project aims to provide a way for non-developers (or developers who just don't want to write a whole bunch of led-code, every time something changes) to auto-generate cpp-arduino or arduino-board like code for accessing WS2812B-Led stripes using an interactive UI.
