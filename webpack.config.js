@@ -42,6 +42,7 @@ module.exports = env => {
     // Packages the typescript-app
     return {
         mode: isProd ? "production" : "development",
+        devtool: "cheap-source-map",
         entry: `${inPath}/application/Appentry.ts`,
         output: {
             path: outPath,   
