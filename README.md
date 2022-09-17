@@ -19,6 +19,12 @@ But obviously there are some disadvantages to this approach to:
 1. A developer can always write more efficient code than the tool can as there are just a lot of edge cases.
 2. The code from the tool is almost always quite unreadable because a lot of calulations that are maybe just required for some edge-cases are not resolved and are left to the compiler to calculate. Meaning the code is mostly unreadable.
 
+# Other contributers
+
+|Name|Contribution|
+|-|-|
+|Fabin von der Heiden|For making this great SLE-Icon / preview-image|
+
 # Dependencies
 
 In it's current state the project uses the following dependencies:
@@ -32,6 +38,7 @@ In it's current state the project uses the following dependencies:
 |[Sass/Scss](https://sass-lang.com/)|Just because|
 |[Webpack](https://webpack.js.org/)|To package the typescript into a single file|
 |[NodeJs (fs-extra)](https://www.npmjs.com/package/fs-extra)|Also for packaging and compiling the project|
+|[Electron-Forge](https://www.electronforge.io/)|For exporting the software into installable apps|
 
 ## How to setup
 
@@ -54,9 +61,30 @@ Styling and resources live inside the `src/styles` and `src/resources` folders a
 
 Using the `builddev` or just the `start` script with npm, a separate folder called `build` will be created that contains all those compiled files. When interested on the exact process, checkout the `webpack.config.js` file.
 
-# Note on Exporting the software
+## The npm-scripts
+There are a couple of npm-scripts defined here is what they do:
 
-// TODO: Finishs this section on exporting the software
+To build/compile to software into a state that can be executed, run one of the commands below (either for production or development)
+```
+npm run buildDev # For the development build
+npm run buildProd # For the production build
+```
 
-This section will be rewritten once an export-routine has been properly setup, howevery.
-Make sure to turn the `IS_DEBUG` boolean to false inside the `src/application/Preset.ts`.
+After you have build/compiled your build run again one of the commands below to start that build using electron
+
+```
+npm run runDev # For the development build
+npm run runProd # For the production build
+```
+
+The `npm start` script builds/compiles the development build and also directly runs it.
+
+# Exporting the software
+
+At this build the software has only an exporter for linux dep and rpm, but a windows and maybe mac build will be added soon.
+
+Before exporting the software into production mode, make sure to set the `IS_DEBUG` boolean to `false` inside the `src/application/Preset.ts`.
+
+Now go ahead and build/compile the production build using `npm run buildProd` and then run `npm run packageProd` to generate the linux rpm and deb binary's.
+
+A new folder `out/` should be generated. It contains all binary's that got generated.

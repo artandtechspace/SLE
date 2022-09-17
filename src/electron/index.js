@@ -7,6 +7,7 @@ app.on('ready', () => {
   const win = new BrowserWindow({
     width: 600*2,
     height: 400*2,
+    icon: __dirname+"/../resources/icon/icon.png",
     webPreferences:{
       
     }

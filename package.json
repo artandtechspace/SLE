@@ -1,9 +1,14 @@
 {
-  "name": "workspace",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "SLE",
+  "version": "0.1-alpha",
+  "description": "(Stupid, Simple or Supercharged) led editor. Pick your name.",
+  "main": "build/build-prod/setup/index.js",
   "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.66",
+    "@electron-forge/maker-deb": "^6.0.0-beta.66",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.66",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.66",
+    "@electron-forge/maker-zip": "^6.0.0-beta.66",
     "electron": "^20.1.3",
     "fs-extra": "^10.1.0",
     "node-sass": "^7.0.1",
@@ -14,15 +19,69 @@
     "webpack-cli": "^4.10.0"
   },
   "scripts": {
-    "start": "npm run builddev && npm run runDevelopment",
-    "build": "webpack --env production",
-    "builddev": "webpack --env development",
-    "runProduction": "electron build/build-prod/setup/",
-    "runDevelopment": "electron build/build-dev/setup/"
+    "start": "npm run buildDev && npm run runDev",
+
+    "buildProd": "webpack --env production",
+    "buildDev": "webpack --env development",
+
+    "runProd": "electron build/build-prod/setup/",
+    "runDev": "electron build/build-dev/setup/",
+
+    "packageProd": "electron-forge make"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "blockly": "^8.0.5"
+    "blockly": "^8.0.5",
+    "electron-squirrel-startup": "^1.0.0"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "ignore": [
+          "^/[.]vs$",
+          "^/src$",
+          "^/tsconfig[.]json$",
+          "^/node_modules$",
+          "^/\\.gitignore$",
+          "^/package-lock.json$",
+          "^/README.md$",
+          "^/webpack\\.config\\.js$",
+          "^/example-programs$"
+        ]
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "SLE"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {
+            "options": {
+              "icon": "./build/build-prod/resources/icon/icon.png",
+              "categories": ["SLE", "Led-Editor", "Arduino", "Microcontroller"]
+            }
+          }
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {
+            "options": {
+              "icon": "./build/build-prod/resources/icon/icon.png",
+              "categories": ["SLE", "Led-Editor", "Arduino", "Microcontroller"]
+            }
+          }
+        }
+      ]
+    }
   }
 }
