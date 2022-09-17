@@ -14,9 +14,15 @@
     opacity: 1;
     visibility: visible;
 
-    i{
-        font-size: 10rem;
-        animation: Jump 2s ease 0s infinite normal ;
+    img{
+        size: 10%;
+        object-fit: contain;
+        margin-bottom: 5%;
+        filter: grayscale(1) brightness(1.6);
+        max-height: 50%;
+        height: 400px;
+        max-width: 50%;
+        animation: Jump 2s ease 0s infinite normal;
     }
 
     #status{
