@@ -5,19 +5,17 @@ import { SupplierElement } from "./BaseElement";
 
 export class DropDownElement extends SupplierElement<number, string>{
 
-    // List with all values that can be used
-    private readonly valueList: string[];
-
-    // Namespace to perform the language lookups on
-    private readonly languageNamespace: string;
+    // List with all values that can be used (Holds their name in the current language and their actual value)
+    private readonly valueList: {lang: string, value: string}[];
 
     constructor(key: string, languageNamespace: string, valueList: string[], selectIdx: number = 0){
         super(key, selectIdx);
 
-        this.languageNamespace = languageNamespace;
-
-        // Only stores a list with all language-texts as the index is used to get which element is selected
-        this.valueList = valueList.map(val=>Language.get(this.languageNamespace+val));
+        // Converts the values directly to their language-key
+        this.valueList = valueList.map(val=>{ return {
+            lang: Language.get(languageNamespace+val),
+            value: val
+        }});
     }
 
     // Event: When the selection on the dropdown-html-element changes.
@@ -29,7 +27,7 @@ export class DropDownElement extends SupplierElement<number, string>{
     render(block: any): HTMLElement {
         // Renders the children
         var children = this.valueList.map(cld=>create("option",{
-            text: cld
+            text: cld.lang
         }));
         
         // Creates the base element
@@ -48,11 +46,11 @@ export class DropDownElement extends SupplierElement<number, string>{
     }
 
     validateParseAndGetValue(block: any): string {
-        return this.valueList[this.getValue(block)];
+        return this.valueList[this.getValue(block)].value;
     }
 
     serialize(block: any): any {
-        return this.valueList[this.getValue(block)];
+        return this.valueList[this.getValue(block)].value;
     }
 
     deserialize(block: any, raw: any): boolean {
@@ -62,7 +60,7 @@ export class DropDownElement extends SupplierElement<number, string>{
             return false;
 
         // Checks if the value is inside the list
-        var idx = this.valueList.indexOf(raw);
+        var idx = this.valueList.findIndex(val=>val.value===raw);
 
         if(idx == -1)
             return false;
