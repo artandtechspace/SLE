@@ -1,6 +1,6 @@
 {
   "name": "SLE",
-  "version": "0.1-alpha",
+  "version": "0.0.1",
   "description": "(Stupid, Simple or Supercharged) led editor. Pick your name.",
   "main": "build/build-prod/setup/index.js",
   "devDependencies": {
@@ -29,7 +29,7 @@
 
     "packageProd": "electron-forge make"
   },
-  "author": "",
+  "author": "Noah Albers",
   "license": "ISC",
   "dependencies": {
     "blockly": "^8.0.5",
@@ -38,6 +38,7 @@
   "config": {
     "forge": {
       "packagerConfig": {
+        "icon": "src/resources/icon/icon",
         "ignore": [
           "^/[.]vs$",
           "^/src$",
@@ -54,7 +55,10 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "SLE"
+            "name": "SLE",
+            "loadingGif": "src/resources/icon/installing.gif",
+            "setupIcon": "src/resources/icon/icon.ico",
+            "iconUrl": "https://raw.githubusercontent.com/Projektlabor-Rheine/SLE/master/src/resources/icon/icon.ico"
           }
         },
         {
