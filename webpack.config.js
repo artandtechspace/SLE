@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs-extra");
-const cp = require("child_process");
+const scss = require("node-sass");
 
 module.exports = env => {
     // Checks if compiling in production or development mode
@@ -24,26 +24,39 @@ module.exports = env => {
         recursive: true
     });
 
-    console.log("...Transpiling scss to css");
+
+
     // Compiles the scss
-    cp.spawnSync("node-sass", ["--include-path", "scss", `${inPath}/styles/Main.scss`, `${outPath}/resources/main.css`]);
-    
-    console.log("...Copying resources");
+    console.log("...Transpiling scss to css");
+    const cssFolderOut = path.resolve(outPath, "resources/");
+    const cssFileIn = path.resolve(inPath, "styles/Main.scss");
+    const cssFileOut = path.resolve(cssFolderOut, "main.css");
+
+    // Makes the resources-folder and then writes the css in there
+    fs.mkdirsSync(cssFolderOut);
+    fs.writeFileSync(cssFileOut, scss.renderSync({
+        file: cssFileIn,
+        outFile: cssFileOut,
+        outputStyle: "compact"
+    }).css)
+
+
     // Copys resources
-    fs.copySync(`${inPath}/resources/`, `${outPath}/resources/`);
+    console.log("...Copying resources");
+    fs.copySync(path.resolve(inPath, "resources/"), path.resolve(outPath, "resources/"));
 
     // Copys the electron-dependencys
-    fs.copySync(`${inPath}/electron/index.js`, `${outPath}/setup/index.js`);
+    fs.copySync(path.resolve(inPath, "electron/index.js"), path.resolve(outPath, "setup/index.js"));
 
     // Copys the index.html file
-    fs.copySync(`${inPath}/index.html`, `${outPath}/index.html`);
+    fs.copySync(path.resolve(inPath, "index.html"), path.resolve(outPath, "index.html"));
     
     console.log("...Compiling typescript into a single js file");
     // Packages the typescript-app
     return {
         mode: isProd ? "production" : "development",
         devtool: "cheap-source-map",
-        entry: `${inPath}/application/Appentry.ts`,
+        entry: path.resolve(inPath, "application/Appentry.ts"),
         output: {
             path: outPath,   
             filename: "webapp.js"
