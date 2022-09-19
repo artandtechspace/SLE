@@ -81,10 +81,27 @@ The `npm start` script builds/compiles the development build and also directly r
 
 # Exporting the software
 
-At this build the software has only an exporter for linux dep and rpm, but a windows and maybe mac build will be added soon.
-
 Before exporting the software into production mode, make sure to set the `IS_DEBUG` boolean to `false` inside the `src/application/Preset.ts`.
 
-Now go ahead and build/compile the production build using `npm run buildProd` and then run `npm run packageProd` to generate the linux rpm and deb binary's.
+Note: There is currently no auto-updater as the software is in a very early alpha.
+
+To package the software for your current operating system do the following:
+
+1. Make sure you have compiled production-build
+```
+npm run buildProd
+```
+
+2. Make sure that that production-build is able to run
+```
+npm run runProd
+```
+
+3. Package that build for your operating system
+```
+npm run packageProd
+```
 
 A new folder `out/` should be generated. It contains all binary's that got generated.
+On Linux this should generate a `.deb` and a `.rpm` file for debian and red-hat based distros.
+On Windows it should spit out a `.exe` that is used to install the software.
