@@ -23,7 +23,7 @@ But obviously there are some disadvantages to this approach to:
 
 |Name|Contribution|
 |-|-|
-|Fabin von der Heiden|For making this great SLE-Icon / preview-image|
+|Fabian von der Heiden|For making this great SLE-Icon / preview-image|
 
 # Dependencies
 
