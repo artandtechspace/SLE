@@ -33,7 +33,7 @@ export async function setupUi(doRecompile: ()=>void){
 
     try{
         // Setups the language-system
-        await Language.setup("en_us");
+        await Language.setup("de_de");
 
         // Initalizes all blockly-stuff and init's the blockly-area
         var workspace = registerBlockly(S("#blocklyDiv") as HTMLDivElement);

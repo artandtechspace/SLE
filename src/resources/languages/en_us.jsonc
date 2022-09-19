@@ -142,7 +142,6 @@
         "ui.blockly.block.animation.gradient.mode.reverse_color": "Reverse-Color",
         "ui.blockly.block.animation.gradient.mode.reverse_direction": "Reverse-Direction",
         "ui.blockly.block.animation.gradient.mode.reverse_both": "Reverse (Color and Direction)",
-        "ui.blockly.block.animation.": "",
 
 
         "ui.blockly.block.special.setup": "Run once at start",
@@ -155,7 +154,6 @@
         // Toolbox-categories
         "ui.blockly.toolbox.categorys.color": "Color",
         "ui.blockly.toolbox.categorys.control": "Control",
-        "ui.blockly.toolbox.categorys.values": "Values",
         "ui.blockly.toolbox.categorys.animations": "Animations",
         "ui.blockly.toolbox.categorys.goggles": "Goggles",
 
@@ -254,7 +252,7 @@
 
     // #region Import/Export
 
-        "ui.import.title": "Export/Export from file",
+        "ui.import.title": "Import/Export from file",
         "ui.import.description": "Lets you export or import a project into a file to save and edit it later.",
         "ui.import.button.import": "Import File",
         "ui.import.button.export": "Export File",

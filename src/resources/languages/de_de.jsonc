@@ -1,0 +1,277 @@
+{
+    // #region Block-specific-errors
+
+        "blocks.errors.color.startend": "Start und end werte sind gleich.",
+
+        "blocks.errors.fields.numeric.nan": "Der Wert des '$var$'-feldes ist keine Nummer.",
+        "blocks.errors.fields.numeric.min": "Der Wert des '$field$'-feldes muss eine Nummer sein, welche <= $min$ ist.",
+        "blocks.errors.fields.numeric.max": "Der Wert des '$field$'-feldes muss eine Nummer sein, welche >= $max$ ist.",
+        "blocks.errors.fields.numeric.int": "Der Wert des '$var$'-feldes muss eine gerade Nummer sein.",
+
+        "blocks.errors.fields.numeric.percentage": "Der Wert des '$field$'-feldes muss ein Prozentwert zwischen 0.00 und 1.00 sein.",
+
+    // #endregion
+
+    // #region Blockly-blocks
+
+        "ui.blockly.block.color.single": "Färbe die Led $$ in $$",
+
+        "ui.blockly.block.color.stripe": "Färbe die Leds von $$ bis $$ in $$",
+        "ui.blockly.block.color.stripe.ui.direction": "Spiele die Animation $$.",
+        "ui.blockly.block.color.stripe.ui.direction.info": "Spielt die Animation entweder vorwärts oder rückwärts.",
+        "ui.blockly.block.color.stripe.ui.direction.normal": "vorwärts",
+        "ui.blockly.block.color.stripe.ui.direction.reverse": "rückwärts",
+        "ui.blockly.block.color.stripe.ui.length": "Die Animation spielt für $$ ms.",
+        "ui.blockly.block.color.stripe.ui.length.info": "Wie lange die Animation braucht (in millisekunden).",
+        
+        "ui.blockly.block.color.turnoff": "Schalte alle Leds aus",
+
+
+
+        
+        
+        
+        
+        "ui.blockly.block.control.comment": "//",
+        "ui.blockly.block.control.comment.text": "Ich bin ein Kommentar",
+        "ui.blockly.block.control.repeat": "Wiederhole $$ mal",
+        "ui.blockly.block.control.delay": "Warte $$ ms",
+        
+        
+        "ui.blockly.block.goggles.turnoff": "Schalte $$ Linse(n) aus",
+        "ui.blockly.block.goggles.turnoff.right": "die rechte",
+        "ui.blockly.block.goggles.turnoff.left": "die linke",
+        "ui.blockly.block.goggles.turnoff.both": "beide",
+        
+        "ui.blockly.block.goggles.rainbow": "Regenbogen über $$ Linse(n) mit einer Helligkeit von $$ in $$ ms",
+        "ui.blockly.block.goggles.rainbow.right": "die rechte",
+        "ui.blockly.block.goggles.rainbow.left": "die linke",
+        "ui.blockly.block.goggles.rainbow.both": "beide",
+        "ui.blockly.block.goggles.rainbow.ui.direction": "Spiele die Animation $$ ab.",
+        "ui.blockly.block.goggles.rainbow.ui.direction.info": "Spielt die Animation entweder vorwärts oder rückwärts.",
+        "ui.blockly.block.goggles.rainbow.ui.direction.normal": "vorwärts",
+        "ui.blockly.block.goggles.rainbow.ui.direction.reverse": "rückwärts",
+        
+        "ui.blockly.block.goggles.gradient": "Gradiant über $$ Linse(n) von $$ zu $$ in $$ ms",
+        "ui.blockly.block.goggles.gradient.right": "die rechte",
+        "ui.blockly.block.goggles.gradient.left": "die linke",
+        "ui.blockly.block.goggles.gradient.both": "beide",
+        "ui.blockly.block.goggles.gradient.ui.color": "Die Farbe spielt $$ ab.",
+        "ui.blockly.block.goggles.gradient.ui.color.info": "Ändert die Richtung der Farbe.",
+        "ui.blockly.block.goggles.gradient.ui.color.normal": "vorwärts",
+        "ui.blockly.block.goggles.gradient.ui.color.reverse": "rückwärts",
+        "ui.blockly.block.goggles.gradient.ui.direction": "Die Animation spielt $$ ab.",
+        "ui.blockly.block.goggles.gradient.ui.direction.info": "Ändert die Richtung der Animation.",
+        "ui.blockly.block.goggles.gradient.ui.direction.normal": "vorwärts",
+        "ui.blockly.block.goggles.gradient.ui.direction.reverse": "rückwärts",
+
+        
+        "ui.blockly.block.goggles.fade": "Übergang über $$ Linse(n) von $$ zu $$ in $$ ms",
+        "ui.blockly.block.goggles.fade.right": "die rechte",
+        "ui.blockly.block.goggles.fade.left": "die linke",
+        "ui.blockly.block.goggles.fade.both": "beide",
+        
+        "ui.blockly.block.goggles.onlylense": "Färbe $$ Linse(n) in $$",
+        "ui.blockly.block.goggles.onlylense.right": "die rechte",
+        "ui.blockly.block.goggles.onlylense.left": "die linke",
+        "ui.blockly.block.goggles.onlylense.both": "beide",
+        "ui.blockly.block.goggles.onlylense.both_parallel": "beide (Parallel)",
+        "ui.blockly.block.goggles.onlylense.ui.direction": "Spielt die Animation $$ ab.",
+        "ui.blockly.block.goggles.onlylense.ui.direction.info": "Ändere die Richtung der Animation.",
+        "ui.blockly.block.goggles.onlylense.ui.direction.normal": "vorwärts",
+        "ui.blockly.block.goggles.onlylense.ui.direction.reverse": "rückwärts",
+        "ui.blockly.block.goggles.onlylense.ui.time": "Die Animation spiel für $$ ms.",
+        "ui.blockly.block.goggles.onlylense.ui.time.info": "Wie lange die Animation dauert in millisekunden.",
+        
+        
+        "ui.blockly.block.goggles.color": "Färbe jede $$ Led $$ Linse(n) in $$ in $$ ms",
+        "ui.blockly.block.goggles.color.right": "der rechten",
+        "ui.blockly.block.goggles.color.left": "der linken",
+        "ui.blockly.block.goggles.color.both": "beider",
+        "ui.blockly.block.goggles.color.count.2": "2te",
+        "ui.blockly.block.goggles.color.count.3": "3te",
+        "ui.blockly.block.goggles.color.count.4": "4te",
+        "ui.blockly.block.goggles.color.count.5": "5te",
+        "ui.blockly.block.goggles.color.count.6": "6te",
+        "ui.blockly.block.goggles.color.count.7": "7te",
+        "ui.blockly.block.goggles.color.count.8": "8te",
+        "ui.blockly.block.goggles.color.ui.direction": "Spiele die Animation $$ ab.",
+        "ui.blockly.block.goggles.color.ui.direction.info": "Ändere die Richtung der Animation.",
+        "ui.blockly.block.goggles.color.ui.direction.normal": "vorwärts",
+        "ui.blockly.block.goggles.color.ui.direction.reverse": "rückwärts",
+        "ui.blockly.block.goggles.color.ui.start": "Die Animation starte von der $$-ten Led",
+
+        
+
+        "ui.blockly.block.animation.fade": "Übergang zwischen $$ und $$",
+        "ui.blockly.block.animation.fade.ui.length": "Die Animation spielt für $$ ms",
+        "ui.blockly.block.animation.fade.ui.length.info": "Wie lange die Animation dauert.",
+        "ui.blockly.block.animation.fade.ui.over": "von Led $$ für $$ Leds.",
+        "ui.blockly.block.animation.fade.ui.over.info": "Legt die Led, von welcher die Animation startet, und die Länge fest.",
+        "ui.blockly.block.animation.fade.ui.cycle": "Es dauert $$ ms, bis ein Übergang abgeschlossen ist.",
+        "ui.blockly.block.animation.fade.ui.cycle.info": "Wie lange ein Übergang/Cyklus braucht bis er abgeschlossen ist.",
+        "ui.blockly.block.animation.fade.ui.offset": "Jede Led ist $$ ms weiter als die vorherige Led.",
+        "ui.blockly.block.animation.fade.ui.offset.info": "Dies kann genutzt werden um eine strömung durch den Streifen zu erstellen.",
+        
+        "ui.blockly.block.animation.rainbow_calc": "Regenbogen mit einer Helligkeit von $$",
+        "ui.blockly.block.animation.rainbow_calc.ui.start": "Die Animation startet von Led $$ und läuft über $$ Leds,",
+        "ui.blockly.block.animation.rainbow_calc.ui.start.info": "Legt die Led, von welcher die Animation startet, und die Länge fest.",
+        "ui.blockly.block.animation.rainbow_calc.ui.length": "für $$ ms.",
+        "ui.blockly.block.animation.rainbow_calc.ui.length.info": "Legt fest wie lange die Animation dauert.",
+        "ui.blockly.block.animation.rainbow_calc.ui.repeat": "Es dauert $$ ms, bis ein Übergang abgeschlossen ist.",
+        "ui.blockly.block.animation.rainbow_calc.ui.repeat.info": "Wie lange ein Übergang/Cyklus braucht bis er abgeschlossen ist.",
+
+        "ui.blockly.block.animation.rainbow": "Regenbogen mit einer Helligkeit von $$ (Eigener Led-Versatz)",
+        "ui.blockly.block.animation.rainbow.ui.length": "Der Regenbogen dauert $$ ms.",
+        "ui.blockly.block.animation.rainbow.ui.length.info": "Legt fest wie lange die Animation dauert.",
+        "ui.blockly.block.animation.rainbow.ui.where": "Startet von Led $$ und läuft über $$ Leds.",
+        "ui.blockly.block.animation.rainbow.ui.where.info": "Legt die Led, von welcher die Animation startet, und die Länge fest.",
+        "ui.blockly.block.animation.rainbow.ui.offset": "Jede Led ist $$ ms weiter als die vorherige Led.",
+        "ui.blockly.block.animation.rainbow.ui.offset.info": "Dies kann genutzt werden um eine strömung durch den Streifen zu erstellen.",
+        "ui.blockly.block.animation.rainbow.ui.repeat": "Es dauert $$ ms, bis ein Übergang abgeschlossen ist.",
+        "ui.blockly.block.animation.rainbow.ui.repeat.info": "Wie lange ein Übergang/Cyklus braucht bis er abgeschlossen ist.",
+
+        "ui.blockly.block.animation.gradient.ui.where": "Gradiant von Led $$ über $$ Leds.",
+        "ui.blockly.block.animation.gradient.ui.where.info": "Legt die Led, von welcher die Animation startet, und die Länge fest.",
+        "ui.blockly.block.animation.gradient.ui.wait": "Warte $$ ms zwischen dem Anschalten der leds.",
+        "ui.blockly.block.animation.gradient.ui.wait.info": "Wartet einen kurzen Moment, befor die nächste Led angeschaltet wird.",
+
+
+        "ui.blockly.block.animation.gradient": "Gradiant von $$ zu $$ mit dem Modus $$",
+        "ui.blockly.block.animation.gradient.mode.normal": "normal",
+        "ui.blockly.block.animation.gradient.mode.reverse_color": "Farbe rückwärts",
+        "ui.blockly.block.animation.gradient.mode.reverse_direction": "Richtung rückwärts",
+        "ui.blockly.block.animation.gradient.mode.reverse_both": "Farbe & Richtung rückwärts",
+
+
+        "ui.blockly.block.special.setup": "Führe einmal beim start aus",
+        "ui.blockly.block.special.loop": "Führe dauerhaft aus",
+
+    // #endregion
+
+    // #region Blockly-Category
+
+        // Toolbox-categories
+        "ui.blockly.toolbox.categorys.color": "Farben",
+        "ui.blockly.toolbox.categorys.control": "Steuerblöcke",
+        "ui.blockly.toolbox.categorys.animations": "Animationen",
+        "ui.blockly.toolbox.categorys.goggles": "Brille",
+
+        // Root-block-errors
+        "ui.blockly.workspace.desynced.noroot": "Es wurden nicht beide Grundblöcke gefunden. Ist irgendwas beim laden schief gelaufen?",
+        "ui.blockly.workspace.desynced.multipleblocks": "Es wurden mehr als zwei Grundblöcke gefunden. Ist irgendwas beim laden schief gelaufen?",
+
+    // #endregion
+    
+    // #region UI-Tabs
+
+        "ui.tabs.preview.code": "Code",
+        "ui.tabs.preview.code.textarea.placeholder": "[Ausgabe des Quellcodes]",
+        "ui.tabs.preview.code.copy-button": "Code kopieren",
+
+        "ui.tabs.preview.animation": "Animation",
+
+        "ui.tabs.preview.analytics": "Infos",
+        "ui.tabs.preview.analytics.runtime.setup": "Die start-Animation dauert $var$ Sekunden.",
+        "ui.tabs.preview.analytics.runtime.loop": "Die dauerhafte Animation läuft für $var$ Sekunden, befor sie wiederholt wird.",
+
+
+        "ui.tabs.controls.env": "Umgebung",
+        "ui.tabs.controls.params": "Parameter",
+        "ui.tabs.controls.settings": "Einstellungen",
+
+    // #endregion
+
+    // #region UI-Utils
+
+        "ui.utils.svg.error.status": "Fehler beim laden des SVG-Bildes. Invalider status-code '$var$' wurde empfangen.",
+        "ui.utils.brightnessslider": "Helligkeit",
+        "ui.utils.colorpicker.color": "Farbe",
+        "ui.utils.colorpicker.saturation": "Sättigung",
+        "ui.utils.colorpicker.value": "Wert",
+
+        
+    // #endregion
+
+    // #region Envionment-Settings
+    
+        "ui.settings.edit-button": "Grund-Code bearbeiten",
+        "ui.settings.led-pin": "Led-Pin",
+        "ui.settings.led-pin.info": "Pin an welchen das Neopixel/WS2812b-Streifen angeschlossen ist.",
+        "ui.settings.led-amt": "Led-Anzahl",
+        "ui.settings.led-amt.info": "Wie viele Leds auf dem Led-Streifen sind.",
+        "ui.settings.preview-image": "Vorschaubild",
+        "ui.settings.preview-image.info": "Welches Vorschaubild für die Simulation genutzt werden soll.",
+        "ui.settings.comments": "Mit Kommentaren?",
+        "ui.settings.comments.info": "Ob Kommentare in den finalen Quellcode integriert werden sollen.",
+        "ui.settings.preview-image.values.goggles": "Brille",
+        "ui.settings.preview-image.values.ws2812b-8x1": "WS2812B (8x1)",
+        "ui.settings.preview-image.values.ws2812b-8x2": "WS2812B (8x2)",
+        "ui.settings.preview-image.values.ws2812b-8x3": "WS2812B (8x3)",
+        "ui.settings.preview-image.values.ws2812b-8x4": "WS2812B (8x4)",
+        "ui.settings.preview-image.values.ring-16-pxl": "Ring (16 Pixel)",
+        "ui.settings.preview-image.values.ring-8-pxl": "Ring (8 Pixel)",
+
+        // Envionment-Popup
+        "ui.popup.editcode.save-button": "Speichern",
+        "ui.popup.editcode.cancle-button": "Abbrechen",
+        "ui.popup.editcode.title": "Bearbeiten des Grund-Codes",
+
+    // #endregion
+
+    // #region Parameters
+
+        "ui.params.table.name": "Name",
+        "ui.params.table.value": "Wert",
+
+        // Parameter names
+        "ui.parameter.description.ledAmount": "'Led-Amount' enthält die Anzahl an Leds, welche eingestellt wurden.",
+
+        "ui.parameter.errors.name.duplicated": "Der Parametername '$var$' existiert bereits.",
+        "ui.parameter.errors.name.startchar": "Ein Parametername kann nicht mit '$var$' beginnen.",
+        "ui.parameter.errors.name.invalidchar": "Das Zeichen '$var$' ist in einem Parameternamen nicht erlaubt.",
+        "ui.parameter.errors.value.invalid": "Der Parameter '$var$' muss eine Nummer enthalten.",
+
+        "calc.param.error.lexer.nonumbers": "Parameter können nicht mit Zahlen starten.",
+        "calc.param.error.lexer.illegalcharacter": "Illegal character error. Unknown character called '$var$'",
+        "calc.param.error.lexer.multipledecimalpoints": "Es wurden mehrere Dezimalpunkte für eine Nummer gefunden.",
+
+        "calc.param.error.parser.syntaxerror": "Formel wurde nicht erkannt, bitte überprüfen.",
+        "calc.param.error.parser.noclosingparen": "Es wurde keine schließende Klammer gefunden.",
+        "calc.param.error.parser.numbernotfound": "Expected number couldn't be found",
+
+        "calc.param.error.solver.paramnotfound": "Parameter '$var$' wurde nicht gefunden.",
+
+    // #endregion
+
+    // #region Other-Errors and Warnings
+
+        "ui.warnings.led-overflow": "Ein Block greift auf die $user_leds$. led zu, obwohl der Streifen nur $stripe_leds$ Leds lang ist.",
+
+    // #endregion
+
+    // #region Import/Export
+
+        "ui.import.title": "Import/Export",
+        "ui.import.description": "Exportieren und Importieren von Projekten in und aus einer Datei.",
+        "ui.import.button.import": "Importieren",
+        "ui.import.button.export": "Exportieren",
+
+        "import.error.general.withcomments": "Fehler beim importieren des Umgebung, 'withComments' muss ein Boolean sein",
+        "import.error.general.preproccode": "Fehler beim importieren des Umgebung, 'preprocessingCode' muss ein String sein",
+        "import.error.general.ledpin": "Fehler beim importieren des Umgebung, 'ledPin' muss ein positiver Integer sein",
+        "import.error.general.ledamount": "Fehler beim importieren des Umgebung, 'ledAmount' muss ein Integer >= 1",
+        "import.error.general.selectedpreview": "Fehler beim importieren des Umgebung, 'selectedPreview' muss ein Index der Vorschau sein",
+        
+        // Settings-ui
+        "import.error.deserialize.settingsui.field": "Failed to load field '$var$'. Invalid value detected.",
+
+        "import.error.jsonparse": "Fehler beim analysieren der Datei.",
+        "import.error.json.workspace": "Fehler beim einlesen der Datei, das Arbeitsbereich-Objekt ist invalid.",
+        "import.error.json.environment": "Fehler beim einlesen der Datei, das Umgebungs-Objekt ist invalid.",
+        "import.error.json.parameters": "Fehler beim einlesen der Datei, das Parameter-Objekt ist invalid.",
+        "import.error.json.parameters.format": "Fehler beim einlesen der Datei, einige Parameter sind in einem invalides/unbekannten format."
+
+    // #endregion
+
+}
