@@ -270,8 +270,16 @@
         "import.error.json.workspace": "Fehler beim einlesen der Datei, das Arbeitsbereich-Objekt ist invalid.",
         "import.error.json.environment": "Fehler beim einlesen der Datei, das Umgebungs-Objekt ist invalid.",
         "import.error.json.parameters": "Fehler beim einlesen der Datei, das Parameter-Objekt ist invalid.",
-        "import.error.json.parameters.format": "Fehler beim einlesen der Datei, einige Parameter sind in einem invalides/unbekannten format."
+        "import.error.json.parameters.format": "Fehler beim einlesen der Datei, einige Parameter sind in einem invalides/unbekannten format.",
 
     // #endregion
 
+    // #region General HTML-Stuff
+
+        "ui.preventpageleave": "Soll die Anwendung beendet werden?",
+        "ui.preventpageleave.detail": "Möglicherweise gibt es noch ungespeicherte Änderungen?",
+        "ui.preventpageleave.yes": "Ja",
+        "ui.preventpageleave.no": "Nein"
+
+    // #endregion
 }

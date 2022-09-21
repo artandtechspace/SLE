@@ -46,7 +46,7 @@ module.exports = env => {
     fs.copySync(path.resolve(inPath, "resources/"), path.resolve(outPath, "resources/"));
 
     // Copys the electron-dependencys
-    fs.copySync(path.resolve(inPath, "electron/index.js"), path.resolve(outPath, "setup/index.js"));
+    fs.copySync(path.resolve(inPath, "electron/"), path.resolve(outPath, "setup/"));
 
     // Copys the index.html file
     fs.copySync(path.resolve(inPath, "index.html"), path.resolve(outPath, "index.html"));
@@ -72,6 +72,9 @@ module.exports = env => {
         },
         resolve: {
             extensions: ['.tsx', '.ts', '.js'],
+            fallback: {
+                path: false
+            }
         }
     }
 }

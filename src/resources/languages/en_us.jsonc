@@ -270,8 +270,16 @@
         "import.error.json.workspace": "Failed to parse file because the workspace-object is invalid.",
         "import.error.json.environment": "Failed to parse file because the environment-object is invalid.",
         "import.error.json.parameters": "Failed to parse file because the parameter-object is invalid.",
-        "import.error.json.parameters.format": "Failed to parse file because some parameters are in an unknown/invalid format."
+        "import.error.json.parameters.format": "Failed to parse file because some parameters are in an unknown/invalid format.",
 
     // #endregion
 
+    // #region General HTML-Stuff
+
+        "ui.preventpageleave": "Shuld the application close?",
+        "ui.preventpageleave.detail": "Maybe you have got unsaved changes?",
+        "ui.preventpageleave.yes": "Yes",
+        "ui.preventpageleave.no": "No"
+
+    // #endregion
 }

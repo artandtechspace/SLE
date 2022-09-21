@@ -16,6 +16,7 @@ import { registerBlockly } from "../blockly/BlocklyRegister";
 import { setupExportFeature } from "./utils/UiExportFeature";
 import { onRenderTab, startParameterSystem } from "../parameterCalculator/system/ParameterSystem";
 import { Language } from "../language/LanguageManager";
+import { API } from "../utils/PreloadWrapper";
 
 // Executes to setup the ui
 // Returns an object with all important elements
@@ -70,6 +71,8 @@ export async function setupUi(doRecompile: ()=>void){
         // Cleans all hidden popup-content
         popupsystem.closePopup();
 
+        // Prepares some very basic html-page stuff
+        prepareHtmlPage();
 
         // Closes the loading-screen
         removeLoadingScreen();
@@ -96,6 +99,27 @@ export async function setupUi(doRecompile: ()=>void){
 
 //#region Setup-functions
 
+// Prepares some very basic html-page stuff
+function prepareHtmlPage(){
+    // If the window should close
+    // Because of a bug, electron can interrupt the beforeunload event with an api-call.
+    // Therefor we use a simelar trick to get around this as this user: https://github.com/electron/electron/issues/7977#issuecomment-267430262
+    var closeWindow = false
+
+    // Prevents the user from accidentally existing the page without saving
+    window.onbeforeunload = (evt)=> {
+        // Returns if the window shall close
+        if(closeWindow) return;
+
+        // Always prevents
+        evt.returnValue = false;
+
+        // Askes the user
+        setTimeout(()=>closeWindow = API.askForClosing())
+    };
+}
+
+// Returns all elements required for the analytics display
 function getAnalyticsDisplay(){
     // Gets the shell of the displays
     var shell = S("#analyticsTab");

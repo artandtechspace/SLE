@@ -1,5 +1,8 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain: IPC, dialog } = require('electron');
 const path = require("path");
+
+// Will hold the window
+var win;
 
 // this should be placed at top of main.js to handle setup events quickly
 if (handleSquirrelEvent()) {
@@ -7,6 +10,7 @@ if (handleSquirrelEvent()) {
   return;
 }
 
+// Handles install, updates and other stuff on squirrel-windows application
 function handleSquirrelEvent() {
   if (process.argv.length === 1) {
     return false;
@@ -68,15 +72,49 @@ function handleSquirrelEvent() {
   }
 };
 
-app.on('ready', () => {
-
+// Creates the main window
+function createWindow(){
   // Creates the browser-window
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 600*2,
     height: 400*2,
     icon: path.resolve(__dirname, "/../resources/icon/icon.png"),
+    webPreferences: {
+      preload: path.resolve(__dirname,"preload.js")
+    }
   });
 
   const indexHTML = path.join(__dirname + '/../index.html');
   win.loadFile(indexHTML);
+}
+
+// Registers the listeners for nodejs-accesses from the browser-window
+function registerElectronAPIEndpoints(){
+  IPC.on("askForClosing",(evt, text, textDetail, yesBtnText, noBtnText)=>{
+    
+    // Shows the dialog
+    var res = dialog.showMessageBoxSync(null, {
+      type: 'question',
+      buttons: [yesBtnText, noBtnText],
+      defaultId: 1,
+      message: text,
+      detail: textDetail,
+      noLink: true
+    });
+
+    // Returns true/false if the user clicked yes
+    evt.returnValue = res === 0;
+
+    // Sends another close-request if the used wants to close the application
+    if(res === 0)
+      win.close();
+  });
+}
+
+app.whenReady().then(()=>{
+
+  registerElectronAPIEndpoints();
+
+  createWindow(); 
+
 });
