@@ -29,7 +29,6 @@ export function setWorkspaceInvalid(){
 /**
  * Takes in the exported workspace objects and returns if the changed
  */
-// TODO: Might want to move the dragging-detection here
 export function didWorkspaceChange(setupExpots: ModBlockExport<any>[], loopExports: ModBlockExport<any>[]){
 
     // Gets the raw configs (Without any blocks etc.)

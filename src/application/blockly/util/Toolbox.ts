@@ -49,7 +49,6 @@ export function buildToolBox(){
 
         // This category will only be added in debugging-mode
         categoryDebug([
-          block("sle_debug_1"),
         ])
 
 
