@@ -15,6 +15,8 @@ import { Language } from "../language/LanguageManager";
 // Reference to the electron-api that lives inside the electronAPI-object
 const EAPI = (window as any).electronAPI;
 
+// Shows an error-message to the user
+const showErrorMessage = (title: string, text: string) : void => EAPI.showErrorMessage(title, text);
 
 // Askes the user if the application should close
 const askForClosing = () : boolean => EAPI.askForClosing(
@@ -29,5 +31,6 @@ const askForClosing = () : boolean => EAPI.askForClosing(
 );
 
 export const API = {
-    askForClosing
+    askForClosing,
+    showErrorMessage
 }

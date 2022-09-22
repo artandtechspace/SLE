@@ -17,6 +17,7 @@ import { writeEnvironmentToPage } from "./ui/utils/UiEnvironmentIntegration";
 import { checkParametersForErrors } from "./parameterCalculator/system/ParameterSystem";
 import { Language } from "./language/LanguageManager";
 import { getRootBlocks } from "./blockly/workspace/WorkspaceHandler";
+import { API } from "./utils/PreloadWrapper";
 
 // Arduino-simulation
 var simulation: ArduinoSimulation;
@@ -137,7 +138,7 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 			// Ensures that the error is from the error-system
 			if(!(e instanceof Error)){
 				console.error(e);
-				alert("We have detected a critical error, please restart the application.");
+				API.showErrorMessage("Critical error", "We have detected a critical error, please restart the application.");
 				return;
 			}
 

@@ -177,8 +177,8 @@ function displayLoadingError(error: any){
     }catch(e){
         console.error("App crashed while handling critical error: ", e, "Inital error: ",error);
 
-        // Uses the last tool known to men that now can notify the user.
-        alert("Oh no. It seams the app has crashed while handling an initalization error. please restart it.");
+        // Notifyes the user using the api
+        API.showErrorMessage("Initalize-error", "Oh no. It seams the app has crashed while handling an initalization error. please restart it.")
     }
 
 }

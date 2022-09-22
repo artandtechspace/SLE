@@ -11,7 +11,14 @@ const askForClosing = (text, textDetail, yesBtnText, noBtnText)=>{
     return IPC.sendSync(MSG,text, textDetail, yesBtnText, noBtnText);
 };
 
+const showErrorMessage = (title, text) => {
+    const MSG = "showErrorMessage";
+
+    IPC.send(MSG, title, text);
+}
+
 // Exposes all these functions using an electronAPI-Global object
 CB.exposeInMainWorld("electronAPI", {
-    askForClosing
+    askForClosing,
+    showErrorMessage
 });

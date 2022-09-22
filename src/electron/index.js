@@ -109,6 +109,10 @@ function registerElectronAPIEndpoints(){
     if(res === 0)
       win.close();
   });
+
+  IPC.on("showErrorMessage", (evt,title, text)=>{
+    dialog.showErrorBox(title, text);
+  });
 }
 
 app.whenReady().then(()=>{

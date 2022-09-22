@@ -263,6 +263,8 @@
         "import.error.general.ledamount": "Fehler beim importieren des Umgebung, 'ledAmount' muss ein Integer >= 1",
         "import.error.general.selectedpreview": "Fehler beim importieren des Umgebung, 'selectedPreview' muss ein Index der Vorschau sein",
         
+        "import.error.title": "Fehler beim importieren",
+
         // Settings-ui
         "import.error.deserialize.settingsui.field": "Failed to load field '$var$'. Invalid value detected.",
 

@@ -7,6 +7,7 @@ import { loadSVG } from "../../utils/SVGUtil";
 import { S } from "./UiUtils";
 import { getEnvironment } from "../../SharedObjects";
 import { Language } from "../../language/LanguageManager";
+import { handleProgrammingError } from "../../errorSystem/ProgrammingErrorSystem";
 
 
 /**
@@ -205,8 +206,7 @@ function bindEnvironment(sim: ArduinoSimulation, popsys: PopupSystem, onEnvChang
             onEnvChange();
         }catch(e){
             // Displays the error to the user
-            // TODO: Implement using popup-system
-            alert(e);
+            return handleProgrammingError(JSON.stringify(e));
         }
     });
 }

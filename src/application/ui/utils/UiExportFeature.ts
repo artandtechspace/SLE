@@ -1,4 +1,6 @@
 import { exportToString, importFromString } from "../../exportSystem/ExportSystem";
+import { Language } from "../../language/LanguageManager";
+import { API } from "../../utils/PreloadWrapper";
 
 export function setupExportFeature(exportBtn: HTMLInputElement, importBtn: HTMLInputElement, importHelperButton: HTMLInputElement){
     // Sets the ui-events
@@ -56,7 +58,9 @@ function onImportFile(evt: any){
         // Tries to load the environment from that file
         importFromString(cont);
     }catch(exc){
-        // TODO: Implement using popup-system
-        alert((exc as Error).message);
+        API.showErrorMessage(
+            Language.get("import.error.title"),
+            (exc as Error).message
+        );
     }
 }
