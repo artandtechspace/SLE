@@ -2,7 +2,7 @@
   "name": "SLE",
   "version": "0.0.1",
   "description": "(Stupid, Simple or Supercharged) led editor. Pick your name.",
-  "main": "build/build-prod/setup/index.js",
+  "main": "build/build-prod/setup/backend/index.js",
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.66",
     "@electron-forge/maker-deb": "^6.0.0-beta.66",
@@ -24,8 +24,8 @@
     "buildProd": "webpack --env production",
     "buildDev": "webpack --env development",
 
-    "runProd": "electron build/build-prod/setup/",
-    "runDev": "electron build/build-dev/setup/",
+    "runProd": "electron build/build-prod/setup/backend/",
+    "runDev": "electron build/build-dev/setup/backend/",
 
     "packageProd": "electron-forge make"
   },

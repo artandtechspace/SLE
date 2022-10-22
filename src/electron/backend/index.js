@@ -1,8 +1,13 @@
-const { app, BrowserWindow, ipcMain: IPC, dialog } = require('electron');
-const path = require("path");
 
-// Will hold the window
-var win;
+/**
+ * IMPORTANT: THIS FILE IS THE NODEJS-BACKEND WHICH CREATES AND MANAGES THE WHOLE APPLICATION.
+ * IT CAN RUN NODEJS-FUNCTION.
+ * KEEP IT AS SIMPLE AS POSSIBLE
+ */
+
+const { app, BrowserWindow } = require('electron');
+const path = require("path");
+const ElectronAPI = require("./ElectronAPIRegister");
 
 // this should be placed at top of main.js to handle setup events quickly
 if (handleSquirrelEvent()) {
@@ -75,49 +80,23 @@ function handleSquirrelEvent() {
 // Creates the main window
 function createWindow(){
   // Creates the browser-window
-  win = new BrowserWindow({
+  global.win = new BrowserWindow({
     width: 600*2,
     height: 400*2,
-    icon: path.resolve(__dirname, "/../resources/icon/icon.png"),
+    icon: path.resolve(__dirname, "/../../resources/icon/icon.png"),
     webPreferences: {
-      preload: path.resolve(__dirname,"preload.js")
+      preload: path.resolve(__dirname,"../preload.js")
     }
   });
 
-  const indexHTML = path.join(__dirname + '/../index.html');
-  win.loadFile(indexHTML);
-}
-
-// Registers the listeners for nodejs-accesses from the browser-window
-function registerElectronAPIEndpoints(){
-  IPC.on("askForClosing",(evt, text, textDetail, yesBtnText, noBtnText)=>{
-    
-    // Shows the dialog
-    var res = dialog.showMessageBoxSync(null, {
-      type: 'question',
-      buttons: [yesBtnText, noBtnText],
-      defaultId: 1,
-      message: text,
-      detail: textDetail,
-      noLink: true
-    });
-
-    // Returns true/false if the user clicked yes
-    evt.returnValue = res === 0;
-
-    // Sends another close-request if the used wants to close the application
-    if(res === 0)
-      win.close();
-  });
-
-  IPC.on("showErrorMessage", (evt,title, text)=>{
-    dialog.showErrorBox(title, text);
-  });
+  const indexHTML = path.join(__dirname + '/../../index.html');
+  global.win.loadFile(indexHTML);
 }
 
 app.whenReady().then(()=>{
 
-  registerElectronAPIEndpoints();
+  // Registers the api-endpoints
+  ElectronAPI.init();
 
   createWindow(); 
 
