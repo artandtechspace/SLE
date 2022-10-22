@@ -16,7 +16,7 @@ import { registerBlockly } from "../blockly/BlocklyRegister";
 import { setupExportFeature } from "./utils/UiExportFeature";
 import { onRenderTab, startParameterSystem } from "../parameterCalculator/system/ParameterSystem";
 import { Language } from "../language/LanguageManager";
-import { API } from "../utils/PreloadWrapper";
+import { getApi } from "../apiWrapper/APIWrapper";
 
 // Executes to setup the ui
 // Returns an object with all important elements
@@ -101,22 +101,8 @@ export async function setupUi(doRecompile: ()=>void){
 
 // Prepares some very basic html-page stuff
 function prepareHtmlPage(){
-    // If the window should close
-    // Because of a bug, electron can interrupt the beforeunload event with an api-call.
-    // Therefor we use a simelar trick to get around this as this user: https://github.com/electron/electron/issues/7977#issuecomment-267430262
-    var closeWindow = false
-
     // Prevents the user from accidentally existing the page without saving
-    window.onbeforeunload = (evt)=> {
-        // Returns if the window shall close
-        if(closeWindow) return;
-
-        // Always prevents
-        evt.returnValue = false;
-
-        // Askes the user
-        setTimeout(()=>closeWindow = API.askForClosing())
-    };
+    window.onbeforeunload = getApi().onBeforeClosing;
 }
 
 // Returns all elements required for the analytics display
@@ -178,7 +164,7 @@ function displayLoadingError(error: any){
         console.error("App crashed while handling critical error: ", e, "Inital error: ",error);
 
         // Notifyes the user using the api
-        API.showErrorMessage("Initalize-error", "Oh no. It seams the app has crashed while handling an initalization error. please restart it.")
+        getApi().showErrorMessage("Initalize-error", "Oh no. It seams the app has crashed while handling an initalization error. please restart it.")
     }
 
 }

@@ -17,7 +17,7 @@ import { writeEnvironmentToPage } from "./ui/utils/UiEnvironmentIntegration";
 import { checkParametersForErrors } from "./parameterCalculator/system/ParameterSystem";
 import { Language } from "./language/LanguageManager";
 import { getRootBlocks } from "./blockly/workspace/WorkspaceHandler";
-import { API } from "./utils/PreloadWrapper";
+import { getApi, preIntializeApi } from "./apiWrapper/APIWrapper";
 
 // Arduino-simulation
 var simulation: ArduinoSimulation;
@@ -138,7 +138,7 @@ function requestBlocklyWsCompilation(ignoreNoChanges=false){
 			// Ensures that the error is from the error-system
 			if(!(e instanceof Error)){
 				console.error(e);
-				API.showErrorMessage("Critical error", "We have detected a critical error, please restart the application.");
+				getApi().showErrorMessage("Critical error", "We have detected a critical error, please restart the application.");
 				return;
 			}
 
@@ -193,6 +193,9 @@ function onNewEnvLoaded(){
  * Gets called once the general environment for the app got setup. Eg. the electron browser-window or the inbrowser setup got done.
  */
 export default async function onAppInitalize(){
+	// Registers the api
+	preIntializeApi();
+
 	// Inits all custom blockly-fields
 	registerCustomFields();
 	

@@ -1,6 +1,6 @@
+import { getApi } from "../../apiWrapper/APIWrapper";
 import { exportToString, importFromString } from "../../exportSystem/ExportSystem";
 import { Language } from "../../language/LanguageManager";
-import { API } from "../../utils/PreloadWrapper";
 
 export function setupExportFeature(exportBtn: HTMLInputElement, importBtn: HTMLInputElement, importHelperButton: HTMLInputElement){
     // Sets the ui-events
@@ -58,7 +58,7 @@ function onImportFile(evt: any){
         // Tries to load the environment from that file
         importFromString(cont);
     }catch(exc){
-        API.showErrorMessage(
+        getApi().showErrorMessage(
             Language.get("import.error.title"),
             (exc as Error).message
         );
