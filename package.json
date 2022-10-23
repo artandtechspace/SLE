@@ -9,30 +9,27 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.66",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.66",
     "@electron-forge/maker-zip": "^6.0.0-beta.66",
-    "electron": "^20.1.3",
+    "electron": "^21.2.0",
     "fs-extra": "^10.1.0",
     "node-sass": "^7.0.1",
-    "sass": "^1.54.9",
-    "ts-loader": "^9.3.1",
-    "typescript": "^4.8.3",
+    "sass": "^1.55.0",
+    "ts-loader": "^9.4.1",
+    "typescript": "^4.8.4",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0"
   },
   "scripts": {
     "start": "npm run buildDev && npm run runDev",
-
     "buildProd": "webpack --env production",
     "buildDev": "webpack --env development",
-
     "runProd": "electron build/build-prod/setup/backend/",
     "runDev": "electron build/build-dev/setup/backend/",
-
     "packageProd": "electron-forge make"
   },
   "author": "Noah Albers",
   "license": "ISC",
   "dependencies": {
-    "blockly": "^8.0.5",
+    "blockly": "^9.0.1",
     "electron-squirrel-startup": "^1.0.0"
   },
   "config": {
@@ -72,7 +69,12 @@
           "config": {
             "options": {
               "icon": "./build/build-prod/resources/icon/icon.png",
-              "categories": ["SLE", "Led-Editor", "Arduino", "Microcontroller"]
+              "categories": [
+                "SLE",
+                "Led-Editor",
+                "Arduino",
+                "Microcontroller"
+              ]
             }
           }
         },
@@ -81,7 +83,12 @@
           "config": {
             "options": {
               "icon": "./build/build-prod/resources/icon/icon.png",
-              "categories": ["SLE", "Led-Editor", "Arduino", "Microcontroller"]
+              "categories": [
+                "SLE",
+                "Led-Editor",
+                "Arduino",
+                "Microcontroller"
+              ]
             }
           }
         }
