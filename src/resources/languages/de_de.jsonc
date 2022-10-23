@@ -264,6 +264,7 @@
         "import.error.general.selectedpreview": "Fehler beim importieren des Umgebung, 'selectedPreview' muss ein Index der Vorschau sein",
         
         "import.error.title": "Fehler beim importieren",
+        "import.error.read": "Die Datei konnte nicht gelesen werden.\nExistiert sie und hat das Program Leseberechtigungen?",
 
         // Settings-ui
         "import.error.deserialize.settingsui.field": "Failed to load field '$var$'. Invalid value detected.",
@@ -273,6 +274,17 @@
         "import.error.json.environment": "Fehler beim einlesen der Datei, das Umgebungs-Objekt ist invalid.",
         "import.error.json.parameters": "Fehler beim einlesen der Datei, das Parameter-Objekt ist invalid.",
         "import.error.json.parameters.format": "Fehler beim einlesen der Datei, einige Parameter sind in einem invalides/unbekannten format.",
+
+        // Electron-dialog
+        "import.dialog.open": "Öffnen",
+        "import.dialog.title": "Öffne SLE-Projektdatei",
+        "import.dialog.filename": "SLE-Projektdatei",
+        "import.dialog.filename.other": "Andere",
+
+        "export.dialog.save": "Speichern",
+        "export.dialog.title": "Projekt speichern",
+        "export.error.title": "Fehler beim speichern",
+        "export.error.desc": "Existiert das ausgewählte Verzeichnis und hat das Program Zugriffsrechte/Schreibrechte auf das Verzeichnis?",
 
     // #endregion
 

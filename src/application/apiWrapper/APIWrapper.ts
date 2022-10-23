@@ -30,6 +30,10 @@ export interface APIBaseSimple {
     onBeforeClosing: (evt: BeforeUnloadEvent)=>any
     // Shows a given error-message (Using title and text) to the user
     showErrorMessage: (title: string, text: string)=>void,
+    // Lets the user open a file to import a project
+    importProject: ()=>void,
+    // Lets the user save the current project as a file
+    exportProject: ()=>void
 }
 
 export interface APIBase extends APIBaseSimple{

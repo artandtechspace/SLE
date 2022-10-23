@@ -4,24 +4,28 @@
  * KEEP IT AS SIMPLE AS POSSIBLE
  */
 
-
 const { contextBridge: CB, ipcRenderer: IPC } = require('electron');
 
-/**
- * This file will be preloaded for the browser-window and can access nodejs-functions
- */
 
 
-const askForClosing = (text, textDetail, yesBtnText, noBtnText)=>{
-    return IPC.sendSync("askForClosing",text, textDetail, yesBtnText, noBtnText);
-};
+const askForClosing = (text, textDetail, yesBtnText, noBtnText) => IPC.sendSync("askForClosing",text, textDetail, yesBtnText, noBtnText);
 
-const showErrorMessage = (title, text) => {
-    IPC.send("showErrorMessage", title, text);
-}
+const showErrorMessage = (title, text) => IPC.send("showErrorMessage", title, text);
+
+const showOpenFileDialog = (title, buttonLabel, filters) => IPC.sendSync("showOpenFileDialog", title, buttonLabel, filters);
+
+const readInProjectFile = (path) => IPC.sendSync("readInProjectFile", path);
+
+const showSaveFileDialog = (title, buttonLabel, filters, defaultPath) => IPC.sendSync("showSaveFileDialog", title, buttonLabel, filters, defaultPath);
+
+const saveFile = (path, data) => IPC.sendSync("saveFile", path, data);
 
 // Exposes all these functions using an electronAPI-Global object
 CB.exposeInMainWorld("electronAPI", {
     askForClosing,
-    showErrorMessage
+    showErrorMessage,
+    showOpenFileDialog,
+    readInProjectFile,
+    showSaveFileDialog,
+    saveFile
 });

@@ -264,6 +264,7 @@
         "import.error.general.selectedpreview": "Failed to import enviornment, 'selectedPreview' must be an the index of a preview",
         
         "import.error.title": "Import error",
+        "import.error.read": "Could not open file.\nDoes the file exist and is the program permitted to open it?",
 
         // Settings-ui
         "import.error.deserialize.settingsui.field": "Failed to load field '$var$'. Invalid value detected.",
@@ -273,6 +274,17 @@
         "import.error.json.environment": "Failed to parse file because the environment-object is invalid.",
         "import.error.json.parameters": "Failed to parse file because the parameter-object is invalid.",
         "import.error.json.parameters.format": "Failed to parse file because some parameters are in an unknown/invalid format.",
+
+        // Electron-dialog
+        "import.dialog.open": "Open",
+        "import.dialog.title": "Open SLE-Projectfile",
+        "import.dialog.filename": "SLE-Projectfile",
+        "import.dialog.filename.other": "Other",
+
+        "export.dialog.save": "Save",
+        "export.dialog.title": "Save project",
+        "export.error.title": "Failed to save project",
+        "export.error.desc": "Does the selected directory exist and does the program have access/write permissions?",
 
     // #endregion
 

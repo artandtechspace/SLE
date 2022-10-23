@@ -2,6 +2,9 @@
 // TODO: TURN THIS TO FALSE WHEN IN PRODUCTION MODE
 export const IS_DEBUGGING = true;
 
+// Extension to use for sle-project files
+export const PROJECT_EXTENSION = "json";
+
 // Preset source-code for new projects
 export const PRESET_SOURCECODE = `
 #include <FastLED.h>

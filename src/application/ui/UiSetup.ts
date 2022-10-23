@@ -13,7 +13,6 @@ import { PREVIEWS_FILE_PATH, DEFAULT_PREVIEW_NAME, setupEnvironment } from "./ut
 import { S } from "./utils/UiUtils";
 import { Manager as SettingsUiManager } from "../blockly/settingsui/SettingsUI";
 import { registerBlockly } from "../blockly/BlocklyRegister";
-import { setupExportFeature } from "./utils/UiExportFeature";
 import { onRenderTab, startParameterSystem } from "../parameterCalculator/system/ParameterSystem";
 import { Language } from "../language/LanguageManager";
 import { getApi } from "../apiWrapper/APIWrapper";
@@ -131,9 +130,9 @@ function setupImportExport(){
     var tab = S("#import-export");
     var expBtn = S("#export",tab) as HTMLInputElement;
     var impBtn = S("#import",tab) as HTMLInputElement;
-    var impHelper = S("#import_helper",tab) as HTMLInputElement;
 
-    setupExportFeature(expBtn,impBtn, impHelper);
+    expBtn.onclick = getApi().exportProject;
+    impBtn.onclick = getApi().importProject;
 }
 
 // Setups the code-area and returns it
