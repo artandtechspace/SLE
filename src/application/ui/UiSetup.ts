@@ -7,15 +7,16 @@ import { ArduinoSimulation } from "../simulation/ArduinoSimulation";
 import { Min, PositiveNumber } from "../types/Types";
 import { loadSVG } from "../utils/SVGUtil";
 import { TAB_PREVIEW_ANIMATION, TAB_PREVIEW_CODE, TAB_PREVIEW_ANALYTICS, TAB_CONTROLS_ENVS, TAB_CONTROLS_PARAMS, TAB_CONTROLS_SETTINGS } from "./Tabs";
-import { SliderBar, SliderBarDirection } from "./utils/SliderBar";
 import { TabHandler } from "./utils/TabHandler";
 import { PREVIEWS_FILE_PATH, DEFAULT_PREVIEW_NAME, setupEnvironment } from "./utils/UiEnvironmentIntegration";
-import { S } from "./utils/UiUtils";
+import { S, SM } from "./utils/UiUtils";
 import { Manager as SettingsUiManager } from "../blockly/settingsui/SettingsUI";
 import { registerBlockly } from "../blockly/BlocklyRegister";
 import { onRenderTab, startParameterSystem } from "../parameterCalculator/system/ParameterSystem";
 import { Language } from "../language/LanguageManager";
 import { getApi } from "../apiWrapper/APIWrapper";
+
+const Split = require("split.js");
 
 // Executes to setup the ui
 // Returns an object with all important elements
@@ -39,7 +40,7 @@ export async function setupUi(doRecompile: ()=>void){
         var workspace = registerBlockly(S("#blocklyDiv") as HTMLDivElement);
 
         // Registers the slider-bars for the sidebar tabs
-        registerSliderBars();
+        prepareSplitters();
         
         // Gets specific elements
         var codeArea = setupCodeArea();
@@ -97,6 +98,31 @@ export async function setupUi(doRecompile: ()=>void){
 
 
 //#region Setup-functions
+
+function prepareSplitters(){
+    console.log(Split);
+
+    Split.default(['#preview', '#controls'], {
+        direction: 'vertical',
+        sizes: [70, 30],
+        minSize: [150, 42],
+        gutterSize: 3
+    });
+
+    Split.default(['#mainArea', '#sidebar'], {
+        sizes: [80, 20],
+        minSize: 0,
+        snapOffset: [20,130],
+        gutterSize: 3
+    });
+
+     
+   // Adds a children to every gutter
+   // This is used to spread the area that the gutter can be dragged
+   // from without making a bigger gutter. Useful for touch-screen devices
+   for(var gutter of SM(".gutter") as any as HTMLElement[])
+        gutter.appendChild(document.createElement("div"));
+}
 
 // Prepares some very basic html-page stuff
 function prepareHtmlPage(){
@@ -283,13 +309,6 @@ function handleTabCode(tabCode: HTMLDivElement){
     // Gets the copy-button and registers the event-handler
     var cpBtn = S("#copy",tabCode) as HTMLInputElement
     cpBtn.addEventListener("click",()=>navigator.clipboard.writeText(textArea.value));
-}
-
-
-// Registers the sliders
-function registerSliderBars(){
-    SliderBar.register(S("#controls"), S(".sliderbar.y"), 50, 500, SliderBarDirection.DIRECTION_Y_BACKWARD);
-    SliderBar.register(S("#sidebar"),S(".sliderbar.x"), 50, 800, SliderBarDirection.DIRECTION_X_BACKWARD);
 }
 
 //#endregion

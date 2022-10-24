@@ -39,6 +39,8 @@ In it's current state the project uses the following dependencies:
 |[Webpack](https://webpack.js.org/)|To package the typescript into a single file|
 |[NodeJs (fs-extra)](https://www.npmjs.com/package/fs-extra)|Also for packaging and compiling the project|
 |[Electron-Forge](https://www.electronforge.io/)|For exporting the software into installable apps|
+|[Split.js](https://split.js.org/)|Used to create interactive split-panels like between the blockly workspace and the preview.|
+
 
 ## How to setup
 

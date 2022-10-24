@@ -30,7 +30,8 @@
   "license": "ISC",
   "dependencies": {
     "blockly": "^9.0.1",
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "split.js": "^1.6.5"
   },
   "config": {
     "forge": {

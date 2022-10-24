@@ -4,11 +4,14 @@
     
     // Picker for the preview
     .th-picker{
+        min-height: 50px;
         border-bottom: $defaultBorderSize solid $defaultBorderColor;
         width: 100%;
+        overflow: hidden;
         
         // Contains the text-elements for the tabs
         .th-texts{
+            height: 100%;
             visibility: visible;
             display: flex;
             flex-wrap: wrap;
