@@ -103,7 +103,7 @@ function checkElement(elm: any){
                 case "button":
                     handle(elm.value, (set: string)=>elm.value = set);
                     break;
-                case "text": case "password":
+                case "text": case "password": case "number":
                     handle(elm.placeholder, (set: string)=>elm.placeholder = set);
                     break;
             }
