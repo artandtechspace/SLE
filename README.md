@@ -8,6 +8,8 @@ Using pre-programmed modules in form of blockly-blocks the user can then select 
 
 When the pasting the generated code into an IDE ie. the [arduino-ide](https://www.arduino.cc/en/software) and when having the required libraries (eg. fastled) installed, it should just compile directly and be able to be uploaded into the chip.
 
+You can view the web-version [here](https://artandtechspace.github.io/SLE/)
+
 ## Advantages and disadvantages
 
 This way of doing it has a few advantages:
