@@ -4,8 +4,8 @@
         "blocks.errors.color.startend": "The start- and end-values are equal.",
 
         "blocks.errors.fields.numeric.nan": "The '$var$'-field's numeric value is not a number.",
-        "blocks.errors.fields.numeric.min": "The '$field$'-field's numeric value must <= to $min$.",
-        "blocks.errors.fields.numeric.max": "The '$field$'-field's numeric value must >= to $max$.",
+        "blocks.errors.fields.numeric.min": "The '$field$'-field's numeric value must >= to $min$.",
+        "blocks.errors.fields.numeric.max": "The '$field$'-field's numeric value must <= to $max$.",
         "blocks.errors.fields.numeric.int": "The '$var$'-field's numeric value must be an integer.",
 
         "blocks.errors.fields.numeric.percentage": "The '$field$'-value must be a percentage-number (0.00-1.00).",

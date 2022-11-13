@@ -100,7 +100,6 @@ export async function setupUi(doRecompile: ()=>void){
 //#region Setup-functions
 
 function prepareSplitters(){
-    console.log(Split);
 
     Split.default(['#preview', '#controls'], {
         direction: 'vertical',
