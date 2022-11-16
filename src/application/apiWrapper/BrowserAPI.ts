@@ -79,9 +79,17 @@ function saveProject(){
     }, 0); 
 }
 
+// Opens the given url inside a new blank window
+const openURL=(url: string)=>window.open(url, '_blank');
+
 export const createBrowserAPI = () : APIBaseSimple => {return{
     showErrorMessage,
     onBeforeClosing,
     importProject,
-    exportProject: saveProject
+    exportProject: saveProject,
+    openURL,
+
+    // Not supported
+    openElectronDevTools: ()=>{},
+    closeElectronWindow: ()=>{}
 }}

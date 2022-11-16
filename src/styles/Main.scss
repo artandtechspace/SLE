@@ -18,19 +18,135 @@ $defaultBorderColor: #474747;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-html,body{
+html,body, #page{
     width: 100%;
     height: 100%;
 }
 
 body{
-    color: $textColor;
-    display: flex;
     background: #252526;
     overflow-x: hidden;
+    color: $textColor;
 
     &.loadingScreen{
         overflow: hidden;
+    }
+}
+
+#page, #header{
+    display: flex;
+    flex-direction: column;
+}
+
+// Header of the page
+header{
+    display: flex;
+    flex-direction: row;
+    color: white;
+
+    img {
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        filter: grayscale(0.1);
+        margin: 8px;
+    }
+
+    .split{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+    }
+
+    .title{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        input{
+            font-size: 1.2rem;
+            width: 100%;
+            background: transparent;
+            border: none;
+            padding-left: 4px;
+        }
+    }
+
+    .menubar {
+        user-select: none;
+
+        li{
+            padding:5px;
+
+            &.disabled{
+                color: gray;
+            }
+
+            &:hover{
+                background: rgba(0, 0, 0, 0.255);
+            }
+
+            &.divider {
+                padding: 0;
+                height: 1px;
+                margin: 5px;
+                background: gray;
+            }
+        }
+
+        .submenu {
+            position: relative;
+            &>ul{
+                margin-left: 100%;
+                white-space: nowrap;
+                top: 0;
+            }
+
+            &:hover>ul, &>ul:hover{
+                display: block;
+            }
+            &:after {
+                content: "\f101";
+                font: normal normal normal 14px/1 ForkAwesome;
+                margin-left: 10px;
+            }
+        }
+
+        div{
+            position: relative;
+            white-space: nowrap;
+            display: inline-block;
+            cursor: pointer;
+            padding: 2px 5px;
+
+            &:hover{
+                background: rgba(0, 0, 0, 0.255);
+            }
+
+            ul{
+                min-width: 100px;
+                display: flex;
+                justify-content: space-between;
+                list-style-type: none;
+                position: absolute;
+                z-index: 9999;
+                background: rgb(47, 47, 47);
+                border-radius: 2px;
+                border: 3px solid gray;
+
+                display: none;
+                left: 0;
+            }
+
+            &:focus>ul, &:focus-within>ul{
+                display: block;
+            }
+
+
+        }
+
     }
 }
 

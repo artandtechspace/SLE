@@ -20,6 +20,12 @@ const showSaveFileDialog = (title, buttonLabel, filters, defaultPath) => IPC.sen
 
 const saveFile = (path, data) => IPC.sendSync("saveFile", path, data);
 
+const openURL = (url) => IPC.send("openURL", url);
+
+const openDevTools = ()=> IPC.send("openDevTools");
+
+const closeWindow = ()=> IPC.send("closeWindow");
+
 // Exposes all these functions using an electronAPI-Global object
 CB.exposeInMainWorld("electronAPI", {
     askForClosing,
@@ -27,5 +33,8 @@ CB.exposeInMainWorld("electronAPI", {
     showOpenFileDialog,
     readInProjectFile,
     showSaveFileDialog,
-    saveFile
+    saveFile,
+    openURL,
+    openDevTools,
+    closeWindow
 });

@@ -40,188 +40,203 @@
         </div>
     </div>
 
-    <!--Splits main work area and sidebar-->
-    <div id="content">
-        <div id="mainArea">
-            
-            <div id="blocklyArea">
-                <!--Popup for "hidden" blockly-block settings-->
-                <div id="blockly-settingsui" class="hidden"></div>
+    <!--Contains all page stuff that belongs to the main "work" area-->
+    <div id="page">
+        <header>
+            <img id="logo" src="resources/icon/icon.png" alt="">
+            <div class="split">
+                <div class="title">
+                    <input type="text" placeholder="{{ ui.header.project.defaultname }}">
+                </div>
+                <div class="menubar">
+                </div>
+            </div>
+        </header>
+    
+        <!--Splits main work area and sidebar-->
+        <div id="content">
+            <div id="mainArea">
                 
-                <!--Blockly will be inserted here-->
-                <div id="blocklyDiv"></div>
+                <div id="blocklyArea">
+                    <!--Popup for "hidden" blockly-block settings-->
+                    <div id="blockly-settingsui" class="hidden"></div>
+                    
+                    <!--Blockly will be inserted here-->
+                    <div id="blocklyDiv"></div>
+                </div>
+                
+                <!--Bottom-info text for errors, warning or informations-->
+                <div id="infobar">
+                    <div class="wrapper">
+                        <span>
+                        </span>
+                        <!--Error-info icon-->
+                        <i class="fa fa-info" aria-hidden="true"></i>
+                    </div>
+                </div>
             </div>
             
-            <!--Bottom-info text for errors, warning or informations-->
-            <div id="infobar">
-                <div class="wrapper">
-                    <span>
-                    </span>
-                    <!--Error-info icon-->
-                    <i class="fa fa-info" aria-hidden="true"></i>
-                </div>
-            </div>
-        </div>
+            <!--Sidebar-->
+            <div id="sidebar">
+                <div id="preview">
+                    <div id="wrapper" class="tabHandler">
+                        <div class="th-picker">
+                            <div class="th-texts">
+                                <input type="button" value="{{ ui.tabs.preview.code }}" id="btnTabCode">
+                                <input type="button" value="{{ ui.tabs.preview.animation }}" id="btnTabAnimation">
+                                <input type="button" value="{{ ui.tabs.preview.analytics }}" id="btnTabAnalytics">
+                            </div>
+    
+                            <div class="th-icons">
+                                <i class="fa fa-code" id="tabCode" aria-hidden="true"></i>
+                                <i class="fa fa-film" id="tabAnimation" aria-hidden="true"></i>
+                                <i class="fa fa-line-chart" id="tabAnalytics" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        <!--Holds all tabs for the previews-->
+                        <div class="th-tabs">
+                            <!--Code-tab-->
+                            <div id="codeTab">
+                                <textarea id="codeArea" placeholder="{{ ui.tabs.preview.code.textarea.placeholder }}" disabled></textarea>
+                                <div id="codeActions">
+                                    <input type="button" value="{{ ui.tabs.preview.code.copy-button }}" id="copy">
+                                </div>
+                            </div>
         
-        <!--Sidebar-->
-        <div id="sidebar">
-            <div id="preview">
-                <div id="wrapper" class="tabHandler">
-                    <div class="th-picker">
+                            <!--Animation-tab-->
+                            <div id="animationTab"></div>
+        
+                            <!--Raw-Analytics tab-->
+                            <div id="analyticsTab">
+                                <p id="runtime-setup"></p>
+                                <p id="runtime-loop"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Control-field-->
+                <div id="controls" class="tabHandler">
+    
+                    <div id="settingsPicker" class="th-picker">
                         <div class="th-texts">
-                            <input type="button" value="{{ ui.tabs.preview.code }}" id="btnTabCode">
-                            <input type="button" value="{{ ui.tabs.preview.animation }}" id="btnTabAnimation">
-                            <input type="button" value="{{ ui.tabs.preview.analytics }}" id="btnTabAnalytics">
+                            <input type="button" value="{{ ui.tabs.controls.env }}" id="btnTabEnv">
+                            <input type="button" value="{{ ui.tabs.controls.params }}" id="btnTabParams">
+                            <input type="button" value="{{ ui.tabs.controls.settings }}" id="btnTabSettings">
                         </div>
-
+    
                         <div class="th-icons">
-                            <i class="fa fa-code" id="tabCode" aria-hidden="true"></i>
-                            <i class="fa fa-film" id="tabAnimation" aria-hidden="true"></i>
-                            <i class="fa fa-line-chart" id="tabAnalytics" aria-hidden="true"></i>
+                            <i class="fa fa-leaf" id="tabEnv" aria-hidden="true"></i>
+                            <i class="fa fa-sliders" id="tabParams" aria-hidden="true"></i>
+                            <i class="fa fa-cog" id="tabSettings" aria-hidden="true"></i>
                         </div>
                     </div>
-                    <!--Holds all tabs for the previews-->
+    
+                    <!--Holds all tabs for the lower area-->
                     <div class="th-tabs">
-                        <!--Code-tab-->
-                        <div id="codeTab">
-                            <textarea id="codeArea" placeholder="{{ ui.tabs.preview.code.textarea.placeholder }}" disabled></textarea>
-                            <div id="codeActions">
-                                <input type="button" value="{{ ui.tabs.preview.code.copy-button }}" id="copy">
+                        <!--Tab for the environment-configuration-->
+                        <div id="envTab">
+        
+                            <!--Led-pin field-->
+                            <div class="infoInput">
+                                <div class="wrapper">
+                                    <p> {{ ui.settings.led-pin }} </p>
+                                    <i class="infoIcon fa fa-info" aria-hidden="true">
+                                        <div class="popup">
+                                            <p>{{ ui.settings.led-pin.info }}</p>
+                                        </div>
+                                    </i>
+                                </div>
+                                <input id="inpPin" placeholder="{{ ui.settings.led-pin }}" style="width:200px" min="0" type="number"/>
+                            </div>
+        
+                            <!--Led-amount field-->
+                            <div class="infoInput">
+                                <div class="wrapper">
+                                    <p> {{ ui.settings.led-amt }} </p>
+                                    <i class="infoIcon fa fa-info" aria-hidden="true">
+                                        <div class="popup">
+                                            <p> {{ ui.settings.led-amt.info }} </p>
+                                        </div>
+                                    </i>
+                                </div>
+                                <input id="inpAmt"  placeholder="{{ ui.settings.led-amt }}" style="width:200px" min="1" type="number"/>
+                            </div>
+        
+                            <!--Animation-type field-->
+                            <div class="infoInput">
+                                <div class="wrapper">
+                                    <p> {{ ui.settings.preview-image }} </p>
+                                    <i class="infoIcon fa fa-info" aria-hidden="true">
+                                        <div class="popup">
+                                            <p> {{ ui.settings.preview-image.info }} </p>
+                                        </div>
+                                    </i>
+                                </div>
+                                <select id="inpSelect">
+                                    <!--Here will be all options for the animation-preview-selection-->
+                                </select>
+                            </div>
+        
+                            <!--With comments field-->
+                            <div class="infoInput">
+                                <input id="inpComments" type="checkbox"/>
+                                <div class="wrapper">
+                                    <p> {{ ui.settings.comments }} </p>
+                                    <i class="infoIcon fa fa-info" aria-hidden="true">
+                                        <div class="popup">
+                                            <p> {{ ui.settings.comments.info }} </p>
+                                        </div>
+                                    </i>
+                                </div>
+                            </div>
+        
+                            <!--Precompile-Code field-->
+                            <div class="infoInput">
+                                <input id="inpPreCode" value="{{ ui.settings.edit-button }}" type="button"/>
                             </div>
                         </div>
     
-                        <!--Animation-tab-->
-                        <div id="animationTab"></div>
+                        <div id="paramsTab">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>{{ ui.params.table.name }}</th>
+                                        <th>{{ ui.params.table.value }}</th>
+                                        <th><!--Action/Info column--></th>
+                                    </tr>
+                                </thead>
     
-                        <!--Raw-Analytics tab-->
-                        <div id="analyticsTab">
-                            <p id="runtime-setup"></p>
-                            <p id="runtime-loop"></p>
+                                <tbody>
+                                </tbody>
+                            </table>
+    
+    
+                        </div>
+    
+                        <!--Tab to perform some actions inside the app-->
+                        <div id="settingsTab">
+                            <div id="import-export" class="infoInput">
+                                <div class="wrapper">
+                                    <p>{{ ui.import.title }}</p>
+                                    <i class="infoIcon fa fa-info" aria-hidden="true">
+                                        <div class="popup">
+                                            <p>{{ ui.import.description }}</p>
+                                        </div>
+                                    </i>
+                                </div>
+                                <div id="buttons">
+                                    <input type="button" value="{{ ui.import.button.import }}" id="import"/>
+                                    <input type="button" value="{{ ui.import.button.export }}" id="export"/>
+                                </div>
+                            </div>
+    
                         </div>
                     </div>
+    
                 </div>
-            </div>
-            <!--Control-field-->
-            <div id="controls" class="tabHandler">
-
-                <div id="settingsPicker" class="th-picker">
-                    <div class="th-texts">
-                        <input type="button" value="{{ ui.tabs.controls.env }}" id="btnTabEnv">
-                        <input type="button" value="{{ ui.tabs.controls.params }}" id="btnTabParams">
-                        <input type="button" value="{{ ui.tabs.controls.settings }}" id="btnTabSettings">
-                    </div>
-
-                    <div class="th-icons">
-                        <i class="fa fa-leaf" id="tabEnv" aria-hidden="true"></i>
-                        <i class="fa fa-sliders" id="tabParams" aria-hidden="true"></i>
-                        <i class="fa fa-cog" id="tabSettings" aria-hidden="true"></i>
-                    </div>
-                </div>
-
-                <!--Holds all tabs for the lower area-->
-                <div class="th-tabs">
-                    <!--Tab for the environment-configuration-->
-                    <div id="envTab">
-    
-                        <!--Led-pin field-->
-                        <div class="infoInput">
-                            <div class="wrapper">
-                                <p> {{ ui.settings.led-pin }} </p>
-                                <i class="infoIcon fa fa-info" aria-hidden="true">
-                                    <div class="popup">
-                                        <p>{{ ui.settings.led-pin.info }}</p>
-                                    </div>
-                                </i>
-                            </div>
-                            <input id="inpPin" placeholder="{{ ui.settings.led-pin }}" style="width:200px" min="0" type="number"/>
-                        </div>
-    
-                        <!--Led-amount field-->
-                        <div class="infoInput">
-                            <div class="wrapper">
-                                <p> {{ ui.settings.led-amt }} </p>
-                                <i class="infoIcon fa fa-info" aria-hidden="true">
-                                    <div class="popup">
-                                        <p> {{ ui.settings.led-amt.info }} </p>
-                                    </div>
-                                </i>
-                            </div>
-                            <input id="inpAmt"  placeholder="{{ ui.settings.led-amt }}" style="width:200px" min="1" type="number"/>
-                        </div>
-    
-                        <!--Animation-type field-->
-                        <div class="infoInput">
-                            <div class="wrapper">
-                                <p> {{ ui.settings.preview-image }} </p>
-                                <i class="infoIcon fa fa-info" aria-hidden="true">
-                                    <div class="popup">
-                                        <p> {{ ui.settings.preview-image.info }} </p>
-                                    </div>
-                                </i>
-                            </div>
-                            <select id="inpSelect">
-                                <!--Here will be all options for the animation-preview-selection-->
-                            </select>
-                        </div>
-    
-                        <!--With comments field-->
-                        <div class="infoInput">
-                            <input id="inpComments" type="checkbox"/>
-                            <div class="wrapper">
-                                <p> {{ ui.settings.comments }} </p>
-                                <i class="infoIcon fa fa-info" aria-hidden="true">
-                                    <div class="popup">
-                                        <p> {{ ui.settings.comments.info }} </p>
-                                    </div>
-                                </i>
-                            </div>
-                        </div>
-    
-                        <!--Precompile-Code field-->
-                        <div class="infoInput">
-                            <input id="inpPreCode" value="{{ ui.settings.edit-button }}" type="button"/>
-                        </div>
-                    </div>
-
-                    <div id="paramsTab">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>{{ ui.params.table.name }}</th>
-                                    <th>{{ ui.params.table.value }}</th>
-                                    <th><!--Action/Info column--></th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                            </tbody>
-                        </table>
-
-
-                    </div>
-
-                    <!--Tab to perform some actions inside the app-->
-                    <div id="settingsTab">
-                        <div id="import-export" class="infoInput">
-                            <div class="wrapper">
-                                <p>{{ ui.import.title }}</p>
-                                <i class="infoIcon fa fa-info" aria-hidden="true">
-                                    <div class="popup">
-                                        <p>{{ ui.import.description }}</p>
-                                    </div>
-                                </i>
-                            </div>
-                            <div id="buttons">
-                                <input type="button" value="{{ ui.import.button.import }}" id="import"/>
-                                <input type="button" value="{{ ui.import.button.export }}" id="export"/>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
+
 </body>
 </html>

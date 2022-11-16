@@ -33,7 +33,13 @@ export interface APIBaseSimple {
     // Lets the user open a file to import a project
     importProject: ()=>void,
     // Lets the user save the current project as a file
-    exportProject: ()=>void
+    exportProject: ()=>void,
+    // Opens the given url inside the current or system webbrowser
+    openURL: (url: string)=>void,
+    // Opens the devtools (If supported)
+    openElectronDevTools:()=>void,
+    // Closes the electron-window if supported
+    closeElectronWindow:()=>void
 }
 
 export interface APIBase extends APIBaseSimple{

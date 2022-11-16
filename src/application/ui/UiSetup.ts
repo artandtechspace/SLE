@@ -15,6 +15,8 @@ import { registerBlockly } from "../blockly/BlocklyRegister";
 import { onRenderTab, startParameterSystem } from "../parameterCalculator/system/ParameterSystem";
 import { Language } from "../language/LanguageManager";
 import { getApi } from "../apiWrapper/APIWrapper";
+import { convertMenuToHTML } from "./menubar/MenubarBuilder";
+import { createMenu } from "./menubar/Menu";
 
 const Split = require("split.js");
 
@@ -41,6 +43,8 @@ export async function setupUi(doRecompile: ()=>void){
 
         // Registers the slider-bars for the sidebar tabs
         prepareSplitters();
+
+        prepareHeader();
         
         // Gets specific elements
         var codeArea = setupCodeArea();
@@ -98,6 +102,31 @@ export async function setupUi(doRecompile: ()=>void){
 
 
 //#region Setup-functions
+
+function prepareHeader(){
+
+    // Gets the header
+    var header = S("header");
+
+    // Adds the image-link
+    var img = S("img", header);
+    
+    // Adds the url-open event to the image
+    img.onclick=()=>getApi().openURL("https://github.com/artandtechspace/SLE");
+
+
+    // Gets the menubar-base
+    var menubar = S(".menubar", header);
+
+    // Creates and appends the menu
+    menubar.append(...convertMenuToHTML(createMenu()));
+
+    // Gets the projekt-name input
+    var nameInp = S("input",S(".title", header)) as HTMLInputElement;
+    // Sets the default project-name
+    nameInp.value = Language.get("ui.header.project.defaultname");
+
+}
 
 function prepareSplitters(){
 

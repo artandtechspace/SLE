@@ -55,8 +55,12 @@ export function create(tag: string, {cls,id,text,chld,attr,evts}: CreateArgument
   }
     
   // Appends events
-  for(var z in evts)
-    elm.addEventListener(z,evts[z as keyof typeof evts]);
+  for(var z in evts){
+    var cb = evts[z as keyof typeof evts];
+
+    if(cb !== undefined)
+      elm.addEventListener(z,cb);
+  }
 
   return elm;
 }

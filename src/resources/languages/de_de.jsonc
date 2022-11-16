@@ -193,6 +193,21 @@
         
     // #endregion
 
+    // #region UI-Menubar
+
+        "ui.menubar.file": "Datei",
+        "ui.menubar.file.save": "Speichern",
+        "ui.menubar.file.save-as": "Speichern als...",
+        "ui.menubar.file.open": "Öffnen...",
+        "ui.menubar.file.close": "Beenden",
+
+        "ui.menubar.extra": "Extra",
+        "ui.menubar.extra.webpage": "Webseite",
+        "ui.menubar.extra.report-issue": "Fehler melden",
+        "ui.menubar.extra.dev-tools": "Öffne DevTools",
+
+    // #endregion
+
     // #region Envionment-Settings
     
         "ui.settings.edit-button": "Grund-Code bearbeiten",
@@ -293,7 +308,9 @@
         "ui.preventpageleave": "Soll die Anwendung beendet werden?",
         "ui.preventpageleave.detail": "Möglicherweise gibt es noch ungespeicherte Änderungen?",
         "ui.preventpageleave.yes": "Ja",
-        "ui.preventpageleave.no": "Nein"
+        "ui.preventpageleave.no": "Nein",
+
+        "ui.header.project.defaultname": "Unbenanntes Projekt"
 
     // #endregion
 }

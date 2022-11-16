@@ -1,5 +1,5 @@
 
-const { ipcMain: IPC, dialog } = require('electron');
+const { ipcMain: IPC, dialog, shell } = require('electron');
 const fs = require("fs");
 const path = require("path");
 
@@ -127,6 +127,24 @@ function onSaveFile(evt, selectedPath, data){
     }
 }
 
+/**
+ * Open the given url inside the system-default browser
+ * @param {string} url 
+ */
+function openURL(evt, url) {
+    shell.openExternal(url);
+}
+
+// Opens the devtools on the window
+function openDevTools(evt){
+    global.win.openDevTools();
+}
+
+// Closes the electron-window and therefor exits the application
+function closeWindow(evt){
+    global.win.close();
+}
+
 //#endregion
 
 // Registers all nodejs/electron-api-endpoints
@@ -137,6 +155,9 @@ function init(){
     IPC.on("readInProjectFile", onReadInProjectFile);
     IPC.on("showSaveFileDialog", onShowSaveFileDialog);
     IPC.on("saveFile", onSaveFile);
+    IPC.on("openURL", openURL);
+    IPC.on("openDevTools", openDevTools);
+    IPC.on("closeWindow", closeWindow);
 }
 
 module.exports = { init }

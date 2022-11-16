@@ -15,7 +15,10 @@ interface ElectronApi {
     showOpenFileDialog: (title: string, buttonLabel: string, filters: FileFilters[])=>string|undefined
     readInProjectFile: (path: string)=>string,
     showSaveFileDialog: (title: string, buttonLabel: string, filters: FileFilters[], defaultPath: string)=>string|undefined,
-    saveFile: (path: string, data: string)=>string|true
+    saveFile: (path: string, data: string)=>string|true,
+    openURL: (url: string)=>void,
+    openDevTools: ()=>void,
+    closeWindow: ()=>void
 }
 
 // Reference to the electron-api that lives inside the electronAPI-object
@@ -126,9 +129,17 @@ function exportProject(){
     }
 }
 
+// Opens the given url inside the system-browser
+const openURL=(url: string) => EAPI.openURL(url);
+
 export const createElectronAPI = () : APIBaseSimple => {return{
     showErrorMessage,
     onBeforeClosing,
     importProject,
-    exportProject
+    exportProject,
+    openURL,
+
+    // Electron only
+    openElectronDevTools: ()=> EAPI.openDevTools(),
+    closeElectronWindow: ()=> EAPI.closeWindow()
 }}

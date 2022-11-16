@@ -193,6 +193,22 @@
         
     // #endregion
 
+
+    // #region UI-Menubar
+
+        "ui.menubar.file": "File",
+        "ui.menubar.file.save": "Save",
+        "ui.menubar.file.save-as": "Save as...",
+        "ui.menubar.file.open": "Open...",
+        "ui.menubar.file.close": "Close",
+
+        "ui.menubar.extra": "Extra",
+        "ui.menubar.extra.webpage": "Webpage",
+        "ui.menubar.extra.report-issue": "Report Issue",
+        "ui.menubar.extra.dev-tools": "Open DevTools",
+
+    // #endregion
+
     // #region Envionment-Settings
     
         "ui.settings.edit-button": "View/Edit Precompile-Code",
@@ -293,7 +309,9 @@
         "ui.preventpageleave": "Shuld the application close?",
         "ui.preventpageleave.detail": "Maybe you have got unsaved changes?",
         "ui.preventpageleave.yes": "Yes",
-        "ui.preventpageleave.no": "No"
+        "ui.preventpageleave.no": "No",
+
+        "ui.header.project.defaultname": "Unnamed Project"
 
     // #endregion
 }
