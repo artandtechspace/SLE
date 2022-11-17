@@ -121,13 +121,11 @@
                         <div class="th-texts">
                             <input type="button" value="{{ ui.tabs.controls.env }}" id="btnTabEnv">
                             <input type="button" value="{{ ui.tabs.controls.params }}" id="btnTabParams">
-                            <input type="button" value="{{ ui.tabs.controls.settings }}" id="btnTabSettings">
                         </div>
     
                         <div class="th-icons">
                             <i class="fa fa-leaf" id="tabEnv" aria-hidden="true"></i>
                             <i class="fa fa-sliders" id="tabParams" aria-hidden="true"></i>
-                            <i class="fa fa-cog" id="tabSettings" aria-hidden="true"></i>
                         </div>
                     </div>
     
@@ -210,25 +208,6 @@
                                 </tbody>
                             </table>
     
-    
-                        </div>
-    
-                        <!--Tab to perform some actions inside the app-->
-                        <div id="settingsTab">
-                            <div id="import-export" class="infoInput">
-                                <div class="wrapper">
-                                    <p>{{ ui.import.title }}</p>
-                                    <i class="infoIcon fa fa-info" aria-hidden="true">
-                                        <div class="popup">
-                                            <p>{{ ui.import.description }}</p>
-                                        </div>
-                                    </i>
-                                </div>
-                                <div id="buttons">
-                                    <input type="button" value="{{ ui.import.button.import }}" id="import"/>
-                                    <input type="button" value="{{ ui.import.button.export }}" id="export"/>
-                                </div>
-                            </div>
     
                         </div>
                     </div>

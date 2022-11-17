@@ -67,6 +67,7 @@ interface EnvIntegrationCollection {
     readonly comments: any/*Input-checkbox*/,
     readonly precodeBtn: any/*Input-button*/,
     readonly previewSelect: HTMLSelectElement,
+    readonly projectName: HTMLInputElement
     
     readonly codeeditor: {
         readonly popup: HTMLDivElement
@@ -93,6 +94,7 @@ function loadEnvIntegrationCollection() : EnvIntegrationCollection{
         comments: S("#inpComments",ctrl) as HTMLInputElement,
         precodeBtn: S("#inpPreCode",ctrl) as HTMLInputElement,
         previewSelect:  S("#inpSelect",ctrl) as HTMLSelectElement,
+        projectName: S("input", S(".title", S("header"))) as HTMLInputElement,
         
         codeeditor: {
             popup: codePopup,
@@ -110,6 +112,7 @@ export function writeEnvironmentToPage(env: Environment, withUpdate = false){
     envIntCol.amt.value = env.ledAmount;
     envIntCol.pin.value = env.ledPin;
     envIntCol.comments.checked = env.withComments;
+    envIntCol.projectName.value = env.projectName;
 
     // Updates the index of the selected preview
     for(let i=0; i<envIntCol.previewSelect.children.length; i++){
@@ -133,7 +136,6 @@ export function writeEnvironmentToPage(env: Environment, withUpdate = false){
  * Takes in multiple required elements and bind the document-environment with all events and initalizsation stuff
  */
 function bindEnvironment(sim: ArduinoSimulation, popsys: PopupSystem, onEnvChange: ()=>void){
-    
     // Adds event below
     envIntCol.pin.addEventListener("change",(_: any)=>{
         getEnvironment().ledPin=envIntCol.pin.valueAsNumber as PositiveNumber;
@@ -144,12 +146,15 @@ function bindEnvironment(sim: ArduinoSimulation, popsys: PopupSystem, onEnvChang
         onEnvChange();
     });
     envIntCol.comments.addEventListener("change",(_: any)=>{
-        getEnvironment().withComments=envIntCol.comments.checked
+        getEnvironment().withComments=envIntCol.comments.checked;
         onEnvChange();
     });
     envIntCol.precodeBtn.addEventListener("click",(_: any)=>{
         popsys.showPopup(envIntCol.codeeditor.popup);
         envIntCol.codeeditor.editor.value = getEnvironment().preprocessingCode;
+    });
+    envIntCol.projectName.addEventListener("change", (_: any)=>{
+        getEnvironment().projectName=envIntCol.projectName.value;
     });
 
     // Adds codeeditor events

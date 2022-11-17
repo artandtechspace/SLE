@@ -32,8 +32,10 @@ export interface APIBaseSimple {
     showErrorMessage: (title: string, text: string)=>void,
     // Lets the user open a file to import a project
     importProject: ()=>void,
+
     // Lets the user save the current project as a file
-    exportProject: ()=>void,
+    // The save-as parameter lets the user force a new save-location
+    exportProject: (saveAs: boolean)=>void,
     // Opens the given url inside the current or system webbrowser
     openURL: (url: string)=>void,
     // Opens the devtools (If supported)

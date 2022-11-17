@@ -1,6 +1,8 @@
 import { exportToString, importFromString } from "../exportSystem/ExportSystem";
 import { Language } from "../language/LanguageManager";
 import { PROJECT_EXTENSION } from "../Preset";
+import { getEnvironment } from "../SharedObjects";
+import { makeValidFilename } from "../utils/FileUtils";
 import { create } from "../utils/HTMLBuilder";
 import { APIBaseSimple } from "./APIWrapper";
 
@@ -25,7 +27,7 @@ function importProject(){
             var cont = (evt as any).target.result;
         
             // Tries to load the environment from that file
-            importFromString(cont);
+            importFromString(cont, undefined);
         }catch(exc){
             showErrorMessage(
                 Language.get("import.error.title"),
@@ -56,7 +58,7 @@ function importProject(){
 }
 
 // Lets the user save the current project as a file
-function saveProject(){
+function saveProject(saveAs: boolean){
     // Exports
     var data = exportToString();
 
@@ -69,8 +71,10 @@ function saveProject(){
     // Creates an element to download the element
     var a = document.createElement("a");
     var url = a.href = URL.createObjectURL(file);
-    // TODO: Edit to something else than just "Export.[PROJECT_EXTENSION]"
-    a.download = "Export."+PROJECT_EXTENSION;
+
+    // Sets the filename
+    a.download = makeValidFilename(getEnvironment().projectName+"."+PROJECT_EXTENSION)
+
     document.body.appendChild(a);
     a.click();
     setTimeout(function() {

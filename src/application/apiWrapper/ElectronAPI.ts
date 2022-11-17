@@ -2,6 +2,8 @@
 import { exportToString, importFromString } from "../exportSystem/ExportSystem";
 import { Language } from "../language/LanguageManager";
 import { PROJECT_EXTENSION } from "../Preset";
+import { getEnvironment } from "../SharedObjects";
+import { makeValidFilename } from "../utils/FileUtils";
 import { APIBaseSimple as APIBaseSimple } from "./APIWrapper";
 
 // Used for save and open file dialogs
@@ -87,7 +89,7 @@ function importProject(){
 
     try{
         // Tries to load the environment from that file
-        importFromString(content);
+        importFromString(content, file);
     }catch(exc){
         showErrorMessage(
             Language.get("import.error.title"),
@@ -97,23 +99,33 @@ function importProject(){
 }
 
 // Lets the user save the current project as a file
-function exportProject(){
-    // Prompts the user to select the file
-    var file = EAPI.showSaveFileDialog(
-        Language.get("export.dialog.title"),
-        Language.get("export.dialog.save"),
-        [
-            { name: Language.get("import.dialog.filename"), extensions: [PROJECT_EXTENSION] },
-            { name: Language.get("import.dialog.filename.other"), extensions: ["*"]}
-        ],
-        // TODO: Change to something other than Export.[PROJECT_EXTENSION]
-        "Export."+PROJECT_EXTENSION
-    );
+function exportProject(saveAs: boolean){
 
-    // Checks if the selection got cancled
-    if(file === undefined)
-        return;
-    
+    // Gets the file-path from the loaded environment
+    var file : string|undefined = getEnvironment().savePath;
+
+    // Checks if the save-path isn't given or if the file should be saved elsewhere
+    if(file === undefined || saveAs){
+        // Prompts the user to select the file
+        file = EAPI.showSaveFileDialog(
+            Language.get("export.dialog.title"),
+            Language.get("export.dialog.save"),
+            [
+                { name: Language.get("import.dialog.filename"), extensions: [PROJECT_EXTENSION] },
+                { name: Language.get("import.dialog.filename.other"), extensions: ["*"]}
+            ],
+            // Filename for the exported file
+            makeValidFilename(getEnvironment().projectName+"."+PROJECT_EXTENSION)
+        );
+
+        // Checks if the selection got cancled
+        if(file === undefined)
+            return;
+
+        // Updates the path
+        getEnvironment().savePath = file;
+    }
+
     // Tries to save the project
     var result = EAPI.saveFile(file, exportToString());
     

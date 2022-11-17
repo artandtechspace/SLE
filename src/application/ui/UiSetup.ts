@@ -6,7 +6,7 @@ import { PRESET_SOURCECODE } from "../Preset";
 import { ArduinoSimulation } from "../simulation/ArduinoSimulation";
 import { Min, PositiveNumber } from "../types/Types";
 import { loadSVG } from "../utils/SVGUtil";
-import { TAB_PREVIEW_ANIMATION, TAB_PREVIEW_CODE, TAB_PREVIEW_ANALYTICS, TAB_CONTROLS_ENVS, TAB_CONTROLS_PARAMS, TAB_CONTROLS_SETTINGS } from "./Tabs";
+import { TAB_PREVIEW_ANIMATION, TAB_PREVIEW_CODE, TAB_PREVIEW_ANALYTICS, TAB_CONTROLS_ENVS, TAB_CONTROLS_PARAMS } from "./Tabs";
 import { TabHandler } from "./utils/TabHandler";
 import { PREVIEWS_FILE_PATH, DEFAULT_PREVIEW_NAME, setupEnvironment } from "./utils/UiEnvironmentIntegration";
 import { S, SM } from "./utils/UiUtils";
@@ -57,13 +57,18 @@ export async function setupUi(doRecompile: ()=>void){
         SettingsUiManager.attachToUI(S("#blockly-settingsui") as HTMLDivElement, doRecompile);
 
         // Builds the environment
-        var env = new Environment(simulation.getLedAmount() as any as Min<1>,true,PRESET_SOURCECODE,0 as PositiveNumber, DEFAULT_PREVIEW_NAME);
+        var env = new Environment(
+            undefined /* Unsaved project / Unknown save-path */,
+            Language.get("ui.header.project.defaultname"),
+            simulation.getLedAmount() as any as Min<1>,
+            true,
+            PRESET_SOURCECODE,
+            0 as PositiveNumber,
+            DEFAULT_PREVIEW_NAME
+        );
         
         // Binds the environment-settings to the ui
         setupEnvironment(env,popupsystem,simulation,doRecompile);
-        
-        // Setups the export/import feature
-        setupImportExport();
 
         // Setups the parameter-system
         var paramSys = setupParameterSystem(doRecompile);
@@ -120,12 +125,6 @@ function prepareHeader(){
 
     // Creates and appends the menu
     menubar.append(...convertMenuToHTML(createMenu()));
-
-    // Gets the projekt-name input
-    var nameInp = S("input",S(".title", header)) as HTMLInputElement;
-    // Sets the default project-name
-    nameInp.value = Language.get("ui.header.project.defaultname");
-
 }
 
 function prepareSplitters(){
@@ -176,17 +175,6 @@ function setupParameterSystem(onParameterChange: ()=>void){
 
     // Creates the parameter system
     startParameterSystem(tbody, onParameterChange);
-}
-
-// Setups the export/import feature
-function setupImportExport(){
-    // Gets the export/import button
-    var tab = S("#import-export");
-    var expBtn = S("#export",tab) as HTMLInputElement;
-    var impBtn = S("#import",tab) as HTMLInputElement;
-
-    expBtn.onclick = getApi().exportProject;
-    impBtn.onclick = getApi().importProject;
 }
 
 // Setups the code-area and returns it
@@ -279,16 +267,13 @@ function registerControlsTabs(){
         [S("#btnTabEnv",controls),TAB_CONTROLS_ENVS],
         [S("#tabEnv",controls),TAB_CONTROLS_ENVS],
         [S("#btnTabParams",controls),TAB_CONTROLS_PARAMS],
-        [S("#tabParams",controls),TAB_CONTROLS_PARAMS],
-        [S("#btnTabSettings",controls),TAB_CONTROLS_SETTINGS],
-        [S("#tabSettings",controls),TAB_CONTROLS_SETTINGS]
+        [S("#tabParams",controls),TAB_CONTROLS_PARAMS]
     ];
     
     // Gets the tabs
     const TABS: [HTMLElement,number][] = [
         [S("#envTab",controls),TAB_CONTROLS_ENVS],
-        [S("#paramsTab",controls),TAB_CONTROLS_PARAMS],
-        [S("#settingsTab",controls),TAB_CONTROLS_SETTINGS]
+        [S("#paramsTab",controls),TAB_CONTROLS_PARAMS]
     ]
  
     var handler = new TabHandler(controls,BUTTONS,TABS,TAB_CONTROLS_ENVS);

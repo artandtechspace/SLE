@@ -35,7 +35,7 @@ export function exportToString(){
  * Tries to import the given string @param data as a project
  * @throws {LoadingError|SerialisationError} if the data is invalid
  */
-export function importFromString(data: string){
+export function importFromString(data: string, savePath: string|undefined){
     // Tries to parse
     var parsedJson: OpenObject;
     try{
@@ -54,7 +54,7 @@ export function importFromString(data: string){
     if(!isObjectEV(parsedJson[exportStringEnv]))
         throw new LoadingError("import.error.json.environment");
 
-    var env: Environment = Environment.deserialize(parsedJson[exportStringEnv]);
+    var env: Environment = Environment.deserialize(parsedJson[exportStringEnv], savePath);
         
         
 

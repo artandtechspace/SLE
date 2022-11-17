@@ -7,23 +7,17 @@ export function createMenu() : MenuBase {
         "file": [
             {
                 name: "open",
-                action(){
-                    console.log("Open");
-                }
+                action: getApi().importProject
             },
             "divider",
             {
                 name: "save",
-                action(){
-                    console.log("Triggert save");
-                    
-                }
+                enabled: getApi().isElectron(),
+                action: ()=>getApi().exportProject(false)
             },
             {
                 name: "save-as",
-                action(){
-                    console.log("Triggert save-as");
-                }
+                action: ()=>getApi().exportProject(true)
             },
             "divider",
             {
